@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "seal", "seal\seal.vcxproj", "{F1214071-F4ED-4C33-ABA2-107DABAE3FB9}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test", "test\test.vcxproj", "{345040D6-216C-43C0-A2ED-88C738B56673}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libogg", "libogg\libogg.vcxproj", "{5C22F807-F28B-45F6-9380-B2AA3E692E88}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libvorbis", "libvorbis\libvorbis.vcxproj", "{204AF737-0171-4026-A116-4341CBE473DE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F1214071-F4ED-4C33-ABA2-107DABAE3FB9}.Debug|Win32.ActiveCfg = DllDebug|Win32
+		{F1214071-F4ED-4C33-ABA2-107DABAE3FB9}.Debug|Win32.Build.0 = DllDebug|Win32
+		{F1214071-F4ED-4C33-ABA2-107DABAE3FB9}.Release|Win32.ActiveCfg = DllRelease|Win32
+		{F1214071-F4ED-4C33-ABA2-107DABAE3FB9}.Release|Win32.Build.0 = DllRelease|Win32
+		{345040D6-216C-43C0-A2ED-88C738B56673}.Debug|Win32.ActiveCfg = Debug|Win32
+		{345040D6-216C-43C0-A2ED-88C738B56673}.Debug|Win32.Build.0 = Debug|Win32
+		{345040D6-216C-43C0-A2ED-88C738B56673}.Release|Win32.ActiveCfg = Release|Win32
+		{345040D6-216C-43C0-A2ED-88C738B56673}.Release|Win32.Build.0 = Release|Win32
+		{5C22F807-F28B-45F6-9380-B2AA3E692E88}.Debug|Win32.ActiveCfg = Debug|Win32
+		{5C22F807-F28B-45F6-9380-B2AA3E692E88}.Debug|Win32.Build.0 = Debug|Win32
+		{5C22F807-F28B-45F6-9380-B2AA3E692E88}.Release|Win32.ActiveCfg = Release|Win32
+		{5C22F807-F28B-45F6-9380-B2AA3E692E88}.Release|Win32.Build.0 = Release|Win32
+		{204AF737-0171-4026-A116-4341CBE473DE}.Debug|Win32.ActiveCfg = Debug|Win32
+		{204AF737-0171-4026-A116-4341CBE473DE}.Debug|Win32.Build.0 = Debug|Win32
+		{204AF737-0171-4026-A116-4341CBE473DE}.Release|Win32.ActiveCfg = Release|Win32
+		{204AF737-0171-4026-A116-4341CBE473DE}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,198 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="DllDebug|Win32">
+      <Configuration>DllDebug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="DllRelease|Win32">
+      <Configuration>DllRelease</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{F1214071-F4ED-4C33-ABA2-107DABAE3FB9}</ProjectGuid>
+    <RootNamespace>seal</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DllDebug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DllRelease|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DllDebug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='DllRelease|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DllDebug|Win32'">
+    <GenerateManifest>false</GenerateManifest>
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>..\..\include;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include;</IncludePath>
+    <LibraryPath>..\..\lib\win32;.;$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSdkDir)lib;$(FrameworkSDKDir)\lib</LibraryPath>
+    <SourcePath>..\..\src\seal;$(VCInstallDir)atlmfc\src\mfc;$(VCInstallDir)atlmfc\src\mfcm;$(VCInstallDir)atlmfc\src\atl;$(VCInstallDir)crt\src;</SourcePath>
+    <OutDir>$(SolutionDir)Debug\</OutDir>
+    <EmbedManifest>true</EmbedManifest>
+    <TargetExt>.dll</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DllRelease|Win32'">
+    <GenerateManifest>false</GenerateManifest>
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>..\..\include;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include;</IncludePath>
+    <LibraryPath>..\..\lib\win32;$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSdkDir)lib;$(FrameworkSDKDir)\lib</LibraryPath>
+    <SourcePath>..\..\src\seal;$(VCInstallDir)atlmfc\src\mfc;$(VCInstallDir)atlmfc\src\mfcm;$(VCInstallDir)atlmfc\src\atl;$(VCInstallDir)crt\src;</SourcePath>
+    <OutDir>$(SolutionDir)Release\</OutDir>
+    <EmbedManifest>true</EmbedManifest>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DllDebug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <ExceptionHandling>false</ExceptionHandling>
+      <PreprocessorDefinitions>
+      </PreprocessorDefinitions>
+      <CompileAs>CompileAsC</CompileAs>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <FloatingPointModel>Precise</FloatingPointModel>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <StringPooling>true</StringPooling>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>
+      </EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>OpenAL32.lib;libmpg123.lib</AdditionalDependencies>
+      <ModuleDefinitionFile>exports.def</ModuleDefinitionFile>
+      <TurnOffAssemblyGeneration>true</TurnOffAssemblyGeneration>
+      <ImportLibrary>
+      </ImportLibrary>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+      <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
+    </Link>
+    <BuildLog>
+      <Path>
+      </Path>
+    </BuildLog>
+    <PostBuildEvent>
+      <Command>copy ..\..\lib\win32\*.dll ..\Debug /Y</Command>
+    </PostBuildEvent>
+    <PostBuildEvent>
+      <Message>Copy required DLLs</Message>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DllRelease|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <ExceptionHandling>false</ExceptionHandling>
+      <PreprocessorDefinitions>NDEBUG</PreprocessorDefinitions>
+      <CompileAs>CompileAsC</CompileAs>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <FloatingPointModel>Precise</FloatingPointModel>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <StringPooling>true</StringPooling>
+      <DisableSpecificWarnings>4996;4142;4127</DisableSpecificWarnings>
+      <OmitFramePointers>true</OmitFramePointers>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>OpenAL32.lib;libmpg123.lib</AdditionalDependencies>
+      <ModuleDefinitionFile>exports.def</ModuleDefinitionFile>
+      <TurnOffAssemblyGeneration>true</TurnOffAssemblyGeneration>
+      <ImportLibrary>
+      </ImportLibrary>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+    </Link>
+    <BuildLog>
+      <Path>
+      </Path>
+    </BuildLog>
+    <PostBuildEvent>
+      <Command>copy ..\..\lib\win32\*.dll ..\Release /Y</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\seal\buf.c" />
+    <ClCompile Include="..\..\src\seal\core.c" />
+    <ClCompile Include="..\..\src\seal\err.c" />
+    <ClCompile Include="..\..\src\seal\fmt.c" />
+    <ClCompile Include="..\..\src\seal\listener.c" />
+    <ClCompile Include="..\..\src\seal\mid.c" />
+    <ClCompile Include="..\..\src\seal\mpg.c" />
+    <ClCompile Include="..\..\src\seal\ov.c" />
+    <ClCompile Include="..\..\src\seal\raw.c" />
+    <ClCompile Include="..\..\src\seal\reader.c" />
+    <ClCompile Include="..\..\src\seal\src.c" />
+    <ClCompile Include="..\..\src\seal\stream.c" />
+    <ClCompile Include="..\..\src\seal\threading.c" />
+    <ClCompile Include="..\..\src\seal\wav.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\seal.h" />
+    <ClInclude Include="..\..\include\seal\buf.h" />
+    <ClInclude Include="..\..\include\seal\core.h" />
+    <ClInclude Include="..\..\include\seal\err.h" />
+    <ClInclude Include="..\..\include\seal\fmt.h" />
+    <ClInclude Include="..\..\include\seal\listener.h" />
+    <ClInclude Include="..\..\include\seal\mid.h" />
+    <ClInclude Include="..\..\include\seal\mpg.h" />
+    <ClInclude Include="..\..\include\seal\ov.h" />
+    <ClInclude Include="..\..\include\seal\pstdint.h" />
+    <ClInclude Include="..\..\include\seal\raw.h" />
+    <ClInclude Include="..\..\include\seal\reader.h" />
+    <ClInclude Include="..\..\include\seal\src.h" />
+    <ClInclude Include="..\..\include\seal\stream.h" />
+    <ClInclude Include="..\..\include\seal\threading.h" />
+    <ClInclude Include="..\..\include\seal\wav.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\libvorbis\libvorbis.vcxproj">
+      <Project>{204af737-0171-4026-a116-4341cbe473de}</Project>
+      <Private>false</Private>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="exports.def" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

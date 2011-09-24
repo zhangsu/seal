@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{3815e7dc-4307-4aef-9620-dc41eeeab3dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{89868a92-ac75-49aa-83b0-c73271207352}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\seal">
+      <UniqueIdentifier>{837e3638-287d-4833-b010-2bfafa6572e7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\seal\buf.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\seal\core.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\seal\err.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\seal\raw.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\seal\reader.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\seal\src.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\seal\wav.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\seal\listener.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\seal\threading.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\seal\stream.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\seal\mpg.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\seal\fmt.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\seal\mid.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\seal\ov.c">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\seal\buf.h">
+      <Filter>include\seal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\seal\core.h">
+      <Filter>include\seal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\seal\err.h">
+      <Filter>include\seal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\seal\raw.h">
+      <Filter>include\seal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\seal\src.h">
+      <Filter>include\seal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\seal\wav.h">
+      <Filter>include\seal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\seal.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\seal\listener.h">
+      <Filter>include\seal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\seal\threading.h">
+      <Filter>include\seal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\seal\pstdint.h">
+      <Filter>include\seal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\seal\reader.h">
+      <Filter>include\seal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\seal\stream.h">
+      <Filter>include\seal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\seal\mpg.h">
+      <Filter>include\seal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\seal\fmt.h">
+      <Filter>include\seal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\seal\mid.h">
+      <Filter>include\seal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\seal\ov.h">
+      <Filter>include\seal</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="exports.def">
+      <Filter>src</Filter>
+    </None>
+  </ItemGroup>
+</Project>

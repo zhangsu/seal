@@ -1,0 +1,148 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{204AF737-0171-4026-A116-4341CBE473DE}</ProjectGuid>
+    <RootNamespace>libvorbis</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>..\..\include;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include;</IncludePath>
+    <OutDir>$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>..\..\include;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include;</IncludePath>
+    <OutDir>$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <FloatingPointModel>Precise</FloatingPointModel>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <CompileAs>CompileAsC</CompileAs>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
+      <PreprocessorDefinitions>NDEBUG</PreprocessorDefinitions>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <CompileAs>CompileAsC</CompileAs>
+      <FloatingPointModel>Precise</FloatingPointModel>
+      <ExceptionHandling>false</ExceptionHandling>
+      <StringPooling>true</StringPooling>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <OmitFramePointers>true</OmitFramePointers>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\vorbis\codec.h" />
+    <ClInclude Include="..\..\include\vorbis\vorbisfile.h" />
+    <ClInclude Include="..\..\src\libvorbis\backends.h" />
+    <ClInclude Include="..\..\src\libvorbis\bitrate.h" />
+    <ClInclude Include="..\..\src\libvorbis\codebook.h" />
+    <ClInclude Include="..\..\src\libvorbis\codec_internal.h" />
+    <ClInclude Include="..\..\src\libvorbis\envelope.h" />
+    <ClInclude Include="..\..\src\libvorbis\highlevel.h" />
+    <ClInclude Include="..\..\src\libvorbis\lookup.h" />
+    <ClInclude Include="..\..\src\libvorbis\lookup_data.h" />
+    <ClInclude Include="..\..\src\libvorbis\lpc.h" />
+    <ClInclude Include="..\..\src\libvorbis\lsp.h" />
+    <ClInclude Include="..\..\src\libvorbis\masking.h" />
+    <ClInclude Include="..\..\src\libvorbis\mdct.h" />
+    <ClInclude Include="..\..\src\libvorbis\misc.h" />
+    <ClInclude Include="..\..\src\libvorbis\os.h" />
+    <ClInclude Include="..\..\src\libvorbis\psy.h" />
+    <ClInclude Include="..\..\src\libvorbis\registry.h" />
+    <ClInclude Include="..\..\src\libvorbis\scales.h" />
+    <ClInclude Include="..\..\src\libvorbis\smallft.h" />
+    <ClInclude Include="..\..\src\libvorbis\window.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\libvorbis\bitrate.c" />
+    <ClCompile Include="..\..\src\libvorbis\block.c" />
+    <ClCompile Include="..\..\src\libvorbis\codebook.c" />
+    <ClCompile Include="..\..\src\libvorbis\envelope.c" />
+    <ClCompile Include="..\..\src\libvorbis\floor0.c" />
+    <ClCompile Include="..\..\src\libvorbis\floor1.c" />
+    <ClCompile Include="..\..\src\libvorbis\info.c" />
+    <ClCompile Include="..\..\src\libvorbis\lookup.c" />
+    <ClCompile Include="..\..\src\libvorbis\lpc.c" />
+    <ClCompile Include="..\..\src\libvorbis\lsp.c" />
+    <ClCompile Include="..\..\src\libvorbis\mapping0.c" />
+    <ClCompile Include="..\..\src\libvorbis\mdct.c" />
+    <ClCompile Include="..\..\src\libvorbis\psy.c" />
+    <ClCompile Include="..\..\src\libvorbis\registry.c" />
+    <ClCompile Include="..\..\src\libvorbis\res0.c" />
+    <ClCompile Include="..\..\src\libvorbis\sharedbook.c" />
+    <ClCompile Include="..\..\src\libvorbis\smallft.c" />
+    <ClCompile Include="..\..\src\libvorbis\synthesis.c" />
+    <ClCompile Include="..\..\src\libvorbis\vorbisfile.c" />
+    <ClCompile Include="..\..\src\libvorbis\window.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\libogg\libogg.vcxproj">
+      <Project>{5c22f807-f28b-45f6-9380-b2aa3e692e88}</Project>
+      <Private>false</Private>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
