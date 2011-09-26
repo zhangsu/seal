@@ -1,11 +1,11 @@
 -   What is SEAL?
 
     The Scorched End Audio Library (SEAL) is a C library (with Ruby binding)
-    for 3D audio playback with built-in support for Ogg Vorbis, MPEG-1 and
-    MPEG-2 Audio Layer I, II and III, and WAVE format. The major components of
-    SEAL are based on OpenAL, a 3D sound rendering engine.
+    for 3D audio rendering and manipulation with built-in support for Ogg
+    Vorbis, MPEG Audio and WAVE format. The major components of SEAL are based
+    on OpenAL, a 3D sound rendering engine.
 
--   What Platforms and Compilers are supported?
+-   What Platforms and Compilers are Supported?
 
     For SEAL itself, only Windows and POSIX-compliant platforms are supported.
     The third-party libraries libogg, libvorbis and libmpg123 define their own
@@ -53,13 +53,13 @@
 	are *NOT* thread-safe. Refer to the documentation for these two functions
 	for details.
 
--   What character encoding should be used?
+-   What Character Encoding Should be Used?
 
     UTF-8 should be used to encode the source code, or at least the path
     strings, so that SEAL can properly input audio files using paths that
     contain multibyte (Chinese, Japanese, etc.) characters.
 
--   How Can I redistribute SEAL?
+-   How Can I Redistribute SEAL?
 
     See COPYING.
 
@@ -67,12 +67,11 @@
 
     See AUTHOR.
 
-
 -   What is Implied by "Scorched End"?
 
-    The phrase "Scorched end" (Pinyin: Jiao Wei) is a direct tranlation of the
-    name of a Guqin[1] existed in China in the second century. The name
-    literally means that one end of the Qin is scorched.
+    The phrase "Scorched end" (Chinese: 焦尾; Pinyin: Jiao Wei) is a direct
+    tranlation of the name of a Guqin[1] existed in China in the second
+    century CE. The name literally means that one end of the Qin is scorched.
 
     This Qin was found by Cai Yong.[2] According to the "History of the Later
     Han",[3] Cai Yong once heard very loud sound of someone burning Firmiana
