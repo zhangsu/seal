@@ -31,15 +31,19 @@
 
 -   How to Build?
 
-    To build with GCC on Linux32, run `make RELEASE=1' under /gmake/linux32.
-    To build with GCC + MinGW, run `make RELEASE=1' under /gmake/win32.
-    To build with the Microsoft Visual C++ compiler, run `nmake' under /msvc.
+    To build with GCC on Linux32, run `make RELEASE=1` under /gmake/linux32.
+    To build with GCC + MinGW, run `make RELEASE=1` under /gmake/win32.
+    To build with the Microsoft Visual C++ compiler, run `nmake` under /msvc.
 
     Note that these Makefiles do not add header dependencies for third-party
     libraries and other header files which are not expected to change.
 
     To build with the Microsoft Visual Studio 2010 IDE, use the solution file
     under /msvc.
+    
+    To build as a Ruby extension, run `ruby configure.rb` under demo (which
+    generates a Makefile), then run `make`. The default output is `seal.*',
+    which is a dynamic library that could be required by Ruby at runtime.
 
 -   Is SEAL Thread-safe?
 
