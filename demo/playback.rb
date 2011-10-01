@@ -1,13 +1,13 @@
-#coding: GBK
-
 require './seal'
-include Audio
 
 Audio.startup
 
-src = Source.new
-src.buffer = Buffer.new("D:/music/ÎÞÎý Ì«ºþÃÀ ³Ì¹ðÀ¼.mp3")
+src = Audio::Source.new
+src.stream = Audio::Stream.open("pipa.ogg")
 src.play
-sleep(10)
+while src.state == :playing
+  src.update
+  sleep(0.01)
+end
 
 Audio.cleanup
