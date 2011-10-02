@@ -4,15 +4,9 @@
  * See COPYING attached with the library.
  */
 
-#include <stdio.h>
 #include <stddef.h>
 #include <seal.h>
 #include "ruby.h"
-
-typedef void* allocator_t(void);
-typedef void deallocator_t(void*);
-typedef void inputter_t(void*, const char*, seal_fmt_t);
-typedef void* getter_t(seal_buf_t*);
 
 static VALUE mAudio;
 static VALUE eAudioError;
@@ -33,9 +27,9 @@ name2sym(const char* name)
 }
 
 VALUE
-alloc(VALUE klass, allocator_t* allocate, deallocator_t* free)
+alloc(VALUE klass, void* allocate, void* free)
 {
-    void* obj = allocate();
+    void* obj = ((void* (*)(void)) allocate)();
     check_seal_err();
 
     return Data_Wrap_Struct(klass, 0, free, obj);
@@ -59,25 +53,26 @@ map_fmt(VALUE rsym)
 }
 
 void
-input_audio(int argc, VALUE* argv, void* media, inputter_t* input)
+input_audio(int argc, VALUE* argv, void* media, void* input)
 {
     VALUE filename;
     VALUE format;
 
     rb_scan_args(argc, argv, "11", &filename, &format);
-    input(media, rb_string_value_cstr(&filename), map_fmt(format));
+    ((void (*)(void*, const char*, seal_fmt_t)) input)
+    (media, rb_string_value_ptr(&filename), map_fmt(format));
     check_seal_err();
 }
 
 VALUE
-get_buf_attr(VALUE rbuf, getter_t get)
+get_buf_attr(VALUE rbuf, void* get)
 {
-    void* attr;
+    unsigned long attr;
 
-    attr = get(DATA_PTR(rbuf));
+    attr = ((unsigned long (*)(seal_buf_t*)) get)(DATA_PTR(rbuf));
     check_seal_err();
 
-    return LONG2FIX(attr);
+    return ULONG2NUM(attr);
 }
 
 void
@@ -121,8 +116,7 @@ bulk_convert_float(VALUE* rtuple, float* tuple, int len)
 }
 
 VALUE
-get_src3float(VALUE rsrc,
-                       void (*get)(seal_src_t*, float*, float*, float*))
+get_src3float(VALUE rsrc, void (*get)(seal_src_t*, float*, float*, float*))
 {
     float tuple[3];
     VALUE rtuple[3];
@@ -178,7 +172,7 @@ get_listener_float(float (*get)())
 VALUE
 set_src_fixnum(VALUE rsrc, VALUE rfixnum, int (*set)(seal_src_t*, size_t))
 {
-    set(DATA_PTR(rsrc), NUM2LONG(rfixnum));
+    set(DATA_PTR(rsrc), NUM2ULONG(rfixnum));
     check_seal_err();
 
     return Qnil;
@@ -187,7 +181,7 @@ set_src_fixnum(VALUE rsrc, VALUE rfixnum, int (*set)(seal_src_t*, size_t))
 VALUE
 get_src_fixnum(VALUE rsrc, size_t (*get)(seal_src_t*))
 {
-    return LONG2FIX(get(DATA_PTR(rsrc)));
+    return ULONG2NUM(get(DATA_PTR(rsrc)));
 }
 
 VALUE
@@ -230,7 +224,7 @@ startup(int argc, VALUE* argv)
     VALUE rstring;
 
     rb_scan_args(argc, argv, "01", &rstring);
-    seal_startup(NIL_P(rstring) ? 0 : rb_string_value_cstr(&rstring));
+    seal_startup(NIL_P(rstring) ? 0 : rb_string_value_ptr(&rstring));
     check_seal_err();
 
     return Qnil;
@@ -255,8 +249,7 @@ cleanup()
 VALUE
 alloc_buf(VALUE klass)
 {
-    return alloc(klass, (allocator_t*) seal_alloc_buf,
-                 (deallocator_t*) seal_free_buf);
+    return alloc(klass, seal_alloc_buf, seal_free_buf);
 }
 
 /*
@@ -266,7 +259,7 @@ alloc_buf(VALUE klass)
 VALUE
 init_buf(int argc, VALUE* argv, VALUE rbuf)
 {
-    input_audio(argc, argv, DATA_PTR(rbuf), (inputter_t*) seal_init_buf);
+    input_audio(argc, argv, DATA_PTR(rbuf), seal_init_buf);
 
     return rbuf;
 }
@@ -278,7 +271,7 @@ init_buf(int argc, VALUE* argv, VALUE rbuf)
 VALUE 
 load_buf(int argc, VALUE* argv, VALUE rbuf)
 {
-    input_audio(argc, argv, DATA_PTR(rbuf), (inputter_t*) seal_load2buf);
+    input_audio(argc, argv, DATA_PTR(rbuf), seal_load2buf);
 
     return Qnil;
 }
@@ -290,7 +283,7 @@ load_buf(int argc, VALUE* argv, VALUE rbuf)
 VALUE 
 get_buf_size(VALUE rbuf)
 {
-    return get_buf_attr(rbuf, (getter_t*) seal_get_buf_size);
+    return get_buf_attr(rbuf, seal_get_buf_size);
 }
 
 /*
@@ -300,7 +293,7 @@ get_buf_size(VALUE rbuf)
 VALUE
 get_buf_freq(VALUE rbuf)
 {
-    return get_buf_attr(rbuf, (getter_t*) seal_get_buf_freq);
+    return get_buf_attr(rbuf, seal_get_buf_freq);
 }
 
 /*
@@ -310,7 +303,7 @@ get_buf_freq(VALUE rbuf)
 VALUE
 get_buf_bps(VALUE rbuf)
 {
-    return get_buf_attr(rbuf, (getter_t*) seal_get_buf_bps);
+    return get_buf_attr(rbuf, seal_get_buf_bps);
 }
 
 /*
@@ -320,7 +313,7 @@ get_buf_bps(VALUE rbuf)
 VALUE
 get_buf_nchannels(VALUE rbuf)
 {
-    return get_buf_attr(rbuf, (getter_t*) seal_get_buf_nchannels);
+    return get_buf_attr(rbuf, seal_get_buf_nchannels);
 }
 
 /*
@@ -330,8 +323,7 @@ get_buf_nchannels(VALUE rbuf)
 VALUE
 alloc_stream(VALUE klass)
 {
-    return alloc(klass, (allocator_t*) seal_alloc_stream,
-                 (deallocator_t*) seal_free_stream);
+    return alloc(klass, seal_alloc_stream, seal_free_stream);
 }
 
 /*
@@ -342,7 +334,7 @@ alloc_stream(VALUE klass)
 VALUE
 init_stream(int argc, VALUE* argv, VALUE rstream)
 {
-    input_audio(argc, argv, DATA_PTR(rstream), (inputter_t*) seal_init_stream);
+    input_audio(argc, argv, DATA_PTR(rstream), seal_init_stream);
 
     return rstream;
 }
@@ -354,7 +346,7 @@ init_stream(int argc, VALUE* argv, VALUE rstream)
 VALUE
 get_stream_freq(VALUE rstream)
 {
-    return LONG2FIX(extract_stream(rstream)->attr.freq);
+    return INT2NUM(extract_stream(rstream)->attr.freq);
 }
 
 /*
@@ -364,7 +356,7 @@ get_stream_freq(VALUE rstream)
 VALUE
 get_stream_bps(VALUE rstream)
 {
-    return LONG2FIX(extract_stream(rstream)->attr.bit_depth);
+    return INT2NUM(extract_stream(rstream)->attr.bit_depth);
 }
 
 /*
@@ -374,7 +366,7 @@ get_stream_bps(VALUE rstream)
 VALUE
 get_stream_nchannels(VALUE rstream)
 {
-    return LONG2FIX(extract_stream(rstream)->attr.nchannels);
+    return INT2NUM(extract_stream(rstream)->attr.nchannels);
 }
 
 /*
@@ -409,7 +401,7 @@ close_stream(VALUE rstream)
 VALUE
 alloc_src(VALUE klass)
 {
-    return alloc(klass, (allocator_t*) seal_alloc_src, (deallocator_t*) seal_free_src);
+    return alloc(klass, seal_alloc_src, seal_free_src);
 }
 
 /*
@@ -797,7 +789,8 @@ set_listener_vel(VALUE rlistener, VALUE rarr)
  *  call-seq:
  *      Audio.listener.position -> [flt, flt, flt]
  */
-VALUE get_listener_vel(VALUE rlistener)
+VALUE
+get_listener_vel(VALUE rlistener)
 {
     return get_listener3float(seal_get_listener_vel);
 }
@@ -910,10 +903,12 @@ bind_src(void)
     rb_define_method(cSource, "state", get_src_state, 0);
 }
 
-void bind_listener(void)
+void
+bind_listener(void)
 {
     VALUE cListener = rb_define_class_under(mAudio, "Listener", rb_cObject);
-    rb_define_const(mAudio, "LISTENER", rb_data_object_alloc(cListener, 0, 0, 0));
+    VALUE listener = rb_data_object_alloc(cListener, 0, 0, 0);
+    rb_define_const(mAudio, "LISTENER", listener);
     rb_define_singleton_method(mAudio, "listener", get_listener, 0);
     rb_undef_alloc_func(cListener);
     rb_undef_method(rb_singleton_class(cListener), "new");
