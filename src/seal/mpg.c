@@ -116,7 +116,8 @@ setup(seal_raw_attr_t* attr, const char* filename)
 
     attr->bit_depth = 16;
     /* Default encoding is MPG123_ENC_SIGNED_16. */
-    mpg123_getformat(mh, &freq, &attr->nchannels, &encoding);
+    SEAL_CHK_S(mpg123_getformat(mh, &freq, &attr->nchannels, &encoding)
+               == MPG123_OK, SEAL_INIT_MPG_FAILED, cleanup);
     attr->freq = freq;
 
     return mh;
