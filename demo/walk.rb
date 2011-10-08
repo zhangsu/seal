@@ -26,13 +26,14 @@ listener = Audio.listener
 loop do
   print 'Enter new destination: '
   dest = scanf('%f%f%f')
-  $mover.kill if $mover
+  $walker.kill if $walker
   origin = listener.position
   printf("Walking from (%.2f, %.2f, %.2f) to (%.2f, %.2f, %.2f).\n",
          *origin, *dest)
-  $mover = Thread.new do
+  $walker = Thread.new do
     disp = []
     3.times { |i| disp[i] = dest[i] - origin[i] }
+    return if disp.all? &:zero?
     scalar = UNIT_PER_100MS / Math.sqrt(disp[0]**2 + disp[1]**2 + disp[2]**2)
     velocity = disp.map { |component| scalar * component }
     listener.velocity = velocity
