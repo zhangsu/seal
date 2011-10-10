@@ -1,7 +1,7 @@
-CC              = gcc -c
+CC              = gcc
 LINKER          = gcc
 FLAGS           = -Wextra
-CFLAGS          = $(FLAGS) -I$(INCLUDEDIR)
+CFLAGS          = $(FLAGS) -c -I$(INCLUDEDIR)
 LFLAGS          = $(FLAGS)
 
 PROJDIR         = ../..
@@ -28,8 +28,8 @@ TESTOUTPUT      = $(OBJDIR)/test.exe
 
 VPATH           = $(INCLUDEDIR)/$(SEAL):$(SRCDIR)/$(SEAL):$(SRCDIR)/libogg:$(SRCDIR)/libvorbis:$(PROJDIR)/test
 
-COMPILE         = $(CC) -o $@ $(CFLAGS) $<
-LINK            = $(LINKER) -o $@ $(LFLAGS) $^
+COMPILE         = $(CC) $(CFLAGS) -o $@ $<
+LINK            = $(LINKER) $(LFLAGS) -o $@ $^
 MKDIR           = mkdir -p
 CP              = cp $< $@
 
@@ -38,6 +38,8 @@ ifeq ($(RELEASE), 1)
     CFLAGS += -DNDEBUG
     OBJDIR = release
 endif
+
+.PHONY : clean
 
 all : $(SEALOUTPUT) $(TESTOUTPUT) $(addprefix $(OBJDIR)/, OpenAL32.dll libmpg123.dll wrap_oal.dll)
 
