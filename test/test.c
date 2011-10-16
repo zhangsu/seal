@@ -28,7 +28,7 @@ main()
 
     if (passed) {
         const char* str = "All tests passed!\n";
-        printf(str);
+        printf("%s", str);
 #ifdef _WIN32
         OutputDebugString(str);
 #endif
