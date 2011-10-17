@@ -10,7 +10,7 @@ LIBDIR          = $(PROJDIR)/lib/win32
 SRCDIR          = $(PROJDIR)/src
 
 OBJDIR          = debug
-SEALOBJDIR      = $(OBJDIR)/seal
+SEALOBJDIR      = $(OBJDIR)/$(SEAL)
 LIBOGGOBJDIR    = $(OBJDIR)/libogg
 LIBVORBISOBJDIR = $(OBJDIR)/libvorbis
 TESTOBJDIR      = $(OBJDIR)/test
