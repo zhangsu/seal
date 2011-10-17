@@ -6,9 +6,9 @@ HEADERDIR       = ../../include/seal
 SEALSRCDIR      = ../../src/seal
 LIBOGGSRCDIR    = ../../src/libogg
 LIBVORBISSRCDIR = ../../src/libvorbis
-LIBDIR          = ../../lib/win32
+LIBDIR          = ../../lib
 TESTSRCDIR      = ../../test
-LIBS            = ../../lib/win32/OpenAL32.lib ../../lib/win32/libmpg123.lib
+LIBS            = ../../lib/OpenAL32.lib ../../lib/libmpg123.lib
 SEALOBJ         = buf.obj core.obj err.obj fmt.obj listener.obj mid.obj mpg.obj ov.obj raw.obj reader.obj src.obj stream.obj threading.obj wav.obj
 LIBOGGOBJ       = bitwise.obj framing.obj
 LIBVORBISOBJ    = bitrate.obj block.obj codebook.obj envelope.obj floor0.obj floor1.obj info.obj lookup.obj lpc.obj lsp.obj mapping0.obj mdct.obj psy.obj registry.obj res0.obj sharedbook.obj smallft.obj synthesis.obj vorbisfile.obj window.obj
@@ -21,13 +21,13 @@ TESTOUTPUT      = test.exe
 all : $(SEALOUTPUT) $(TESTOUTPUT) OpenAL32.dll libmpg123.dll wrap_oal.dll
 
 OpenAL32.dll : $(LIBDIR)/$@
-	copy /Y ..\..\lib\win32\$@ .
+	copy /Y ..\..\lib\$@ .
 
 libmpg123.dll : $(LIBDIR)/$@
-	copy /Y ..\..\lib\win32\$@ .
+	copy /Y ..\..\lib\$@ .
 
 wrap_oal.dll : $(LIBDIR)/$@
-	copy /Y ..\..\lib\win32\$@ .
+	copy /Y ..\..\lib\$@ .
 
 $(TESTOUTPUT) : $(TESTOBJ) $(SEALLIBOUTPUT)
 	$(LINKER) /OUT:$@ $(LFLAGS) /SUBSYSTEM:CONSOLE $(TESTOBJ) $(SEALLIBOUTPUT)

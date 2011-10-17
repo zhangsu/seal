@@ -6,7 +6,7 @@ LFLAGS          = $(FLAGS)
 
 PROJDIR         = ../..
 INCLUDEDIR      = $(PROJDIR)/include
-LIBDIR          = $(PROJDIR)/lib/win32
+LIBDIR          = $(PROJDIR)/lib
 SRCDIR          = $(PROJDIR)/src
 
 OBJDIR          = debug
