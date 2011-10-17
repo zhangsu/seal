@@ -71,27 +71,29 @@ _seal_unlock(_seal_lock_t lock)
 _seal_tls_t
 _seal_alloc_tls()
 {
-    // TODO
-    return 0;
+    pthread_key_t* tls = _seal_malloc(sizeof (pthread_key_t));
+    pthread_key_create(tls, 0);
+
+    return tls;
 }
 
 void
 _seal_free_tls(_seal_tls_t tls)
 {
-    // TODO
+    pthread_key_delete(*(pthread_key_t*) tls);
+    _seal_free(tls);
 }
 
 void
 _seal_set_tls(_seal_tls_t tls, void* value)
 {
-    // TODO
+    pthread_setspecific(*(pthread_key_t*) tls, value);
 }
 
 void*
 _seal_get_tls(_seal_tls_t tls)
 {
-    // TODO
-    return 0;
+    return pthread_getspecific(*(pthread_key_t*) tls);
 }
 
 #elif defined (_WIN32)
@@ -153,7 +155,7 @@ _seal_get_tls(_seal_tls_t tls)
 void
 _seal_sleep(unsigned int millisec)
 {
-    // TODO
+    usleep(millisec * 1000);
 }
 
 #elif defined (_WIN32)
