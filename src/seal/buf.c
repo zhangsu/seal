@@ -137,8 +137,9 @@ seal_raw2buf(seal_buf_t* buf, seal_raw_t* raw)
     alBufferData(buf->id, _seal_get_buf_fmt(raw->attr.nchannels,
                                             raw->attr.bit_depth),
                  raw->data, raw->size, raw->attr.freq);
-    SEAL_CHK_AL2(AL_OUT_OF_MEMORY, SEAL_MEM_ALLOC_FAILED,
-                 AL_INVALID_VALUE, SEAL_BUF_INUSE, 0);
+    SEAL_CHK_AL3(AL_OUT_OF_MEMORY, SEAL_MEM_ALLOC_FAILED,
+                 AL_INVALID_VALUE, SEAL_BUF_INUSE,
+                 AL_INVALID_OPERATION, SEAL_BUF_INUSE, 0);
 
     return 1;
 }

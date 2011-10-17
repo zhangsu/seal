@@ -140,10 +140,23 @@ int _seal_get_al_err(void);
 /* Asserts `expr' evaluates to true and jumps. */
 #define SEAL_CHK_S(expr, err, label) if (!(expr)) SEAL_ABORT_S(err, label)
 
+/* Checks and maps 3 OpenAL errors to 3 SEAL errors. */
+#define SEAL_CHK_AL3(alerr1, err1, alerr2, err2, alerr3, err3, ret) do      \
+{                                                                           \
+    switch (_seal_get_al_err()) {                                           \
+    case (alerr1):                                                          \
+        SEAL_ABORT(err1, ret);                                              \
+    case (alerr2):                                                          \
+        SEAL_ABORT(err2, ret);                                              \
+    case (alerr3):                                                          \
+        SEAL_ABORT(err3, ret);                                              \
+    }                                                                       \
+} while (0)
+
 /* Checks and maps 2 OpenAL errors to 2 SEAL errors. */
 #define SEAL_CHK_AL2(alerr1, err1, alerr2, err2, ret) do                    \
 {                                                                           \
-    switch (_seal_get_al_err()) {                                                 \
+    switch (_seal_get_al_err()) {                                           \
     case (alerr1):                                                          \
         SEAL_ABORT(err1, ret);                                              \
     case (alerr2):                                                          \
