@@ -7,32 +7,18 @@
 
 -   What Platforms and Compilers are Supported?
 
-    For SEAL itself, only Windows and POSIX-compliant platforms are supported.
-    The third-party libraries libogg, libvorbis and libmpg123 define their own
-    supported platforms. Windows and popular Un*x-like platforms are
-    definitely supported by them, but please check the following links for
-    up-to-date details.
-
-    libmpg123:
-        http://www.mpg123.de/
-
-    libogg, libvorbis:
-        http://www.vorbis.com/
-        http://xiph.org/
-
-    The third-party libraries that are redistributed in binary forms are for
-    32-bit Linux and Windows; you can of course build your own versions of
-    them for other supported platforms.
-
-    The Makefiles are written specifically for MSVC and platforms with GCC
-    and GNU make support (Un*x-like, MinGW, etc.). However, you should be able
-    to build with other compilers given the above platform conditions are met
-    as the code is portable across compilers.
+    Windows and Linux are supported. The third-party libraries are
+    redistributed in binary forms for 32-bit Windows only; Linux users are
+    expected to install the third-party libraries themselves. The Makefiles
+    are written specifically for MSVC and GCC (MinGW or native Linux).
 
 -   How to Build?
 
-    To build with GCC on Linux32, run `make RELEASE=1` under /gmake/linux32.
+    To build with GCC on Linux, install libopenal and libmpg123 first and then
+    run `make RELEASE=1` under /gmake/linux.
+
     To build with GCC + MinGW, run `make RELEASE=1` under /gmake/win32.
+
     To build with the Microsoft Visual C++ compiler, run `nmake` under /msvc.
 
     Note that these Makefiles do not add header dependencies for third-party
