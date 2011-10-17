@@ -39,7 +39,7 @@ _seal_get_tls(_seal_tls_t tls)
     return (void*) *(uintptr_t*) tls;
 }
 
-#elif defined (_POSIX_VERSION)
+#elif defined (__unix__)
 
 #include <pthread.h>
 
@@ -146,9 +146,9 @@ _seal_get_tls(_seal_tls_t tls)
     return TlsGetValue((DWORD) tls);
 }
 
-#endif /* SEAL_NO_THREAD_SAFETY, _POSIX_VERSION, _WIN32 */
+#endif /* SEAL_NO_THREAD_SAFETY, __unix__, _WIN32 */
 
-#if defined (_POSIX_VERSION)
+#if defined (__unix__)
 
 void
 _seal_sleep(unsigned int millisec)
@@ -164,4 +164,4 @@ _seal_sleep(unsigned int millisec)
     Sleep(millisec);
 }
 
-#endif /* _POSIX_VERSION, _WIN32 */
+#endif /* __unix__, _WIN32 */

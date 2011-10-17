@@ -7,8 +7,6 @@
 #include <seal/mid.h>
 #include <seal/err.h>
 
-#ifdef _WIN32
-
 int
 seal_midi_startup(void)
 {
@@ -52,5 +50,3 @@ void
 seal_midi_cleanup(void)
 {
 }
-
-#endif /* _WIN32 */
