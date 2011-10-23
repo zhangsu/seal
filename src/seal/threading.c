@@ -152,6 +152,8 @@ _seal_get_tls(_seal_tls_t tls)
 
 #if defined (__unix__)
 
+#include <unistd.h>
+
 void
 _seal_sleep(unsigned int millisec)
 {
