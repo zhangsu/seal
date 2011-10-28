@@ -46,26 +46,28 @@ _seal_get_tls(_seal_tls_t tls)
 _seal_lock_t
 _seal_create_lock(void)
 {
-    // TODO
-    return 0;
+    pthread_mutex_t* lock = _seal_malloc(sizeof (pthread_mutex_t));
+    pthread_mutex_init(lock, 0);
+
+    return lock;
 }
 
 void
 _seal_destroy_lock(_seal_lock_t lock)
 {
-    // TODO
+    pthread_mutex_destroy((pthread_mutex_t*) lock);
 }
 
 void
 _seal_lock(_seal_lock_t lock)
 {
-    // TODO
+    pthread_mutex_lock((pthread_mutex_t*) lock);
 }
 
 void
 _seal_unlock(_seal_lock_t lock)
 {
-    // TODO
+    pthread_mutex_unlock((pthread_mutex_t*) lock);
 }
 
 _seal_tls_t
@@ -127,7 +129,7 @@ _seal_unlock(_seal_lock_t lock)
 _seal_tls_t
 _seal_alloc_tls()
 {
-    return (void*) TlsAlloc();
+    return (_seal_tls_t) TlsAlloc();
 }
 
 void
