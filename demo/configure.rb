@@ -13,7 +13,7 @@ $defs << '-DNDEBUG'
 
 if target_os =~ /mswin|mingw/
   include_dir = "#{root_dir}/include"
-  lib_dir = "#{root_dir}/lib/win32"
+  lib_dir = "#{root_dir}/lib"
   cp "#{lib_dir}/libmpg123.dll", '.'
   cp "#{lib_dir}/OpenAL32.dll", '.'
   cp "#{lib_dir}/wrap_oal.dll", '.'
