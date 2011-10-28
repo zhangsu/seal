@@ -72,7 +72,7 @@ seal_get_err_msg(seal_err_t err)
     case SEAL_BAD_SRC_OP:
         return "Invalid operation on the source";
     case SEAL_MIXING_SRC_TYPE:
-        return "Cannot attach a stream to a static source or"
+        return "Cannot attach a stream to a static source or "
                "attach a buffer to a streaming source";
 
     case SEAL_BAD_LISTENER_ATTR_VAL:
