@@ -878,6 +878,7 @@ bind_src(void)
     rb_define_method(cSource, "pause", pause_src, 0);
     rb_define_method(cSource, "stop", stop_src, 0);
     rb_define_method(cSource, "rewind", rewind_src, 0);
+    rb_define_method(cSource, "detach", detach_src_audio, 0);
     rb_define_method(cSource, "buffer=", set_src_buf, 1);
     rb_define_method(cSource, "buffer", get_src_buf, 0);
     rb_define_method(cSource, "stream=", set_src_stream, 1);
