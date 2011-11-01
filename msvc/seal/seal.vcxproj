@@ -41,7 +41,7 @@
     <GenerateManifest>false</GenerateManifest>
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>..\..\include;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include;</IncludePath>
-    <LibraryPath>..\..\lib\win32;.;$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSdkDir)lib;$(FrameworkSDKDir)\lib</LibraryPath>
+    <LibraryPath>..\..\lib;.;$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSdkDir)lib;$(FrameworkSDKDir)\lib</LibraryPath>
     <SourcePath>..\..\src\seal;$(VCInstallDir)atlmfc\src\mfc;$(VCInstallDir)atlmfc\src\mfcm;$(VCInstallDir)atlmfc\src\atl;$(VCInstallDir)crt\src;</SourcePath>
     <OutDir>$(SolutionDir)Debug\</OutDir>
     <EmbedManifest>true</EmbedManifest>
@@ -97,7 +97,7 @@
       </Path>
     </BuildLog>
     <PostBuildEvent>
-      <Command>copy ..\..\lib\win32\*.dll ..\Debug /Y</Command>
+      <Command>copy ..\..\lib\*.dll ..\Debug /Y</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>Copy required DLLs</Message>
