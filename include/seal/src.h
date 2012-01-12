@@ -76,8 +76,9 @@ void seal_free_src(seal_src_t*);
  * change its state to `SEAL_PLAYING'.
  *
  * @param src   the source to play
+ * @return      nonzero if successful or otherwise 0
  */
-void seal_play_src(seal_src_t*);
+int seal_play_src(seal_src_t*);
 
 /*
  * Pauses the playing of a source. Applying to a `SEAL_PLAYING' source will

@@ -98,7 +98,7 @@ seal_free_src(seal_src_t* src)
     _seal_free(src);
 }
 
-void
+int
 seal_play_src(seal_src_t* src)
 {
     assert(src != 0 && alIsSource(src->id));
@@ -106,9 +106,12 @@ seal_play_src(seal_src_t* src)
     if (src->stream != 0) {
         if (seal_get_src_state(src) == SEAL_PLAYING)
             restart_queuing(src);
-        seal_update_src(src);
+        if (seal_update_src(src) < 0)
+            return 0;
     }
     alSourcePlay(src->id);
+
+    return 1;
 }
 
 void
