@@ -170,4 +170,10 @@ _seal_sleep(unsigned int millisec)
     Sleep(millisec);
 }
 
+_seal_thread_t
+_seal_create_thread(_seal_routine* routine, void* args)
+{
+    return CreateThread(0, 0, (LPTHREAD_START_ROUTINE) routine, args, 0, 0);
+}
+
 #endif /* __unix__, _WIN32 */
