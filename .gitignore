@@ -1,0 +1,11 @@
+msvc/debug/
+msvc/release/
+msvc/*/debug/
+msvc/*/release/
+msvc/ipch/
+msvc/seal/dlldebug/
+msvc/seal.suo
+msvc/seal.sdf
+demo/Makefile
+demo/test.rb
+
