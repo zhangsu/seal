@@ -14,9 +14,6 @@
 #include <seal/err.h>
 #include <assert.h>
 
-typedef void operator_t(unsigned int);
-typedef void ptr_accessor_t(unsigned int, int, void*);
-
 struct seal_src_t
 {
     size_t         chunk_size : 24;
