@@ -11,6 +11,7 @@
 #include <seal/core.h>
 #include <seal/buf.h>
 #include <seal/stream.h>
+#include <seal/threading.h>
 #include <seal/err.h>
 #include <assert.h>
 
@@ -23,7 +24,6 @@ struct seal_src_t
     seal_buf_t*    buf;
     seal_stream_t* stream;
 };
-
 
 enum
 {
@@ -55,6 +55,7 @@ static void restart_queuing(seal_src_t*);
 static void empty_queue(seal_src_t*);
 static void ensure_queue_empty(seal_src_t*);
 static void ensure_stream_released(seal_src_t*);
+static _seal_routine auto_update;
 
 seal_src_t*
 seal_alloc_src(void)
@@ -105,6 +106,7 @@ seal_play_src(seal_src_t* src)
             restart_queuing(src);
         if (seal_update_src(src) < 0)
             return 0;
+        _seal_create_thread(auto_update, src);
     }
     alSourcePlay(src->id);
 
@@ -566,4 +568,12 @@ ensure_stream_released(seal_src_t* src)
 {
     if (src->stream != 0)
         src->stream->in_use = 0;
+}
+
+void*
+auto_update(void* src)
+{
+    if (seal_get_src_state(src) == SEAL_PLAYING)
+        seal_update_src(src);
+    _seal_sleep(50);
 }

@@ -16,7 +16,6 @@ typedef void* _seal_tls_t;
 typedef void* _seal_thread_t;
 typedef void* _seal_routine(void*);
 
-
 /*
  * Define this to improve performance for single-threaded application or for
  * language bindings like CRuby 1.8 and 1.9 where no real concurrency can
