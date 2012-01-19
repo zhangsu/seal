@@ -6,6 +6,7 @@ msvc/ipch/
 msvc/seal/dlldebug/
 msvc/seal.suo
 msvc/seal.sdf
+msvc/seal.opensdf
 demo/Makefile
 demo/test.rb
 
