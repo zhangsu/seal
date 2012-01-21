@@ -244,6 +244,7 @@ void
 test_src_stream(void)
 {
     seal_src_t* src;
+    seal_src_t* src2;
     seal_buf_t* buf;
     seal_stream_t* stream;
     seal_stream_t* stream2;
@@ -262,6 +263,7 @@ test_src_stream(void)
 
     ASSERT_FAIL(!seal_close_stream(stream), SEAL_STREAM_INUSE);
     ASSERT_FAIL(!seal_free_stream(stream), SEAL_STREAM_INUSE);
+    /* Test setting the same stream to the source that is using it. */
     ASSERT_OK(seal_set_src_stream(src, stream));
     ASSERT_FAIL(!seal_set_src_buf(src, buf), SEAL_MIXING_SRC_TYPE);
     ASSERT_OK(seal_update_src(src) >= 0);
@@ -281,16 +283,21 @@ test_src_stream(void)
     ASSERT_FAIL(!seal_set_src_stream(src, stream), SEAL_STREAM_UNOPENED);
     ASSERT_OK(seal_free_stream(stream));
 
+    assert_alloc_src_ok(&src2);
     assert_open_stream_ok(&stream);
     assert_open_stream_ok(&stream2);
     ASSERT_OK(seal_set_src_stream(src, stream));
     ASSERT_OK(seal_set_src_stream(src, stream2));
+    ASSERT_FAIL(!seal_set_src_stream(src2, stream2), SEAL_STREAM_INUSE);
+    ASSERT_OK(seal_set_src_stream(src2, stream));
     ++stream->attr.freq;
+    ASSERT_FAIL(!seal_set_src_stream(src, stream), SEAL_STREAM_INUSE);
+    seal_detach_src_audio(src2);
     ASSERT_FAIL(!seal_set_src_stream(src, stream), SEAL_MIXING_STREAM_FMT);
     ASSERT_OK(seal_free_stream(stream));
     seal_free_src(src);
     ASSERT_OK(seal_free_stream(stream2));
-
+    seal_free_src(src2);
     ASSERT_OK(seal_free_buf(buf));
 
 cleanup:
