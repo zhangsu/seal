@@ -28,8 +28,6 @@ typedef void* _seal_routine(void*);
 extern "C" {
 #endif
 
-void _seal_sleep(unsigned int millisec);
-
 /* Mutex. */
 _seal_lock_t _seal_create_lock(void);
 void _seal_destroy_lock(_seal_lock_t);
@@ -44,6 +42,8 @@ void* _seal_get_tls(_seal_tls_t);
 
 /* Thread manipulations. */
 _seal_thread_t _seal_create_thread(_seal_routine*, void* /*args*/);
+void _seal_join_thread(_seal_thread_t);
+void _seal_sleep(unsigned int millisec);
 
 #ifdef __cplusplus
 }
