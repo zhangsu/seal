@@ -23,6 +23,7 @@ struct seal_src_t
     unsigned int   id;
     seal_buf_t*    buf;
     seal_stream_t* stream;
+    _seal_thread_t thread;
 };
 
 enum
@@ -92,6 +93,7 @@ seal_free_src(seal_src_t* src)
         ensure_queue_empty(src);
         alDeleteSources(1, &src->id);
     }
+    _seal_join_thread(src->thread);
     ensure_stream_released(src);
     _seal_free(src);
 }
@@ -102,11 +104,13 @@ seal_play_src(seal_src_t* src)
     assert(src != 0 && alIsSource(src->id));
 
     if (src->stream != 0) {
-        if (seal_get_src_state(src) == SEAL_PLAYING)
+        seal_src_state_t state = seal_get_src_state(src);
+        if (state == SEAL_PLAYING)
             restart_queuing(src);
         if (seal_update_src(src) < 0)
             return 0;
-        _seal_create_thread(auto_update, src);
+        if (state != SEAL_PLAYING)
+            src->thread = _seal_create_thread(auto_update, src);
     }
     alSourcePlay(src->id);
 
@@ -571,9 +575,12 @@ ensure_stream_released(seal_src_t* src)
 }
 
 void*
-auto_update(void* src)
+auto_update(seal_src_t* src)
 {
-    if (seal_get_src_state(src) == SEAL_PLAYING)
-        seal_update_src(src);
-    _seal_sleep(50);
+    while (alIsSource(src->id) && seal_get_src_state(src) == SEAL_PLAYING) {
+        if (seal_update_src(src) < 0)
+            return 0;
+        _seal_sleep(50);
+    }
+    return (void*) 1;
 }
