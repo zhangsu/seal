@@ -23,7 +23,7 @@ struct seal_src_t
     unsigned int   id;
     seal_buf_t*    buf;
     seal_stream_t* stream;
-    _seal_thread_t thread;
+    _seal_thread_t updater;
 };
 
 enum
@@ -56,7 +56,7 @@ static void restart_queuing(seal_src_t*);
 static void empty_queue(seal_src_t*);
 static void ensure_queue_empty(seal_src_t*);
 static void ensure_stream_released(seal_src_t*);
-static _seal_routine auto_update;
+static _seal_routine update;
 
 seal_src_t*
 seal_alloc_src(void)
@@ -93,8 +93,9 @@ seal_free_src(seal_src_t* src)
         ensure_queue_empty(src);
         alDeleteSources(1, &src->id);
     }
-    _seal_join_thread(src->thread);
     ensure_stream_released(src);
+    /* Wait for updater thread before making `src' a dangling pointer. */
+    _seal_join_thread(src->updater);
     _seal_free(src);
 }
 
@@ -109,8 +110,11 @@ seal_play_src(seal_src_t* src)
             restart_queuing(src);
         if (seal_update_src(src) < 0)
             return 0;
-        if (state != SEAL_PLAYING)
-            src->thread = _seal_create_thread(auto_update, src);
+        if (state != SEAL_PLAYING) {
+            /* In case the old updater is not done. */
+            _seal_join_thread(src->updater);
+            src->updater = _seal_create_thread(update, src);
+        }
     }
     alSourcePlay(src->id);
 
@@ -166,6 +170,8 @@ seal_detach_src_audio(seal_src_t* src)
     ensure_stream_released(src);
     seti_s(src, AL_BUFFER, AL_NONE);
     src->buf = 0;
+    /* Wait for updater thread to finish before nullifying stream pointer. */
+    _seal_join_thread(src->updater);
     src->stream = 0;
 }
 
@@ -192,10 +198,13 @@ seal_set_src_stream(seal_src_t* src, seal_stream_t* stream)
 {
     assert(src != 0 && alIsSource(src->id) && stream != 0);
 
+    if (stream == src->stream)
+        return 1;
     /* Make sure `src' is not currently a static source. */
     SEAL_CHK(src->buf == 0, SEAL_MIXING_SRC_TYPE, 0);
     /* Cannot associate an unopened stream. */
     SEAL_CHK(stream->id != 0, SEAL_STREAM_UNOPENED, 0);
+    SEAL_CHK(!stream->in_use, SEAL_STREAM_INUSE, 0);
     /* Cannot associate a stream with a different audio format. */
     if (src->stream != 0) {
         SEAL_CHK(memcmp(&stream->attr, &src->stream->attr,
@@ -575,7 +584,7 @@ ensure_stream_released(seal_src_t* src)
 }
 
 void*
-auto_update(seal_src_t* src)
+update(seal_src_t* src)
 {
     while (alIsSource(src->id) && seal_get_src_state(src) == SEAL_PLAYING) {
         if (seal_update_src(src) < 0)
