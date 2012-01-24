@@ -56,12 +56,13 @@ static void restart_queuing(seal_src_t*);
 static void empty_queue(seal_src_t*);
 static void ensure_queue_empty(seal_src_t*);
 static void ensure_stream_released(seal_src_t*);
+static void wait4updater(seal_src_t*);
 static _seal_routine update;
 
 seal_src_t*
 seal_alloc_src(void)
 {
-    seal_src_t* src = _seal_malloc(sizeof (seal_src_t));
+    seal_src_t* src = _seal_calloc(1, sizeof (seal_src_t));
     if (src == 0)
         return 0;
 
@@ -70,9 +71,6 @@ seal_alloc_src(void)
     SEAL_CHK_AL2_S(AL_OUT_OF_MEMORY, SEAL_ALLOC_SRC_FAILED,
                    AL_INVALID_VALUE, SEAL_ALLOC_SRC_FAILED, cleanup);
 
-    src->buf = 0;
-    src->stream = 0;
-    src->looping = 0;
     src->queue_size = DEFAULT_QUEUE_SIZE;
     src->chunk_size = DEFAULT_CHUNK_SIZE;
 
@@ -94,8 +92,8 @@ seal_free_src(seal_src_t* src)
         alDeleteSources(1, &src->id);
     }
     ensure_stream_released(src);
-    /* Wait for updater thread before making `src' a dangling pointer. */
-    _seal_join_thread(src->updater);
+    /* Wait before making `src' a dangling pointer. */
+    wait4updater(src);
     _seal_free(src);
 }
 
@@ -112,7 +110,7 @@ seal_play_src(seal_src_t* src)
             return 0;
         if (state != SEAL_PLAYING) {
             /* In case the old updater is not done. */
-            _seal_join_thread(src->updater);
+            wait4updater(src);
             src->updater = _seal_create_thread(update, src);
         }
     }
@@ -170,8 +168,8 @@ seal_detach_src_audio(seal_src_t* src)
     ensure_stream_released(src);
     seti_s(src, AL_BUFFER, AL_NONE);
     src->buf = 0;
-    /* Wait for updater thread to finish before nullifying stream pointer. */
-    _seal_join_thread(src->updater);
+    /* Wait before nullifying stream pointer. */
+    wait4updater(src);
     src->stream = 0;
 }
 
@@ -592,4 +590,11 @@ update(seal_src_t* src)
         _seal_sleep(50);
     }
     return (void*) 1;
+}
+
+void
+wait4updater(seal_src_t* src)
+{
+    if (src->updater != 0)
+        _seal_join_thread(src->updater);
 }
