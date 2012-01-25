@@ -164,12 +164,6 @@ _seal_sleep(unsigned int millisec)
 
 #elif defined (_WIN32)
 
-void
-_seal_sleep(unsigned int millisec)
-{
-    Sleep(millisec);
-}
-
 _seal_thread_t
 _seal_create_thread(_seal_routine* routine, void* args)
 {
@@ -180,6 +174,18 @@ void
 _seal_join_thread(_seal_thread_t thread)
 {
     WaitForSingleObject(thread, INFINITE);
+}
+
+int
+_seal_calling_thread_is(_seal_thread_t thread)
+{
+    return GetCurrentThreadId() == GetThreadId(thread);
+}
+
+void
+_seal_sleep(unsigned int millisec)
+{
+    Sleep(millisec);
 }
 
 #endif /* __unix__, _WIN32 */

@@ -43,6 +43,7 @@ void* _seal_get_tls(_seal_tls_t);
 /* Thread manipulations. */
 _seal_thread_t _seal_create_thread(_seal_routine*, void* /*args*/);
 void _seal_join_thread(_seal_thread_t);
+int _seal_calling_thread_is(_seal_thread_t);
 void _seal_sleep(unsigned int millisec);
 
 #ifdef __cplusplus
