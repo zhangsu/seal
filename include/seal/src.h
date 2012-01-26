@@ -144,7 +144,8 @@ int seal_set_src_stream(seal_src_t*, seal_stream_t*);
 /*
  * Updates a streaming source. If the source is not up-to-date, the playback
  * will end before the end of the stream is reached. Does nothing if the
- * passed-in source is not a streaming source.
+ * passed-in source is not a streaming source. Also does nothing if auto
+ * update is on.
  *
  * @param src       the source to update
  * @return          nonzero if successfully updated, 0 if end of stream is
@@ -235,6 +236,17 @@ int seal_set_src_pitch(seal_src_t*, float /*pitch*/);
  * @return      nonzero if successful or otherwise 0
  */
 int seal_set_src_gain(seal_src_t*, float /*gain*/);
+
+/*
+ * Sets whether a source should be automatically updated asynchronously by a
+ * background thread. If this thread is running, user calls to seal_update_src
+ * does nothing.
+ *
+ * @param src           the source to set the auto update property of
+ * @param auto_update   1 to set it auto update or otherwise 0
+ * @return              nonzero if successful or otherwise 0
+ */
+int seal_set_src_auto_update(seal_src_t*, int /*auto_update*/);
 
 /*
  * Sets whether a source's position, velocity, cone and direction are all
@@ -336,20 +348,31 @@ float seal_get_src_pitch(seal_src_t*);
 float seal_get_src_gain(seal_src_t*);
 
 /*
- * Gets the relative property of a source. The default is 0.
+ * Determines if a source is automatically updated. The default is true
+ * (return nonzero).
+ *
+ * @see         seal_set_src_auto_update
+ * @param src   the source to determine
+ * @return      nonzero if the source is relative to the listener or otherwise
+ *              0
+ */
+int seal_is_src_auto_updated(seal_src_t*);
+
+/*
+ * Determines if a source is relative. The default is false (return 0).
  *
  * @see         seal_set_src_relative
- * @param src   the source to get the relative property of
+ * @param src   the source to determine
  * @return      nonzero if the source is relative to the listener or otherwise
  *              0
  */
 int seal_is_src_relative(seal_src_t*);
 
 /*
- * Gets the looping property of a source. The default is 0.
+ * Determines if a source is looping. The default is false (return 0).
  *
  * @see         seal_set_src_looping
- * @param src   the source to get the looping property of
+ * @param src   the source to determine
  * @return      nonzero if the source is looping or otherwise 0
  */
 int seal_is_src_looping(seal_src_t*);

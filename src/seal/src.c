@@ -17,9 +17,10 @@
 
 struct seal_src_t
 {
-    size_t         chunk_size : 24;
-    size_t         queue_size : 7;
-    unsigned int   looping    : 1;
+    size_t         chunk_size  : 24;
+    size_t         queue_size  : 6;
+    unsigned int   looping     : 1;
+    unsigned int   auto_update : 1;
     unsigned int   id;
     seal_buf_t*    buf;
     seal_stream_t* stream;
@@ -35,7 +36,7 @@ enum
 };
 
 static const size_t MIN_QUEUE_SIZE     = 2;
-static const size_t MAX_QUEUE_SIZE     = 127;
+static const size_t MAX_QUEUE_SIZE     = 63;
 static const size_t DEFAULT_QUEUE_SIZE = 3;
 static const size_t DEFAULT_CHUNK_SIZE = MIN_CHUNK_SIZE << 2;
 static const size_t MAX_CHUNK_SIZE     = CHUNK_STORAGE_CAP -
@@ -73,6 +74,7 @@ seal_alloc_src(void)
 
     src->queue_size = DEFAULT_QUEUE_SIZE;
     src->chunk_size = DEFAULT_CHUNK_SIZE;
+    src->auto_update = 1;
 
     return src;
 
@@ -114,7 +116,8 @@ seal_play_src(seal_src_t* src)
         /* Stream some data so plackback can start immediately. */
         if (seal_update_src(src) < 0)
             return 0;
-        src->updater = _seal_create_thread(update, src);
+        if (src->auto_update)
+            src->updater = _seal_create_thread(update, src);
     }
     alSourcePlay(src->id);
 
@@ -228,11 +231,17 @@ seal_update_src(seal_src_t* src)
     unsigned int buf;
     seal_raw_t raw;
     int nbytes_streamed;
+    int updater_is_working;
 
     assert(src != 0 && alIsSource(src->id));
 
     if (src->stream == 0)
         return 0;
+
+    updater_is_working = src->updater != 0
+                         && !_seal_calling_thread_is(src->updater);
+    if (updater_is_working)
+        return 1;
 
     raw.size = src->chunk_size;
 
@@ -349,6 +358,16 @@ seal_set_src_gain(seal_src_t* src, float gain)
 }
 
 int
+seal_set_src_auto_update(seal_src_t* src, int auto_update)
+{
+    SEAL_CHK(auto_update == 0 || auto_update == 1, SEAL_BAD_SRC_ATTR_VAL, 0);
+
+    src->auto_update = auto_update;
+
+    return 1;
+}
+
+int
 seal_set_src_relative(seal_src_t* src, int relative)
 {
     return seti_s(src, AL_SOURCE_RELATIVE, relative);
@@ -424,6 +443,13 @@ float
 seal_get_src_gain(seal_src_t* src)
 {
     return getf(src, AL_GAIN);
+}
+
+
+int
+seal_is_src_auto_updated(seal_src_t* src)
+{
+    return src->auto_update;
 }
 
 int
@@ -586,6 +612,7 @@ ensure_stream_released(seal_src_t* src)
         src->stream->in_use = 0;
 }
 
+/* The updater thread routine. */
 void*
 update(seal_src_t* src)
 {

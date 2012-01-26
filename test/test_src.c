@@ -325,9 +325,9 @@ test_src_simple_attr(void)
     ASSERT_FAIL(!seal_set_src_queue_size(src, 0), SEAL_BAD_SRC_ATTR_VAL);
     ASSERT_FAIL(!seal_set_src_queue_size(src, 1), SEAL_BAD_SRC_ATTR_VAL);
     ASSERT_OK(seal_set_src_queue_size(src, 2));
-    ASSERT_OK(seal_set_src_queue_size(src, 127));
+    ASSERT_OK(seal_set_src_queue_size(src, 63));
     ASSERT_OK(seal_set_src_queue_size(src, 32));
-    ASSERT_FAIL(!seal_set_src_queue_size(src, 128), SEAL_BAD_SRC_ATTR_VAL);
+    ASSERT_FAIL(!seal_set_src_queue_size(src, 64), SEAL_BAD_SRC_ATTR_VAL);
     ASSERT_FAIL(!seal_set_src_queue_size(src, 321428), SEAL_BAD_SRC_ATTR_VAL);
     ASSERT_OK(seal_get_src_queue_size(src) == 32);
 
