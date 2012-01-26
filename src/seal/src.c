@@ -104,15 +104,17 @@ seal_play_src(seal_src_t* src)
 
     if (src->stream != 0) {
         seal_src_state_t state = seal_get_src_state(src);
-        if (state == SEAL_PLAYING)
+        if (state == SEAL_PLAYING) {
+            /* Source and its updater will be stopped after this. */
             restart_queuing(src);
-        if (seal_update_src(src) < 0)
-            return 0;
-        if (state != SEAL_PLAYING) {
+        } else {
             /* In case the old updater is not done. */
             wait4updater(src);
-            src->updater = _seal_create_thread(update, src);
         }
+        /* Stream some data so plackback can start immediately. */
+        if (seal_update_src(src) < 0)
+            return 0;
+        src->updater = _seal_create_thread(update, src);
     }
     alSourcePlay(src->id);
 
@@ -549,6 +551,8 @@ void
 stop_then_clean_queue(seal_src_t* src)
 {
     alSourceStop(src->id);
+    /* Do not let the updater touch anything when cleaning the queue. */
+    wait4updater(src);
     clean_queue(src);
 }
 
@@ -562,6 +566,7 @@ restart_queuing(seal_src_t* src)
 void
 empty_queue(seal_src_t* src)
 {
+    /* Need to be playing first in order to become stopped. */
     alSourcePlay(src->id);
     stop_then_clean_queue(src);
 }
@@ -595,6 +600,8 @@ update(seal_src_t* src)
 void
 wait4updater(seal_src_t* src)
 {
-    if (src->updater != 0)
+    if (src->updater != 0) {
         _seal_join_thread(src->updater);
+        src->updater = 0;
+    }
 }
