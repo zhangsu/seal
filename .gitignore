@@ -1,12 +1,22 @@
+*.o
+*.so
+*.log
+*.obj
 msvc/debug/
 msvc/release/
 msvc/*/debug/
 msvc/*/release/
 msvc/ipch/
 msvc/seal/dlldebug/
-msvc/seal.suo
-msvc/seal.sdf
-msvc/seal.opensdf
+msvc/*.suo
+msvc/*.sdf
+msvc/*.opensdf
+msvc/nmake/*.dll
+msvc/nmake/*.manifest
+msvc/nmake/*.exe
+msvc/nmake/*.exp
+msvc/nmake/*.lib
+demo/*.dll
 demo/Makefile
 demo/test.rb
 
