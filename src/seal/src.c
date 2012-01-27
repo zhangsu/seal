@@ -614,13 +614,16 @@ ensure_stream_released(seal_src_t* src)
 
 /* The updater thread routine. */
 void*
-update(seal_src_t* src)
+update(void* args)
 {
+    seal_src_t* src = args;
+
     while (alIsSource(src->id) && seal_get_src_state(src) == SEAL_PLAYING) {
         if (seal_update_src(src) < 0)
             return 0;
         _seal_sleep(50);
     }
+
     return (void*) 1;
 }
 
