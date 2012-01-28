@@ -57,8 +57,9 @@ static void restart_queuing(seal_src_t*);
 static void empty_queue(seal_src_t*);
 static void ensure_queue_empty(seal_src_t*);
 static void ensure_stream_released(seal_src_t*);
-static void wait4updater(seal_src_t*);
+/* Updater thread routines. */
 static _seal_routine update;
+static void wait4updater(seal_src_t*);
 
 seal_src_t*
 seal_alloc_src(void)
@@ -612,7 +613,6 @@ ensure_stream_released(seal_src_t* src)
         src->stream->in_use = 0;
 }
 
-/* The updater thread routine. */
 void*
 update(void* args)
 {
