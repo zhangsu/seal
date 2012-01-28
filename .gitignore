@@ -2,6 +2,8 @@
 *.so
 *.log
 *.obj
+gmake/win32/debug/
+gmake/win32/release/
 msvc/debug/
 msvc/release/
 msvc/*/debug/
