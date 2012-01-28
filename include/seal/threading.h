@@ -20,7 +20,6 @@ typedef void* _seal_routine(void*);
  * Define this to improve performance for single-threaded application or for
  * language bindings like CRuby 1.8 and 1.9 where no real concurrency can
  * exist due to the nature of green threads or the global interpreter lock.
- * Note that defining this will make auto update on sources thread-unsafe.
  */
 //#define SEAL_NO_THREAD_SAFETY
 
