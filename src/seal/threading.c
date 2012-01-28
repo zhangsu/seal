@@ -100,6 +100,7 @@ _seal_get_tls(_seal_tls_t tls)
 
 #elif defined (_WIN32)
 
+#define _WIN32_WINNT 0x0500
 #include <Windows.h>
 
 _seal_lock_t
@@ -167,19 +168,27 @@ _seal_sleep(unsigned int millisec)
 _seal_thread_t
 _seal_create_thread(_seal_routine* routine, void* args)
 {
-    return CreateThread(0, 0, (LPTHREAD_START_ROUTINE) routine, args, 0, 0);
+    DWORD thread;
+
+    CloseHandle(
+        CreateThread(0, 0, (LPTHREAD_START_ROUTINE) routine, args, 0, &thread)
+    );
+
+    return (_seal_thread_t) thread;
 }
 
 void
 _seal_join_thread(_seal_thread_t thread)
 {
-    WaitForSingleObject(thread, INFINITE);
+    HANDLE thread_handle = OpenThread(SYNCHRONIZE, 0, (DWORD) thread); 
+    WaitForSingleObject(thread_handle, INFINITE);
+    CloseHandle(thread_handle);
 }
 
 int
 _seal_calling_thread_is(_seal_thread_t thread)
 {
-    return GetCurrentThreadId() == GetThreadId(thread);
+    return GetCurrentThreadId() == (DWORD) thread;
 }
 
 void
