@@ -163,7 +163,7 @@ get_src_float(VALUE rsrc, float (*get)(seal_src_t*))
     return rb_float_new(get(DATA_PTR(rsrc)));
 }
 
-VALUE 
+VALUE
 get_listener_float(float (*get)())
 {
     return rb_float_new(get());
@@ -268,7 +268,7 @@ init_buf(int argc, VALUE* argv, VALUE rbuf)
  *  call-seq:
  *      buffer.load(filename [, format])    -> nil
  */
-VALUE 
+VALUE
 load_buf(int argc, VALUE* argv, VALUE rbuf)
 {
     input_audio(argc, argv, DATA_PTR(rbuf), seal_load2buf);
@@ -280,7 +280,7 @@ load_buf(int argc, VALUE* argv, VALUE rbuf)
  *  call-seq:
  *      buffer.size ->  fixnum
  */
-VALUE 
+VALUE
 get_buf_size(VALUE rbuf)
 {
     return get_buf_attr(rbuf, seal_get_buf_size);
@@ -472,7 +472,7 @@ VALUE
 set_src_buf(VALUE rsrc, VALUE rbuf)
 {
     seal_buf_t* buf;
-    
+
     Data_Get_Struct(rbuf, seal_buf_t, buf);
     seal_set_src_buf(DATA_PTR(rsrc), buf);
     check_seal_err();
