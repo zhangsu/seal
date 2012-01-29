@@ -3,6 +3,7 @@
 *.log
 *.obj
 *.swp
+gmake/linux/test
 gmake/win32/debug/
 gmake/win32/release/
 msvc/debug/
