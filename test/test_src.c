@@ -193,8 +193,7 @@ test_src_buf(void)
     ASSERT_FAIL(!seal_free_buf(buf), SEAL_BUF_INUSE);
     ASSERT_FAIL(!seal_set_src_stream(src, stream), SEAL_MIXING_SRC_TYPE);
 
-    seal_play_src(src);
-    ASSERT_NO_ERR();
+    ASSERT_OK(seal_play_src(src));
     ASSERT_FAIL(!seal_set_src_buf(src, buf), SEAL_BAD_SRC_OP);
     ASSERT_FAIL(!seal_load2buf(buf, TEST_FILENAME, SEAL_WAV_FMT),
                 SEAL_BUF_INUSE);
@@ -245,6 +244,7 @@ void
 test_src_stream(void)
 {
     seal_src_t* src;
+    seal_src_t* src2;
     seal_buf_t* buf;
     seal_stream_t* stream;
     seal_stream_t* stream2;
@@ -263,6 +263,7 @@ test_src_stream(void)
 
     ASSERT_FAIL(!seal_close_stream(stream), SEAL_STREAM_INUSE);
     ASSERT_FAIL(!seal_free_stream(stream), SEAL_STREAM_INUSE);
+    /* Test setting the same stream to the source that is using it. */
     ASSERT_OK(seal_set_src_stream(src, stream));
     ASSERT_FAIL(!seal_set_src_buf(src, buf), SEAL_MIXING_SRC_TYPE);
     ASSERT_OK(seal_update_src(src) >= 0);
@@ -282,16 +283,21 @@ test_src_stream(void)
     ASSERT_FAIL(!seal_set_src_stream(src, stream), SEAL_STREAM_UNOPENED);
     ASSERT_OK(seal_free_stream(stream));
 
+    assert_alloc_src_ok(&src2);
     assert_open_stream_ok(&stream);
     assert_open_stream_ok(&stream2);
     ASSERT_OK(seal_set_src_stream(src, stream));
     ASSERT_OK(seal_set_src_stream(src, stream2));
+    ASSERT_FAIL(!seal_set_src_stream(src2, stream2), SEAL_STREAM_INUSE);
+    ASSERT_OK(seal_set_src_stream(src2, stream));
     ++stream->attr.freq;
+    ASSERT_FAIL(!seal_set_src_stream(src, stream), SEAL_STREAM_INUSE);
+    seal_detach_src_audio(src2);
     ASSERT_FAIL(!seal_set_src_stream(src, stream), SEAL_MIXING_STREAM_FMT);
     ASSERT_OK(seal_free_stream(stream));
     seal_free_src(src);
     ASSERT_OK(seal_free_stream(stream2));
-
+    seal_free_src(src2);
     ASSERT_OK(seal_free_buf(buf));
 
 cleanup:
@@ -319,9 +325,9 @@ test_src_simple_attr(void)
     ASSERT_FAIL(!seal_set_src_queue_size(src, 0), SEAL_BAD_SRC_ATTR_VAL);
     ASSERT_FAIL(!seal_set_src_queue_size(src, 1), SEAL_BAD_SRC_ATTR_VAL);
     ASSERT_OK(seal_set_src_queue_size(src, 2));
-    ASSERT_OK(seal_set_src_queue_size(src, 127));
+    ASSERT_OK(seal_set_src_queue_size(src, 63));
     ASSERT_OK(seal_set_src_queue_size(src, 32));
-    ASSERT_FAIL(!seal_set_src_queue_size(src, 128), SEAL_BAD_SRC_ATTR_VAL);
+    ASSERT_FAIL(!seal_set_src_queue_size(src, 64), SEAL_BAD_SRC_ATTR_VAL);
     ASSERT_FAIL(!seal_set_src_queue_size(src, 321428), SEAL_BAD_SRC_ATTR_VAL);
     ASSERT_OK(seal_get_src_queue_size(src) == 32);
 
@@ -404,7 +410,7 @@ test_src_looping(void)
     ASSERT_OK(seal_set_src_looping(src, 1));
 
     /* `seal_update_src' will never return 0 for looping sources. */
-    seal_play_src(src);
+    ASSERT_OK(seal_play_src(src));
     _seal_sleep(500);
     ASSERT_OK(seal_update_src(src) > 0);
 
@@ -450,19 +456,19 @@ test_src_state(void)
     ASSERT_OK(seal_get_src_state(src) == SEAL_INITIAL);
     seal_rewind_src(src);
     ASSERT_OK(seal_get_src_state(src) == SEAL_INITIAL);
-    seal_play_src(src);
+    ASSERT_OK(seal_play_src(src));
     ASSERT_OK(seal_get_src_state(src) == SEAL_PLAYING);
 
     /* Transition from `SEAL_PLAYING'. */
-    seal_play_src(src);
+    ASSERT_OK(seal_play_src(src));
     ASSERT_OK(seal_get_src_state(src) == SEAL_PLAYING);
     seal_rewind_src(src);
     ASSERT_OK(seal_get_src_state(src) == SEAL_INITIAL);
-    seal_play_src(src);
+    ASSERT_OK(seal_play_src(src));
     ASSERT_OK(seal_get_src_state(src) == SEAL_PLAYING);
     seal_stop_src(src);
     ASSERT_OK(seal_get_src_state(src) == SEAL_STOPPED);
-    seal_play_src(src);
+    ASSERT_OK(seal_play_src(src));
     ASSERT_OK(seal_get_src_state(src) == SEAL_PLAYING);
     seal_pause_src(src);
     ASSERT_OK(seal_get_src_state(src) == SEAL_PAUSED);
@@ -470,13 +476,13 @@ test_src_state(void)
     /* Transition from `SEAL_PAUSED'. */
     seal_pause_src(src);
     ASSERT_OK(seal_get_src_state(src) == SEAL_PAUSED);
-    seal_play_src(src);
+    ASSERT_OK(seal_play_src(src));
     ASSERT_OK(seal_get_src_state(src) == SEAL_PLAYING);
     seal_pause_src(src);
     ASSERT_OK(seal_get_src_state(src) == SEAL_PAUSED);
     seal_rewind_src(src);
     ASSERT_OK(seal_get_src_state(src) == SEAL_INITIAL);
-    seal_play_src(src);
+    ASSERT_OK(seal_play_src(src));
     ASSERT_OK(seal_get_src_state(src) == SEAL_PLAYING);
     seal_pause_src(src);
     ASSERT_OK(seal_get_src_state(src) == SEAL_PAUSED);
@@ -488,7 +494,7 @@ test_src_state(void)
     ASSERT_OK(seal_get_src_state(src) == SEAL_STOPPED);
     seal_pause_src(src);
     ASSERT_OK(seal_get_src_state(src) == SEAL_STOPPED);
-    seal_play_src(src);
+    ASSERT_OK(seal_play_src(src));
     ASSERT_OK(seal_get_src_state(src) == SEAL_PLAYING);
     seal_stop_src(src);
     ASSERT_OK(seal_get_src_state(src) == SEAL_STOPPED);
@@ -506,7 +512,7 @@ test_src_state(void)
     /* Detach from `SEAL_PLAYING'. */
     seal_rewind_stream(stream);
     ASSERT_OK(seal_set_src_stream(src, stream));
-    seal_play_src(src);
+    ASSERT_OK(seal_play_src(src));
     ASSERT_OK(seal_get_src_state(src) == SEAL_PLAYING);
     seal_detach_src_audio(src);
     ASSERT_OK(seal_get_src_state(src) == SEAL_INITIAL);
@@ -514,7 +520,7 @@ test_src_state(void)
     /* Detach from `SEAL_PAUSED'. */
     seal_rewind_stream(stream);
     ASSERT_OK(seal_set_src_stream(src, stream));
-    seal_play_src(src);
+    ASSERT_OK(seal_play_src(src));
     ASSERT_OK(seal_get_src_state(src) == SEAL_PLAYING);
     seal_pause_src(src);
     ASSERT_OK(seal_get_src_state(src) == SEAL_PAUSED);
@@ -524,7 +530,7 @@ test_src_state(void)
     /* Detach from `SEAL_STOPPED'. */
     seal_rewind_stream(stream);
     ASSERT_OK(seal_set_src_stream(src, stream));
-    seal_play_src(src);
+    ASSERT_OK(seal_play_src(src));
     ASSERT_OK(seal_get_src_state(src) == SEAL_PLAYING);
     seal_stop_src(src);
     ASSERT_OK(seal_get_src_state(src) == SEAL_STOPPED);

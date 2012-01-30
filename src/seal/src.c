@@ -11,22 +11,21 @@
 #include <seal/core.h>
 #include <seal/buf.h>
 #include <seal/stream.h>
+#include <seal/threading.h>
 #include <seal/err.h>
 #include <assert.h>
 
-typedef void operator_t(unsigned int);
-typedef void ptr_accessor_t(unsigned int, int, void*);
-
 struct seal_src_t
 {
-    size_t         chunk_size : 24;
-    size_t         queue_size : 7;
-    unsigned int   looping    : 1;
+    size_t         chunk_size  : 24;
+    size_t         queue_size  : 6;
+    unsigned int   looping     : 1;
+    unsigned int   auto_update : 1;
     unsigned int   id;
     seal_buf_t*    buf;
     seal_stream_t* stream;
+    _seal_thread_t updater;
 };
-
 
 enum
 {
@@ -37,7 +36,7 @@ enum
 };
 
 static const size_t MIN_QUEUE_SIZE     = 2;
-static const size_t MAX_QUEUE_SIZE     = 127;
+static const size_t MAX_QUEUE_SIZE     = 63;
 static const size_t DEFAULT_QUEUE_SIZE = 3;
 static const size_t DEFAULT_CHUNK_SIZE = MIN_CHUNK_SIZE << 2;
 static const size_t MAX_CHUNK_SIZE     = CHUNK_STORAGE_CAP -
@@ -58,11 +57,14 @@ static void restart_queuing(seal_src_t*);
 static void empty_queue(seal_src_t*);
 static void ensure_queue_empty(seal_src_t*);
 static void ensure_stream_released(seal_src_t*);
+/* Updater thread routines. */
+static _seal_routine update;
+static void wait4updater(seal_src_t*);
 
 seal_src_t*
 seal_alloc_src(void)
 {
-    seal_src_t* src = _seal_malloc(sizeof (seal_src_t));
+    seal_src_t* src = _seal_calloc(1, sizeof (seal_src_t));
     if (src == 0)
         return 0;
 
@@ -71,11 +73,9 @@ seal_alloc_src(void)
     SEAL_CHK_AL2_S(AL_OUT_OF_MEMORY, SEAL_ALLOC_SRC_FAILED,
                    AL_INVALID_VALUE, SEAL_ALLOC_SRC_FAILED, cleanup);
 
-    src->buf = 0;
-    src->stream = 0;
-    src->looping = 0;
     src->queue_size = DEFAULT_QUEUE_SIZE;
     src->chunk_size = DEFAULT_CHUNK_SIZE;
+    src->auto_update = 1;
 
     return src;
 
@@ -95,20 +95,34 @@ seal_free_src(seal_src_t* src)
         alDeleteSources(1, &src->id);
     }
     ensure_stream_released(src);
+    /* Wait before making `src' a dangling pointer. */
+    wait4updater(src);
     _seal_free(src);
 }
 
-void
+int
 seal_play_src(seal_src_t* src)
 {
     assert(src != 0 && alIsSource(src->id));
 
     if (src->stream != 0) {
-        if (seal_get_src_state(src) == SEAL_PLAYING)
+        seal_src_state_t state = seal_get_src_state(src);
+        if (state == SEAL_PLAYING) {
+            /* Source and its updater will be stopped after this. */
             restart_queuing(src);
-        seal_update_src(src);
+        } else {
+            /* In case the old updater is not done. */
+            wait4updater(src);
+        }
+        /* Stream some data so plackback can start immediately. */
+        if (seal_update_src(src) < 0)
+            return 0;
+        if (src->auto_update)
+            src->updater = _seal_create_thread(update, src);
     }
     alSourcePlay(src->id);
+
+    return 1;
 }
 
 void
@@ -160,6 +174,8 @@ seal_detach_src_audio(seal_src_t* src)
     ensure_stream_released(src);
     seti_s(src, AL_BUFFER, AL_NONE);
     src->buf = 0;
+    /* Wait before nullifying stream pointer. */
+    wait4updater(src);
     src->stream = 0;
 }
 
@@ -186,10 +202,13 @@ seal_set_src_stream(seal_src_t* src, seal_stream_t* stream)
 {
     assert(src != 0 && alIsSource(src->id) && stream != 0);
 
+    if (stream == src->stream)
+        return 1;
     /* Make sure `src' is not currently a static source. */
     SEAL_CHK(src->buf == 0, SEAL_MIXING_SRC_TYPE, 0);
     /* Cannot associate an unopened stream. */
     SEAL_CHK(stream->id != 0, SEAL_STREAM_UNOPENED, 0);
+    SEAL_CHK(!stream->in_use, SEAL_STREAM_INUSE, 0);
     /* Cannot associate a stream with a different audio format. */
     if (src->stream != 0) {
         SEAL_CHK(memcmp(&stream->attr, &src->stream->attr,
@@ -213,11 +232,17 @@ seal_update_src(seal_src_t* src)
     unsigned int buf;
     seal_raw_t raw;
     int nbytes_streamed;
+    int updater_is_working;
 
     assert(src != 0 && alIsSource(src->id));
 
     if (src->stream == 0)
         return 0;
+
+    updater_is_working = src->updater != 0
+                         && !_seal_calling_thread_is(src->updater);
+    if (updater_is_working)
+        return 1;
 
     raw.size = src->chunk_size;
 
@@ -334,6 +359,16 @@ seal_set_src_gain(seal_src_t* src, float gain)
 }
 
 int
+seal_set_src_auto_update(seal_src_t* src, int auto_update)
+{
+    SEAL_CHK(auto_update == 0 || auto_update == 1, SEAL_BAD_SRC_ATTR_VAL, 0);
+
+    src->auto_update = auto_update;
+
+    return 1;
+}
+
+int
 seal_set_src_relative(seal_src_t* src, int relative)
 {
     return seti_s(src, AL_SOURCE_RELATIVE, relative);
@@ -409,6 +444,13 @@ float
 seal_get_src_gain(seal_src_t* src)
 {
     return getf(src, AL_GAIN);
+}
+
+
+int
+seal_is_src_auto_updated(seal_src_t* src)
+{
+    return src->auto_update;
 }
 
 int
@@ -536,6 +578,8 @@ void
 stop_then_clean_queue(seal_src_t* src)
 {
     alSourceStop(src->id);
+    /* Do not let the updater touch anything when cleaning the queue. */
+    wait4updater(src);
     clean_queue(src);
 }
 
@@ -549,6 +593,7 @@ restart_queuing(seal_src_t* src)
 void
 empty_queue(seal_src_t* src)
 {
+    /* Need to be playing first in order to become stopped. */
     alSourcePlay(src->id);
     stop_then_clean_queue(src);
 }
@@ -566,4 +611,27 @@ ensure_stream_released(seal_src_t* src)
 {
     if (src->stream != 0)
         src->stream->in_use = 0;
+}
+
+void*
+update(void* args)
+{
+    seal_src_t* src = args;
+
+    while (alIsSource(src->id) && seal_get_src_state(src) == SEAL_PLAYING) {
+        if (seal_update_src(src) < 0)
+            return 0;
+        _seal_sleep(50);
+    }
+
+    return (void*) 1;
+}
+
+void
+wait4updater(seal_src_t* src)
+{
+    if (src->updater != 0) {
+        _seal_join_thread(src->updater);
+        src->updater = 0;
+    }
 }
