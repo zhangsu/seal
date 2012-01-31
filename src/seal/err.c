@@ -19,7 +19,7 @@ seal_err_t
 seal_get_err(void)
 {
     seal_err_t err;
-    
+
     err = seal_peek_err();
     _seal_set_tls(_seal_err, (void*) SEAL_OK);
 
@@ -144,7 +144,7 @@ int
 _seal_get_al_err(void)
 {
     int err;
-    
+
     err = alGetError();
     _seal_unlock_al();
 

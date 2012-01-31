@@ -56,7 +56,7 @@ _seal_init_ov_stream(seal_stream_t* stream, const char* filename)
         _seal_free(povf);
         return 0;
     }
-    
+
     stream->id = povf;
     stream->fmt = SEAL_OV_FMT;
     stream->attr = attr;
@@ -158,7 +158,7 @@ load(seal_raw_t* raw, OggVorbis_File* ovf)
     } while (nbytes_read > 0);
     /* If `nbytes_read' < 0 then an error occurred. */
     SEAL_CHK_S(nbytes_read == 0, SEAL_READ_OV_FAILED, cleanup);
-    
+
     raw->size = nbytes_loaded;
 
     return 1;

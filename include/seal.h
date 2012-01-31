@@ -7,7 +7,7 @@
  * including seal.h, there will be no need to include the inidividual modules'
  * header files.
  */
- 
+
 #ifndef _SEAL_SEAL_H_
 #define _SEAL_SEAL_H_
 

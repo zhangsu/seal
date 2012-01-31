@@ -18,7 +18,7 @@ seal_raw_t*
 seal_alloc_raw(void)
 {
     seal_raw_t* raw;
-    
+
     raw = _seal_calloc(1, sizeof (seal_raw_t));
 
     return raw;

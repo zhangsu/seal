@@ -110,7 +110,7 @@ _seal_init_wav_stream(seal_stream_t* stream, const char* filename)
     stream->fmt = SEAL_WAV_FMT;
     stream->attr = tmp_raw.attr;
     _seal_rewind_wav_stream(stream);
- 
+
     return stream;
 
 cleanup:
@@ -219,7 +219,7 @@ read_chunk(seal_raw_t* raw, wav_stream_t* wav_stream, FILE* wav)
     default:
         SEAL_ABORT(SEAL_BAD_WAV_CHUNK, ERR_READING_CHUNKS);
     }
- 
+
     return NEED_MORE_CHUNKS;
 }
 

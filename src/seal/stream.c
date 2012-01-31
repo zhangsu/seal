@@ -18,7 +18,7 @@ seal_stream_t*
 seal_alloc_stream(void)
 {
     seal_stream_t* stream;
-    
+
     stream = _seal_calloc(1, sizeof (seal_stream_t));
 
     return stream;
@@ -28,7 +28,7 @@ seal_stream_t*
 seal_init_stream(seal_stream_t* stream, const char* filename, seal_fmt_t fmt)
 {
     assert(stream != 0 && filename != 0);
-    
+
     SEAL_CHK(stream->id == 0, SEAL_STREAM_ALREADY_OPENED, 0);
     if (seal_ensure_fmt_known(filename, &fmt) == 0)
         return 0;

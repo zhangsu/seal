@@ -155,7 +155,7 @@ load(seal_raw_t* raw, mpg123_handle* mh)
     } while (read(raw, &nbytes_loaded, mh) == MPG123_OK);
 
     SEAL_CHK_S(nbytes_loaded != 0, SEAL_READ_MPG_FAILED, cleanup);
-    
+
     raw->size = nbytes_loaded;
 
     return 1;

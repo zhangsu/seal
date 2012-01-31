@@ -191,7 +191,7 @@ seal_set_src_buf(seal_src_t* src, seal_buf_t* buf)
         return 0;
     /* Carry the previous looping state over for static sources. */
     alSourcei(src->id, AL_LOOPING, src->looping);
-     
+
     src->buf = buf;
 
     return 1;
@@ -526,7 +526,7 @@ float getf(seal_src_t* src, int attr)
     float f;
 
     assert(src != 0 && alIsSource(src->id));
-    
+
     alGetSourcef(src->id, attr, &f);
 
     return f;

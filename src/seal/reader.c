@@ -75,7 +75,7 @@ _seal_read_uint32le(uint32_t* buf, size_t size, void* file)
     READ_UINT_LE(32, buf, size, file);
 }
 
-/* 
+/*
  * Use of static variable avoids the overhead brought by dynamic memory
  * allocations and deallocations. Microsoft's implementation of fseek flushes
  * the buffer, which is evil and why fread is used here.

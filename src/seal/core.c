@@ -103,7 +103,7 @@ void*
 _seal_malloc(size_t size)
 {
     void* mem;
-    
+
     mem = malloc(size);
     SEAL_CHK(mem != 0, SEAL_MEM_ALLOC_FAILED, 0);
 

@@ -35,7 +35,7 @@ seal_alloc_nbuf(unsigned int n)
     seal_buf_t* buf;
 
     assert(n > 0);
-    
+
     buf = _seal_malloc(sizeof (seal_buf_t) * n);
     if (buf == 0)
         return 0;
@@ -115,7 +115,7 @@ seal_load2buf(seal_buf_t* buf, const char* filename, seal_fmt_t fmt)
 {
     int successful;
     seal_raw_t raw;
-    
+
     assert(buf != 0 && filename != 0 && alIsBuffer(buf->id));
 
     /* `raw.data' will be dynamically allocated by the callee. */
