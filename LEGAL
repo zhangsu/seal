@@ -555,9 +555,9 @@ include/mpg123/mpg123.h.in
 lib/*/libmpg123.*
 
     These are header and binary files of libmpg123. Code is copyrighted by
-	Michael Hipp, who made it free software under the terms of the LGPL 2.1.
-	You should have received a copy of LGPL Version 2.1 with this
-	distribution (see COPYING).
+    Michael Hipp, who made it free software under the terms of the LGPL 2.1.
+    You should have received a copy of LGPL Version 2.1 with this
+    distribution (see COPYING).
 
 --- END OF LIST ---
 

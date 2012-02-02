@@ -39,9 +39,9 @@
     described at:
         http://xiph.org/vorbis/doc/vorbisfile/threads.html
 	
-	Exceptions are the two functions `seal_startup' and `seal_cleanup', which
-	are *NOT* thread-safe. Refer to the documentation for these two functions
-	for details.
+    Exceptions are the two functions `seal_startup' and `seal_cleanup', which
+    are *NOT* thread-safe. Refer to the documentation for these two functions
+    for details.
 
 -   What Character Encoding Should be Used?
 
