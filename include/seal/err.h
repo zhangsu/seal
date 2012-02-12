@@ -19,6 +19,7 @@ enum seal_err_t
     SEAL_OK,
 
     SEAL_OPEN_DEVICE_FAILED,
+    SEAL_NO_EFX,
     SEAL_BAD_DEVICE,
     SEAL_CREATE_CONTEXT_FAILED,
 

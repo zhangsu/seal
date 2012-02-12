@@ -15,9 +15,6 @@
 extern "C" {
 #endif
 
-/* Gets the SEAL version string. */
-const char* seal_get_verion(void);
-
 /*
  * Initializes SEAL by specifying the device name. This function is not
  * re-entrant nor thread-safe and should be called only once per SEAL session.
@@ -32,6 +29,20 @@ int seal_startup(const char* /*device_name*/);
 /* Uninitializes SEAL and invalidate all SEAL objects. Thread-unsafe. */
 void seal_cleanup(void);
 
+/*
+ * Gets the number of effect slots a source has.
+ *
+ * @return  the version string
+ */
+int seal_get_effect_slot_count(void);
+
+/*
+ * Gets the SEAL version string.
+ *
+ * @return  the version string
+ */
+const char* seal_get_verion(void);
+
 #ifdef __cplusplus
 }
 #endif
@@ -43,18 +54,13 @@ void seal_cleanup(void);
  * SEAL_NO_THREAD_SAFETY is defined. Ideally we should lock only before
  * setting the error and unlock after retrieving the error, but that requires
  * a modification to the OpenAL implementation being used... */
-void _seal_lock_al(void);
-void _seal_unlock_al(void);
+void _seal_lock_openal(void);
+void _seal_unlock_openal(void);
 
 /* Memory operations. */
 void* _seal_malloc(size_t);
 void* _seal_calloc(size_t /*count*/, size_t /*size*/);
 void* _seal_realloc(void* /*mem*/, size_t);
 void _seal_free(void* /*mem*/);
-
-/* Interfaces for working with dynamic libraries. */
-void* _seal_open_lib(const char* /*lib_filename*/);
-void* _seal_get_sym(void* /*lib*/, const char* /*symbol*/);
-void _seal_close_lib(void* /*lib*/);
 
 #endif /* _SEAL_CORE_H_ */

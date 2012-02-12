@@ -41,6 +41,8 @@ seal_get_err_msg(seal_err_t err)
 
     case SEAL_OPEN_DEVICE_FAILED:
         return "Failed opening the specified device";
+    case SEAL_NO_EFX:
+        return "The effect module is not found";
     case SEAL_BAD_DEVICE:
         return "Invalid device";
     case SEAL_CREATE_CONTEXT_FAILED:
@@ -136,7 +138,7 @@ _seal_set_err(seal_err_t err)
 }
 
 /*
- * Always call `_seal_lock_al' before calling an OpenAL function that could
+ * Always call `_seal_lock_openal' before calling an OpenAL function that could
  * possibly raise an OpenAL error, and then call this function to get the
  * error.
  */
@@ -146,7 +148,7 @@ _seal_get_al_err(void)
     int err;
 
     err = alGetError();
-    _seal_unlock_al();
+    _seal_unlock_openal();
 
     return err;
 }

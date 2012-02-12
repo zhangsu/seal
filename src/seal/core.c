@@ -8,6 +8,7 @@
 #include <malloc.h>
 #include <al/al.h>
 #include <al/alc.h>
+#include <al/efx.h>
 #include <mpg123/mpg123.h>
 #include <seal/core.h>
 #include <seal/threading.h>
@@ -17,7 +18,9 @@
 /* Defined in err.c. */
 extern _seal_tls_t _seal_err;
 /* Global lock on OpenAL functions. */
-static _seal_lock_t al_lock;
+static _seal_lock_t openal_lock;
+/* Number of auxiliary sends per source. */
+static int effect_slot_count = 1;
 
 const char*
 seal_get_verion(void)
@@ -34,19 +37,25 @@ seal_startup(const char* device_name)
 {
     ALCdevice* device;
     ALCcontext* context;
+    ALint attr[] = { 0, 0, 0, 0 };
 
     device = alcOpenDevice(device_name);
     SEAL_CHK(device != 0, SEAL_OPEN_DEVICE_FAILED, 0);
+    SEAL_CHK_S(alcIsExtensionPresent(device, "ALC_EXT_EFX"),
+               SEAL_NO_EFX, cleanup);
 
-    context = alcCreateContext(device, 0);
+    attr[0] = ALC_MAX_AUXILIARY_SENDS;
+    attr[1] = 4;
+    context = alcCreateContext(device, attr);
     switch (alcGetError(device)) {
     case ALC_INVALID_VALUE:
         SEAL_ABORT_S(SEAL_CREATE_CONTEXT_FAILED, cleanup);
     case ALC_INVALID_DEVICE:
         SEAL_ABORT_S(SEAL_BAD_DEVICE, cleanup);
     }
-
     alcMakeContextCurrent(context);
+
+    alcGetIntegerv(device, ALC_MAX_AUXILIARY_SENDS, 1, &effect_slot_count);
 
     /* Reset OpenAL's error state. */
     alGetError();
@@ -55,7 +64,7 @@ seal_startup(const char* device_name)
     SEAL_CHK_S(mpg123_init() == MPG123_OK && seal_midi_startup() != 0,
                SEAL_INIT_MPG_FAILED, cleanup);
 
-    al_lock = _seal_create_lock();
+    openal_lock = _seal_create_lock();
     _seal_err = _seal_alloc_tls();
     _seal_set_tls(_seal_err, (void*) SEAL_OK);
 
@@ -75,10 +84,9 @@ seal_cleanup(void)
     ALCcontext* context;
 
     _seal_free_tls(_seal_err);
-    _seal_destroy_lock(al_lock);
+    _seal_destroy_lock(openal_lock);
 
     mpg123_exit();
-    seal_midi_cleanup();
 
     context = alcGetCurrentContext();
     device = alcGetContextsDevice(context);
@@ -87,16 +95,22 @@ seal_cleanup(void)
     alcCloseDevice(device);
 }
 
-void
-_seal_lock_al(void)
+int
+seal_get_effect_slot_count(void)
 {
-    _seal_lock(al_lock);
+    return effect_slot_count;
 }
 
 void
-_seal_unlock_al(void)
+_seal_lock_openal(void)
 {
-    _seal_unlock(al_lock);
+    _seal_lock(openal_lock);
+}
+
+void
+_seal_unlock_openal(void)
+{
+    _seal_unlock(openal_lock);
 }
 
 void*
