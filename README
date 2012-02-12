@@ -10,7 +10,9 @@
     Windows and Linux are supported. The third-party libraries are
     redistributed in binary forms for 32-bit Windows only; Linux users are
     expected to install the third-party libraries themselves. The Makefiles
-    are written specifically for MSVC and GCC (MinGW or native Linux).
+    are written specifically for MSVC and GCC (MinGW or native Linux). In
+    theory seal is portable to all UN*X-like systems, but it is only tested on
+    Linux.
 
 -   How to Build?
 
