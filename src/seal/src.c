@@ -68,7 +68,7 @@ seal_alloc_src(void)
     if (src == 0)
         return 0;
 
-    _seal_lock_al();
+    _seal_lock_openal();
     alGenSources(1, &src->id);
     SEAL_CHK_AL2_S(AL_OUT_OF_MEMORY, SEAL_ALLOC_SRC_FAILED,
                    AL_INVALID_VALUE, SEAL_ALLOC_SRC_FAILED, cleanup);
@@ -263,7 +263,7 @@ seal_update_src(seal_src_t* src)
         /* Queue is too short. */
         } else if (nbufs_queued < src->queue_size) {
             /* Generate new buffers. */
-            _seal_lock_al();
+            _seal_lock_openal();
             alGenBuffers(1, &buf);
             SEAL_CHK_AL(AL_OUT_OF_MEMORY, SEAL_ALLOC_BUF_FAILED, -1);
         /* The queue is up-to-date. */
@@ -276,7 +276,7 @@ start_streaming:
         if (nbytes_streamed > 0) {
             int buffer_filled;
             /* Fill or refill the current buffer. */
-            _seal_lock_al();
+            _seal_lock_openal();
             alBufferData(buf, _seal_get_buf_fmt(raw.attr.nchannels,
                                                 raw.attr.bit_depth),
                          raw.data, raw.size, raw.attr.freq);
@@ -537,7 +537,7 @@ seti_s(seal_src_t* src, int attr, int i)
 {
     assert(alIsSource(src->id));
 
-    _seal_lock_al();
+    _seal_lock_openal();
     alSourcei(src->id, attr, i);
     SEAL_CHK_AL2(AL_INVALID_VALUE, SEAL_BAD_SRC_ATTR_VAL,
                  AL_INVALID_OPERATION, SEAL_BAD_SRC_OP, 0);
@@ -550,7 +550,7 @@ setf_s(seal_src_t* src, int attr, float f)
 {
     assert(alIsSource(src->id));
 
-    _seal_lock_al();
+    _seal_lock_openal();
     alSourcef(src->id, attr, f);
     SEAL_CHK_AL2(AL_INVALID_VALUE, SEAL_BAD_SRC_ATTR_VAL,
                  AL_INVALID_OPERATION, SEAL_BAD_SRC_OP, 0);

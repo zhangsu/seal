@@ -40,7 +40,7 @@ seal_alloc_nbuf(unsigned int n)
     if (buf == 0)
         return 0;
 
-    _seal_lock_al();
+    _seal_lock_openal();
     /* Can't do this if `struct seal_buf_t' gets extended. */
     alGenBuffers(n, (unsigned int*) buf);
     SEAL_CHK_AL_S(AL_OUT_OF_MEMORY, SEAL_ALLOC_BUF_FAILED, cleanup);
@@ -98,7 +98,7 @@ seal_free_nbuf(seal_buf_t* buf, unsigned int n)
     assert(buf != 0 && n > 0);
 
     if (alIsBuffer(buf->id)) {
-        _seal_lock_al();
+        _seal_lock_openal();
         /* Can't do this if `struct seal_buf_t' gets extended. */
         alDeleteBuffers(n, (unsigned int*) buf);
         SEAL_CHK_AL2(AL_INVALID_OPERATION, SEAL_BUF_INUSE,
@@ -133,7 +133,7 @@ seal_raw2buf(seal_buf_t* buf, seal_raw_t* raw)
 {
     assert(buf != 0 && raw != 0 && alIsBuffer(buf->id));
 
-    _seal_lock_al();
+    _seal_lock_openal();
     alBufferData(buf->id, _seal_get_buf_fmt(raw->attr.nchannels,
                                             raw->attr.bit_depth),
                  raw->data, raw->size, raw->attr.freq);
