@@ -2,7 +2,7 @@ require 'mkmf'
 require 'fileutils'
 require 'rbconfig'
 include FileUtils
-include Config
+include RbConfig
 
 target_os = CONFIG['target_os']
 root_dir = '..'
