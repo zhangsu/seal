@@ -43,11 +43,16 @@ int seal_get_effect_slot_count(void);
  */
 const char* seal_get_verion(void);
 
+/* IMPLEMENTATION DETAILS STARTS FROM HERE. */
+
+/* Effect extension routines. */
+extern void (*alGenEffects)(int, unsigned int*);
+extern void (*alDeleteEffects)(int, unsigned int*);
+extern char (*alIsEffect)(unsigned int);
+
 #ifdef __cplusplus
 }
 #endif
-
-/* IMPLEMENTATION DETAILS STARTS FROM HERE. */
 
 /*
  * OpenAL's error state is not thread-safe and so semaphores are needed unless

@@ -43,6 +43,8 @@ seal_get_err_msg(seal_err_t err)
         return "Failed opening the specified device";
     case SEAL_NO_EFX:
         return "The effect module is not found";
+    case SEAL_NO_EXT_FUNC:
+        return "The required extension functions are not found";
     case SEAL_BAD_DEVICE:
         return "Invalid device";
     case SEAL_CREATE_CONTEXT_FAILED:
