@@ -30,11 +30,11 @@ int seal_startup(const char* /*device_name*/);
 void seal_cleanup(void);
 
 /*
- * Gets the number of effect slots a source has.
+ * Gets the maximum number of effects a source can apply concurrently.
  *
  * @return  the version string
  */
-int seal_get_effect_slot_count(void);
+int seal_get_max_effect_count(void);
 
 /*
  * Gets the SEAL version string.

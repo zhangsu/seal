@@ -20,7 +20,7 @@ extern _seal_tls_t _seal_err;
 /* Global lock on OpenAL functions. */
 static _seal_lock_t openal_lock;
 /* Number of auxiliary sends per source. */
-static int effect_slot_count = 1;
+static int max_effect_count = 1;
 
 LPALGENEFFECTS alGenEffects = 0;
 LPALDELETEEFFECTS alDeleteEffects = 0;
@@ -73,7 +73,7 @@ seal_startup(const char* device_name)
     alGetError();
     alcGetError(device);
 
-    alcGetIntegerv(device, ALC_MAX_AUXILIARY_SENDS, 1, &effect_slot_count);
+    alcGetIntegerv(device, ALC_MAX_AUXILIARY_SENDS, 1, &max_effect_count);
 
     openal_lock = _seal_create_lock();
     _seal_err = _seal_alloc_tls();
@@ -110,9 +110,9 @@ seal_cleanup(void)
 }
 
 int
-seal_get_effect_slot_count(void)
+seal_get_max_effect_count(void)
 {
-    return effect_slot_count;
+    return max_effect_count;
 }
 
 void

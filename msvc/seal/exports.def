@@ -1,6 +1,8 @@
 EXPORTS
 seal_startup
 seal_cleanup
+seal_get_max_effect_count
+seal_get_verion
 seal_alloc_src
 seal_free_src
 seal_play_src
