@@ -51,14 +51,14 @@ seal_get_err_msg(seal_err_t err)
         return "Failed creating an additional context for the device";
 
     case SEAL_ALLOC_BUF_FAILED:
-        return "Failed allocating buffer(s) due to lack of physical memory";
+        return "Buffer allocation failed";
     case SEAL_FREE_BUF_FAILED:
-        return "Failed freeing buffer(s)";
+        return "Buffer deallocation failed";
     case SEAL_BUF_INUSE:
         return "The operation cannot be done as the buffer is still in use";
 
     case SEAL_ALLOC_STREAM_FAILED:
-        return "Failed allocating the stream";
+        return "Stream allocation failed";
     case SEAL_STREAM_UNOPENED:
         return "Cannot use the uninitialized stream";
     case SEAL_STREAM_ALREADY_OPENED:
@@ -70,7 +70,7 @@ seal_get_err_msg(seal_err_t err)
                "that of the currently attached stream";
 
     case SEAL_ALLOC_SRC_FAILED:
-        return "Failed allocating the source due to lack of resources";
+        return "Source allocation failed";
     case SEAL_BAD_SRC_ATTR_VAL:
         return "Invalid source attribute value";
     case SEAL_BAD_SRC_OP:
@@ -81,6 +81,11 @@ seal_get_err_msg(seal_err_t err)
 
     case SEAL_BAD_LISTENER_ATTR_VAL:
         return "Invalid listener attribute value";
+
+    case SEAL_ALLOC_EFEFCT_FAILED:
+        return "Effect allocation failed";
+    case SEAL_FREE_EFFECT_FAILED:
+        return "Effect deallocation failed";
 
     case SEAL_OPEN_FILE_FAILED:
         return "Failed opening the specified file";
