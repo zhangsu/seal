@@ -34,7 +34,7 @@ void seal_cleanup(void);
  *
  * @return  the version string
  */
-int seal_get_max_effect_count(void);
+int seal_get_neffects_per_src(void);
 
 /*
  * Gets the SEAL version string.
@@ -43,16 +43,16 @@ int seal_get_max_effect_count(void);
  */
 const char* seal_get_verion(void);
 
+#ifdef __cplusplus
+}
+#endif
+
 /* IMPLEMENTATION DETAILS STARTS FROM HERE. */
 
 /* Effect extension routines. */
 extern void (*alGenEffects)(int, unsigned int*);
 extern void (*alDeleteEffects)(int, unsigned int*);
 extern char (*alIsEffect)(unsigned int);
-
-#ifdef __cplusplus
-}
-#endif
 
 /*
  * OpenAL's error state is not thread-safe and so semaphores are needed unless

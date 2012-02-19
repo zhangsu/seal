@@ -1,7 +1,7 @@
 EXPORTS
 seal_startup
 seal_cleanup
-seal_get_max_effect_count
+seal_get_neffects_per_src
 seal_get_verion
 seal_alloc_src
 seal_free_src
