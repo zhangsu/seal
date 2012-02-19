@@ -54,6 +54,9 @@
     <ClCompile Include="..\..\src\seal\ov.c">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\seal\reverb.c">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\seal\buf.h">
@@ -102,6 +105,9 @@
       <Filter>include\seal</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\seal\ov.h">
+      <Filter>include\seal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\seal\reverb.h">
       <Filter>include\seal</Filter>
     </ClInclude>
   </ItemGroup>
