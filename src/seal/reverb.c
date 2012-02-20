@@ -1,4 +1,5 @@
 #include <al/al.h>
+#include <al/efx.h>
 #include <seal/reverb.h>
 #include <seal/core.h>
 #include <seal/err.h>
@@ -8,6 +9,8 @@ struct seal_reverb_t
 {
     unsigned int id;
 };
+
+static float get_attr(seal_reverb_t*, int);
 
 seal_reverb_t*
 seal_alloc_reverb(void)
@@ -90,43 +93,88 @@ int
 seal_set_reverb_hfdecay_limited(seal_reverb_t* reverb, int limited);
 
 float
-seal_get_reverb_density(seal_reverb_t* reverb);
+seal_get_reverb_density(seal_reverb_t* reverb)
+{
+    return get_attr(reverb, AL_REVERB_DENSITY);
+}
 
 float
-seal_get_reverb_diffusion(seal_reverb_t* reverb);
+seal_get_reverb_diffusion(seal_reverb_t* reverb)
+{
+    return get_attr(reverb,  AL_REVERB_DIFFUSION);
+}
 
 float
-seal_get_reverb_gain(seal_reverb_t* reverb);
+seal_get_reverb_gain(seal_reverb_t* reverb)
+{
+    return get_attr(reverb,  AL_REVERB_GAIN);
+}
 
 float
-seal_get_reverb_hfgain(seal_reverb_t* reverb);
+seal_get_reverb_hfgain(seal_reverb_t* reverb)
+{
+    return get_attr(reverb,  AL_REVERB_GAINHF);
+}
 
 float
-seal_get_reverb_decay_time(seal_reverb_t* reverb);
+seal_get_reverb_decay_time(seal_reverb_t* reverb)
+{
+    return get_attr(reverb,  AL_REVERB_DECAY_TIME);
+}
 
 float
-seal_get_reverb_hfdecay_ratio(seal_reverb_t* reverb);
+seal_get_reverb_hfdecay_ratio(seal_reverb_t* reverb)
+{
+    return get_attr(reverb,  AL_REVERB_DECAY_HFRATIO);
+}
 
 float
-seal_get_reverb_reflections_gain(seal_reverb_t* reverb);
+seal_get_reverb_reflections_gain(seal_reverb_t* reverb)
+{
+    return get_attr(reverb,  AL_REVERB_REFLECTIONS_GAIN);
+}
 
 float
-seal_get_reverb_reflections_delay(seal_reverb_t* reverb);
+seal_get_reverb_reflections_delay(seal_reverb_t* reverb)
+{
+    return get_attr(reverb,  AL_REVERB_REFLECTIONS_DELAY);
+}
 
 float
-seal_get_reverb_late_gain(seal_reverb_t* reverb);
+seal_get_reverb_late_gain(seal_reverb_t* reverb)
+{
+    return get_attr(reverb,  AL_REVERB_LATE_REVERB_GAIN);
+}
 
 float
-seal_get_reverb_late_delay(seal_reverb_t* reverb);
+seal_get_reverb_late_delay(seal_reverb_t* reverb)
+{
+    return get_attr(reverb,  AL_REVERB_LATE_REVERB_DELAY);
+}
 
 float
-seal_get_reverb_air_absorbtion_hfgain(seal_reverb_t* reverb);
+seal_get_reverb_air_absorbtion_hfgain(seal_reverb_t* reverb)
+{
+    return get_attr(reverb,  AL_REVERB_ROOM_ROLLOFF_FACTOR);
+}
 
 float
-seal_get_reverb_room_rolloff_factor(seal_reverb_t* reverb);
+seal_get_reverb_room_rolloff_factor(seal_reverb_t* reverb)
+{
+    return get_attr(reverb,  AL_REVERB_AIR_ABSORPTION_GAINHF);
+}
 
 int
-seal_is_reverb_hfdecay_limited(seal_reverb_t* reverb);
+seal_is_reverb_hfdecay_limited(seal_reverb_t* reverb)
+{
+    int attr_value;
+
+    assert(reverb != 0 && alIsEffect(reverb->id));
+
+    alGetEffecti(reverb->id, AL_REVERB_DECAY_HFLIMIT, &attr_value);
+
+    return attr_value;
+}
 
 float
 get_attr(seal_reverb_t* reverb, int attr_key)
