@@ -25,6 +25,11 @@ static int neffects_per_src = 1;
 LPALGENEFFECTS alGenEffects = 0;
 LPALDELETEEFFECTS alDeleteEffects = 0;
 LPALISEFFECT alIsEffect = 0;
+LPALGETEFFECTF alGetEffectf = 0;
+LPALGETEFFECTI alGetEffecti = 0;
+
+static int init_ext_proc(void);
+
 
 const char*
 seal_get_verion(void)
@@ -59,11 +64,8 @@ seal_startup(const char* device_name)
     }
     alcMakeContextCurrent(context);
 
-    alGenEffects = (LPALGENEFFECTS) alGetProcAddress("alGenEffects");
-    alDeleteEffects = (LPALDELETEEFFECTS) alGetProcAddress("alDeleteEffects");
-    alIsEffect = (LPALISEFFECT) alGetProcAddress("alIsEffect");
-    SEAL_CHK_S(alGenEffects != 0 && alDeleteEffects != 0 && alIsEffect != 0,
-               SEAL_NO_EXT_FUNC, clean_all);
+    if (init_ext_proc() == 0)
+        goto clean_all;
 
     /* `mpg123_init' is thread-unsafe. */
     SEAL_CHK_S(mpg123_init() == MPG123_OK && seal_midi_startup() != 0,
@@ -162,4 +164,19 @@ void
 _seal_free(void* mem)
 {
     free(mem);
+}
+
+static int
+init_ext_proc(void)
+{
+    alGenEffects = (LPALGENEFFECTS) alGetProcAddress("alGenEffects");
+    alDeleteEffects = (LPALDELETEEFFECTS) alGetProcAddress("alDeleteEffects");
+    alIsEffect = (LPALISEFFECT) alGetProcAddress("alIsEffect");
+    alGetEffectf = (LPALGETEFFECTF) alGetProcAddress("alGetEffectf");
+    alGetEffecti = (LPALGETEFFECTI) alGetProcAddress("alGetEffecti");
+    SEAL_CHK(alGenEffects != 0 && alDeleteEffects != 0 && alIsEffect != 0
+             && alGetEffectf && alGetEffecti,
+             SEAL_NO_EXT_FUNC, 0);
+
+    return 1;
 }

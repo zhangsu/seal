@@ -53,6 +53,8 @@ const char* seal_get_verion(void);
 extern void (*alGenEffects)(int, unsigned int*);
 extern void (*alDeleteEffects)(int, unsigned int*);
 extern char (*alIsEffect)(unsigned int);
+extern void (*alGetEffectf)(unsigned int, int, float*);
+extern void (*alGetEffecti)(unsigned int, int, int*);
 
 /*
  * OpenAL's error state is not thread-safe and so semaphores are needed unless
