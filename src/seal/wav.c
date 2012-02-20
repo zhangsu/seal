@@ -48,8 +48,8 @@ struct wav_stream_t
 typedef enum reading_state_t reading_state_t;
 typedef struct wav_stream_t wav_stream_t;
 
-static const uint16_t PCM_CODE         = 1;
-static const uint32_t CHUNK_MIN_SIZE   = 4;
+static const uint16_t PCM_CODE       = 1;
+static const uint32_t CHUNK_MIN_SIZE = 4;
 
 static reading_state_t read_chunks(seal_raw_t*, wav_stream_t*, FILE*);
 static reading_state_t read_chunk(seal_raw_t*, wav_stream_t*, FILE*);
