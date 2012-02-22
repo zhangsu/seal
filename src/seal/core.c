@@ -25,6 +25,8 @@ static int neffects_per_src = 1;
 LPALGENEFFECTS alGenEffects = 0;
 LPALDELETEEFFECTS alDeleteEffects = 0;
 LPALISEFFECT alIsEffect = 0;
+LPALEFFECTF alEffectf = 0;
+LPALEFFECTI alEffecti = 0;
 LPALGETEFFECTF alGetEffectf = 0;
 LPALGETEFFECTI alGetEffecti = 0;
 
@@ -172,10 +174,12 @@ init_ext_proc(void)
     alGenEffects = (LPALGENEFFECTS) alGetProcAddress("alGenEffects");
     alDeleteEffects = (LPALDELETEEFFECTS) alGetProcAddress("alDeleteEffects");
     alIsEffect = (LPALISEFFECT) alGetProcAddress("alIsEffect");
+    alEffectf = (LPALEFFECTF) alGetProcAddress("alEffectf");
+    alEffecti = (LPALEFFECTI) alGetProcAddress("alEffecti");
     alGetEffectf = (LPALGETEFFECTF) alGetProcAddress("alGetEffectf");
     alGetEffecti = (LPALGETEFFECTI) alGetProcAddress("alGetEffecti");
-    SEAL_CHK(alGenEffects != 0 && alDeleteEffects != 0 && alIsEffect != 0
-             && alGetEffectf && alGetEffecti,
+    SEAL_CHK(alGenEffects && alDeleteEffects && alIsEffect && alGetEffectf
+             && alGetEffecti && alEffectf,
              SEAL_NO_EXT_FUNC, 0);
 
     return 1;

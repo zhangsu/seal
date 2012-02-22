@@ -74,7 +74,7 @@ seal_get_err_msg(seal_err_t err)
     case SEAL_BAD_SRC_ATTR_VAL:
         return "Invalid source attribute value";
     case SEAL_BAD_SRC_OP:
-        return "Invalid operation on the source";
+        return "Invalid source operation";
     case SEAL_MIXING_SRC_TYPE:
         return "Cannot attach a stream to a static source or "
                "attach a buffer to a streaming source";
@@ -86,6 +86,12 @@ seal_get_err_msg(seal_err_t err)
         return "Effect allocation failed";
     case SEAL_FREE_EFFECT_FAILED:
         return "Effect deallocation failed";
+    case SEAL_BAD_EFFECT:
+        return "Invalid effect";
+    case SEAL_BAD_EFFECT_ATTR_VAL:
+        return "Invalid effect attribute value";
+    case SEAL_BAD_EFFECT_OP:
+        return "Invalid effect operation";
 
     case SEAL_OPEN_FILE_FAILED:
         return "Failed opening the specified file";

@@ -53,6 +53,8 @@ const char* seal_get_verion(void);
 extern void (*alGenEffects)(int, unsigned int*);
 extern void (*alDeleteEffects)(int, unsigned int*);
 extern char (*alIsEffect)(unsigned int);
+extern void (*alEffectf)(unsigned int, int, float);
+extern void (*alEffecti)(unsigned int, int, int);
 extern void (*alGetEffectf)(unsigned int, int, float*);
 extern void (*alGetEffecti)(unsigned int, int, int*);
 
