@@ -177,13 +177,13 @@ seal_get_buf_nchannels(seal_buf_t* buf)
 }
 
 int
-get_attr(seal_buf_t* buf, int attr)
+get_attr(seal_buf_t* buf, int key)
 {
     int ret;
 
     assert(buf != 0 && alIsBuffer(buf->id));
 
-    alGetBufferi(buf->id, attr, &ret);
+    alGetBufferi(buf->id, key, &ret);
 
     return ret;
 }
