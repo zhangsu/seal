@@ -15,29 +15,30 @@ UN*X-like systems, but it is only tested on Linux.
 
 ### Build
 
--   GCC on Linux  
-    install libopenal and libmpg123 first and then run  
+-   GCC + GNU Make + Linux
+
+    install [libopenal]
+    (http://connect.creativelabs.com/openal/Downloads/Forms/AllItems.aspx)
+    and [libmpg123](http://sourceforge.net/projects/mpg123/), then
 
         $ cd gmake/linux
         $ make RELEASE=1
 
--   GCC through MinGW  
-    run
+-   GCC + MinGW
 
         $ cd gmake/win32
         $ make RELEASE=1
 
--   MSVC through nmake  
-    run
+-   MSVC + nmake
 
         > cd msvc/nmake
         > nmake
 
--   MSVC through Microsoft Visual Studio 2010 IDE  
+-   MSVC + Microsoft Visual Studio 2010
+
     use the solution and project files under /msvc.
 
--   Ruby extension  
-    run
+-   Ruby extension
 
         $ cd demo
         $ ruby configure.rb
