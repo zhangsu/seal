@@ -44,8 +44,8 @@ UN*X-like systems, but it is only tested on Linux.
         $ ruby configure.rb
         $ make
         
-    The default output is `seal.*', which is a dynamic library that could be
-    required by Ruby at runtime.
+    The default output is `seal.{so,dll}`, which is a dynamic library that
+    could be required by Ruby at runtime.
 
 Note that these Makefiles do not add header dependencies for third-party
 libraries and other header files which are not expected to change.
