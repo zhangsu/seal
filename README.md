@@ -17,26 +17,26 @@ UN*X-like systems, but it is only tested on Linux.
 
 ### Build
 
--   GCC on Linux
-    install libopenal and libmpg123 first and then run
+-   GCC on Linux  
+    install libopenal and libmpg123 first and then run  
         $ cd gmake/linux
         $ make RELEASE=1
 
--   GCC through MinGW
-    run
+-   GCC through MinGW  
+    run  
         $ cd gmake/win32
         $ make RELEASE=1
 
--   MSVC through nmake
-    run
+-   MSVC through nmake  
+    run  
         > cd msvc/nmake
         > nmake
 
--   MSVC through Microsoft Visual Studio 2010 IDE
+-   MSVC through Microsoft Visual Studio 2010 IDE  
     use the solution and project files under /msvc.
 
--   Ruby extension
-    run
+-   Ruby extension  
+    run  
         $ cd demo
         $ ruby configure.rb
         $ make
@@ -89,7 +89,7 @@ hence the name "Scorched end".
 SEAL was named so with the hope that it will be more useful than it seems
 and will be discovered by the right people who need the right tool.
 
-[1] http://en.wikipedia.org/wiki/Guqin
-[2] http://en.wikipedia.org/wiki/Cai_Yong
-[3] http://en.wikipedia.org/wiki/History_of_the_Later_Han
-[4] http://en.wikipedia.org/wiki/Firmiana_simplex
+[1] http://en.wikipedia.org/wiki/Guqin  
+[2] http://en.wikipedia.org/wiki/Cai_Yong  
+[3] http://en.wikipedia.org/wiki/History_of_the_Later_Han  
+[4] http://en.wikipedia.org/wiki/Firmiana_simplex  
