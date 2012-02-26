@@ -1,8 +1,6 @@
 Scorched End Audio Library
 ==========================
 
-### What is SEAL?
-
 SEAL is a C library with Ruby binding for 3D audio rendering and manipulation
 with built-in support for Ogg Vorbis, MPEG Audio and WAVE format. The major
 components of SEAL are based on OpenAL, a 3D sound rendering engine.
@@ -19,16 +17,19 @@ UN*X-like systems, but it is only tested on Linux.
 
 -   GCC on Linux  
     install libopenal and libmpg123 first and then run  
+
         $ cd gmake/linux
         $ make RELEASE=1
 
 -   GCC through MinGW  
-    run  
+    run
+
         $ cd gmake/win32
         $ make RELEASE=1
 
 -   MSVC through nmake  
-    run  
+    run
+
         > cd msvc/nmake
         > nmake
 
@@ -36,7 +37,8 @@ UN*X-like systems, but it is only tested on Linux.
     use the solution and project files under /msvc.
 
 -   Ruby extension  
-    run  
+    run
+
         $ cd demo
         $ ruby configure.rb
         $ make
@@ -54,7 +56,7 @@ source, buffer or stream instance is accessed by different threads at the
 *same time* , which is similar to libvorbis' thread-safety conditions
 described [here](http://xiph.org/vorbis/doc/vorbisfile/threads.html).
 
-Exceptions are the two functions `seal_startup' and `seal_cleanup', which are
+Exceptions are the two functions `seal_startup` and `seal_cleanup`, which are
 *NOT* thread-safe. Refer to the documentation for these two functions for
 details.
 
