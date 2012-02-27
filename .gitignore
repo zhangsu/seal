@@ -21,6 +21,6 @@ msvc/nmake/*.exe
 msvc/nmake/*.exp
 msvc/nmake/*.lib
 demo/*.dll
+demo/*.def
 demo/Makefile
 demo/test.rb
-
