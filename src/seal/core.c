@@ -48,15 +48,13 @@ seal_startup(const char* device_name)
 {
     ALCdevice* device;
     ALCcontext* context;
-    ALint attr[] = { 0, 0, 0, 0 };
+    ALint attr[] = { ALC_MAX_AUXILIARY_SENDS, 4, 0, 0 };
 
     device = alcOpenDevice(device_name);
     SEAL_CHK(device != 0, SEAL_OPEN_DEVICE_FAILED, 0);
     SEAL_CHK_S(alcIsExtensionPresent(device, ALC_EXT_EFX_NAME),
                SEAL_NO_EFX, clean_device);
 
-    attr[0] = ALC_MAX_AUXILIARY_SENDS;
-    attr[1] = 4;
     context = alcCreateContext(device, attr);
     switch (alcGetError(device)) {
     case ALC_INVALID_VALUE:
