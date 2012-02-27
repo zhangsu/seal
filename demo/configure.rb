@@ -32,4 +32,4 @@ end
 $VPATH << src_dir << "#{src_dir}/seal"
 $VPATH << "#{src_dir}/libogg" << "#{src_dir}/libvorbis"
 dir_config('seal', include_dir, lib_dir)
-create_makefile('seal', '../src/**')
+create_makefile('seal', '../src/**/')
