@@ -216,7 +216,7 @@ _seal_calling_thread_is(_seal_thread_t thread)
 void
 _seal_sleep(unsigned int millisec)
 {
-    Sleep(millisec);
+    SleepEx(millisec, 0);
 }
 
 #endif /* __unix__, _WIN32 */
