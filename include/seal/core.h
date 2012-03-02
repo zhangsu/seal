@@ -72,4 +72,6 @@ void* _seal_calloc(size_t /*count*/, size_t /*size*/);
 void* _seal_realloc(void* /*mem*/, size_t);
 void _seal_free(void* /*mem*/);
 
+void _seal_sleep(unsigned int millisec);
+
 #endif /* _SEAL_CORE_H_ */

@@ -173,7 +173,7 @@ int seal_load(seal_raw_t*, const char* /*filename*/, seal_fmt_t);
  *                  AL_FORMAT_STEREO16
  *                  if successful or otherwise 0
  */
-int _seal_get_buf_fmt(uint32_t /*nchannels*/, uint32_t /*bit_depth*/);
+int _seal_get_buf_fmt(int /*nchannels*/, int /*bit_depth*/);
 
 #ifdef __cplusplus
 }

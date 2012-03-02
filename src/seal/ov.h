@@ -9,8 +9,8 @@
 #ifndef _SEAL_OV_H_
 #define _SEAL_OV_H_
 
-#include "raw.h"
-#include "stream.h"
+#include <seal/raw.h>
+#include <seal/stream.h>
 
 #ifdef __cplusplus
 extern "C" {

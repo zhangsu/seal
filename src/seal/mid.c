@@ -4,8 +4,8 @@
  * attached with the library.
  */
 
-#include <seal/mid.h>
 #include <seal/err.h>
+#include <seal/mid.h>
 
 int
 seal_midi_startup(void)

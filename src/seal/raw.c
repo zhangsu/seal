@@ -7,7 +7,6 @@
 #include <stddef.h>
 #include <seal/raw.h>
 #include <seal/core.h>
-#include <seal/pstdint.h>
 #include <seal/err.h>
 #include <assert.h>
 

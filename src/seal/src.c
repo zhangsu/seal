@@ -11,9 +11,9 @@
 #include <seal/core.h>
 #include <seal/buf.h>
 #include <seal/stream.h>
-#include <seal/threading.h>
 #include <seal/err.h>
 #include <assert.h>
+#include "threading.h"
 
 struct seal_src_t
 {

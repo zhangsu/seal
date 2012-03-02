@@ -4,9 +4,9 @@
  * COPYING attached with the library.
  */
 
-#include <seal/threading.h>
 #include <seal/core.h>
-#include <seal/pstdint.h>
+#include "threading.h"
+#include "pstdint.h"
 
 #if defined (SEAL_NO_THREAD_SAFETY)
 
@@ -179,12 +179,6 @@ _seal_calling_thread_is(_seal_thread_t thread)
     return pthread_self() == (pthread_t) thread;
 }
 
-void
-_seal_sleep(unsigned int millisec)
-{
-    usleep(millisec * 1000);
-}
-
 #elif defined (_WIN32)
 
 _seal_thread_t
@@ -211,12 +205,6 @@ int
 _seal_calling_thread_is(_seal_thread_t thread)
 {
     return GetCurrentThreadId() == (DWORD) thread;
-}
-
-void
-_seal_sleep(unsigned int millisec)
-{
-    SleepEx(millisec, 0);
 }
 
 #endif /* __unix__, _WIN32 */

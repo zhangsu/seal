@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <setjmp.h>
 #include <seal.h>
-#include <seal/threading.h>
 #include "test.h"
 
 #ifdef _MSC_VER

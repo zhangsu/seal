@@ -1,6 +1,5 @@
 #include <string.h>
 #include <stdio.h>
-#include <seal/threading.h>
 #include <seal.h>
 #include "test.h"
 

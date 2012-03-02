@@ -11,7 +11,6 @@
 #define _SEAL_RAW_H_
 
 #include <stddef.h>
-#include "pstdint.h"
 
 /* Raw PCM data. */
 typedef struct seal_raw_t seal_raw_t;

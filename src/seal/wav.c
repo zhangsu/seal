@@ -6,12 +6,12 @@
 
 #include <stdio.h>
 #include <stddef.h>
-#include <seal/wav.h>
 #include <seal/core.h>
 #include <seal/raw.h>
 #include <seal/stream.h>
-#include <seal/reader.h>
 #include <seal/err.h>
+#include "reader.h"
+#include "wav.h"
 
 enum
 {

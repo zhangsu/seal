@@ -8,11 +8,11 @@
 #include <seal/core.h>
 #include <seal/raw.h>
 #include <seal/fmt.h>
-#include <seal/wav.h>
-#include <seal/ov.h>
-#include <seal/mpg.h>
 #include <seal/err.h>
 #include <assert.h>
+#include "ov.h"
+#include "mpg.h"
+#include "wav.h"
 
 seal_stream_t*
 seal_alloc_stream(void)

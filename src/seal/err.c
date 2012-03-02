@@ -10,7 +10,7 @@
 #include <al/al.h>
 #include <seal/err.h>
 #include <seal/core.h>
-#include <seal/threading.h>
+#include "threading.h"
 
 /* Thread-local error state. Initialized and uninitialized in core.c. */
 _seal_tls_t _seal_err;

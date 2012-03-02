@@ -10,11 +10,11 @@
 #include <seal/core.h>
 #include <seal/raw.h>
 #include <seal/fmt.h>
-#include <seal/wav.h>
-#include <seal/ov.h>
-#include <seal/mpg.h>
 #include <seal/err.h>
 #include <assert.h>
+#include "ov.h"
+#include "mpg.h"
+#include "wav.h"
 
 struct seal_buf_t
 {
@@ -222,7 +222,7 @@ seal_load(seal_raw_t* raw, const char* filename, seal_fmt_t fmt)
 } while (0)
 
 int
-_seal_get_buf_fmt(uint32_t nchannels, uint32_t bit_depth)
+_seal_get_buf_fmt(int nchannels, int bit_depth)
 {
     if (nchannels == 1)
         RETURN_FMT_CONST(bit_depth, MONO);

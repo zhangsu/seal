@@ -6,13 +6,13 @@
 
 #include <stdio.h>
 #include <stddef.h>
-#include <seal/reader.h>
-#include <seal/pstdint.h>
 #include <seal/err.h>
 #include <assert.h>
 #ifdef _WIN32
 # include <Windows.h>
 #endif
+#include "reader.h"
+#include "pstdint.h"
 
 enum
 {

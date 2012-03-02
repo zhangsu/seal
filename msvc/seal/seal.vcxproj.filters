@@ -74,41 +74,41 @@
     <ClInclude Include="..\..\include\seal\src.h">
       <Filter>include\seal</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\seal\wav.h">
-      <Filter>include\seal</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\seal.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\seal\listener.h">
       <Filter>include\seal</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\seal\threading.h">
-      <Filter>include\seal</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\seal\pstdint.h">
-      <Filter>include\seal</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\seal\reader.h">
-      <Filter>include\seal</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\seal\stream.h">
-      <Filter>include\seal</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\seal\mpg.h">
       <Filter>include\seal</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\seal\fmt.h">
       <Filter>include\seal</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\seal\reverb.h">
+      <Filter>include\seal</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\include\seal\mid.h">
       <Filter>include\seal</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\seal\ov.h">
-      <Filter>include\seal</Filter>
+    <ClInclude Include="..\..\src\seal\mpg.h">
+      <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\seal\reverb.h">
-      <Filter>include\seal</Filter>
+    <ClInclude Include="..\..\src\seal\ov.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\seal\reader.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\seal\threading.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\seal\wav.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\seal\pstdint.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -6,12 +6,11 @@
 
 #include <stdio.h>
 #include <stddef.h>
-#include <seal/pstdint.h>
 #include <mpg123/mpg123.h>
-#include <seal/mpg.h>
 #include <seal/raw.h>
 #include <seal/stream.h>
 #include <seal/err.h>
+#include "mpg.h"
 
 /* Initial buffer size for loading. */
 static const int INITIAL_BUF_SIZE = 32768;

@@ -11,9 +11,9 @@
 #include <al/efx.h>
 #include <mpg123/mpg123.h>
 #include <seal/core.h>
-#include <seal/threading.h>
 #include <seal/mid.h>
 #include <seal/err.h>
+#include "threading.h"
 
 /* Defined in err.c. */
 extern _seal_tls_t _seal_err;
@@ -182,3 +182,25 @@ init_ext_proc(void)
 
     return 1;
 }
+
+#if defined (__unix__)
+
+#include <unistd.h>
+
+void
+_seal_sleep(unsigned int millisec)
+{
+    usleep(millisec * 1000);
+}
+
+#elif defined (_WIN32)
+
+#include <Windows.h>
+
+void
+_seal_sleep(unsigned int millisec)
+{
+    SleepEx(millisec, 0);
+}
+
+#endif /* __unix__, _WIN32 */

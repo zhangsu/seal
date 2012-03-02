@@ -170,16 +170,16 @@
     <ClInclude Include="..\..\include\seal\fmt.h" />
     <ClInclude Include="..\..\include\seal\listener.h" />
     <ClInclude Include="..\..\include\seal\mid.h" />
-    <ClInclude Include="..\..\include\seal\mpg.h" />
-    <ClInclude Include="..\..\include\seal\ov.h" />
-    <ClInclude Include="..\..\include\seal\pstdint.h" />
     <ClInclude Include="..\..\include\seal\raw.h" />
-    <ClInclude Include="..\..\include\seal\reader.h" />
     <ClInclude Include="..\..\include\seal\reverb.h" />
     <ClInclude Include="..\..\include\seal\src.h" />
     <ClInclude Include="..\..\include\seal\stream.h" />
-    <ClInclude Include="..\..\include\seal\threading.h" />
-    <ClInclude Include="..\..\include\seal\wav.h" />
+    <ClInclude Include="..\..\src\seal\mpg.h" />
+    <ClInclude Include="..\..\src\seal\ov.h" />
+    <ClInclude Include="..\..\src\seal\pstdint.h" />
+    <ClInclude Include="..\..\src\seal\reader.h" />
+    <ClInclude Include="..\..\src\seal\threading.h" />
+    <ClInclude Include="..\..\src\seal\wav.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\libvorbis\libvorbis.vcxproj">

@@ -7,12 +7,12 @@
 #include <vorbis/codec.h>
 #define OV_EXCLUDE_STATIC_CALLBACKS
 #include <vorbis/vorbisfile.h>
-#include <seal/ov.h>
 #include <seal/core.h>
-#include <seal/reader.h>
 #include <seal/raw.h>
 #include <seal/stream.h>
 #include <seal/err.h>
+#include "ov.h"
+#include "reader.h"
 
 /* Initial buffer size for loading. */
 static const int INITIAL_BUF_SIZE = 4096;

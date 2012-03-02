@@ -10,8 +10,8 @@
 #ifndef _SEAL_WAV_H_
 #define _SEAL_WAV_H_
 
-#include "raw.h"
-#include "stream.h"
+#include <seal/raw.h>
+#include <seal/stream.h>
 
 #ifdef __cplusplus
 extern "C" {
