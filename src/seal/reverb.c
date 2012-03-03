@@ -39,8 +39,6 @@ cleanup:
 int
 seal_free_reverb(seal_reverb_t* reverb)
 {
-    assert(reverb != 0);
-
     if (alIsEffect(reverb->id)) {
         _seal_lock_openal();
         alDeleteEffects(1, &reverb->id);
@@ -129,7 +127,7 @@ seal_set_reverb_room_rolloff_factor(seal_reverb_t* reverb, float factor)
 int
 seal_set_reverb_hfdecay_limited(seal_reverb_t* reverb, char limited)
 {
-    assert(reverb != 0 && alIsEffect(reverb->id));
+    assert(alIsEffect(reverb->id));
 
     alEffecti(reverb->id, AL_REVERB_DECAY_HFLIMIT, limited);
     SEAL_CHK_AL3(AL_INVALID_NAME, SEAL_BAD_EFFECT,
@@ -216,7 +214,7 @@ seal_is_reverb_hfdecay_limited(seal_reverb_t* reverb)
 {
     int attr_value;
 
-    assert(reverb != 0 && alIsEffect(reverb->id));
+    assert(alIsEffect(reverb->id));
 
     alGetEffecti(reverb->id, AL_REVERB_DECAY_HFLIMIT, &attr_value);
 
@@ -226,7 +224,7 @@ seal_is_reverb_hfdecay_limited(seal_reverb_t* reverb)
 int
 set_attr(seal_reverb_t* reverb, int key, float value)
 {
-    assert(reverb != 0 && alIsEffect(reverb->id));
+    assert(alIsEffect(reverb->id));
 
     alEffectf(reverb->id, key, value);
     SEAL_CHK_AL3(AL_INVALID_NAME, SEAL_BAD_EFFECT,
@@ -241,7 +239,7 @@ get_attr(seal_reverb_t* reverb, int key)
 {
     float value;
 
-    assert(reverb != 0 && alIsEffect(reverb->id));
+    assert(alIsEffect(reverb->id));
 
     alGetEffectf(reverb->id, key, &value);
 

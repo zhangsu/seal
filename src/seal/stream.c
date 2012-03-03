@@ -27,8 +27,6 @@ seal_alloc_stream(void)
 seal_stream_t*
 seal_init_stream(seal_stream_t* stream, const char* filename, seal_fmt_t fmt)
 {
-    assert(stream != 0 && filename != 0);
-
     SEAL_CHK(stream->id == 0, SEAL_STREAM_ALREADY_OPENED, 0);
     if (seal_ensure_fmt_known(filename, &fmt) == 0)
         return 0;
@@ -65,7 +63,7 @@ seal_open_stream(const char* filename, seal_fmt_t fmt)
 int
 seal_stream(seal_stream_t* stream, seal_raw_t* raw)
 {
-    assert(raw != 0 && raw->size > 0 && stream != 0 && stream->id != 0);
+    assert(raw->size > 0);
 
     SEAL_CHK(stream->id != 0, SEAL_STREAM_UNOPENED, 0);
 
@@ -84,7 +82,7 @@ seal_stream(seal_stream_t* stream, seal_raw_t* raw)
 void
 seal_rewind_stream(seal_stream_t* stream)
 {
-    assert(stream != 0 && stream->id != 0);
+    assert(stream->id != 0);
 
     if (stream->id != 0) {
         switch (stream->fmt) {
@@ -104,8 +102,6 @@ seal_rewind_stream(seal_stream_t* stream)
 int
 seal_close_stream(seal_stream_t* stream)
 {
-    assert(stream != 0);
-
     SEAL_CHK(stream->id != 0, SEAL_STREAM_UNOPENED, 0);
     SEAL_CHK(!stream->in_use, SEAL_STREAM_INUSE, 0);
 
@@ -128,8 +124,6 @@ seal_close_stream(seal_stream_t* stream)
 int
 seal_free_stream(seal_stream_t* stream)
 {
-    assert(stream != 0);
-
     if (stream->id != 0 && seal_close_stream(stream) == 0)
         return 0;
 

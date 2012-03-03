@@ -54,7 +54,7 @@ _seal_fclose(void* file)
 {                                                                           \
     size_t _i_;                                                             \
                                                                             \
-    assert((buf) != 0 && (size) > 0 && (size) != 0);                        \
+    assert((buf) != 0 && (size) > 0);                                       \
                                                                             \
     fread((buf), sizeof (uint##nbits##_t), (size), (file));                 \
     for (_i_ = 0; _i_ < (size); ++_i_) {                                    \

@@ -26,8 +26,6 @@ seal_alloc_raw(void)
 void
 seal_free_raw(seal_raw_t* raw)
 {
-    assert(raw != 0);
-
     if (raw->data != 0)
         _seal_free(raw->data);
     _seal_free(raw);
@@ -36,7 +34,7 @@ seal_free_raw(seal_raw_t* raw)
 int
 seal_alloc_raw_data(seal_raw_t* raw, size_t size)
 {
-    assert(raw != 0 && size > 0);
+    assert(size > 0);
 
     raw->size = size;
     raw->data = _seal_malloc(size);
@@ -49,24 +47,18 @@ seal_alloc_raw_data(seal_raw_t* raw, size_t size)
 void
 seal_free_raw_data(seal_raw_t* raw)
 {
-    assert(raw != 0);
-
     _seal_free(raw->data);
 }
 
 int
 seal_extend_raw_data(seal_raw_t* raw)
 {
-    assert(raw != 0);
-
     return realloc_raw_data(raw, raw->size * 2);
 }
 
 int
 seal_ensure_raw_data_size(seal_raw_t* raw, size_t size)
 {
-    assert(raw != 0);
-
     /* If the buffer is not large enough... */
     if (size >= raw->size)
         return seal_extend_raw_data(raw);

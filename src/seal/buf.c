@@ -72,8 +72,6 @@ seal_new_buf(const char* filename, seal_fmt_t fmt)
 {
     seal_buf_t* buf;
 
-    assert(filename != 0);
-
     buf = seal_alloc_buf();
     if (buf == 0)
         return 0;
@@ -95,7 +93,7 @@ seal_free_buf(seal_buf_t* buf)
 int
 seal_free_nbuf(seal_buf_t* buf, unsigned int n)
 {
-    assert(buf != 0 && n > 0);
+    assert(n > 0);
 
     if (alIsBuffer(buf->id)) {
         _seal_lock_openal();
@@ -116,7 +114,7 @@ seal_load2buf(seal_buf_t* buf, const char* filename, seal_fmt_t fmt)
     int successful;
     seal_raw_t raw;
 
-    assert(buf != 0 && filename != 0 && alIsBuffer(buf->id));
+    assert(alIsBuffer(buf->id));
 
     /* `raw.data' will be dynamically allocated by the callee. */
     if (seal_load(&raw, filename, fmt) == 0)
@@ -131,7 +129,7 @@ seal_load2buf(seal_buf_t* buf, const char* filename, seal_fmt_t fmt)
 int
 seal_raw2buf(seal_buf_t* buf, seal_raw_t* raw)
 {
-    assert(buf != 0 && raw != 0 && alIsBuffer(buf->id));
+    assert(raw != 0 && alIsBuffer(buf->id));
 
     _seal_lock_openal();
     alBufferData(buf->id, _seal_get_buf_fmt(raw->attr.nchannels,
@@ -147,7 +145,7 @@ seal_raw2buf(seal_buf_t* buf, seal_raw_t* raw)
 unsigned int
 _seal_get_buf_id(seal_buf_t* buf)
 {
-    assert(buf != 0 && alIsBuffer(buf->id));
+    assert(alIsBuffer(buf->id));
 
     return buf->id;
 }
@@ -181,7 +179,7 @@ get_attr(seal_buf_t* buf, int key)
 {
     int ret;
 
-    assert(buf != 0 && alIsBuffer(buf->id));
+    assert(alIsBuffer(buf->id));
 
     alGetBufferi(buf->id, key, &ret);
 
@@ -191,7 +189,7 @@ get_attr(seal_buf_t* buf, int key)
 int
 seal_load(seal_raw_t* raw, const char* filename, seal_fmt_t fmt)
 {
-    assert(raw != 0 && filename != 0);
+    assert(raw != 0);
 
     if (seal_ensure_fmt_known(filename, &fmt) == 0)
         return 0;

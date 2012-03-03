@@ -88,8 +88,6 @@ cleanup:
 void
 seal_free_src(seal_src_t* src)
 {
-    assert(src != 0);
-
     if (alIsSource(src->id)) {
         ensure_queue_empty(src);
         alDeleteSources(1, &src->id);
@@ -103,7 +101,7 @@ seal_free_src(seal_src_t* src)
 int
 seal_play_src(seal_src_t* src)
 {
-    assert(src != 0 && alIsSource(src->id));
+    assert(alIsSource(src->id));
 
     if (src->stream != 0) {
         seal_src_state_t state = seal_get_src_state(src);
@@ -128,7 +126,7 @@ seal_play_src(seal_src_t* src)
 void
 seal_pause_src(seal_src_t* src)
 {
-    assert(src != 0 && alIsSource(src->id));
+    assert(alIsSource(src->id));
 
     alSourcePause(src->id);
 }
@@ -136,7 +134,7 @@ seal_pause_src(seal_src_t* src)
 void
 seal_stop_src(seal_src_t* src)
 {
-    assert(src != 0 && alIsSource(src->id));
+    assert(alIsSource(src->id));
 
     alSourceStop(src->id);
     if (src->stream != 0) {
@@ -149,7 +147,7 @@ seal_stop_src(seal_src_t* src)
 void
 seal_rewind_src(seal_src_t* src)
 {
-    assert(src != 0 && alIsSource(src->id));
+    assert(alIsSource(src->id));
 
     if (src->stream != 0) {
         seal_src_state_t state = seal_get_src_state(src);
@@ -162,7 +160,7 @@ seal_rewind_src(seal_src_t* src)
 void
 seal_detach_src_audio(seal_src_t* src)
 {
-    assert(src != 0 && alIsSource(src->id));
+    assert(alIsSource(src->id));
 
     alSourcePlay(src->id);
     alSourceStop(src->id);
@@ -182,7 +180,7 @@ seal_detach_src_audio(seal_src_t* src)
 int
 seal_set_src_buf(seal_src_t* src, seal_buf_t* buf)
 {
-    assert(src != 0 && alIsSource(src->id) && buf != 0);
+    assert(alIsSource(src->id) && buf != 0);
 
     /* Make sure `src' is not currently a streaming source. */
     SEAL_CHK(src->stream == 0, SEAL_MIXING_SRC_TYPE, 0);
@@ -200,7 +198,7 @@ seal_set_src_buf(seal_src_t* src, seal_buf_t* buf)
 int
 seal_set_src_stream(seal_src_t* src, seal_stream_t* stream)
 {
-    assert(src != 0 && alIsSource(src->id) && stream != 0);
+    assert(alIsSource(src->id) && stream != 0);
 
     if (stream == src->stream)
         return 1;
@@ -234,7 +232,7 @@ seal_update_src(seal_src_t* src)
     int nbytes_streamed;
     int updater_is_working;
 
-    assert(src != 0 && alIsSource(src->id));
+    assert(alIsSource(src->id));
 
     if (src->stream == 0)
         return 0;
@@ -311,7 +309,7 @@ start_streaming:
 int
 seal_set_src_queue_size(seal_src_t* src, size_t size)
 {
-    assert(src != 0 && alIsSource(src->id));
+    assert(alIsSource(src->id));
 
     SEAL_CHK(MIN_QUEUE_SIZE <= size && size <= MAX_QUEUE_SIZE,
              SEAL_BAD_SRC_ATTR_VAL, 0);
@@ -324,7 +322,7 @@ seal_set_src_queue_size(seal_src_t* src, size_t size)
 int
 seal_set_src_chunk_size(seal_src_t* src, size_t size)
 {
-    assert(src != 0 && alIsSource(src->id));
+    assert(alIsSource(src->id));
 
     SEAL_CHK(MIN_CHUNK_SIZE <= size && size <= MAX_CHUNK_SIZE
              && size % MIN_CHUNK_SIZE == 0, SEAL_BAD_SRC_ATTR_VAL, 0);
@@ -394,14 +392,14 @@ seal_set_src_looping(seal_src_t* src, char looping)
 seal_buf_t*
 seal_get_src_buf(seal_src_t* src)
 {
-    assert(src != 0);
+    assert(alIsSource(src->id));
 
     return src->buf;
 }
 
 seal_stream_t* seal_get_src_stream(seal_src_t* src)
 {
-    assert(src != 0);
+    assert(alIsSource(src->id));
 
     return src->stream;
 }
@@ -409,7 +407,7 @@ seal_stream_t* seal_get_src_stream(seal_src_t* src)
 size_t
 seal_get_src_queue_size(seal_src_t* src)
 {
-    assert(src != 0);
+    assert(alIsSource(src->id));
 
     return src->queue_size;
 }
@@ -417,7 +415,7 @@ seal_get_src_queue_size(seal_src_t* src)
 size_t
 seal_get_src_chunk_size(seal_src_t* src)
 {
-    assert(src != 0);
+    assert(alIsSource(src->id));
 
     return src->chunk_size;
 }
@@ -450,6 +448,8 @@ seal_get_src_gain(seal_src_t* src)
 char
 seal_is_src_auto_updated(seal_src_t* src)
 {
+    assert(alIsSource(src->id));
+
     return src->auto_update;
 }
 
@@ -462,6 +462,8 @@ seal_is_src_relative(seal_src_t* src)
 char
 seal_is_src_looping(seal_src_t* src)
 {
+    assert(alIsSource(src->id));
+
     return src->looping;
 }
 
@@ -496,7 +498,7 @@ seal_get_src_state(seal_src_t* src)
 void
 set3f(seal_src_t* src, int key, float x, float y, float z)
 {
-    assert(src != 0 && alIsSource(src->id));
+    assert(alIsSource(src->id));
 
     alSource3f(src->id, key, x, y, z);
 }
@@ -504,7 +506,7 @@ set3f(seal_src_t* src, int key, float x, float y, float z)
 void
 get3f(seal_src_t* src, int key, float* x, float* y, float* z)
 {
-    assert(src != 0 && alIsSource(src->id));
+    assert(alIsSource(src->id));
 
     alGetSource3f(src->id, key, x, y, z);
 }
@@ -514,7 +516,7 @@ geti(seal_src_t* src, int key)
 {
     int i;
 
-    assert(src != 0 && alIsSource(src->id));
+    assert(alIsSource(src->id));
 
     alGetSourcei(src->id, key, &i);
 
@@ -525,7 +527,7 @@ float getf(seal_src_t* src, int key)
 {
     float f;
 
-    assert(src != 0 && alIsSource(src->id));
+    assert(alIsSource(src->id));
 
     alGetSourcef(src->id, key, &f);
 

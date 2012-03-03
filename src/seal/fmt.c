@@ -36,8 +36,6 @@ seal_recognize_fmt(const char* filename)
     FILE* audio;
     uint32_t magic_nums[SAMPLE_SIZE];
 
-    assert(filename != 0);
-
     audio = _seal_fopen(filename);
     if (audio == 0)
         return SEAL_UNKNOWN_FMT;
