@@ -320,30 +320,43 @@ test_src_simple_attr(void)
     ASSERT_OK(seal_startup(0));
     assert_alloc_src_ok(&src);
 
-    ASSERT_OK(seal_get_src_queue_size(src) == 3);
-    ASSERT_FAIL(!seal_set_src_queue_size(src, 0), SEAL_BAD_SRC_ATTR_VAL);
-    ASSERT_FAIL(!seal_set_src_queue_size(src, 1), SEAL_BAD_SRC_ATTR_VAL);
-    ASSERT_OK(seal_set_src_queue_size(src, 2));
-    ASSERT_OK(seal_set_src_queue_size(src, 63));
-    ASSERT_OK(seal_set_src_queue_size(src, 32));
-    ASSERT_FAIL(!seal_set_src_queue_size(src, 64), SEAL_BAD_SRC_ATTR_VAL);
-    ASSERT_FAIL(!seal_set_src_queue_size(src, 321428), SEAL_BAD_SRC_ATTR_VAL);
-    ASSERT_OK(seal_get_src_queue_size(src) == 32);
+    ASSERT(seal_get_src_queue_size(src) == 3);
+    seal_set_src_queue_size(src, 0);
+    ASSERT(seal_get_src_queue_size(src) == 2);
+    seal_set_src_queue_size(src, 1);
+    ASSERT(seal_get_src_queue_size(src) == 2);
+    seal_set_src_queue_size(src, 2);
+    ASSERT(seal_get_src_queue_size(src) == 2);
+    seal_set_src_queue_size(src, 32);
+    ASSERT(seal_get_src_queue_size(src) == 32);
+    seal_set_src_queue_size(src, 64);
+    ASSERT(seal_get_src_queue_size(src) == 63);
+    seal_set_src_queue_size(src, 63);
+    ASSERT(seal_get_src_queue_size(src) == 63);
+    seal_set_src_queue_size(src, 321428);
+    ASSERT(seal_get_src_queue_size(src) == 63);
 
-    ASSERT_OK(seal_get_src_chunk_size(src) == 36864);
-    ASSERT_FAIL(!seal_set_src_chunk_size(src, 0), SEAL_BAD_SRC_ATTR_VAL);
-    ASSERT_FAIL(!seal_set_src_chunk_size(src, 432), SEAL_BAD_SRC_ATTR_VAL);
-    ASSERT_FAIL(!seal_set_src_chunk_size(src, 9215), SEAL_BAD_SRC_ATTR_VAL);
-    ASSERT_OK(seal_set_src_chunk_size(src, 9216));
-    ASSERT_FAIL(!seal_set_src_chunk_size(src, 9217), SEAL_BAD_SRC_ATTR_VAL);
-    ASSERT_FAIL(!seal_set_src_chunk_size(src, 32768), SEAL_BAD_SRC_ATTR_VAL);
-    ASSERT_OK(seal_set_src_chunk_size(src, 294912));
-    ASSERT_FAIL(!seal_set_src_chunk_size(src, 16773119),
-                SEAL_BAD_SRC_ATTR_VAL);
-    ASSERT_OK(seal_set_src_chunk_size(src, 16773120));
-    ASSERT_FAIL(!seal_set_src_chunk_size(src, 16773121),
-                SEAL_BAD_SRC_ATTR_VAL);
-    ASSERT_OK(seal_get_src_chunk_size(src) == 16773120);
+    ASSERT(seal_get_src_chunk_size(src) == 36864);
+    seal_set_src_chunk_size(src, 0);
+    ASSERT(seal_get_src_chunk_size(src) == 9216);
+    seal_set_src_chunk_size(src, 432);
+    ASSERT(seal_get_src_chunk_size(src) == 9216);
+    seal_set_src_chunk_size(src, 9215);
+    ASSERT(seal_get_src_chunk_size(src) == 9216);
+    seal_set_src_chunk_size(src, 9216);
+    ASSERT(seal_get_src_chunk_size(src) == 9216);
+    seal_set_src_chunk_size(src, 9217);
+    ASSERT(seal_get_src_chunk_size(src) == 9217);
+    seal_set_src_chunk_size(src, 32768);
+    ASSERT(seal_get_src_chunk_size(src) == 32768);
+    seal_set_src_chunk_size(src, 294912);
+    ASSERT(seal_get_src_chunk_size(src) == 294912);
+    seal_set_src_chunk_size(src, 16773119);
+    ASSERT(seal_get_src_chunk_size(src) == 16773119);
+    seal_set_src_chunk_size(src, 16773120);
+    ASSERT(seal_get_src_chunk_size(src) == 16773120);
+    seal_set_src_chunk_size(src, 16773121);
+    ASSERT(seal_get_src_chunk_size(src) == 16773120);
 
     seal_get_src_pos(src, actual_pos, actual_pos + 1, actual_pos + 2);
     ASSERT(memcmp(default_pos, actual_pos, sizeof (actual_pos)) == 0);
@@ -367,11 +380,15 @@ test_src_simple_attr(void)
     ASSERT_FAIL(!seal_set_src_gain(src, -1.13f), SEAL_BAD_SRC_ATTR_VAL);
     ASSERT_OK(seal_get_src_gain(src) == 32.01f);
 
-    ASSERT_OK(seal_is_src_relative(src) == 0);
-    ASSERT_OK(seal_set_src_relative(src, 1));
-    ASSERT_OK(seal_is_src_relative(src));
-    ASSERT_OK(seal_set_src_relative(src, 0));
-    ASSERT_OK(!seal_is_src_relative(src));
+    ASSERT(!seal_is_src_relative(src));
+    seal_set_src_relative(src, 1);
+    ASSERT(seal_is_src_relative(src));
+    seal_set_src_relative(src, 0);
+    ASSERT(!seal_is_src_relative(src));
+    seal_set_src_relative(src, -1);
+    ASSERT(seal_is_src_relative(src));
+    seal_set_src_relative(src, 2);
+    ASSERT(seal_is_src_relative(src));
 
     seal_free_src(src);
 
@@ -393,20 +410,25 @@ test_src_looping(void)
     assert_init_ok(&src, &buf, &stream);
 
     /* `SEAL_UNDETERMINED' type. */
-    ASSERT_OK(!seal_is_src_looping(src));
-    ASSERT_OK(seal_set_src_looping(src, 1));
-    ASSERT_OK(seal_is_src_looping(src));
-    ASSERT_OK(seal_set_src_looping(src, 0));
-    ASSERT_FAIL(!seal_set_src_looping(src, 2), SEAL_BAD_SRC_ATTR_VAL);
-    ASSERT_OK(!seal_is_src_looping(src));
-    ASSERT_OK(seal_set_src_looping(src, 1));
+    ASSERT(!seal_is_src_looping(src));
+    seal_set_src_looping(src, 1);
+    ASSERT(seal_is_src_looping(src));
+    seal_set_src_looping(src, 0);
+    ASSERT(!seal_is_src_looping(src));
+    seal_set_src_looping(src, 2);
+    ASSERT(seal_is_src_looping(src));
+    seal_set_src_looping(src, 1);
+    ASSERT(seal_is_src_looping(src));
+    seal_set_src_looping(src, -1);
+    ASSERT(seal_is_src_looping(src));
 
     /* `SEAL_STEAMING' type. */
     ASSERT_OK(seal_set_src_stream(src, stream));
-    ASSERT_OK(seal_is_src_looping(src));
-    ASSERT_OK(seal_set_src_looping(src, 0));
-    ASSERT_OK(!seal_is_src_looping(src));
-    ASSERT_OK(seal_set_src_looping(src, 1));
+    ASSERT(seal_is_src_looping(src));
+    seal_set_src_looping(src, 0);
+    ASSERT(!seal_is_src_looping(src));
+    seal_set_src_looping(src, 1);
+    ASSERT(seal_is_src_looping(src));
 
     /* `seal_update_src' will never return 0 for looping sources. */
     ASSERT_OK(seal_play_src(src));
@@ -417,8 +439,8 @@ test_src_looping(void)
     seal_detach_src_audio(src);
     ASSERT_OK(seal_set_src_buf(src, buf));
     ASSERT_OK(seal_is_src_looping(src));
-    ASSERT_OK(seal_set_src_looping(src, 0));
-    ASSERT_OK(!seal_is_src_looping(src));
+    seal_set_src_looping(src, 0);
+    ASSERT(!seal_is_src_looping(src));
 
     /* `SEAL_UNDETERMINED' type. */
     seal_detach_src_audio(src);

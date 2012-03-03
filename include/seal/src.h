@@ -176,9 +176,8 @@ void seal_detach_src_audio(seal_src_t*);
  *
  * @param src   the source to set the queue size of
  * @param size  the queue size in the interval [2, 127]
- * @return      nonzero if successful or otherwise 0
  */
-int seal_set_src_queue_size(seal_src_t*, size_t);
+void seal_set_src_queue_size(seal_src_t*, size_t);
 
 /*
  * Sets the maximum size, in byte, of the audio chunk which buffers the audio
@@ -189,9 +188,8 @@ int seal_set_src_queue_size(seal_src_t*, size_t);
  * @param src   the source to set the chunk size of
  * @param size  the chunk size in the interval [9216, 16773120]; must be a
  *              multiple of 9216
- * @return      nonzero if successful or otherwise 0
  */
-int seal_set_src_chunk_size(seal_src_t*, size_t);
+void seal_set_src_chunk_size(seal_src_t*, size_t);
 
 /*
  * Sets the position of a source in a right-handed Cartesian coordinate
@@ -244,9 +242,8 @@ int seal_set_src_gain(seal_src_t*, float /*gain*/);
  *
  * @param src           the source to set the auto update property of
  * @param auto_update   1 to set it auto update or otherwise 0
- * @return              nonzero if successful or otherwise 0
  */
-int seal_set_src_auto_update(seal_src_t*, char /*auto_update*/);
+void seal_set_src_auto_update(seal_src_t*, char /*auto_update*/);
 
 /*
  * Sets whether a source's position, velocity, cone and direction are all
@@ -254,9 +251,8 @@ int seal_set_src_auto_update(seal_src_t*, char /*auto_update*/);
  *
  * @param src       the source to set the relative property of
  * @param relative  1 to set it relative to the listener or otherwise 0
- * @return          nonzero if successful or otherwise 0
  */
-int seal_set_src_relative(seal_src_t*, char /*relative*/);
+void seal_set_src_relative(seal_src_t*, char /*relative*/);
 
 /*
  * Sets whether the playback of a source is looping. A looping source will
@@ -266,9 +262,8 @@ int seal_set_src_relative(seal_src_t*, char /*relative*/);
  *
  * @param src       the source to set the looping property of
  * @param looping   1 to set it looping or otherwise 0
- * @return          nonzero if successful or otherwise 0
  */
-int seal_set_src_looping(seal_src_t*, char /*looping*/);
+void seal_set_src_looping(seal_src_t*, char /*looping*/);
 
 /*
  * Gets the buffer of a source. The default is 0 (null pointer).

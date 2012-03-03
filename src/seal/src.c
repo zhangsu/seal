@@ -42,6 +42,8 @@ static const size_t DEFAULT_CHUNK_SIZE = MIN_CHUNK_SIZE << 2;
 static const size_t MAX_CHUNK_SIZE     = CHUNK_STORAGE_CAP -
                                          CHUNK_STORAGE_CAP % MIN_CHUNK_SIZE;
 
+/* Limits a value within a range. */
+static int limit_value(int, int, int);
 /* Getters and setters without error checking. */
 static void set3f(seal_src_t*, int, float, float, float);
 static void get3f(seal_src_t*, int, float*, float*, float*);
@@ -306,30 +308,20 @@ start_streaming:
     return nbytes_streamed;
 }
 
-int
+void
 seal_set_src_queue_size(seal_src_t* src, size_t size)
 {
     assert(alIsSource(src->id));
 
-    SEAL_CHK(MIN_QUEUE_SIZE <= size && size <= MAX_QUEUE_SIZE,
-             SEAL_BAD_SRC_ATTR_VAL, 0);
-
-    src->queue_size = size;
-
-    return 1;
+    src->queue_size = limit_value(size, MIN_QUEUE_SIZE, MAX_QUEUE_SIZE);
 }
 
-int
+void
 seal_set_src_chunk_size(seal_src_t* src, size_t size)
 {
     assert(alIsSource(src->id));
 
-    SEAL_CHK(MIN_CHUNK_SIZE <= size && size <= MAX_CHUNK_SIZE
-             && size % MIN_CHUNK_SIZE == 0, SEAL_BAD_SRC_ATTR_VAL, 0);
-
-    src->chunk_size = size;
-
-    return 1;
+    src->chunk_size = limit_value(size, MIN_CHUNK_SIZE, MAX_CHUNK_SIZE);
 }
 
 void
@@ -356,27 +348,22 @@ seal_set_src_gain(seal_src_t* src, float gain)
     return setf_s(src, AL_GAIN, gain);
 }
 
-int
+void
 seal_set_src_auto_update(seal_src_t* src, char auto_update)
 {
-    SEAL_CHK(auto_update == 0 || auto_update == 1, SEAL_BAD_SRC_ATTR_VAL, 0);
-
-    src->auto_update = auto_update;
-
-    return 1;
+    src->auto_update = auto_update != 0;
 }
 
-int
+void
 seal_set_src_relative(seal_src_t* src, char relative)
 {
-    return seti_s(src, AL_SOURCE_RELATIVE, relative);
+    seti_s(src, AL_SOURCE_RELATIVE, relative != 0);
 }
 
-int
+void
 seal_set_src_looping(seal_src_t* src, char looping)
 {
-    SEAL_CHK(looping == 0 || looping == 1, SEAL_BAD_SRC_ATTR_VAL, 0);
-
+    looping = looping != 0;
     src->looping = looping;
     /*
      * Streaming does not work with OpenAL's looping as the queuing buffers
@@ -385,8 +372,6 @@ seal_set_src_looping(seal_src_t* src, char looping)
      */
     if (src->stream == 0)
         alSourcei(src->id, AL_LOOPING, looping);
-
-    return 1;
 }
 
 seal_buf_t*
@@ -493,6 +478,16 @@ seal_get_src_state(seal_src_t* src)
     default:
         return SEAL_INITIAL;
     }
+}
+
+int limit_value(int value, int lower_bound, int upper_bound)
+{
+    if (value < lower_bound)
+        return lower_bound;
+    else if (value > upper_bound)
+        return upper_bound;
+    else
+        return value;
 }
 
 void
