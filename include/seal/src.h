@@ -246,7 +246,7 @@ int seal_set_src_gain(seal_src_t*, float /*gain*/);
  * @param auto_update   1 to set it auto update or otherwise 0
  * @return              nonzero if successful or otherwise 0
  */
-int seal_set_src_auto_update(seal_src_t*, int /*auto_update*/);
+int seal_set_src_auto_update(seal_src_t*, char /*auto_update*/);
 
 /*
  * Sets whether a source's position, velocity, cone and direction are all
@@ -256,7 +256,7 @@ int seal_set_src_auto_update(seal_src_t*, int /*auto_update*/);
  * @param relative  1 to set it relative to the listener or otherwise 0
  * @return          nonzero if successful or otherwise 0
  */
-int seal_set_src_relative(seal_src_t*, int /*relative*/);
+int seal_set_src_relative(seal_src_t*, char /*relative*/);
 
 /*
  * Sets whether the playback of a source is looping. A looping source will
@@ -268,7 +268,7 @@ int seal_set_src_relative(seal_src_t*, int /*relative*/);
  * @param looping   1 to set it looping or otherwise 0
  * @return          nonzero if successful or otherwise 0
  */
-int seal_set_src_looping(seal_src_t*, int /*looping*/);
+int seal_set_src_looping(seal_src_t*, char /*looping*/);
 
 /*
  * Gets the buffer of a source. The default is 0 (null pointer).
@@ -356,7 +356,7 @@ float seal_get_src_gain(seal_src_t*);
  * @return      nonzero if the source is relative to the listener or otherwise
  *              0
  */
-int seal_is_src_auto_updated(seal_src_t*);
+char seal_is_src_auto_updated(seal_src_t*);
 
 /*
  * Determines if a source is relative. The default is false (return 0).
@@ -366,7 +366,7 @@ int seal_is_src_auto_updated(seal_src_t*);
  * @return      nonzero if the source is relative to the listener or otherwise
  *              0
  */
-int seal_is_src_relative(seal_src_t*);
+char seal_is_src_relative(seal_src_t*);
 
 /*
  * Determines if a source is looping. The default is false (return 0).
@@ -375,7 +375,7 @@ int seal_is_src_relative(seal_src_t*);
  * @param src   the source to determine
  * @return      nonzero if the source is looping or otherwise 0
  */
-int seal_is_src_looping(seal_src_t*);
+char seal_is_src_looping(seal_src_t*);
 
 /*
  * Gets the type of a source.

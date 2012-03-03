@@ -235,7 +235,7 @@ int seal_set_reverb_room_rolloff_factor(seal_reverb_t*, float /*factor*/);
  * @param limited   1 to set it limited or otherwise 0
  * @return          nonzero if successful or otherwise 0
  */
-int seal_set_reverb_hfdecay_limited(seal_reverb_t*, int /*limited*/);
+int seal_set_reverb_hfdecay_limited(seal_reverb_t*, char /*limited*/);
 
 /*
  * Gets the density of a reverb. The default is 1.0f.
@@ -354,7 +354,7 @@ float seal_get_reverb_room_rolloff_factor(seal_reverb_t*);
  * @param reverb    the source to get the limited flag of
  * @return          nonzero if it is limited or otherwise 0
  */
-int seal_is_reverb_hfdecay_limited(seal_reverb_t*);
+char seal_is_reverb_hfdecay_limited(seal_reverb_t*);
 
 #ifdef __cplusplus
 }

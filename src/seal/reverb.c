@@ -127,7 +127,7 @@ seal_set_reverb_room_rolloff_factor(seal_reverb_t* reverb, float factor)
 }
 
 int
-seal_set_reverb_hfdecay_limited(seal_reverb_t* reverb, int limited)
+seal_set_reverb_hfdecay_limited(seal_reverb_t* reverb, char limited)
 {
     assert(reverb != 0 && alIsEffect(reverb->id));
 
@@ -211,7 +211,7 @@ seal_get_reverb_room_rolloff_factor(seal_reverb_t* reverb)
     return get_attr(reverb,  AL_REVERB_AIR_ABSORPTION_GAINHF);
 }
 
-int
+char
 seal_is_reverb_hfdecay_limited(seal_reverb_t* reverb)
 {
     int attr_value;

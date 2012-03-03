@@ -359,7 +359,7 @@ seal_set_src_gain(seal_src_t* src, float gain)
 }
 
 int
-seal_set_src_auto_update(seal_src_t* src, int auto_update)
+seal_set_src_auto_update(seal_src_t* src, char auto_update)
 {
     SEAL_CHK(auto_update == 0 || auto_update == 1, SEAL_BAD_SRC_ATTR_VAL, 0);
 
@@ -369,13 +369,13 @@ seal_set_src_auto_update(seal_src_t* src, int auto_update)
 }
 
 int
-seal_set_src_relative(seal_src_t* src, int relative)
+seal_set_src_relative(seal_src_t* src, char relative)
 {
     return seti_s(src, AL_SOURCE_RELATIVE, relative);
 }
 
 int
-seal_set_src_looping(seal_src_t* src, int looping)
+seal_set_src_looping(seal_src_t* src, char looping)
 {
     SEAL_CHK(looping == 0 || looping == 1, SEAL_BAD_SRC_ATTR_VAL, 0);
 
@@ -447,19 +447,19 @@ seal_get_src_gain(seal_src_t* src)
 }
 
 
-int
+char
 seal_is_src_auto_updated(seal_src_t* src)
 {
     return src->auto_update;
 }
 
-int
+char
 seal_is_src_relative(seal_src_t* src)
 {
     return geti(src, AL_SOURCE_RELATIVE);
 }
 
-int
+char
 seal_is_src_looping(seal_src_t* src)
 {
     return src->looping;
