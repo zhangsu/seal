@@ -103,14 +103,6 @@ int seal_load2buf(seal_buf_t*, const char* /*filename*/, seal_fmt_t);
 int seal_raw2buf(seal_buf_t*, seal_raw_t*);
 
 /*
- * Gets the identifier of a buffer.
- *
- * @param buf   the buffer to retrieve the identifer of
- * @return      the identifer
- */
-unsigned int _seal_get_buf_id(seal_buf_t*);
-
-/*
  * Gets the size, in bytes, of a buffer. The default is 0.
  *
  * @param buf   the buffer to retrive the size of
@@ -174,6 +166,14 @@ int seal_load(seal_raw_t*, const char* /*filename*/, seal_fmt_t);
  *                  if successful or otherwise 0
  */
 int _seal_get_buf_fmt(int /*nchannels*/, int /*bit_depth*/);
+
+/*
+ * Gets the identifier of a buffer.
+ *
+ * @param buf   the buffer to retrieve the identifer of
+ * @return      the identifer
+ */
+unsigned int _seal_get_buf_id(seal_buf_t*);
 
 #ifdef __cplusplus
 }
