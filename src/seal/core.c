@@ -87,8 +87,6 @@ seal_startup(const char* device_name)
     alcGetIntegerv(device, ALC_MAX_AUXILIARY_SENDS, 1, &neffects_per_src);
 
     openal_lock = _seal_create_lock();
-    _seal_err = _seal_alloc_tls();
-    _seal_set_tls(_seal_err, (void*) SEAL_OK);
 
     return 1;
 
