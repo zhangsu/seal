@@ -346,13 +346,13 @@ test_src_simple_attr(void)
     seal_set_src_chunk_size(src, 9216);
     ASSERT(seal_get_src_chunk_size(src) == 9216);
     seal_set_src_chunk_size(src, 9217);
-    ASSERT(seal_get_src_chunk_size(src) == 9217);
+    ASSERT(seal_get_src_chunk_size(src) == 9216);
     seal_set_src_chunk_size(src, 32768);
-    ASSERT(seal_get_src_chunk_size(src) == 32768);
+    ASSERT(seal_get_src_chunk_size(src) == 27648);
     seal_set_src_chunk_size(src, 294912);
     ASSERT(seal_get_src_chunk_size(src) == 294912);
     seal_set_src_chunk_size(src, 16773119);
-    ASSERT(seal_get_src_chunk_size(src) == 16773119);
+    ASSERT(seal_get_src_chunk_size(src) == 16763904);
     seal_set_src_chunk_size(src, 16773120);
     ASSERT(seal_get_src_chunk_size(src) == 16773120);
     seal_set_src_chunk_size(src, 16773121);

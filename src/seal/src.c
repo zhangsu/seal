@@ -321,7 +321,8 @@ seal_set_src_chunk_size(seal_src_t* src, size_t size)
 {
     assert(alIsSource(src->id));
 
-    src->chunk_size = limit_value(size, MIN_CHUNK_SIZE, MAX_CHUNK_SIZE);
+    src->chunk_size = limit_value(size, MIN_CHUNK_SIZE, MAX_CHUNK_SIZE)
+                      / MIN_CHUNK_SIZE * MIN_CHUNK_SIZE;
 }
 
 void
