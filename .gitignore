@@ -6,12 +6,11 @@
 gmake/linux/test
 gmake/win32/debug/
 gmake/win32/release/
-msvc/debug/
-msvc/release/
-msvc/*/debug/
-msvc/*/release/
+msvc/Release
+msvc/Debug
+msvc/*/*Debug/
+msvc/*/*Release/
 msvc/ipch/
-msvc/seal/dlldebug/
 msvc/*.suo
 msvc/*.sdf
 msvc/*.opensdf
