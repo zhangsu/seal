@@ -152,6 +152,10 @@ int seal_get_buf_nchannels(seal_buf_t*);
  */
 int seal_load(seal_raw_t*, const char* /*filename*/, seal_fmt_t);
 
+#ifdef __cplusplus
+}
+#endif
+
 /*
  * Gets the OpenAL buffer format based on the number of channels and bit
  * depth.
@@ -174,9 +178,5 @@ int _seal_get_buf_fmt(int /*nchannels*/, int /*bit_depth*/);
  * @return      the identifer
  */
 unsigned int _seal_get_buf_id(seal_buf_t*);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* _SEAL_BUF_H_ */

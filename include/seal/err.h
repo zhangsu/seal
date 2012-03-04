@@ -100,6 +100,10 @@ seal_err_t seal_peek_err(void);
  */
 const char* seal_get_err_msg(seal_err_t);
 
+#ifdef __cplusplus
+}
+#endif
+
 /* IMPLEMENTATION DETAILS STARTS FROM HERE. */
 
 /*

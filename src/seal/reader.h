@@ -15,10 +15,6 @@
 /* Makes a 32-bit tag in little-endian. No multiple evaluations. */
 #define SEAL_MKTAG(a, b, c, d) ((a) | (b) << 8 | (c) << 16 | (d) << 24)
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /*
  * @param filename  the filename to open
  * @return          the opened file handle
@@ -55,9 +51,5 @@ void _seal_read_uint32le(uint32_t* /*buf*/, size_t, void* /*file*/);
  * @param file      the file input stream
  */
 void _seal_skip(uint32_t /*nbytes*/, void* /*file*/);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* _SEAL_READER_H_ */

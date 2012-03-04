@@ -23,10 +23,6 @@ typedef void* _seal_routine(void*);
  */
 //#define SEAL_NO_THREAD_SAFETY
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /* Mutex. */
 _seal_lock_t _seal_create_lock(void);
 void _seal_destroy_lock(_seal_lock_t);
@@ -43,9 +39,5 @@ void* _seal_get_tls(_seal_tls_t);
 _seal_thread_t _seal_create_thread(_seal_routine*, void* /*args*/);
 void _seal_join_thread(_seal_thread_t);
 int _seal_calling_thread_is(_seal_thread_t);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* _SEAL_THREADING_H_ */
