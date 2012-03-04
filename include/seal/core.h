@@ -62,7 +62,8 @@ extern void (*alGetEffecti)(unsigned int, int, int*);
  * OpenAL's error state is not thread-safe and so semaphores are needed unless
  * SEAL_NO_THREAD_SAFETY is defined. Ideally we should lock only before
  * setting the error and unlock after retrieving the error, but that requires
- * a modification to the OpenAL implementation being used... */
+ * a modification to the OpenAL implementation being used...
+ */
 void _seal_lock_openal(void);
 void _seal_unlock_openal(void);
 
