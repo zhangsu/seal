@@ -37,7 +37,7 @@ test_listener_attr(void)
 
     ASSERT_OK(seal_get_listener_gain() == 1.0f);
     ASSERT_OK(seal_set_listener_gain(332.0321f));
-    ASSERT_FAIL(!seal_set_listener_gain(-0.15f), SEAL_BAD_LISTENER_ATTR_VAL);
+    ASSERT_FAIL(!seal_set_listener_gain(-0.15f), SEAL_BAD_VAL);
     ASSERT_OK(seal_get_listener_gain() == 332.0321f);
 
     seal_cleanup();

@@ -24,9 +24,8 @@ seal_alloc_reverb(void)
 
     _seal_lock_openal();
     alGenEffects(1, &reverb->id);
-    SEAL_CHK_AL3_S(AL_OUT_OF_MEMORY, SEAL_ALLOC_EFEFCT_FAILED,
-                   AL_INVALID_OPERATION, SEAL_ALLOC_EFEFCT_FAILED,
-                   AL_INVALID_VALUE, SEAL_ALLOC_EFEFCT_FAILED, cleanup);
+    if (_seal_chk_openal_err() == 0)
+        goto cleanup;
 
     return reverb;
 
@@ -42,9 +41,8 @@ seal_free_reverb(seal_reverb_t* reverb)
     if (alIsEffect(reverb->id)) {
         _seal_lock_openal();
         alDeleteEffects(1, &reverb->id);
-        SEAL_CHK_AL3(AL_OUT_OF_MEMORY, SEAL_FREE_EFFECT_FAILED,
-                     AL_INVALID_OPERATION, SEAL_FREE_EFFECT_FAILED,
-                     AL_INVALID_VALUE, SEAL_FREE_EFFECT_FAILED, 0);
+        if (_seal_chk_openal_err() == 0)
+            return 0;
     }
 
     _seal_free(reverb);
@@ -129,10 +127,10 @@ seal_set_reverb_hfdecay_limited(seal_reverb_t* reverb, char limited)
 {
     assert(alIsEffect(reverb->id));
 
+    _seal_lock_openal();
     alEffecti(reverb->id, AL_REVERB_DECAY_HFLIMIT, limited);
-    SEAL_CHK_AL3(AL_INVALID_NAME, SEAL_BAD_EFFECT,
-                 AL_INVALID_OPERATION, SEAL_BAD_EFFECT_OP,
-                 AL_INVALID_VALUE, SEAL_BAD_EFFECT_ATTR_VAL, 0);
+    if (_seal_chk_openal_err() == 0)
+        return 0;
 
     return 0;
 }
@@ -226,10 +224,10 @@ set_attr(seal_reverb_t* reverb, int key, float value)
 {
     assert(alIsEffect(reverb->id));
 
+    _seal_lock_openal();
     alEffectf(reverb->id, key, value);
-    SEAL_CHK_AL3(AL_INVALID_NAME, SEAL_BAD_EFFECT,
-                 AL_INVALID_OPERATION, SEAL_BAD_EFFECT_OP,
-                 AL_INVALID_VALUE, SEAL_BAD_EFFECT_ATTR_VAL, 0);
+    if (_seal_chk_openal_err() == 0)
+        return 0;
 
     return 1;
 }

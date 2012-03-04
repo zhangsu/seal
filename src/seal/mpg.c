@@ -72,7 +72,7 @@ _seal_stream_mpg(seal_stream_t* stream, seal_raw_t* raw)
     while (err == MPG123_OK && nbytes_loaded < tmp_raw.size);
 
     SEAL_CHK_S(nbytes_loaded != 0 || err == MPG123_DONE,
-               SEAL_READ_MPG_FAILED, cleanup);
+               SEAL_CANNOT_READ_MPG, cleanup);
 
     raw->data = tmp_raw.data;
     raw->size = nbytes_loaded;
@@ -106,17 +106,17 @@ setup(seal_raw_attr_t* attr, const char* filename)
     int encoding;
 
     mh = mpg123_new(0, 0);
-    SEAL_CHK(mh != 0, SEAL_INIT_MPG_FAILED, 0);
+    SEAL_CHK(mh != 0, SEAL_CANNOT_INIT_MPG, 0);
 
     SEAL_CHK_S(mpg123_open(mh, filename) == MPG123_OK,
-               SEAL_INIT_MPG_FAILED, cleanup);
+               SEAL_CANNOT_INIT_MPG, cleanup);
 
     mpg123_param(mh, MPG123_FLAGS, MPG123_QUIET, 0);
 
     attr->bit_depth = 16;
     /* Default encoding is MPG123_ENC_SIGNED_16. */
     SEAL_CHK_S(mpg123_getformat(mh, &freq, &attr->nchannels, &encoding)
-               == MPG123_OK, SEAL_INIT_MPG_FAILED, cleanup);
+               == MPG123_OK, SEAL_CANNOT_INIT_MPG, cleanup);
     attr->freq = freq;
 
     return mh;
@@ -153,7 +153,7 @@ load(seal_raw_t* raw, mpg123_handle* mh)
             goto cleanup;
     } while (read(raw, &nbytes_loaded, mh) == MPG123_OK);
 
-    SEAL_CHK_S(nbytes_loaded != 0, SEAL_READ_MPG_FAILED, cleanup);
+    SEAL_CHK_S(nbytes_loaded != 0, SEAL_CANNOT_READ_MPG, cleanup);
 
     raw->size = nbytes_loaded;
 

@@ -15,7 +15,8 @@ seal_set_listener_gain(float gain)
 {
     _seal_lock_openal();
     alListenerf(AL_GAIN, gain);
-    SEAL_CHK_AL(AL_INVALID_VALUE, SEAL_BAD_LISTENER_ATTR_VAL, 0);
+    if (_seal_chk_openal_err() == 0)
+        return 0;
 
     return 1;
 }

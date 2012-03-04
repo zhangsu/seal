@@ -35,7 +35,7 @@ _seal_fopen(const char* filename)
 #else
     file = fopen(filename, "rb");
 #endif
-    SEAL_CHK(file != 0, SEAL_OPEN_FILE_FAILED, 0);
+    SEAL_CHK(file != 0, SEAL_CANNOT_OPEN_FILE, 0);
 
     return file;
 }

@@ -72,8 +72,8 @@ seal_alloc_src(void)
 
     _seal_lock_openal();
     alGenSources(1, &src->id);
-    SEAL_CHK_AL2_S(AL_OUT_OF_MEMORY, SEAL_ALLOC_SRC_FAILED,
-                   AL_INVALID_VALUE, SEAL_ALLOC_SRC_FAILED, cleanup);
+    if (_seal_chk_openal_err() == 0)
+        goto cleanup;
 
     src->queue_size = DEFAULT_QUEUE_SIZE;
     src->chunk_size = DEFAULT_CHUNK_SIZE;
@@ -265,7 +265,8 @@ seal_update_src(seal_src_t* src)
             /* Generate new buffers. */
             _seal_lock_openal();
             alGenBuffers(1, &buf);
-            SEAL_CHK_AL(AL_OUT_OF_MEMORY, SEAL_ALLOC_BUF_FAILED, -1);
+            if (_seal_chk_openal_err() == 0)
+                return -1;
         /* The queue is up-to-date. */
         } else {
             return 1;
@@ -280,12 +281,11 @@ start_streaming:
             alBufferData(buf, _seal_get_buf_fmt(raw.attr.nchannels,
                                                 raw.attr.bit_depth),
                          raw.data, raw.size, raw.attr.freq);
-            buffer_filled = _seal_get_al_err() == AL_NO_ERROR;
+            buffer_filled = _seal_chk_openal_err() != 0;
             _seal_free(raw.data);
             if (buffer_filled) {
                 alSourceQueueBuffers(src->id, 1, &buf);
             } else {
-                _seal_set_err(SEAL_MEM_ALLOC_FAILED);
                 break;
             }
         /* End of stream reached. */
@@ -536,8 +536,8 @@ seti_s(seal_src_t* src, int key, int i)
 
     _seal_lock_openal();
     alSourcei(src->id, key, i);
-    SEAL_CHK_AL2(AL_INVALID_VALUE, SEAL_BAD_SRC_ATTR_VAL,
-                 AL_INVALID_OPERATION, SEAL_BAD_SRC_OP, 0);
+    if (_seal_chk_openal_err() == 0)
+        return 0;
 
     return 1;
 }
@@ -549,8 +549,8 @@ setf_s(seal_src_t* src, int key, float f)
 
     _seal_lock_openal();
     alSourcef(src->id, key, f);
-    SEAL_CHK_AL2(AL_INVALID_VALUE, SEAL_BAD_SRC_ATTR_VAL,
-                 AL_INVALID_OPERATION, SEAL_BAD_SRC_OP, 0);
+    if (_seal_chk_openal_err() == 0)
+        return 0;
 
     return 1;
 }

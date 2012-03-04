@@ -72,7 +72,7 @@ realloc_raw_data(seal_raw_t* raw, size_t size)
     void* buf;
 
     buf = _seal_realloc(raw->data, size);
-    SEAL_CHK(buf != 0, SEAL_MEM_ALLOC_FAILED, 0);
+    SEAL_CHK(buf != 0, SEAL_CANNOT_ALLOC_MEM, 0);
     raw->data = buf;
     raw->size = size;
 

@@ -80,7 +80,7 @@ _seal_stream_ov(seal_stream_t* stream, seal_raw_t* raw)
     /* Either error or end of stream. */
     if (nbytes_read < 0 || nbytes_loaded == 0) {
         if (nbytes_read < 0)
-            _seal_set_err(SEAL_READ_OV_FAILED);
+            _seal_set_err(SEAL_CANNOT_READ_OV);
         seal_free_raw_data(&tmp_raw);
         return nbytes_read;
     }
@@ -114,7 +114,7 @@ setup(seal_raw_attr_t* attr, OggVorbis_File* ovf, const char* filename)
     ov = _seal_fopen(filename);
     if (ov == 0)
         return 0;
-    SEAL_CHK_S(ov_open(ov, ovf, 0, 0) >= 0, SEAL_OPEN_OV_FAILED, cleanup);
+    SEAL_CHK_S(ov_open(ov, ovf, 0, 0) >= 0, SEAL_CANNOT_OPEN_OV, cleanup);
     vi = ov_info(ovf, -1);
     attr->bit_depth = 16;
     attr->nchannels = vi->channels;
@@ -157,7 +157,7 @@ load(seal_raw_t* raw, OggVorbis_File* ovf)
         nbytes_read = read(raw, &nbytes_loaded, ovf);
     } while (nbytes_read > 0);
     /* If `nbytes_read' < 0 then an error occurred. */
-    SEAL_CHK_S(nbytes_read == 0, SEAL_READ_OV_FAILED, cleanup);
+    SEAL_CHK_S(nbytes_read == 0, SEAL_CANNOT_READ_OV, cleanup);
 
     raw->size = nbytes_loaded;
 

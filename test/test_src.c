@@ -188,23 +188,23 @@ test_src_buf(void)
     ASSERT_OK(seal_get_src_type(src) == SEAL_STATIC);
 
     ASSERT_FAIL(!seal_load2buf(buf, TEST_FILENAME, SEAL_WAV_FMT),
-                SEAL_BUF_INUSE);
-    ASSERT_FAIL(!seal_free_buf(buf), SEAL_BUF_INUSE);
+                SEAL_BAD_VAL);
+    ASSERT_FAIL(!seal_free_buf(buf), SEAL_BAD_OP);
     ASSERT_FAIL(!seal_set_src_stream(src, stream), SEAL_MIXING_SRC_TYPE);
 
     ASSERT_OK(seal_play_src(src));
-    ASSERT_FAIL(!seal_set_src_buf(src, buf), SEAL_BAD_SRC_OP);
+    ASSERT_FAIL(!seal_set_src_buf(src, buf), SEAL_BAD_OP);
     ASSERT_FAIL(!seal_load2buf(buf, TEST_FILENAME, SEAL_WAV_FMT),
-                SEAL_BUF_INUSE);
-    ASSERT_FAIL(!seal_free_buf(buf), SEAL_BUF_INUSE);
+                SEAL_BAD_VAL);
+    ASSERT_FAIL(!seal_free_buf(buf), SEAL_BAD_OP);
     ASSERT_FAIL(!seal_set_src_stream(src, stream), SEAL_MIXING_SRC_TYPE);
 
     seal_pause_src(src);
     ASSERT_NO_ERR();
-    ASSERT_FAIL(!seal_set_src_buf(src, buf), SEAL_BAD_SRC_OP);
+    ASSERT_FAIL(!seal_set_src_buf(src, buf), SEAL_BAD_OP);
     ASSERT_FAIL(!seal_load2buf(buf, TEST_FILENAME, SEAL_WAV_FMT),
-                SEAL_BUF_INUSE);
-    ASSERT_FAIL(!seal_free_buf(buf), SEAL_BUF_INUSE);
+                SEAL_BAD_VAL);
+    ASSERT_FAIL(!seal_free_buf(buf), SEAL_BAD_OP);
     ASSERT_FAIL(!seal_set_src_stream(src, stream), SEAL_MIXING_SRC_TYPE);
 
     seal_stop_src(src);
@@ -212,8 +212,8 @@ test_src_buf(void)
     ASSERT_OK(seal_set_src_buf(src, buf));
     ASSERT_OK(seal_get_src_type(src) == SEAL_STATIC);
     ASSERT_FAIL(!seal_load2buf(buf, TEST_FILENAME, SEAL_WAV_FMT),
-                SEAL_BUF_INUSE);
-    ASSERT_FAIL(!seal_free_buf(buf), SEAL_BUF_INUSE);
+                SEAL_BAD_VAL);
+    ASSERT_FAIL(!seal_free_buf(buf), SEAL_BAD_OP);
     ASSERT_FAIL(!seal_set_src_stream(src, stream), SEAL_MIXING_SRC_TYPE);
 
     ASSERT_OK(seal_get_src_buf(src) == buf);
@@ -372,12 +372,12 @@ test_src_simple_attr(void)
 
     ASSERT_OK(seal_get_src_pitch(src) == 1.0f);
     ASSERT_OK(seal_set_src_pitch(src, 2.1903f));
-    ASSERT_FAIL(!seal_set_src_pitch(src, -3.1f), SEAL_BAD_SRC_ATTR_VAL);
+    ASSERT_FAIL(!seal_set_src_pitch(src, -3.1f), SEAL_BAD_VAL);
     ASSERT_OK(seal_get_src_pitch(src) == 2.1903f);
 
     ASSERT_OK(seal_get_src_gain(src) == 1.0f);
     ASSERT_OK(seal_set_src_gain(src, 32.01f));
-    ASSERT_FAIL(!seal_set_src_gain(src, -1.13f), SEAL_BAD_SRC_ATTR_VAL);
+    ASSERT_FAIL(!seal_set_src_gain(src, -1.13f), SEAL_BAD_VAL);
     ASSERT_OK(seal_get_src_gain(src) == 32.01f);
 
     ASSERT(!seal_is_src_relative(src));

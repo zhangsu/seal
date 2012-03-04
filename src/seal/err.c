@@ -39,26 +39,26 @@ seal_get_err_msg(seal_err_t err)
     case SEAL_OK:
         return 0;
 
-    case SEAL_OPEN_DEVICE_FAILED:
-        return "Failed opening the specified device";
+    case SEAL_BAD_OBJ:
+        return "Invalid object";
+    case SEAL_BAD_ENUM:
+        return "Invalid token";
+    case SEAL_BAD_VAL:
+        return "Invalid parameter value";
+    case SEAL_BAD_OP:
+        return "Invalid operation";
+
+    case SEAL_CANNOT_OPEN_DEVICE:
+        return "Cannot open the specified device";
     case SEAL_NO_EFX:
         return "The effect module is not found";
     case SEAL_NO_EXT_FUNC:
         return "The required extension functions are not found";
     case SEAL_BAD_DEVICE:
         return "Invalid device";
-    case SEAL_CREATE_CONTEXT_FAILED:
-        return "Failed creating an additional context for the device";
+    case SEAL_CANNOT_CREATE_CONTEXT:
+        return "Cannot create an additional context for the device";
 
-    case SEAL_ALLOC_BUF_FAILED:
-        return "Buffer allocation failed";
-    case SEAL_FREE_BUF_FAILED:
-        return "Buffer deallocation failed";
-    case SEAL_BUF_INUSE:
-        return "The operation cannot be done as the buffer is still in use";
-
-    case SEAL_ALLOC_STREAM_FAILED:
-        return "Stream allocation failed";
     case SEAL_STREAM_UNOPENED:
         return "Cannot use the uninitialized stream";
     case SEAL_STREAM_ALREADY_OPENED:
@@ -69,34 +69,14 @@ seal_get_err_msg(seal_err_t err)
         return "Cannot attach a stream with a different audio format than "
                "that of the currently attached stream";
 
-    case SEAL_ALLOC_SRC_FAILED:
-        return "Source allocation failed";
-    case SEAL_BAD_SRC_ATTR_VAL:
-        return "Invalid source attribute value";
-    case SEAL_BAD_SRC_OP:
-        return "Invalid source operation";
     case SEAL_MIXING_SRC_TYPE:
         return "Cannot attach a stream to a static source or "
                "attach a buffer to a streaming source";
 
-    case SEAL_BAD_LISTENER_ATTR_VAL:
-        return "Invalid listener attribute value";
-
-    case SEAL_ALLOC_EFEFCT_FAILED:
-        return "Effect allocation failed";
-    case SEAL_FREE_EFFECT_FAILED:
-        return "Effect deallocation failed";
-    case SEAL_BAD_EFFECT:
-        return "Invalid effect";
-    case SEAL_BAD_EFFECT_ATTR_VAL:
-        return "Invalid effect attribute value";
-    case SEAL_BAD_EFFECT_OP:
-        return "Invalid effect operation";
-
-    case SEAL_OPEN_FILE_FAILED:
-        return "Failed opening the specified file";
-    case SEAL_MEM_ALLOC_FAILED:
-        return "Failed allocating memory";
+    case SEAL_CANNOT_OPEN_FILE:
+        return "Cannot open the specified file";
+    case SEAL_CANNOT_ALLOC_MEM:
+        return "Cannot allocate additional memory";
 
     case SEAL_BAD_AUDIO:
         return "The specified audio file format is unsupported";
@@ -115,24 +95,24 @@ seal_get_err_msg(seal_err_t err)
     case FILE_BAD_WAV_FREQ:
         return "The specified WAVE file has an invalid sample rate";
 
-    case SEAL_OPEN_OV_FAILED:
+    case SEAL_CANNOT_OPEN_OV:
         return "Failed openning the specified Ogg Vorbis file";
-    case SEAL_GET_OV_INFO_FAILED:
+    case SEAL_CANNOT_GET_OV_INFO:
         return "Failed getting info from the specified Ogg Vorbis file";
-    case SEAL_READ_OV_FAILED:
+    case SEAL_CANNOT_READ_OV:
         return "Failed reading the specified Ogg Vorbis file";
 
-    case SEAL_INIT_MPG_FAILED:
+    case SEAL_CANNOT_INIT_MPG:
         return "Failed initializing MPEG decoder";
-    case SEAL_GET_MPG_INFO_FAILED:
+    case SEAL_CANNOT_GET_MPG_INFO:
         return "Failed getting info from the specified MPEG file";
-    case SEAL_READ_MPG_FAILED:
+    case SEAL_CANNOT_READ_MPG:
         return "Failed reading the specified MPEG file";
 
-    case SEAL_OPEN_MID_FAILED:
+    case SEAL_CANNOT_OPEN_MID:
         return "Failed openning the specified MIDI file "
                "or initializing the MIDI device";
-    case SEAL_PLAY_MID_FAILED:
+    case SEAL_CANNOT_PLAY_MID:
         return "Failed playing the specified MIDI file";
 
     default:
@@ -153,15 +133,39 @@ _seal_set_err(seal_err_t err)
 /*
  * Always call `_seal_lock_openal' before calling an OpenAL function that could
  * possibly raise an OpenAL error, and then call this function to get the
- * error.
+ * error which will automatically release the lock.
  */
 int
-_seal_get_al_err(void)
+_seal_chk_openal_err(void)
 {
-    int err;
+    seal_err_t err;
 
-    err = alGetError();
+    switch (alGetError()) {
+    case AL_INVALID_NAME:
+        err = SEAL_BAD_OBJ;
+        break;
+    case AL_INVALID_ENUM:
+        err = SEAL_BAD_ENUM;
+        break;
+    case AL_INVALID_VALUE:
+        err = SEAL_BAD_VAL;
+        break;
+    case AL_INVALID_OPERATION:
+        err = SEAL_BAD_OP;
+        break;
+    case AL_OUT_OF_MEMORY:
+        err = SEAL_CANNOT_ALLOC_MEM;
+        break;
+    default:
+        err = SEAL_OK;
+    }
     _seal_unlock_openal();
 
-    return err;
+    if (err != SEAL_OK) {
+        _seal_set_err(err);
+
+        return 0;
+    }
+
+    return 1;
 }

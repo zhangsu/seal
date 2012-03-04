@@ -56,15 +56,18 @@ seal_startup(const char* device_name)
     ALCcontext* context;
     ALint attr[] = { ALC_MAX_AUXILIARY_SENDS, 4, 0, 0 };
 
+    _seal_err = _seal_alloc_tls();
+    _seal_set_tls(_seal_err, (void*) SEAL_OK);
+
     device = alcOpenDevice(device_name);
-    SEAL_CHK(device != 0, SEAL_OPEN_DEVICE_FAILED, 0);
+    SEAL_CHK(device != 0, SEAL_CANNOT_OPEN_DEVICE, 0);
     SEAL_CHK_S(alcIsExtensionPresent(device, ALC_EXT_EFX_NAME),
                SEAL_NO_EFX, clean_device);
 
     context = alcCreateContext(device, attr);
     switch (alcGetError(device)) {
     case ALC_INVALID_VALUE:
-        SEAL_ABORT_S(SEAL_CREATE_CONTEXT_FAILED, clean_device);
+        SEAL_ABORT_S(SEAL_CANNOT_CREATE_CONTEXT, clean_device);
     case ALC_INVALID_DEVICE:
         SEAL_ABORT_S(SEAL_BAD_DEVICE, clean_device);
     }
@@ -75,7 +78,7 @@ seal_startup(const char* device_name)
 
     /* `mpg123_init' is thread-unsafe. */
     SEAL_CHK_S(mpg123_init() == MPG123_OK && seal_midi_startup() != 0,
-               SEAL_INIT_MPG_FAILED, clean_all);
+               SEAL_CANNOT_INIT_MPG, clean_all);
 
     /* Reset OpenAL's error state. */
     alGetError();
@@ -141,7 +144,7 @@ _seal_malloc(size_t size)
     void* mem;
 
     mem = malloc(size);
-    SEAL_CHK(mem != 0, SEAL_MEM_ALLOC_FAILED, 0);
+    SEAL_CHK(mem != 0, SEAL_CANNOT_ALLOC_MEM, 0);
 
     return mem;
 }
@@ -152,7 +155,7 @@ _seal_calloc(size_t count, size_t size)
     void* mem;
 
     mem = calloc(count, size);
-    SEAL_CHK(mem != 0, SEAL_MEM_ALLOC_FAILED, 0);
+    SEAL_CHK(mem != 0, SEAL_CANNOT_ALLOC_MEM, 0);
 
     return mem;
 }
@@ -161,7 +164,7 @@ void*
 _seal_realloc(void* mem, size_t size)
 {
     mem = realloc(mem, size);
-    SEAL_CHK(mem != 0, SEAL_MEM_ALLOC_FAILED, 0);
+    SEAL_CHK(mem != 0, SEAL_CANNOT_ALLOC_MEM, 0);
 
     return mem;
 }
