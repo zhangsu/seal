@@ -175,7 +175,8 @@ void seal_detach_src_audio(seal_src_t*);
  * sound quality in non-memory-bound situations.
  *
  * @param src   the source to set the queue size of
- * @param size  the queue size in the interval [2, 127]
+ * @param size  the queue size in the interval [2, 127]; an out-of-bound
+ * value will be adjusted to the closest bound automatically
  */
 void seal_set_src_queue_size(seal_src_t*, size_t);
 
@@ -187,7 +188,8 @@ void seal_set_src_queue_size(seal_src_t*, size_t);
  *
  * @param src   the source to set the chunk size of
  * @param size  the chunk size in the interval [9216, 16773120]; must be a
- *              multiple of 9216
+ *              multiple of 9216; non-multiple value will be adjusted to the
+ *              closest smaller multiple automatically
  */
 void seal_set_src_chunk_size(seal_src_t*, size_t);
 
