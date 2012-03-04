@@ -49,7 +49,7 @@ const char* seal_get_verion(void);
 
 /* IMPLEMENTATION DETAILS STARTS FROM HERE. */
 
-/* Effect extension routines. */
+/* OpenAL effect extension functions. */
 extern void (*alGenEffects)(int, unsigned int*);
 extern void (*alDeleteEffects)(int, unsigned int*);
 extern char (*alIsEffect)(unsigned int);

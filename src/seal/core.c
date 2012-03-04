@@ -22,16 +22,22 @@ static _seal_lock_t openal_lock;
 /* Number of auxiliary sends per source. */
 static int neffects_per_src = 1;
 
-LPALGENEFFECTS alGenEffects = 0;
-LPALDELETEEFFECTS alDeleteEffects = 0;
-LPALISEFFECT alIsEffect = 0;
-LPALEFFECTF alEffectf = 0;
-LPALEFFECTI alEffecti = 0;
-LPALGETEFFECTF alGetEffectf = 0;
-LPALGETEFFECTI alGetEffecti = 0;
+LPALGENEFFECTS alGenEffects;
+LPALDELETEEFFECTS alDeleteEffects;
+LPALISEFFECT alIsEffect;
+LPALEFFECTF alEffectf;
+LPALEFFECTI alEffecti;
+LPALGETEFFECTF alGetEffectf;
+LPALGETEFFECTI alGetEffecti;
+LPALGENAUXILIARYEFFECTSLOTS alGenAuxiliaryEffectSlots;
+LPALDELETEAUXILIARYEFFECTSLOTS alDeleteAuxiliaryEffectSlots;
+LPALISAUXILIARYEFFECTSLOT alIsAuxiliaryEffectSlot;
+LPALAUXILIARYEFFECTSLOTI alAuxiliaryEffectSloti;
+LPALAUXILIARYEFFECTSLOTF alAuxiliaryEffectSlotf;
+LPALGETAUXILIARYEFFECTSLOTI alGetAuxiliaryEffectSloti;
+LPALGETAUXILIARYEFFECTSLOTF alGetAuxiliaryEffectSlotf;
 
 static int init_ext_proc(void);
-
 
 const char*
 seal_get_verion(void)

@@ -79,7 +79,8 @@ extern "C" {
 #endif
 
 /*
- * Gets the thread-local SEAL error state and clears it to SEAL_OK.
+ * Gets the thread-local SEAL error state and clears it to SEAL_OK. If a seal
+ * function returns with an error, the later error will override the old one.
  *
  * @return  the error state
  */
