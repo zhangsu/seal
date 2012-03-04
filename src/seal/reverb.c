@@ -231,7 +231,7 @@ set_attr(seal_reverb_t* reverb, int key, float value)
                  AL_INVALID_OPERATION, SEAL_BAD_EFFECT_OP,
                  AL_INVALID_VALUE, SEAL_BAD_EFFECT_ATTR_VAL, 0);
 
-    return 0;
+    return 1;
 }
 
 float
