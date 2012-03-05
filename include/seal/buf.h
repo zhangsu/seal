@@ -31,14 +31,6 @@ extern "C" {
 seal_buf_t* seal_alloc_buf(void);
 
 /*
- * Allocates an array of `n' new buffers.
- * @param n the number of buffers in the array
- *
- * @return  the newly allocated buffer array if successful or otherwise 0
- */
-seal_buf_t* seal_alloc_nbuf(unsigned int /*n*/);
-
-/*
  * Initializes an already-allocated buffer by loading audio from a file. Will
  * not try to free the buffer upon failure.
  *
@@ -69,15 +61,6 @@ seal_buf_t* seal_new_buf(const char* /*filename*/, seal_fmt_t);
  * @return      nonzero if successful or otherwise 0
  */
 int seal_free_buf(seal_buf_t*);
-
-/*
- * Deallocates an array of `n' buffers.
- *
- * @param buf   the buffer array to deallocate
- * @param n     the number of buffers in the array
- * @return      nonzero if successful or otherwise 0
- */
-int seal_free_nbuf(seal_buf_t*, unsigned int /*n*/);
 
 /*
  * Loads audio from a file to a buffer that is not currently used by any
@@ -170,13 +153,5 @@ int seal_load(seal_raw_t*, const char* /*filename*/, seal_fmt_t);
  *                  if successful or otherwise 0
  */
 int _seal_get_buf_fmt(int /*nchannels*/, int /*bit_depth*/);
-
-/*
- * Gets the identifier of a buffer.
- *
- * @param buf   the buffer to retrieve the identifer of
- * @return      the identifer
- */
-unsigned int _seal_get_buf_id(seal_buf_t*);
 
 #endif /* _SEAL_BUF_H_ */

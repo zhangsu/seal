@@ -42,10 +42,8 @@ seal_get_listener_gain
 seal_get_listener_vel
 seal_get_listener_orien
 seal_alloc_buf
-seal_alloc_nbuf
 seal_new_buf
 seal_free_buf
-seal_free_nbuf
 seal_load2buf
 seal_get_buf_size
 seal_get_buf_freq
