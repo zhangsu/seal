@@ -14,7 +14,7 @@
 typedef void* _seal_lock_t;
 typedef void* _seal_tls_t;
 typedef void* _seal_thread_t;
-typedef void* _seal_routine(void*);
+typedef void* _seal_routine_t(void*);
 
 /*
  * Define this to improve performance for single-threaded application or for
@@ -36,7 +36,7 @@ void _seal_set_tls(_seal_tls_t, void* /*value*/);
 void* _seal_get_tls(_seal_tls_t);
 
 /* Thread manipulations. */
-_seal_thread_t _seal_create_thread(_seal_routine*, void* /*args*/);
+_seal_thread_t _seal_create_thread(_seal_routine_t*, void* /*args*/);
 void _seal_join_thread(_seal_thread_t);
 int _seal_calling_thread_is(_seal_thread_t);
 

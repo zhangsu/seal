@@ -124,6 +124,26 @@ seal_get_neffects_per_src(void)
     return neffects_per_src;
 }
 
+#if defined (__unix__)
+
+#include <unistd.h>
+
+void
+_seal_sleep(unsigned int millisec)
+{
+    usleep(millisec * 1000);
+}
+
+#elif defined (_WIN32)
+
+#include <Windows.h>
+
+void
+_seal_sleep(unsigned int millisec)
+{
+    SleepEx(millisec, 0);
+}
+
 void
 _seal_lock_openal(void)
 {
@@ -216,7 +236,29 @@ _seal_free_obj(void* obj, _seal_openal_deallocator_t* deallocate,
 static int
 init_ext_proc(void)
 {
-    SleepEx(millisec, 0);
+    alGenEffects = alGetProcAddress("alGenEffects");
+    alDeleteEffects = alGetProcAddress("alDeleteEffects");
+    alIsEffect = alGetProcAddress("alIsEffect");
+    alEffectf = alGetProcAddress("alEffectf");
+    alEffecti = alGetProcAddress("alEffecti");
+    alGetEffectf = alGetProcAddress("alGetEffectf");
+    alGetEffecti = alGetProcAddress("alGetEffecti");
+    alGenAuxiliaryEffectSlots = alGetProcAddress("alGenAuxiliaryEffectSlots");
+    alDeleteAuxiliaryEffectSlots =
+        alGetProcAddress("alDeleteAuxiliaryEffectSlots");
+    alIsAuxiliaryEffectSlot = alGetProcAddress("alIsAuxiliaryEffectSlot");
+    alAuxiliaryEffectSloti = alGetProcAddress("alAuxiliaryEffectSloti");
+    alAuxiliaryEffectSlotf = alGetProcAddress("alAuxiliaryEffectSlotf");
+    alGetAuxiliaryEffectSloti = alGetProcAddress("alGetAuxiliaryEffectSloti");
+    alGetAuxiliaryEffectSlotf = alGetProcAddress("alGetAuxiliaryEffectSlotf");
+    SEAL_CHK(alGenEffects && alDeleteEffects && alIsEffect && alGetEffectf
+             && alGetEffecti && alEffectf && alGenAuxiliaryEffectSlots
+             && alDeleteAuxiliaryEffectSlots && alIsAuxiliaryEffectSlot
+             && alAuxiliaryEffectSloti && alAuxiliaryEffectSlotf
+             && alGetAuxiliaryEffectSloti && alGetAuxiliaryEffectSlotf,
+             SEAL_NO_EXT_FUNC, 0);
+
+    return 1;
 }
 
 #endif /* __unix__, _WIN32 */

@@ -158,7 +158,7 @@ _seal_get_tls(_seal_tls_t tls)
 #include <unistd.h>
 
 _seal_thread_t
-_seal_create_thread(_seal_routine* routine, void* args)
+_seal_create_thread(_seal_routine_t_t* routine, void* args)
 {
     pthread_t thread;
 
@@ -182,7 +182,7 @@ _seal_calling_thread_is(_seal_thread_t thread)
 #elif defined (_WIN32)
 
 _seal_thread_t
-_seal_create_thread(_seal_routine* routine, void* args)
+_seal_create_thread(_seal_routine_t* routine, void* args)
 {
     DWORD thread;
 
