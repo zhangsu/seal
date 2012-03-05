@@ -17,14 +17,14 @@
 
 struct seal_src_t
 {
-    size_t         chunk_size  : 24;
-    size_t         queue_size  : 6;
-    unsigned int   looping     : 1;
-    unsigned int   auto_update : 1;
     unsigned int   id;
     seal_buf_t*    buf;
     seal_stream_t* stream;
     _seal_thread_t updater;
+    size_t         chunk_size  : 24;
+    size_t         queue_size  : 6;
+    unsigned int   looping     : 1;
+    unsigned int   auto_update : 1;
 };
 
 enum
@@ -60,31 +60,25 @@ static void empty_queue(seal_src_t*);
 static void ensure_queue_empty(seal_src_t*);
 static void ensure_stream_released(seal_src_t*);
 /* Updater thread routines. */
-static _seal_routine update;
+static _seal_routine_t update;
 static void wait4updater(seal_src_t*);
 
 seal_src_t*
 seal_alloc_src(void)
 {
-    seal_src_t* src = _seal_calloc(1, sizeof (seal_src_t));
-    if (src == 0)
-        return 0;
+    seal_src_t* src = _seal_alloc_obj(sizeof (seal_src_t), alGenSources);
 
-    _seal_lock_openal();
-    alGenSources(1, &src->id);
-    if (_seal_chk_openal_err() == 0)
-        goto cleanup;
-
-    src->queue_size = DEFAULT_QUEUE_SIZE;
-    src->chunk_size = DEFAULT_CHUNK_SIZE;
-    src->auto_update = 1;
+    if (src != 0) {
+        src->buf = 0;
+        src->stream = 0;
+        src->updater = 0;
+        src->chunk_size = DEFAULT_CHUNK_SIZE;
+        src->queue_size = DEFAULT_QUEUE_SIZE;
+        src->looping = 0;
+        src->auto_update = 1;
+    }
 
     return src;
-
-cleanup:
-    _seal_free(src);
-
-    return 0;
 }
 
 void
@@ -187,7 +181,8 @@ seal_set_src_buf(seal_src_t* src, seal_buf_t* buf)
     /* Make sure `src' is not currently a streaming source. */
     SEAL_CHK(src->stream == 0, SEAL_MIXING_SRC_TYPE, 0);
 
-    if (seti_s(src, AL_BUFFER, _seal_get_buf_id(buf)) == 0)
+    /* Hack: assuming the id is always at offset 0. */
+    if (seti_s(src, AL_BUFFER, *(unsigned int*) buf) == 0)
         return 0;
     /* Carry the previous looping state over for static sources. */
     alSourcei(src->id, AL_LOOPING, src->looping);

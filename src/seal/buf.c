@@ -26,32 +26,7 @@ static int get_attr(seal_buf_t*, int);
 seal_buf_t*
 seal_alloc_buf(void)
 {
-    return seal_alloc_nbuf(1);
-}
-
-seal_buf_t*
-seal_alloc_nbuf(unsigned int n)
-{
-    seal_buf_t* buf;
-
-    assert(n > 0);
-
-    buf = _seal_malloc(sizeof (seal_buf_t) * n);
-    if (buf == 0)
-        return 0;
-
-    _seal_lock_openal();
-    /* Can't do this if `struct seal_buf_t' gets extended. */
-    alGenBuffers(n, (unsigned int*) buf);
-    if (_seal_chk_openal_err() == 0)
-        goto cleanup;
-
-    return buf;
-
-cleanup:
-    _seal_free(buf);
-
-    return 0;
+    return _seal_alloc_obj(sizeof (seal_buf_t), alGenBuffers);
 }
 
 /*
@@ -88,25 +63,7 @@ seal_new_buf(const char* filename, seal_fmt_t fmt)
 int
 seal_free_buf(seal_buf_t* buf)
 {
-    return seal_free_nbuf(buf, 1);
-}
-
-int
-seal_free_nbuf(seal_buf_t* buf, unsigned int n)
-{
-    assert(n > 0);
-
-    if (alIsBuffer(buf->id)) {
-        _seal_lock_openal();
-        /* Can't do this if `struct seal_buf_t' gets extended. */
-        alDeleteBuffers(n, (unsigned int*) buf);
-        if (_seal_chk_openal_err() == 0)
-            return 0;
-    }
-
-    _seal_free(buf);
-
-    return 1;
+    return _seal_free_obj(buf, alDeleteBuffers, alIsBuffer);
 }
 
 int

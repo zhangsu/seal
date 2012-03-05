@@ -49,14 +49,7 @@ const char* seal_get_verion(void);
 
 /* IMPLEMENTATION DETAILS STARTS FROM HERE. */
 
-/* OpenAL effect extension functions. */
-extern void (*alGenEffects)(int, unsigned int*);
-extern void (*alDeleteEffects)(int, unsigned int*);
-extern char (*alIsEffect)(unsigned int);
-extern void (*alEffectf)(unsigned int, int, float);
-extern void (*alEffecti)(unsigned int, int, int);
-extern void (*alGetEffectf)(unsigned int, int, float*);
-extern void (*alGetEffecti)(unsigned int, int, int*);
+void _seal_sleep(unsigned int millisec);
 
 /*
  * OpenAL's error state is not thread-safe and so semaphores are needed unless
@@ -73,6 +66,28 @@ void* _seal_calloc(size_t /*count*/, size_t /*size*/);
 void* _seal_realloc(void* /*mem*/, size_t);
 void _seal_free(void* /*mem*/);
 
-void _seal_sleep(unsigned int millisec);
+/* Common helpers. */
+typedef void _seal_openal_allocator_t(int, unsigned int*);
+typedef void _seal_openal_deallocator_t(int, const unsigned int*);
+typedef char _seal_openal_validator_t(unsigned int);
+void* _seal_alloc_obj(size_t, _seal_openal_allocator_t*);
+int _seal_free_obj(void* /*obj*/, _seal_openal_deallocator_t*,
+                   _seal_openal_validator_t*);
+
+/* OpenAL effect extension functions. */
+extern _seal_openal_allocator_t* alGenEffects;
+extern _seal_openal_deallocator_t* alDeleteEffects;
+extern _seal_openal_validator_t* alIsEffect;
+extern void (*alEffectf)(unsigned int, int, float);
+extern void (*alEffecti)(unsigned int, int, int);
+extern void (*alGetEffectf)(unsigned int, int, float*);
+extern void (*alGetEffecti)(unsigned int, int, int*);
+extern _seal_openal_allocator_t* alGenAuxiliaryEffectSlots;
+extern _seal_openal_deallocator_t* alDeleteAuxiliaryEffectSlots;
+extern _seal_openal_validator_t* alIsAuxiliaryEffectSlot;
+extern void (*alAuxiliaryEffectSloti)(unsigned int, int, int);
+extern void (*alAuxiliaryEffectSlotf)(unsigned int, int, float);
+extern void (*alGetAuxiliaryEffectSloti)(unsigned int, int, int*);
+extern void (*alGetAuxiliaryEffectSlotf)(unsigned int, int, float*);
 
 #endif /* _SEAL_CORE_H_ */

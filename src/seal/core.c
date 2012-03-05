@@ -22,16 +22,16 @@ static _seal_lock_t openal_lock;
 /* Number of auxiliary sends per source. */
 static int neffects_per_src = 1;
 
-LPALGENEFFECTS alGenEffects;
-LPALDELETEEFFECTS alDeleteEffects;
-LPALISEFFECT alIsEffect;
+_seal_openal_allocator_t* alGenEffects;
+_seal_openal_deallocator_t* alDeleteEffects;
+_seal_openal_validator_t* alIsEffect;
 LPALEFFECTF alEffectf;
 LPALEFFECTI alEffecti;
 LPALGETEFFECTF alGetEffectf;
 LPALGETEFFECTI alGetEffecti;
-LPALGENAUXILIARYEFFECTSLOTS alGenAuxiliaryEffectSlots;
-LPALDELETEAUXILIARYEFFECTSLOTS alDeleteAuxiliaryEffectSlots;
-LPALISAUXILIARYEFFECTSLOT alIsAuxiliaryEffectSlot;
+_seal_openal_allocator_t* alGenAuxiliaryEffectSlots;
+_seal_openal_deallocator_t* alDeleteAuxiliaryEffectSlots;
+_seal_openal_validator_t* alIsAuxiliaryEffectSlot;
 LPALAUXILIARYEFFECTSLOTI alAuxiliaryEffectSloti;
 LPALAUXILIARYEFFECTSLOTF alAuxiliaryEffectSlotf;
 LPALGETAUXILIARYEFFECTSLOTI alGetAuxiliaryEffectSloti;
@@ -173,39 +173,48 @@ _seal_free(void* mem)
     free(mem);
 }
 
-static int
-init_ext_proc(void)
+void*
+_seal_alloc_obj(size_t size, _seal_openal_allocator_t* allocate)
 {
-    alGenEffects = (LPALGENEFFECTS) alGetProcAddress("alGenEffects");
-    alDeleteEffects = (LPALDELETEEFFECTS) alGetProcAddress("alDeleteEffects");
-    alIsEffect = (LPALISEFFECT) alGetProcAddress("alIsEffect");
-    alEffectf = (LPALEFFECTF) alGetProcAddress("alEffectf");
-    alEffecti = (LPALEFFECTI) alGetProcAddress("alEffecti");
-    alGetEffectf = (LPALGETEFFECTF) alGetProcAddress("alGetEffectf");
-    alGetEffecti = (LPALGETEFFECTI) alGetProcAddress("alGetEffecti");
-    SEAL_CHK(alGenEffects && alDeleteEffects && alIsEffect && alGetEffectf
-             && alGetEffecti && alEffectf,
-             SEAL_NO_EXT_FUNC, 0);
+    void* obj;
+
+    obj = _seal_malloc(size);
+    if (obj == 0)
+        return 0;
+
+    _seal_lock_openal();
+    /* Hack: assuming the id is always at offset 0. */
+    allocate(1, (unsigned int*) &obj);
+    if (_seal_chk_openal_err() == 0)
+        goto cleanup;
+
+    return obj;
+
+cleanup:
+    _seal_free(obj);
+
+    return 0;
+}
+
+int
+_seal_free_obj(void* obj, _seal_openal_deallocator_t* deallocate,
+               _seal_openal_validator_t* validate)
+{
+    /* Hack: assuming the id is always at offset 0. */
+    if (validate(*(unsigned int*) obj)) {
+        _seal_lock_openal();
+        deallocate(1, obj);
+        if (_seal_chk_openal_err() == 0)
+            return 0;
+    }
+
+    _seal_free(obj);
 
     return 1;
 }
 
-#if defined (__unix__)
-
-#include <unistd.h>
-
-void
-_seal_sleep(unsigned int millisec)
-{
-    usleep(millisec * 1000);
-}
-
-#elif defined (_WIN32)
-
-#include <Windows.h>
-
-void
-_seal_sleep(unsigned int millisec)
+static int
+init_ext_proc(void)
 {
     SleepEx(millisec, 0);
 }

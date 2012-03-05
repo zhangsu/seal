@@ -16,38 +16,13 @@ static float get_attr(seal_reverb_t*, int);
 seal_reverb_t*
 seal_alloc_reverb(void)
 {
-    seal_reverb_t* reverb;
-
-    reverb = _seal_malloc(sizeof (seal_reverb_t));
-    if (reverb == 0)
-        return 0;
-
-    _seal_lock_openal();
-    alGenEffects(1, &reverb->id);
-    if (_seal_chk_openal_err() == 0)
-        goto cleanup;
-
-    return reverb;
-
-cleanup:
-    _seal_free(reverb);
-
-    return 0;
+    return _seal_alloc_obj(sizeof (seal_reverb_t), alGenEffects);
 }
 
 int
 seal_free_reverb(seal_reverb_t* reverb)
 {
-    if (alIsEffect(reverb->id)) {
-        _seal_lock_openal();
-        alDeleteEffects(1, &reverb->id);
-        if (_seal_chk_openal_err() == 0)
-            return 0;
-    }
-
-    _seal_free(reverb);
-
-    return 1;
+    return _seal_free_obj(reverb, alDeleteEffects, alIsEffect);
 }
 
 int
