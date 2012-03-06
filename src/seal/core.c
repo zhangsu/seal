@@ -204,7 +204,7 @@ _seal_alloc_obj(size_t size, _seal_openal_allocator_t* allocate)
 
     _seal_lock_openal();
     /* Hack: assuming the id is always at offset 0. */
-    allocate(1, (unsigned int*) &obj);
+    allocate(1, (unsigned int*) obj);
     if (_seal_chk_openal_err() == 0)
         goto cleanup;
 
