@@ -242,7 +242,7 @@ int seal_set_reverb_hfdecay_limited(seal_reverb_t*, char /*limited*/);
  *
  * @see             seal_set_reverb_density
  * @param reverb    the source to get the density of
- * @return          the density
+ * @return          the density if successful or otherwise 0
  */
 float seal_get_reverb_density(seal_reverb_t*);
 
@@ -251,7 +251,7 @@ float seal_get_reverb_density(seal_reverb_t*);
  *
  * @see             seal_set_reverb_diffusion
  * @param reverb    the source to get the diffusion of
- * @return          the diffusion
+ * @return          the diffusion if successful or otherwise 0
  */
 float seal_get_reverb_diffusion(seal_reverb_t*);
 
@@ -260,7 +260,7 @@ float seal_get_reverb_diffusion(seal_reverb_t*);
  *
  * @see             seal_set_reverb_gain
  * @param reverb    the source to get the gain of
- * @return          the gain
+ * @return          the gain if successful or otherwise 0
  */
 float seal_get_reverb_gain(seal_reverb_t*);
 
@@ -269,7 +269,7 @@ float seal_get_reverb_gain(seal_reverb_t*);
  *
  * @see             seal_set_reverb_hfgain
  * @param reverb    the source to get the high-frequency gain of
- * @return          the high-frequency gain
+ * @return          the high-frequency gain if successful or otherwise 0
  */
 float seal_get_reverb_hfgain(seal_reverb_t*);
 
@@ -278,7 +278,7 @@ float seal_get_reverb_hfgain(seal_reverb_t*);
  *
  * @see             seal_set_reverb_decay_time
  * @param reverb    the source to get the decay time of
- * @return          the decay time
+ * @return          the decay time if successful or otherwise 0
  */
 float seal_get_reverb_decay_time(seal_reverb_t*);
 
@@ -287,7 +287,8 @@ float seal_get_reverb_decay_time(seal_reverb_t*);
  *
  * @see             seal_set_reverb_hfdecay_ratio
  * @param reverb    the source to get the high-frequency decay time of
- * @return          the high-frequency decay ratio
+ * @return          the high-frequency decay ratio if successful or
+ *                  otherwise 0
  */
 float seal_get_reverb_hfdecay_ratio(seal_reverb_t*);
 
@@ -296,7 +297,7 @@ float seal_get_reverb_hfdecay_ratio(seal_reverb_t*);
  *
  * @see             seal_set_reverb_reflections_gain
  * @param reverb    the source to get the reflections gain of
- * @return          the reflections gain
+ * @return          the reflections gain if successful or otherwise 0
  */
 float seal_get_reverb_reflections_gain(seal_reverb_t*);
 
@@ -305,7 +306,7 @@ float seal_get_reverb_reflections_gain(seal_reverb_t*);
  *
  * @see             seal_set_reverb_reflections_delay
  * @param reverb    the source to get the reflections delay of
- * @return          the reflections delay
+ * @return          the reflections delay if successful or otherwise 0
  */
 float seal_get_reverb_reflections_delay(seal_reverb_t*);
 
@@ -314,7 +315,7 @@ float seal_get_reverb_reflections_delay(seal_reverb_t*);
  *
  * @see             seal_set_reverb_late_gain
  * @param reverb    the source to get the late gain of
- * @return          the late gain
+ * @return          the late gain if successful or otherwise 0
  */
 float seal_get_reverb_late_gain(seal_reverb_t*);
 
@@ -323,7 +324,7 @@ float seal_get_reverb_late_gain(seal_reverb_t*);
  *
  * @see             seal_set_reverb_late_delay
  * @param reverb    the source to get the late delay of
- * @return          the late delay
+ * @return          the late delay if successful or otherwise 0
  */
 float seal_get_reverb_late_delay(seal_reverb_t*);
 
@@ -333,7 +334,8 @@ float seal_get_reverb_late_delay(seal_reverb_t*);
  *
  * @see             seal_set_reverb_air_absorbtion_hfgain
  * @param reverb    the source to get the gain of
- * @return          the air absorbtion high-frequency gain
+ * @return          the air absorbtion high-frequency gain if successful or
+ *                  otherwise 0
  */
 float seal_get_reverb_air_absorbtion_hfgain(seal_reverb_t*);
 
@@ -342,7 +344,7 @@ float seal_get_reverb_air_absorbtion_hfgain(seal_reverb_t*);
  *
  * @see             seal_set_reverb_room_rolloff_factor
  * @param reverb    the source to get the factor of
- * @return          the room rolloff factor
+ * @return          the room rolloff factor if successful or otherwise 0
  */
 float seal_get_reverb_room_rolloff_factor(seal_reverb_t*);
 
@@ -352,7 +354,7 @@ float seal_get_reverb_room_rolloff_factor(seal_reverb_t*);
  *
  * @see             seal_set_reverb_hfdecay_limited
  * @param reverb    the source to get the limited flag of
- * @return          nonzero if it is limited or otherwise 0
+ * @return          nonzero if it is limited and successful or otherwise 0
  */
 char seal_is_reverb_hfdecay_limited(seal_reverb_t*);
 

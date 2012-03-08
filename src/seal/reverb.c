@@ -214,7 +214,10 @@ get_attr(seal_reverb_t* reverb, int key)
 
     assert(alIsEffect(reverb->id));
 
+    _seal_lock_openal();
     alGetEffectf(reverb->id, key, &value);
+    if (_seal_chk_openal_err() == 0)
+        return 0;
 
     return value;
 }
