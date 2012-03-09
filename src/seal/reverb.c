@@ -189,7 +189,10 @@ seal_is_reverb_hfdecay_limited(seal_reverb_t* reverb)
 
     assert(alIsEffect(reverb->id));
 
+    _seal_lock_openal();
     alGetEffecti(reverb->id, AL_REVERB_DECAY_HFLIMIT, &attr_value);
+    if (_seal_chk_openal_err() == 0)
+        return 0;
 
     return attr_value;
 }
