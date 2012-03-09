@@ -7,6 +7,7 @@
 #include <string.h>
 #include <stddef.h>
 #include <al/al.h>
+#include <al/efx.h>
 #include <seal/src.h>
 #include <seal/core.h>
 #include <seal/buf.h>
@@ -220,6 +221,21 @@ seal_set_src_stream(seal_src_t* src, seal_stream_t* stream)
     /* Immediately update the queue to become `AL_STREAMING'. */
     return seal_update_src(src) >= 0;
 }
+
+int
+seal_mix_src_effect(seal_src_t* src, int index, seal_effect_slot_t* slot)
+{
+    assert(alIsSource(src->id) && slot != 0);
+
+    _seal_lock_openal();
+    alSource3i(src->id, AL_AUXILIARY_SEND_FILTER, *(unsigned int*) slot,
+               index, AL_FILTER_NULL);
+    if (_seal_chk_openal_err() == 0)
+        return 0;
+
+    return 1;
+}
+
 
 int
 seal_update_src(seal_src_t* src)

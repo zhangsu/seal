@@ -13,6 +13,7 @@
 #include <stddef.h>
 #include "buf.h"
 #include "stream.h"
+#include "effect_slot.h"
 
 /*
  * A just-initialized source is of the `SEAL_UNDETERMINED' type. A source that
@@ -140,6 +141,19 @@ int seal_set_src_buf(seal_src_t*, seal_buf_t*);
  * @return          nonzero if successful or otherwise 0
  */
 int seal_set_src_stream(seal_src_t*, seal_stream_t*);
+
+/*
+ * Mixes an sound effect loaded into an effect slot with a source's output.
+ * Later calls to this function with a different effect slot and the same
+ * index will override the old effect slot association.
+ *
+ * @see             seal_get_neffects_per_src
+ * @param src       the source to mix effect with
+ * @param index     the zero-based index of the effect
+ * @param slot      the slot that contains the effect to mix
+ * @return          nonzero if successful or otherwise 0
+ */
+int seal_mix_src_effect(seal_src_t*, int /*index*/, seal_effect_slot_t*);
 
 /*
  * Updates a streaming source. If the source is not up-to-date, the playback
