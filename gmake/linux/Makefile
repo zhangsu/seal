@@ -16,7 +16,7 @@ TESTOBJDIR      = $(OBJDIR)/test
 
 LIBS            = -lopenal -lmpg123
 
-SEALOBJ         = $(addprefix $(SEALOBJDIR)/, buf.o core.o err.o fmt.o listener.o mid.o mpg.o ov.o raw.o reader.o src.o stream.o threading.o wav.o)
+SEALOBJ         = $(addprefix $(SEALOBJDIR)/, buf.o core.o effect_slot.o err.o fmt.o listener.o mid.o mpg.o ov.o raw.o reader.o reverb.o src.o stream.o threading.o wav.o)
 LIBOGGOBJ       = $(addprefix $(LIBOGGOBJDIR)/, bitwise.o framing.o)
 LIBVORBISOBJ    = $(addprefix $(LIBVORBISOBJDIR)/, bitrate.o block.o codebook.o envelope.o floor0.o floor1.o info.o lookup.o lpc.o lsp.o mapping0.o mdct.o psy.o registry.o res0.o sharedbook.o smallft.o synthesis.o vorbisfile.o window.o)
 TESTOBJ         = $(addprefix $(TESTOBJDIR)/, test.o test_listener.o test_src.o)
@@ -60,10 +60,13 @@ $(TESTOUTPUT) : $(TESTOBJ) $(SEALOUTPUT)
 $(SEALOUTPUT) : $(SEALOBJ) $(LIBOGGOBJ) $(LIBVORBISOBJ)
 	$(LINK) $(LIBS) -shared
 
-$(SEALOBJDIR)/buf.o : buf.c buf.h core.h raw.h fmt.h wav.h ov.h mpg.h err.h | $(SEALOBJDIR)/
+$(SEALOBJDIR)/buf.o : buf.c buf.h core.h raw.h fmt.h wav.h stream.h ov.h mpg.h err.h | $(SEALOBJDIR)/
 	$(COMPILE)
 
 $(SEALOBJDIR)/core.o : core.c core.h threading.h mid.h err.h | $(SEALOBJDIR)/
+	$(COMPILE)
+
+$(SEALOBJDIR)/effect_slot.o : effect_slot.c effect_slot.h core.h err.h | $(SEALOBJDIR)/
 	$(COMPILE)
 
 $(SEALOBJDIR)/err.o : err.c err.h core.h threading.h | $(SEALOBJDIR)/
@@ -78,10 +81,10 @@ $(SEALOBJDIR)/listener.o : listener.c listener.h core.h err.h | $(SEALOBJDIR)/
 $(SEALOBJDIR)/mid.o : mid.c mid.h err.h | $(SEALOBJDIR)/
 	$(COMPILE)
 
-$(SEALOBJDIR)/mpg.o : mpg.c mpg.h raw.h stream.h err.h | $(SEALOBJDIR)/
+$(SEALOBJDIR)/mpg.o : mpg.c mpg.h raw.h stream.h fmt.h err.h | $(SEALOBJDIR)/
 	$(COMPILE)
 
-$(SEALOBJDIR)/ov.o : ov.c ov.h core.h raw.h stream.h reader.h err.h | $(SEALOBJDIR)/
+$(SEALOBJDIR)/ov.o : ov.c ov.h core.h raw.h stream.h fmt.h reader.h err.h | $(SEALOBJDIR)/
 	$(COMPILE)
 
 $(SEALOBJDIR)/raw.o : raw.c raw.h core.h err.h | $(SEALOBJDIR)/
@@ -90,7 +93,10 @@ $(SEALOBJDIR)/raw.o : raw.c raw.h core.h err.h | $(SEALOBJDIR)/
 $(SEALOBJDIR)/reader.o : reader.c reader.h err.h | $(SEALOBJDIR)/
 	$(COMPILE)
 
-$(SEALOBJDIR)/src.o : src.c src.h core.h buf.h stream.h err.h | $(SEALOBJDIR)/
+$(SEALOBJDIR)/reverb.o : reverb.c reverb.h core.h err.h | $(SEALOBJDIR)/
+	$(COMPILE)
+
+$(SEALOBJDIR)/src.o : src.c src.h core.h buf.h raw.h fmt.h stream.h effect_slot.h err.h | $(SEALOBJDIR)/
 	$(COMPILE)
 
 $(SEALOBJDIR)/stream.o : stream.c stream.h core.h raw.h fmt.h wav.h ov.h mpg.h err.h | $(SEALOBJDIR)/
@@ -99,7 +105,7 @@ $(SEALOBJDIR)/stream.o : stream.c stream.h core.h raw.h fmt.h wav.h ov.h mpg.h e
 $(SEALOBJDIR)/threading.o : threading.c threading.h core.h | $(SEALOBJDIR)/
 	$(COMPILE)
 
-$(SEALOBJDIR)/wav.o : wav.c wav.h core.h raw.h stream.h reader.h err.h | $(SEALOBJDIR)/
+$(SEALOBJDIR)/wav.o : wav.c wav.h core.h raw.h stream.h fmt.h reader.h err.h | $(SEALOBJDIR)/
 	$(COMPILE)
 
 $(LIBOGGOBJDIR)/%.o : %.c | $(LIBOGGOBJDIR)/
