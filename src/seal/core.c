@@ -40,7 +40,7 @@ LPALGETAUXILIARYEFFECTSLOTF alGetAuxiliaryEffectSlotf;
 static int init_ext_proc(void);
 
 const char*
-seal_get_verion(void)
+seal_get_version(void)
 {
     return "0.2.0";
 }

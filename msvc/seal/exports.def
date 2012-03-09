@@ -2,7 +2,7 @@ EXPORTS
 seal_startup
 seal_cleanup
 seal_get_neffects_per_src
-seal_get_verion
+seal_get_version
 seal_alloc_src
 seal_free_src
 seal_play_src
@@ -73,5 +73,4 @@ seal_is_reverb_hfdecay_limited
 seal_get_err
 seal_peek_err
 seal_get_err_msg
-seal_get_verion
 _seal_sleep

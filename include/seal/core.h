@@ -41,7 +41,7 @@ int seal_get_neffects_per_src(void);
  *
  * @return  the version string
  */
-const char* seal_get_verion(void);
+const char* seal_get_version(void);
 
 #ifdef __cplusplus
 }
