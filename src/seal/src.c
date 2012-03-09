@@ -12,6 +12,7 @@
 #include <seal/core.h>
 #include <seal/buf.h>
 #include <seal/stream.h>
+#include <seal/effect_slot.h>
 #include <seal/err.h>
 #include <assert.h>
 #include "threading.h"
