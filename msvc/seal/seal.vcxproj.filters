@@ -110,9 +110,6 @@
     <ClInclude Include="..\..\src\seal\wav.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\seal\pstdint.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\seal\effect_slot.h">
       <Filter>include\seal</Filter>
     </ClInclude>

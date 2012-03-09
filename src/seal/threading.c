@@ -4,9 +4,9 @@
  * COPYING attached with the library.
  */
 
+#include <stdint.h>
 #include <seal/core.h>
 #include "threading.h"
-#include "pstdint.h"
 
 #if defined (SEAL_NO_THREAD_SAFETY)
 

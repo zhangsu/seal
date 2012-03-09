@@ -9,8 +9,8 @@
 #ifndef _SEAL_READER_H_
 #define _SEAL_READER_H_
 
+#include <stdint.h>
 #include <stddef.h>
-#include "pstdint.h"
 
 /* Makes a 32-bit tag in little-endian. No multiple evaluations. */
 #define SEAL_MKTAG(a, b, c, d) ((a) | (b) << 8 | (c) << 16 | (d) << 24)

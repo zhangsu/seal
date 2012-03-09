@@ -5,6 +5,7 @@
  */
 
 #include <stdio.h>
+#include <stdint.h>
 #include <stddef.h>
 #include <seal/err.h>
 #include <assert.h>
@@ -12,7 +13,6 @@
 # include <Windows.h>
 #endif
 #include "reader.h"
-#include "pstdint.h"
 
 enum
 {

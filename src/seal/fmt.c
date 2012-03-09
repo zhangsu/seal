@@ -5,11 +5,11 @@
  */
 
 #include <stdio.h>
+#include <stdint.h>
 #include <seal/fmt.h>
 #include <seal/err.h>
 #include <assert.h>
 #include "reader.h"
-#include "pstdint.h"
 
 enum
 {

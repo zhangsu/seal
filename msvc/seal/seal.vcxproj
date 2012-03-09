@@ -179,7 +179,6 @@
     <ClInclude Include="..\..\include\seal\stream.h" />
     <ClInclude Include="..\..\src\seal\mpg.h" />
     <ClInclude Include="..\..\src\seal\ov.h" />
-    <ClInclude Include="..\..\src\seal\pstdint.h" />
     <ClInclude Include="..\..\src\seal\reader.h" />
     <ClInclude Include="..\..\src\seal\threading.h" />
     <ClInclude Include="..\..\src\seal\wav.h" />
