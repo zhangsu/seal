@@ -6,7 +6,6 @@ include RbConfig
 
 target_os = CONFIG['target_os']
 root_dir = '..'
-lib_dir = nil
 src_dir = "#{root_dir}/src"
 
 $defs << '-DNDEBUG'
