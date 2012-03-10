@@ -1,7 +1,7 @@
 require 'scanf'
 require './seal'
 
-Audio.startup
+Seal.startup
 
 RATE = 1.0
 UNIT_PER_100MS = RATE / 10.0
@@ -17,11 +17,11 @@ by a 3-tuple of real numbers separated by white spaces.
 You will be moving at a rate of #{RATE} unit/sec.
 "
 
-src = Audio::Source.new
-src.buffer = Audio::Buffer.new('people.ogg')
+src = Seal::Source.new
+src.buffer = Seal::Buffer.new('people.ogg')
 src.looping = true
 src.play
-listener = Audio.listener
+listener = Seal.listener
 
 loop do
   print 'Enter new destination: '

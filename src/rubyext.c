@@ -8,16 +8,16 @@
 #include <seal.h>
 #include "ruby.h"
 
-static VALUE mAudio;
-static VALUE eAudioError;
+static VALUE mSeal;
+static VALUE eSealError;
 
 void
-check_seal_err()
+check_seal_err(void)
 {
     seal_err_t err = seal_get_err();
 
     if (err != SEAL_OK)
-        rb_raise(eAudioError, "%s", seal_get_err_msg(err));
+        rb_raise(eSealError, "%s", seal_get_err_msg(err));
 }
 
 VALUE
@@ -732,7 +732,7 @@ get_src_state(VALUE rsrc)
 VALUE
 get_listener()
 {
-    return rb_const_get(mAudio, rb_intern("LISTENER"));
+    return rb_const_get(mSeal, rb_intern("LISTENER"));
 }
 
 /*
@@ -834,17 +834,17 @@ get_listener_orien(VALUE rlistener)
 void
 bind_core(void)
 {
-    mAudio = rb_define_module("Audio");
-    eAudioError = rb_define_class("AudioError", rb_eException);
-    rb_define_singleton_method(mAudio, "startup", startup, -1);
-    rb_define_singleton_method(mAudio, "cleanup", cleanup, 0);
+    mSeal = rb_define_module("Seal");
+    eSealError = rb_define_class("eSealError", rb_eException);
+    rb_define_singleton_method(mSeal, "startup", startup, -1);
+    rb_define_singleton_method(mSeal, "cleanup", cleanup, 0);
 
 }
 
 void
 bind_buf(void)
 {
-    VALUE cBuffer = rb_define_class_under(mAudio, "Buffer", rb_cObject);
+    VALUE cBuffer = rb_define_class_under(mSeal, "Buffer", rb_cObject);
     rb_define_alloc_func(cBuffer, alloc_buf);
     rb_define_method(cBuffer, "initialize", init_buf, -1);
     rb_define_method(cBuffer, "load", load_buf, -1);
@@ -857,7 +857,7 @@ bind_buf(void)
 void
 bind_stream(void)
 {
-    VALUE cStream = rb_define_class_under(mAudio, "Stream", rb_cObject);
+    VALUE cStream = rb_define_class_under(mSeal, "Stream", rb_cObject);
     rb_define_alloc_func(cStream, alloc_stream);
     rb_define_method(cStream, "initialize", init_stream, -1);
     rb_define_method(cStream, "frequency", get_stream_freq, 0);
@@ -871,7 +871,7 @@ bind_stream(void)
 void
 bind_src(void)
 {
-    VALUE cSource = rb_define_class_under(mAudio, "Source", rb_cObject);
+    VALUE cSource = rb_define_class_under(mSeal, "Source", rb_cObject);
     rb_define_alloc_func(cSource, alloc_src);
     rb_define_method(cSource, "initialize", init_src, 0);
     rb_define_method(cSource, "play", play_src, 0);
@@ -907,10 +907,10 @@ bind_src(void)
 void
 bind_listener(void)
 {
-    VALUE cListener = rb_define_class_under(mAudio, "Listener", rb_cObject);
+    VALUE cListener = rb_define_class_under(mSeal, "Listener", rb_cObject);
     VALUE listener = rb_data_object_alloc(cListener, 0, 0, 0);
-    rb_define_const(mAudio, "LISTENER", listener);
-    rb_define_singleton_method(mAudio, "listener", get_listener, 0);
+    rb_define_const(mSeal, "LISTENER", listener);
+    rb_define_singleton_method(mSeal, "listener", get_listener, 0);
     rb_undef_alloc_func(cListener);
     rb_undef_method(rb_singleton_class(cListener), "new");
     rb_define_method(cListener, "position=", set_listener_pos, 1);
