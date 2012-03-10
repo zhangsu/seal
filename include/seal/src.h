@@ -215,8 +215,9 @@ void seal_set_src_chunk_size(seal_src_t*, size_t);
  * @param x     the x position to set
  * @param y     the y position to set
  * @param z     the z position to set
+ * @return      nonzero if successful or otherwise 0
  */
-void seal_set_src_pos(seal_src_t*, float /*x*/, float /*y*/, float /*z*/);
+int seal_set_src_pos(seal_src_t*, float /*x*/, float /*y*/, float /*z*/);
 
 /*
  * Sets the velocity of a source in a right-handed Cartesian coordinate
@@ -227,8 +228,9 @@ void seal_set_src_pos(seal_src_t*, float /*x*/, float /*y*/, float /*z*/);
  * @param x     the x velocity to set
  * @param y     the y velocity to set
  * @param z     the z velocity to set
+ * @return      nonzero if successful or otherwise 0
  */
-void seal_set_src_vel(seal_src_t*, float /*x*/, float /*y*/, float /*z*/);
+int seal_set_src_vel(seal_src_t*, float /*x*/, float /*y*/, float /*z*/);
 
 /*
  * Sets the pitch shift multiplier of a source. 1.0f means identity; each
@@ -267,8 +269,9 @@ void seal_set_src_auto_update(seal_src_t*, char /*auto_update*/);
  *
  * @param src       the source to set the relative property of
  * @param relative  1 to set it relative to the listener or otherwise 0
+ * @return          nonzero if successful or otherwise 0
  */
-void seal_set_src_relative(seal_src_t*, char /*relative*/);
+int seal_set_src_relative(seal_src_t*, char /*relative*/);
 
 /*
  * Sets whether the playback of a source is looping. A looping source will
@@ -278,8 +281,9 @@ void seal_set_src_relative(seal_src_t*, char /*relative*/);
  *
  * @param src       the source to set the looping property of
  * @param looping   1 to set it looping or otherwise 0
+ * @return          nonzero if successful or otherwise 0
  */
-void seal_set_src_looping(seal_src_t*, char /*looping*/);
+int seal_set_src_looping(seal_src_t*, char /*looping*/);
 
 /*
  * Gets the buffer of a source. The default is 0 (null pointer).
@@ -326,8 +330,9 @@ size_t seal_get_src_chunk_size(seal_src_t*);
  * @param x     receives the x position
  * @param y     receives the y position
  * @param z     receives the z position
+ * @return      nonzero if successful or otherwise 0
  */
-void seal_get_src_pos(seal_src_t*, float* /*x*/, float* /*y*/, float* /*z*/);
+int seal_get_src_pos(seal_src_t*, float* /*x*/, float* /*y*/, float* /*z*/);
 
 /*
  * Gets the velocity of a source. The default is ( 0.0f, 0.0f, 0.0f ).
@@ -337,8 +342,9 @@ void seal_get_src_pos(seal_src_t*, float* /*x*/, float* /*y*/, float* /*z*/);
  * @param x     receives the x velocity
  * @param y     receives the y velocity
  * @param z     receives the z velocity
+ * @return      nonzero if successful or otherwise 0
  */
-void seal_get_src_vel(seal_src_t*, float* /*x*/, float* /*y*/, float* /*z*/);
+int seal_get_src_vel(seal_src_t*, float* /*x*/, float* /*y*/, float* /*z*/);
 
 /*
  * Gets the pitch of a source. The default is 1.0f.

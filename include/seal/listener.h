@@ -31,8 +31,9 @@ int seal_set_listener_gain(float /*gain*/);
  * @param x     the x position to set
  * @param y     the y position to set
  * @param z     the z position to set
+ * @return      nonzero if successful or otherwise 0
  */
-void seal_set_listener_pos(float /*x*/, float /*y*/, float /*z*/);
+int seal_set_listener_pos(float /*x*/, float /*y*/, float /*z*/);
 
 /*
  * Sets the velocity of the listener in a right-handed Cartesian coordinate
@@ -42,8 +43,9 @@ void seal_set_listener_pos(float /*x*/, float /*y*/, float /*z*/);
  * @param x     the x velocity to set
  * @param y     the y velocity to set
  * @param z     the z velocity to set
+ * @return      nonzero if successful or otherwise 0
  */
-void seal_set_listener_vel(float /*x*/, float /*y*/, float /*z*/);
+int seal_set_listener_vel(float /*x*/, float /*y*/, float /*z*/);
 
 /*
  * Sets the orientation of the listener.
@@ -56,7 +58,7 @@ void seal_set_listener_vel(float /*x*/, float /*y*/, float /*z*/);
  *              normalized. Otherwise, the operation is undefined
  * @return      nonzero if successful or otherwise 0
  */
-void seal_set_listener_orien(float* /*orien*/);
+int seal_set_listener_orien(float* /*orien*/);
 
 /*
  * Gets the gain of the listener. The default is 1.0f.
@@ -73,8 +75,9 @@ float seal_get_listener_gain(void);
  * @param x     receives the x position
  * @param y     receives the y position
  * @param z     receives the z position
+ * @return      nonzero if successful or otherwise 0
  */
-void seal_get_listener_pos(float* /*x*/, float* /*y*/, float* /*z*/);
+int seal_get_listener_pos(float* /*x*/, float* /*y*/, float* /*z*/);
 
 /*
  * Gets the velocity of the listener. The default is ( 0.0f, 0.0f, 0.0f ).
@@ -83,8 +86,9 @@ void seal_get_listener_pos(float* /*x*/, float* /*y*/, float* /*z*/);
  * @param x     receives the x velocity
  * @param y     receives the y velocity
  * @param z     receives the z velocity
+ * @return      nonzero if successful or otherwise 0
  */
-void seal_get_listener_vel(float* /*x*/, float* /*y*/, float* /*z*/);
+int seal_get_listener_vel(float* /*x*/, float* /*y*/, float* /*z*/);
 
 /*
  * Gets the orientation of the listener. The default is
@@ -95,7 +99,7 @@ void seal_get_listener_vel(float* /*x*/, float* /*y*/, float* /*z*/);
  *              and the 'up' vector
  * @return      nonzero if successful or otherwise 0
  */
-void seal_get_listener_orien(float* /*orien*/);
+int seal_get_listener_orien(float* /*orien*/);
 
 #ifdef __cplusplus
 }

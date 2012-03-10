@@ -44,27 +44,176 @@ static const size_t DEFAULT_CHUNK_SIZE = MIN_CHUNK_SIZE << 2;
 static const size_t MAX_CHUNK_SIZE     = CHUNK_STORAGE_CAP -
                                          CHUNK_STORAGE_CAP % MIN_CHUNK_SIZE;
 
-/* Limits a value within a range. */
-static int limit_value(int, int, int);
-/* Getters and setters without error checking. */
-static void set3f(seal_src_t*, int, float, float, float);
-static void get3f(seal_src_t*, int, float*, float*, float*);
-static int geti(seal_src_t*, int);
-static float getf(seal_src_t*, int);
-/* Thread-safe setters with error checking. */
-static int seti_s(seal_src_t*, int, int);
-static int setf_s(seal_src_t*, int, float);
-/* Queue operations. */
-static void clean_queue(seal_src_t*);
-static void stop_then_clean_queue(seal_src_t*);
-static void restart_queuing(seal_src_t*);
-static void empty_queue(seal_src_t*);
-static void ensure_queue_empty(seal_src_t*);
-static void ensure_stream_released(seal_src_t*);
-/* Updater thread routines. */
-static _seal_routine_t update;
-static void wait4updater(seal_src_t*);
+int
+limit_value(int value, int lower_bound, int upper_bound)
+{
+    if (value < lower_bound)
+        return lower_bound;
+    else if (value > upper_bound)
+        return upper_bound;
+    else
+        return value;
+}
 
+int
+set3f(seal_src_t* src, int key, float x, float y, float z)
+{
+    assert(alIsSource(src->id));
+
+    _seal_lock_openal();
+    alSource3f(src->id, key, x, y, z);
+    if (_seal_chk_openal_err() == 0)
+        return 0;
+
+    return 1;
+}
+
+int
+seti(seal_src_t* src, int key, int i)
+{
+    assert(alIsSource(src->id));
+
+    _seal_lock_openal();
+    alSourcei(src->id, key, i);
+    if (_seal_chk_openal_err() == 0)
+        return 0;
+
+    return 1;
+}
+
+int
+setf(seal_src_t* src, int key, float f)
+{
+    assert(alIsSource(src->id));
+
+    _seal_lock_openal();
+    alSourcef(src->id, key, f);
+    if (_seal_chk_openal_err() == 0)
+        return 0;
+
+    return 1;
+}
+
+int
+get3f(seal_src_t* src, int key, float* x, float* y, float* z)
+{
+    assert(alIsSource(src->id));
+
+    _seal_lock_openal();
+    alGetSource3f(src->id, key, x, y, z);
+    if (_seal_chk_openal_err() == 0)
+        return 0;
+
+    return 1;
+}
+
+int
+geti(seal_src_t* src, int key)
+{
+    int i;
+
+    assert(alIsSource(src->id));
+
+    _seal_lock_openal();
+    alGetSourcei(src->id, key, &i);
+    if (_seal_chk_openal_err() == 0)
+        return 0;
+
+    return i;
+}
+
+float
+getf(seal_src_t* src, int key)
+{
+    float f;
+
+    assert(alIsSource(src->id));
+
+    _seal_lock_openal();
+    alGetSourcef(src->id, key, &f);
+    if (_seal_chk_openal_err() == 0)
+        return 0;
+
+    return f;
+}
+
+void
+wait4updater(seal_src_t* src)
+{
+    if (src->updater != 0) {
+        _seal_join_thread(src->updater);
+        src->updater = 0;
+    }
+}
+
+void*
+update(void* args)
+{
+    seal_src_t* src = args;
+
+    while (alIsSource(src->id) && seal_get_src_state(src) == SEAL_PLAYING) {
+        if (seal_update_src(src) < 0)
+            return 0;
+        _seal_sleep(50);
+    }
+
+    return (void*) 1;
+}
+
+void
+clean_queue(seal_src_t* src)
+{
+    int nbufs;
+    alGetSourcei(src->id, AL_BUFFERS_PROCESSED, &nbufs);
+    while (--nbufs >= 0) {
+        unsigned int buf;
+        alSourceUnqueueBuffers(src->id, 1, &buf);
+        alDeleteBuffers(1, &buf);
+    }
+}
+
+/*
+ * Stopping a source will mark all the buffers in its queue processed so that
+ * they can be unqueued.
+ */
+void
+stop_then_clean_queue(seal_src_t* src)
+{
+    alSourceStop(src->id);
+    /* Do not let the updater touch anything when cleaning the queue. */
+    wait4updater(src);
+    clean_queue(src);
+}
+
+void
+restart_queuing(seal_src_t* src)
+{
+    stop_then_clean_queue(src);
+    seal_rewind_stream(src->stream);
+}
+
+void
+empty_queue(seal_src_t* src)
+{
+    /* Need to be playing first in order to become stopped. */
+    alSourcePlay(src->id);
+    stop_then_clean_queue(src);
+}
+
+void
+ensure_queue_empty(seal_src_t* src)
+{
+    if (src->stream != 0)
+        empty_queue(src);
+}
+
+
+void
+ensure_stream_released(seal_src_t* src)
+{
+    if (src->stream != 0)
+        src->stream->in_use = 0;
+}
 seal_src_t*
 seal_alloc_src(void)
 {
@@ -168,7 +317,7 @@ seal_detach_src_audio(seal_src_t* src)
     alSourceRewind(src->id);
 
     ensure_stream_released(src);
-    seti_s(src, AL_BUFFER, AL_NONE);
+    seti(src, AL_BUFFER, AL_NONE);
     src->buf = 0;
     /* Wait before nullifying stream pointer. */
     wait4updater(src);
@@ -184,7 +333,7 @@ seal_set_src_buf(seal_src_t* src, seal_buf_t* buf)
     SEAL_CHK(src->stream == 0, SEAL_MIXING_SRC_TYPE, 0);
 
     /* Hack: assuming the id is always at offset 0. */
-    if (seti_s(src, AL_BUFFER, *(unsigned int*) buf) == 0)
+    if (seti(src, AL_BUFFER, *(unsigned int*) buf) == 0)
         return 0;
     /* Carry the previous looping state over for static sources. */
     alSourcei(src->id, AL_LOOPING, src->looping);
@@ -337,28 +486,28 @@ seal_set_src_chunk_size(seal_src_t* src, size_t size)
                       / MIN_CHUNK_SIZE * MIN_CHUNK_SIZE;
 }
 
-void
+int
 seal_set_src_pos(seal_src_t* src, float x, float y, float z)
 {
-    set3f(src, AL_POSITION, x, y, z);
+    return set3f(src, AL_POSITION, x, y, z);
 }
 
-void
+int
 seal_set_src_vel(seal_src_t* src, float x, float y, float z)
 {
-    set3f(src, AL_VELOCITY, x, y, z);
+    return set3f(src, AL_VELOCITY, x, y, z);
 }
 
 int
 seal_set_src_pitch(seal_src_t* src, float pitch)
 {
-    return setf_s(src, AL_PITCH, pitch);
+    return setf(src, AL_PITCH, pitch);
 }
 
 int
 seal_set_src_gain(seal_src_t* src, float gain)
 {
-    return setf_s(src, AL_GAIN, gain);
+    return setf(src, AL_GAIN, gain);
 }
 
 void
@@ -367,24 +516,28 @@ seal_set_src_auto_update(seal_src_t* src, char auto_update)
     src->auto_update = auto_update != 0;
 }
 
-void
+int
 seal_set_src_relative(seal_src_t* src, char relative)
 {
-    seti_s(src, AL_SOURCE_RELATIVE, relative != 0);
+    return seti(src, AL_SOURCE_RELATIVE, relative != 0);
 }
 
-void
+int
 seal_set_src_looping(seal_src_t* src, char looping)
 {
     looping = looping != 0;
-    src->looping = looping;
     /*
      * Streaming does not work with OpenAL's looping as the queuing buffers
      * will never become `processed' when `AL_LOOPING' is true, so set
      * `AL_LOOPING' only for static sources.
      */
     if (src->stream == 0)
-        alSourcei(src->id, AL_LOOPING, looping);
+        if (seti(src, AL_LOOPING, looping) == 0)
+            return 0;
+
+    src->looping = looping;
+
+    return 1;
 }
 
 seal_buf_t*
@@ -418,16 +571,16 @@ seal_get_src_chunk_size(seal_src_t* src)
     return src->chunk_size;
 }
 
-void
+int
 seal_get_src_pos(seal_src_t* src, float* x, float* y, float* z)
 {
-    get3f(src, AL_POSITION, x, y, z);
+    return get3f(src, AL_POSITION, x, y, z);
 }
 
-void
+int
 seal_get_src_vel(seal_src_t* src, float* x, float* y, float* z)
 {
-    get3f(src, AL_VELOCITY, x, y, z);
+    return get3f(src, AL_VELOCITY, x, y, z);
 }
 
 float
@@ -490,158 +643,5 @@ seal_get_src_state(seal_src_t* src)
         return SEAL_STOPPED;
     default:
         return SEAL_INITIAL;
-    }
-}
-
-int limit_value(int value, int lower_bound, int upper_bound)
-{
-    if (value < lower_bound)
-        return lower_bound;
-    else if (value > upper_bound)
-        return upper_bound;
-    else
-        return value;
-}
-
-void
-set3f(seal_src_t* src, int key, float x, float y, float z)
-{
-    assert(alIsSource(src->id));
-
-    alSource3f(src->id, key, x, y, z);
-}
-
-void
-get3f(seal_src_t* src, int key, float* x, float* y, float* z)
-{
-    assert(alIsSource(src->id));
-
-    alGetSource3f(src->id, key, x, y, z);
-}
-
-int
-geti(seal_src_t* src, int key)
-{
-    int i;
-
-    assert(alIsSource(src->id));
-
-    alGetSourcei(src->id, key, &i);
-
-    return i;
-}
-
-float getf(seal_src_t* src, int key)
-{
-    float f;
-
-    assert(alIsSource(src->id));
-
-    alGetSourcef(src->id, key, &f);
-
-    return f;
-}
-
-int
-seti_s(seal_src_t* src, int key, int i)
-{
-    assert(alIsSource(src->id));
-
-    _seal_lock_openal();
-    alSourcei(src->id, key, i);
-    if (_seal_chk_openal_err() == 0)
-        return 0;
-
-    return 1;
-}
-
-int
-setf_s(seal_src_t* src, int key, float f)
-{
-    assert(alIsSource(src->id));
-
-    _seal_lock_openal();
-    alSourcef(src->id, key, f);
-    if (_seal_chk_openal_err() == 0)
-        return 0;
-
-    return 1;
-}
-
-void
-clean_queue(seal_src_t* src)
-{
-    int nbufs;
-    alGetSourcei(src->id, AL_BUFFERS_PROCESSED, &nbufs);
-    while (--nbufs >= 0) {
-        unsigned int buf;
-        alSourceUnqueueBuffers(src->id, 1, &buf);
-        alDeleteBuffers(1, &buf);
-    }
-}
-
-/*
- * Stopping a source will mark all the buffers in its queue processed so that
- * they can be unqueued.
- */
-void
-stop_then_clean_queue(seal_src_t* src)
-{
-    alSourceStop(src->id);
-    /* Do not let the updater touch anything when cleaning the queue. */
-    wait4updater(src);
-    clean_queue(src);
-}
-
-void
-restart_queuing(seal_src_t* src)
-{
-    stop_then_clean_queue(src);
-    seal_rewind_stream(src->stream);
-}
-
-void
-empty_queue(seal_src_t* src)
-{
-    /* Need to be playing first in order to become stopped. */
-    alSourcePlay(src->id);
-    stop_then_clean_queue(src);
-}
-
-void
-ensure_queue_empty(seal_src_t* src)
-{
-    if (src->stream != 0)
-        empty_queue(src);
-}
-
-
-void
-ensure_stream_released(seal_src_t* src)
-{
-    if (src->stream != 0)
-        src->stream->in_use = 0;
-}
-
-void*
-update(void* args)
-{
-    seal_src_t* src = args;
-
-    while (alIsSource(src->id) && seal_get_src_state(src) == SEAL_PLAYING) {
-        if (seal_update_src(src) < 0)
-            return 0;
-        _seal_sleep(50);
-    }
-
-    return (void*) 1;
-}
-
-void
-wait4updater(seal_src_t* src)
-{
-    if (src->updater != 0) {
-        _seal_join_thread(src->updater);
-        src->updater = 0;
     }
 }

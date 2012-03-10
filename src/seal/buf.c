@@ -21,7 +21,17 @@ struct seal_buf_t
     unsigned int id;
 };
 
-static int get_attr(seal_buf_t*, int);
+static int
+geti(seal_buf_t* buf, int key)
+{
+    int value;
+
+    assert(alIsBuffer(buf->id));
+
+    alGetBufferi(buf->id, key, &value);
+
+    return value;
+}
 
 seal_buf_t*
 seal_alloc_buf(void)
@@ -110,37 +120,25 @@ _seal_get_buf_id(seal_buf_t* buf)
 size_t
 seal_get_buf_size(seal_buf_t* buf)
 {
-    return get_attr(buf, AL_SIZE);
+    return geti(buf, AL_SIZE);
 }
 
 int
 seal_get_buf_freq(seal_buf_t* buf)
 {
-    return get_attr(buf, AL_FREQUENCY);
+    return geti(buf, AL_FREQUENCY);
 }
 
 int
 seal_get_buf_bps(seal_buf_t* buf)
 {
-    return get_attr(buf, AL_BITS);
+    return geti(buf, AL_BITS);
 }
 
 int
 seal_get_buf_nchannels(seal_buf_t* buf)
 {
-    return get_attr(buf, AL_CHANNELS);
-}
-
-int
-get_attr(seal_buf_t* buf, int key)
-{
-    int ret;
-
-    assert(alIsBuffer(buf->id));
-
-    alGetBufferi(buf->id, key, &ret);
-
-    return ret;
+    return geti(buf, AL_CHANNELS);
 }
 
 int

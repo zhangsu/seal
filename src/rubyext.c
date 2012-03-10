@@ -86,7 +86,7 @@ extract3float(VALUE rarr, float* x, float* y, float* z)
 
 VALUE
 set_src3float(VALUE rsrc, VALUE rarr,
-              void (*set)(seal_src_t*, float, float, float))
+              int (*set)(seal_src_t*, float, float, float))
 {
     float x, y, z;
 
@@ -97,7 +97,7 @@ set_src3float(VALUE rsrc, VALUE rarr,
 }
 
 VALUE
-set_listener3float(VALUE rarr, void (*set)(float, float, float))
+set_listener3float(VALUE rarr, int (*set)(float, float, float))
 {
     float x, y, z;
 
@@ -116,7 +116,7 @@ bulk_convert_float(VALUE* rtuple, float* tuple, int len)
 }
 
 VALUE
-get_src3float(VALUE rsrc, void (*get)(seal_src_t*, float*, float*, float*))
+get_src3float(VALUE rsrc, int (*get)(seal_src_t*, float*, float*, float*))
 {
     float tuple[3];
     VALUE rtuple[3];
@@ -128,7 +128,7 @@ get_src3float(VALUE rsrc, void (*get)(seal_src_t*, float*, float*, float*))
 }
 
 VALUE
-get_listener3float(void (*get)(float*, float*, float*))
+get_listener3float(int (*get)(float*, float*, float*))
 {
     float tuple[3];
     VALUE rtuple[3];
@@ -170,7 +170,7 @@ get_listener_float(float (*get)())
 }
 
 VALUE
-set_src_fixnum(VALUE rsrc, VALUE rfixnum, int (*set)(seal_src_t*, size_t))
+set_src_fixnum(VALUE rsrc, VALUE rfixnum, void (*set)(seal_src_t*, size_t))
 {
     set(DATA_PTR(rsrc), NUM2ULONG(rfixnum));
     check_seal_err();
@@ -185,7 +185,7 @@ get_src_fixnum(VALUE rsrc, size_t (*get)(seal_src_t*))
 }
 
 VALUE
-set_src_bool(VALUE rsrc, VALUE rbool, int (*set)(seal_src_t*, int))
+set_src_bool(VALUE rsrc, VALUE rbool, int (*set)(seal_src_t*, char))
 {
     set(DATA_PTR(rsrc), RTEST(rbool));
     check_seal_err();
@@ -194,7 +194,7 @@ set_src_bool(VALUE rsrc, VALUE rbool, int (*set)(seal_src_t*, int))
 }
 
 VALUE
-get_src_bool(VALUE rsrc, int (*get)(seal_src_t*))
+get_src_bool(VALUE rsrc, char (*get)(seal_src_t*))
 {
     return get(DATA_PTR(rsrc)) ? Qtrue : Qfalse;
 }
@@ -421,7 +421,10 @@ init_src(VALUE rsrc)
 VALUE
 play_src(VALUE rsrc)
 {
-    return src_op(rsrc, seal_play_src);
+    seal_play_src(DATA_PTR(rsrc));
+    check_seal_err();
+
+    return Qnil;
 }
 
 /*

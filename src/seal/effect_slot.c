@@ -11,8 +11,33 @@ struct seal_effect_slot_t
     void*        effect;
 };
 
-static int seti(seal_effect_slot_t* slot, int, int);
-static int geti(seal_effect_slot_t*, int);
+static int
+seti(seal_effect_slot_t* slot, int key, int value)
+{
+    assert(alIsAuxiliaryEffectSlot(slot->id));
+
+    _seal_lock_openal();
+    alAuxiliaryEffectSloti(slot->id, key, value);
+    if (_seal_chk_openal_err() == 0)
+        return 0;
+
+    return 1;
+}
+
+static int
+geti(seal_effect_slot_t* slot, int key)
+{
+    int value;
+
+    assert(alIsAuxiliaryEffectSlot(slot->id));
+
+    _seal_lock_openal();
+    alGetAuxiliaryEffectSloti(slot->id, key, &value);
+    if (_seal_chk_openal_err() == 0)
+        return 0;
+
+    return value;
+}
 
 seal_effect_slot_t*
 seal_alloc_effect_slot(void)
@@ -91,32 +116,4 @@ float seal_get_effect_slot_gain(seal_effect_slot_t* slot)
 char seal_is_effect_slot_auto(seal_effect_slot_t* slot)
 {
     return geti(slot, AL_EFFECTSLOT_AUXILIARY_SEND_AUTO);
-}
-
-int
-seti(seal_effect_slot_t* slot, int key, int value)
-{
-    assert(alIsAuxiliaryEffectSlot(slot->id));
-
-    _seal_lock_openal();
-    alAuxiliaryEffectSloti(slot->id, key, value);
-    if (_seal_chk_openal_err() == 0)
-        return 0;
-
-    return 1;
-}
-
-int
-geti(seal_effect_slot_t* slot, int key)
-{
-    int value;
-
-    assert(alIsAuxiliaryEffectSlot(slot->id));
-
-    _seal_lock_openal();
-    alGetAuxiliaryEffectSloti(slot->id, key, &value);
-    if (_seal_chk_openal_err() == 0)
-        return 0;
-
-    return value;
 }

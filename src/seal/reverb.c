@@ -10,8 +10,33 @@ struct seal_reverb_t
     unsigned int id;
 };
 
-static int setf(seal_reverb_t*, int, float);
-static float getf(seal_reverb_t*, int);
+static int
+setf(seal_reverb_t* reverb, int key, float value)
+{
+    assert(alIsEffect(reverb->id));
+
+    _seal_lock_openal();
+    alEffectf(reverb->id, key, value);
+    if (_seal_chk_openal_err() == 0)
+        return 0;
+
+    return 1;
+}
+
+static float
+getf(seal_reverb_t* reverb, int key)
+{
+    float value;
+
+    assert(alIsEffect(reverb->id));
+
+    _seal_lock_openal();
+    alGetEffectf(reverb->id, key, &value);
+    if (_seal_chk_openal_err() == 0)
+        return 0;
+
+    return value;
+}
 
 seal_reverb_t*
 seal_alloc_reverb(void)
@@ -185,40 +210,12 @@ seal_get_reverb_room_rolloff_factor(seal_reverb_t* reverb)
 char
 seal_is_reverb_hfdecay_limited(seal_reverb_t* reverb)
 {
-    int attr_value;
+    int value;
 
     assert(alIsEffect(reverb->id));
 
     _seal_lock_openal();
-    alGetEffecti(reverb->id, AL_REVERB_DECAY_HFLIMIT, &attr_value);
-    if (_seal_chk_openal_err() == 0)
-        return 0;
-
-    return attr_value;
-}
-
-int
-setf(seal_reverb_t* reverb, int key, float value)
-{
-    assert(alIsEffect(reverb->id));
-
-    _seal_lock_openal();
-    alEffectf(reverb->id, key, value);
-    if (_seal_chk_openal_err() == 0)
-        return 0;
-
-    return 1;
-}
-
-float
-getf(seal_reverb_t* reverb, int key)
-{
-    float value;
-
-    assert(alIsEffect(reverb->id));
-
-    _seal_lock_openal();
-    alGetEffectf(reverb->id, key, &value);
+    alGetEffecti(reverb->id, AL_REVERB_DECAY_HFLIMIT, &value);
     if (_seal_chk_openal_err() == 0)
         return 0;
 
