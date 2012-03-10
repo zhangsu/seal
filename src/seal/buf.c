@@ -28,7 +28,10 @@ geti(seal_buf_t* buf, int key)
 
     assert(alIsBuffer(buf->id));
 
+    _seal_lock_openal();
     alGetBufferi(buf->id, key, &value);
+    if (_seal_chk_openal_err() == 0)
+        return 0;
 
     return value;
 }

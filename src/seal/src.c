@@ -69,12 +69,12 @@ set3f(seal_src_t* src, int key, float x, float y, float z)
 }
 
 int
-seti(seal_src_t* src, int key, int i)
+seti(seal_src_t* src, int key, int value)
 {
     assert(alIsSource(src->id));
 
     _seal_lock_openal();
-    alSourcei(src->id, key, i);
+    alSourcei(src->id, key, value);
     if (_seal_chk_openal_err() == 0)
         return 0;
 
@@ -82,12 +82,12 @@ seti(seal_src_t* src, int key, int i)
 }
 
 int
-setf(seal_src_t* src, int key, float f)
+setf(seal_src_t* src, int key, float value)
 {
     assert(alIsSource(src->id));
 
     _seal_lock_openal();
-    alSourcef(src->id, key, f);
+    alSourcef(src->id, key, value);
     if (_seal_chk_openal_err() == 0)
         return 0;
 
@@ -95,12 +95,12 @@ setf(seal_src_t* src, int key, float f)
 }
 
 int
-get3f(seal_src_t* src, int key, float* x, float* y, float* z)
+get3f(seal_src_t* src, int key, float* px, float* py, float* pz)
 {
     assert(alIsSource(src->id));
 
     _seal_lock_openal();
-    alGetSource3f(src->id, key, x, y, z);
+    alGetSource3f(src->id, key, px, py, pz);
     if (_seal_chk_openal_err() == 0)
         return 0;
 
@@ -110,31 +110,31 @@ get3f(seal_src_t* src, int key, float* x, float* y, float* z)
 int
 geti(seal_src_t* src, int key)
 {
-    int i;
+    int value;
 
     assert(alIsSource(src->id));
 
     _seal_lock_openal();
-    alGetSourcei(src->id, key, &i);
+    alGetSourcei(src->id, key, &value);
     if (_seal_chk_openal_err() == 0)
         return 0;
 
-    return i;
+    return value;
 }
 
 float
 getf(seal_src_t* src, int key)
 {
-    float f;
+    float value;
 
     assert(alIsSource(src->id));
 
     _seal_lock_openal();
-    alGetSourcef(src->id, key, &f);
+    alGetSourcef(src->id, key, &value);
     if (_seal_chk_openal_err() == 0)
         return 0;
 
-    return f;
+    return value;
 }
 
 void
