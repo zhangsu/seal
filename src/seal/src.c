@@ -548,7 +548,8 @@ seal_get_src_buf(seal_src_t* src)
     return src->buf;
 }
 
-seal_stream_t* seal_get_src_stream(seal_src_t* src)
+seal_stream_t*
+seal_get_src_stream(seal_src_t* src)
 {
     assert(alIsSource(src->id));
 
@@ -594,7 +595,6 @@ seal_get_src_gain(seal_src_t* src)
 {
     return getf(src, AL_GAIN);
 }
-
 
 char
 seal_is_src_auto_updated(seal_src_t* src)

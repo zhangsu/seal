@@ -38,18 +38,16 @@ alloc(VALUE klass, void* allocate, void* free)
 seal_fmt_t
 map_fmt(VALUE rsym)
 {
-    if (!NIL_P(rsym))
-    {
-        rsym = rb_convert_type(rsym, T_SYMBOL, "Symbol", "to_sym");
-        if (rsym == name2sym("wav"))
-            return SEAL_WAV_FMT;
-        else if (rsym == name2sym("ov"))
-            return SEAL_OV_FMT;
-        else if (rsym == name2sym("mpg"))
-            return SEAL_MPG_FMT;
-    }
+    if (NIL_P(rsym))
+        return SEAL_UNKNOWN_FMT;
 
-    return SEAL_UNKNOWN_FMT;
+    rsym = rb_convert_type(rsym, T_SYMBOL, "Symbol", "to_sym");
+    if (rsym == name2sym("wav"))
+        return SEAL_WAV_FMT;
+    else if (rsym == name2sym("ov"))
+        return SEAL_OV_FMT;
+    else if (rsym == name2sym("mpg"))
+        return SEAL_MPG_FMT;
 }
 
 void
@@ -896,9 +894,9 @@ bind_src(void)
     rb_define_method(cSource, "gain=", set_src_gain, 1);
     rb_define_method(cSource, "gain", get_src_gain, 0);
     rb_define_method(cSource, "relative=", set_src_relative, 1);
-    rb_define_method(cSource, "relative", is_src_relative, 0);
+    rb_define_method(cSource, "relative?", is_src_relative, 0);
     rb_define_method(cSource, "looping=", set_src_looping, 1);
-    rb_define_method(cSource, "looping", is_src_looping, 0);
+    rb_define_method(cSource, "looping?", is_src_looping, 0);
     rb_define_method(cSource, "queue_size=", set_src_queue_size, 1);
     rb_define_method(cSource, "queue_size", get_src_queue_size, 0);
     rb_define_method(cSource, "chunk_size=", set_src_chunk_size, 1);

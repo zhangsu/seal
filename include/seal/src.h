@@ -175,7 +175,6 @@ int seal_update_src(seal_src_t*);
  * the associated buffer or stream.
  *
  * @param src       the source to detach the audio of
- * @return          nonzero if successful or otherwise 0
  */
 void seal_detach_src_audio(seal_src_t*);
 
@@ -190,7 +189,7 @@ void seal_detach_src_audio(seal_src_t*);
  *
  * @param src   the source to set the queue size of
  * @param size  the queue size in the interval [2, 127]; an out-of-bound
- * value will be adjusted to the closest bound automatically
+ *              value will be adjusted to the closest bound automatically
  */
 void seal_set_src_queue_size(seal_src_t*, size_t);
 
@@ -256,7 +255,8 @@ int seal_set_src_gain(seal_src_t*, float /*gain*/);
 /*
  * Sets whether a source should be automatically updated asynchronously by a
  * background thread. If this thread is running, user calls to seal_update_src
- * does nothing.
+ * does nothing. If auto update is disabled after it is enabled, it will take
+ * effect the next time the source gets played.
  *
  * @param src           the source to set the auto update property of
  * @param auto_update   1 to set it auto update or otherwise 0
