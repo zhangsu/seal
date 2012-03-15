@@ -4,77 +4,58 @@
  * attached with the library.
  */
 
+#include <stdlib.h>
 #include <stddef.h>
-#include <seal/raw.h>
-#include <seal/core.h>
-#include <seal/err.h>
 #include <assert.h>
+#include <seal/raw.h>
+#include <seal/err.h>
 
 /* Reallocates `raw->data' to size `size'. */
-static int realloc_raw_data(seal_raw_t*, size_t /*size*/);
-
-seal_raw_t*
-seal_alloc_raw(void)
+static seal_err_t
+realloc_raw_data(seal_raw_t* raw, size_t size)
 {
-    seal_raw_t* raw;
+    void* buf;
 
-    raw = _seal_calloc(1, sizeof (seal_raw_t));
+    buf = realloc(raw->data, size);
+    if (buf == 0)
+        return SEAL_CANNOT_ALLOC_MEM;
+    raw->data = buf;
+    raw->size = size;
 
-    return raw;
+    return SEAL_OK;
 }
 
-void
-seal_free_raw(seal_raw_t* raw)
-{
-    if (raw->data != 0)
-        _seal_free(raw->data);
-    _seal_free(raw);
-}
-
-int
+seal_err_t
 seal_alloc_raw_data(seal_raw_t* raw, size_t size)
 {
     assert(size > 0);
 
     raw->size = size;
-    raw->data = _seal_malloc(size);
+    raw->data = malloc(size);
     if (raw->data == 0)
-        return 0;
+        return SEAL_CANNOT_ALLOC_MEM;
 
-    return 1;
+    return SEAL_OK;
 }
 
 void
 seal_free_raw_data(seal_raw_t* raw)
 {
-    _seal_free(raw->data);
+    free(raw->data);
 }
 
-int
+seal_err_t
 seal_extend_raw_data(seal_raw_t* raw)
 {
     return realloc_raw_data(raw, raw->size * 2);
 }
 
-int
+seal_err_t
 seal_ensure_raw_data_size(seal_raw_t* raw, size_t size)
 {
     /* If the buffer is not large enough... */
     if (size >= raw->size)
         return seal_extend_raw_data(raw);
 
-    return 1;
-}
-
-int
-realloc_raw_data(seal_raw_t* raw, size_t size)
-{
-    void* buf;
-
-    buf = _seal_realloc(raw->data, size);
-    SEAL_CHK(buf != 0, SEAL_CANNOT_ALLOC_MEM, 0);
-    raw->data = buf;
-    raw->size = size;
-
-    return 1;
+    return SEAL_OK;
 }

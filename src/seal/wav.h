@@ -10,22 +10,14 @@
 #ifndef _SEAL_WAV_H_
 #define _SEAL_WAV_H_
 
+#include <stddef.h>
 #include <seal/raw.h>
 #include <seal/stream.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-int _seal_load_wav(seal_raw_t*, const char* /*filename*/);
-seal_stream_t* _seal_init_wav_stream(seal_stream_t*,
-                                     const char* /*filename*/);
-int _seal_stream_wav(seal_stream_t*, seal_raw_t*);
-void _seal_rewind_wav_stream(seal_stream_t*);
-void _seal_close_wav_stream(seal_stream_t*);
-
-#ifdef __cplusplus
-}
-#endif
+seal_err_t _seal_load_wav(seal_raw_t*, const char* /*filename*/);
+seal_err_t _seal_init_wav_stream(seal_stream_t*, const char* /*filename*/);
+seal_err_t _seal_stream_wav(seal_stream_t*, seal_raw_t*, size_t* /*psize*/);
+seal_err_t _seal_rewind_wav_stream(seal_stream_t*);
+seal_err_t _seal_close_wav_stream(seal_stream_t*);
 
 #endif /* _SEAL_WAV_H_ */

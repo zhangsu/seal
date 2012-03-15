@@ -29,7 +29,6 @@ enum seal_err_t
     SEAL_BAD_DEVICE,
     SEAL_CANNOT_CREATE_CONTEXT,
 
-    SEAL_STREAM_ALREADY_OPENED,
     SEAL_STREAM_UNOPENED,
     SEAL_STREAM_INUSE,
     SEAL_MIXING_STREAM_FMT,
@@ -48,17 +47,19 @@ enum seal_err_t
     SEAL_BAD_WAV_BPS,
     SEAL_BAD_WAV_NCHANNELS,
     FILE_BAD_WAV_FREQ,
+    SEAL_CANNOT_REWIND_WAV,
 
     SEAL_CANNOT_OPEN_OV,
     SEAL_CANNOT_GET_OV_INFO,
     SEAL_CANNOT_READ_OV,
+    SEAL_CANNOT_REWIND_OV,
+    SEAL_CANNOT_CLOSE_OV,
 
     SEAL_CANNOT_INIT_MPG,
     SEAL_CANNOT_GET_MPG_INFO,
     SEAL_CANNOT_READ_MPG,
-
-    SEAL_CANNOT_OPEN_MID,
-    SEAL_CANNOT_PLAY_MID
+    SEAL_CANNOT_REWIND_MPG,
+    SEAL_CANNOT_CLOSE_MPG,
 };
 
 typedef enum seal_err_t seal_err_t;
@@ -66,21 +67,6 @@ typedef enum seal_err_t seal_err_t;
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-/*
- * Gets the thread-local SEAL error state and clears it to SEAL_OK. If a seal
- * function returns with an error, the later error will override the old one.
- *
- * @return  the error state
- */
-seal_err_t seal_get_err(void);
-
-/*
- * Peeks the thread-local SEAL error state without clearing it to SEAL_OK.
- *
- * @return  the error state
- */
-seal_err_t seal_peek_err(void);
 
 /*
  * Gets a SEAL error message.
@@ -94,49 +80,15 @@ const char* seal_get_err_msg(seal_err_t);
 }
 #endif
 
-/* IMPLEMENTATION DETAILS STARTS FROM HERE. */
-
 /*
- * Sets the thread-local SEAL error state.
- *
- * @param err the error to set
- */
-void _seal_set_err(seal_err_t);
-
-/*
- * Checks if OpenAL is in an error state and sets the corresponding SEAL error
- * if it is.
- *
- * @return  1 if OpenAL is not in an error state or otherwise 0
- */
-int _seal_chk_openal_err(void);
-
-/*
- * Some syntactic sugars for SEAL error checking. No multiple evaluation.
- * SEAL_CHK_AL_* asserts there is no OpenAL error so far.
- * SEAL_CHK_* (without the "AL") asserts an expression evaluates to true.
- * Macros with suffix `_S' also does clean-up by jumping to a local label that
- * starts the clean-up process.
+ *****************************************************************************
+ * Below are **implementation details**.
+ *****************************************************************************
  */
 
-/* Sets an error and returns with a specified value. */
-#define SEAL_ABORT(err, ret) do                                             \
-{                                                                           \
-    _seal_set_err(err);                                                     \
-    return ret;                                                             \
-} while (0)
-
-/* Sets an error and jumps to a specified label. */
-#define SEAL_ABORT_S(err, label) do                                         \
-{                                                                           \
-    _seal_set_err(err);                                                     \
-    goto label;                                                             \
-} while (0)
-
-/* Asserts `expr' evaluates to true and returns. */
-#define SEAL_CHK(expr, err, ret) if (!(expr)) SEAL_ABORT(err, ret)
-
-/* Asserts `expr' evaluates to true and jumps. */
-#define SEAL_CHK_S(expr, err, label) if (!(expr)) SEAL_ABORT_S(err, label)
+/*
+ * @return  the OpenAL error as a SEAL error
+ */
+seal_err_t _seal_get_openal_err(void);
 
 #endif /* _SEAL_ERR_H_ */

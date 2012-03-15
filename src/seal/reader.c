@@ -4,14 +4,14 @@
  * attached with the library.
  */
 
-#include <stdio.h>
-#include <stdint.h>
-#include <stddef.h>
-#include <seal/err.h>
-#include <assert.h>
 #ifdef _WIN32
 # include <Windows.h>
 #endif
+#include <stdio.h>
+#include <stdint.h>
+#include <stddef.h>
+#include <assert.h>
+#include <seal/err.h>
 #include "reader.h"
 
 enum
@@ -20,10 +20,19 @@ enum
 };
 
 /* Helpers that convert raw bytes to little-endian 16- and 32-bit integers. */
-static uint16_t raw2le16(uint8_t*);
-static uint32_t raw2le32(uint8_t*);
+static uint16_t
+raw2le16(uint8_t* bytes)
+{
+    return bytes[1] << 8 | bytes[0];
+}
 
-void*
+static uint32_t
+raw2le32(uint8_t* bytes)
+{
+    return bytes[3] << 24 | bytes[2] << 16 | raw2le16(bytes);
+}
+
+FILE*
 _seal_fopen(const char* filename)
 {
     FILE* file;
@@ -35,13 +44,12 @@ _seal_fopen(const char* filename)
 #else
     file = fopen(filename, "rb");
 #endif
-    SEAL_CHK(file != 0, SEAL_CANNOT_OPEN_FILE, 0);
 
     return file;
 }
 
 void
-_seal_fclose(void* file)
+_seal_fclose(FILE* file)
 {
     fclose(file);
 }
@@ -93,16 +101,4 @@ _seal_skip(uint32_t nbytes, void* file)
     nbytes %= JUNK_BUF_SIZE;
     if (nbytes > 0)
         fread(junk, 1, nbytes, file);
-}
-
-uint16_t
-raw2le16(uint8_t* bytes)
-{
-    return bytes[1] << 8 | bytes[0];
-}
-
-uint32_t
-raw2le32(uint8_t* bytes)
-{
-    return bytes[3] << 24 | bytes[2] << 16 | raw2le16(bytes);
 }

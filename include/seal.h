@@ -16,6 +16,7 @@
 #include "seal/stream.h"
 #include "seal/src.h"
 #include "seal/listener.h"
+#include "seal/effect_slot.h"
 #include "seal/reverb.h"
 #include "seal/err.h"
 

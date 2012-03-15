@@ -4,33 +4,9 @@
  * attached with the library.
  */
 
-#ifndef NDEBUG
-# include <stdio.h>
-#endif
 #include <al/al.h>
 #include <seal/err.h>
 #include <seal/core.h>
-#include "threading.h"
-
-/* Thread-local error state. Initialized and uninitialized in core.c. */
-_seal_tls_t _seal_err;
-
-seal_err_t
-seal_get_err(void)
-{
-    seal_err_t err;
-
-    err = seal_peek_err();
-    _seal_set_tls(_seal_err, (void*) SEAL_OK);
-
-    return err;
-}
-
-seal_err_t
-seal_peek_err(void)
-{
-    return (seal_err_t) _seal_get_tls(_seal_err);
-}
 
 const char*
 seal_get_err_msg(seal_err_t err)
@@ -61,8 +37,6 @@ seal_get_err_msg(seal_err_t err)
 
     case SEAL_STREAM_UNOPENED:
         return "Cannot use the uninitialized stream";
-    case SEAL_STREAM_ALREADY_OPENED:
-        return "Cannot re-initialize the already-opened stream";
     case SEAL_STREAM_INUSE:
         return "The operation cannot be done as the stream is still in use";
     case SEAL_MIXING_STREAM_FMT:
@@ -94,6 +68,8 @@ seal_get_err_msg(seal_err_t err)
         return "The specified WAVE file has an invalid number of channels";
     case FILE_BAD_WAV_FREQ:
         return "The specified WAVE file has an invalid sample rate";
+    case SEAL_CANNOT_REWIND_WAV:
+        return "Failed rewinding the specified WAVE file";
 
     case SEAL_CANNOT_OPEN_OV:
         return "Failed openning the specified Ogg Vorbis file";
@@ -101,6 +77,10 @@ seal_get_err_msg(seal_err_t err)
         return "Failed getting info from the specified Ogg Vorbis file";
     case SEAL_CANNOT_READ_OV:
         return "Failed reading the specified Ogg Vorbis file";
+    case SEAL_CANNOT_REWIND_OV:
+        return "Failed rewinding the specified Ogg Vorbis file";
+    case SEAL_CANNOT_CLOSE_OV:
+        return "Failed closing the specified Ogg Vorbis file";
 
     case SEAL_CANNOT_INIT_MPG:
         return "Failed initializing MPEG decoder";
@@ -108,35 +88,23 @@ seal_get_err_msg(seal_err_t err)
         return "Failed getting info from the specified MPEG file";
     case SEAL_CANNOT_READ_MPG:
         return "Failed reading the specified MPEG file";
-
-    case SEAL_CANNOT_OPEN_MID:
-        return "Failed openning the specified MIDI file "
-               "or initializing the MIDI device";
-    case SEAL_CANNOT_PLAY_MID:
-        return "Failed playing the specified MIDI file";
+    case SEAL_CANNOT_REWIND_MPG:
+        return "Failed rewinding the specified MPEG file";
+    case SEAL_CANNOT_CLOSE_MPG:
+        return "Failed closing the specified MPEG file";
 
     default:
         return "Unkown error";
     }
 }
 
-void
-_seal_set_err(seal_err_t err)
-{
-    _seal_set_tls(_seal_err, (void*) err);
-#ifndef NDEBUG
-    if (err != SEAL_OK)
-        fprintf(stderr, "[SEAL][DEBUG] %s\n", seal_get_err_msg(err));
-#endif
-}
-
 /*
- * Always call `_seal_lock_openal' before calling an OpenAL function that could
- * possibly raise an OpenAL error, and then call this function to get the
- * error which will automatically release the lock.
+ * Always call `_seal_lock_openal' before calling an OpenAL function that
+ * could possibly raise an OpenAL error, and then call this function to get
+ * the error which will automatically release the lock.
  */
-int
-_seal_chk_openal_err(void)
+seal_err_t
+_seal_get_openal_err(void)
 {
     seal_err_t err;
 
@@ -161,11 +129,5 @@ _seal_chk_openal_err(void)
     }
     _seal_unlock_openal();
 
-    if (err != SEAL_OK) {
-        _seal_set_err(err);
-
-        return 0;
-    }
-
-    return 1;
+    return err;
 }

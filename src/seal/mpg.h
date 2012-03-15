@@ -10,14 +10,15 @@
 #ifndef _SEAL_MPG_H_
 #define _SEAL_MPG_H_
 
+#include <stddef.h>
 #include <seal/raw.h>
 #include <seal/stream.h>
+#include <seal/err.h>
 
-int _seal_load_mpg(seal_raw_t*, const char* /*filename*/);
-seal_stream_t* _seal_init_mpg_stream(seal_stream_t*,
-                                     const char* /*filename*/);
-int _seal_stream_mpg(seal_stream_t*, seal_raw_t*);
-void _seal_rewind_mpg_stream(seal_stream_t*);
-void _seal_close_mpg_stream(seal_stream_t*);
+seal_err_t _seal_load_mpg(seal_raw_t*, const char* /*filename*/);
+seal_err_t _seal_init_mpg_stream(seal_stream_t*, const char* /*filename*/);
+seal_err_t _seal_stream_mpg(seal_stream_t*, seal_raw_t*, size_t* /*psize*/);
+seal_err_t _seal_rewind_mpg_stream(seal_stream_t*);
+seal_err_t _seal_close_mpg_stream(seal_stream_t*);
 
 #endif /* _SEAL_MPG_H_ */

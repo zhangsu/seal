@@ -10,6 +10,8 @@
 #ifndef _SEAL_FMT_H_
 #define _SEAL_FMT_H_
 
+#include "err.h"
+
 enum seal_fmt_t
 {
     SEAL_UNKNOWN_FMT,
@@ -33,9 +35,10 @@ extern "C" {
  * at the beginning.
  *
  * @param filename  the filename of the audio
- * @return          the format if recognized or otherwise `SEAL_UNKNOWN_FMT'
+ * @param pfmt      the receiver of the format if recognized or otherwise
+ *                  `SEAL_UNKNOWN_FMT'
  */
-seal_fmt_t seal_recognize_fmt(const char* /*filename*/);
+seal_err_t seal_recognize_fmt(const char* /*filename*/, seal_fmt_t* /*pfmt*/);
 
 /*
  * Ensures an audio format is known.
@@ -44,9 +47,9 @@ seal_fmt_t seal_recognize_fmt(const char* /*filename*/);
  * @param pfmt      if `*pfmt' is not `SEAL_UNKNOWN_FMT' then do nothing;
  *                  otherwise the file format is checked and `pfmt' receives
  *                  the known format
- * @return          nonzero if successful or otherwise 0
  */
-int seal_ensure_fmt_known(const char* /*filename*/, seal_fmt_t* /*pfmt*/);
+seal_err_t seal_ensure_fmt_known(const char* /*filename*/,
+                                 seal_fmt_t* /*pfmt*/);
 
 #ifdef __cplusplus
 }

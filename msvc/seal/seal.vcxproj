@@ -153,7 +153,6 @@
     <ClCompile Include="..\..\src\seal\err.c" />
     <ClCompile Include="..\..\src\seal\fmt.c" />
     <ClCompile Include="..\..\src\seal\listener.c" />
-    <ClCompile Include="..\..\src\seal\mid.c" />
     <ClCompile Include="..\..\src\seal\mpg.c" />
     <ClCompile Include="..\..\src\seal\ov.c" />
     <ClCompile Include="..\..\src\seal\raw.c" />
@@ -172,7 +171,6 @@
     <ClInclude Include="..\..\include\seal\err.h" />
     <ClInclude Include="..\..\include\seal\fmt.h" />
     <ClInclude Include="..\..\include\seal\listener.h" />
-    <ClInclude Include="..\..\include\seal\mid.h" />
     <ClInclude Include="..\..\include\seal\raw.h" />
     <ClInclude Include="..\..\include\seal\reverb.h" />
     <ClInclude Include="..\..\include\seal\src.h" />

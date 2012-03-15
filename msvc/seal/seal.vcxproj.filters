@@ -48,9 +48,6 @@
     <ClCompile Include="..\..\src\seal\fmt.c">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\seal\mid.c">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\seal\ov.c">
       <Filter>src</Filter>
     </ClCompile>
@@ -90,9 +87,6 @@
       <Filter>include\seal</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\seal\reverb.h">
-      <Filter>include\seal</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\seal\mid.h">
       <Filter>include\seal</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\seal\mpg.h">

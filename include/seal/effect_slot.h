@@ -11,24 +11,38 @@
 #ifndef _SEAL_EFFECT_SLOT_H_
 #define _SEAL_EFFECT_SLOT_H_
 
+#include "err.h"
+
 typedef struct seal_effect_slot_t seal_effect_slot_t;
 
-seal_effect_slot_t* seal_alloc_effect_slot(void);
+seal_err_t seal_init_effect_slot(seal_effect_slot_t*);
 
-int seal_free_effect_slot(seal_effect_slot_t*);
+seal_err_t seal_destroy_effect_slot(seal_effect_slot_t*);
 
-int seal_fill_effect_slot(seal_effect_slot_t*, void* /*effect*/);
+seal_err_t seal_fill_effect_slot(seal_effect_slot_t*, void* /*effect*/);
 
-int seal_unfill_effect_slot(seal_effect_slot_t*);
+seal_err_t seal_unfill_effect_slot(seal_effect_slot_t*);
 
-int seal_set_effect_slot_gain(seal_effect_slot_t*, float /*gain*/);
+seal_err_t seal_set_effect_slot_gain(seal_effect_slot_t*, float /*gain*/);
 
-int seal_set_effect_slot_auto(seal_effect_slot_t*, char /*automatic*/);
+seal_err_t seal_set_effect_slot_auto(seal_effect_slot_t*, char /*automatic*/);
 
-void* seal_get_effect_slot_effect(seal_effect_slot_t*);
+seal_err_t seal_get_effect_slot_effect(seal_effect_slot_t*, void* /*effect*/);
 
-float seal_get_effect_slot_gain(seal_effect_slot_t*);
+seal_err_t seal_get_effect_slot_gain(seal_effect_slot_t*, float* /*pgain*/);
 
-char seal_is_effect_slot_auto(seal_effect_slot_t*);
+seal_err_t seal_is_effect_slot_auto(seal_effect_slot_t*, char* /*pauto*/);
+
+/*
+ *****************************************************************************
+ * Below are **implementation details**.
+ *****************************************************************************
+ */
+
+struct seal_effect_slot_t
+{
+    unsigned int id;
+    void*        effect;
+};
 
 #endif /* _SEAL_EFFECT_SLOT_H_ */

@@ -4,130 +4,105 @@
  * attached with the library.
  */
 
+#include <stddef.h>
+#include <assert.h>
 #include <seal/stream.h>
 #include <seal/core.h>
 #include <seal/raw.h>
 #include <seal/fmt.h>
 #include <seal/err.h>
-#include <assert.h>
 #include "ov.h"
 #include "mpg.h"
 #include "wav.h"
 
-seal_stream_t*
-seal_alloc_stream(void)
+seal_err_t
+seal_open_stream(seal_stream_t* stream, const char* filename, seal_fmt_t fmt)
 {
-    seal_stream_t* stream;
+    seal_err_t err;
 
-    stream = _seal_calloc(1, sizeof (seal_stream_t));
-
-    return stream;
-}
-
-seal_stream_t*
-seal_init_stream(seal_stream_t* stream, const char* filename, seal_fmt_t fmt)
-{
-    SEAL_CHK(stream->id == 0, SEAL_STREAM_ALREADY_OPENED, 0);
-    if (seal_ensure_fmt_known(filename, &fmt) == 0)
-        return 0;
+    if ((err = seal_ensure_fmt_known(filename, &fmt)) != SEAL_OK)
+        return err;
 
     switch (fmt) {
     case SEAL_WAV_FMT:
-        return _seal_init_wav_stream(stream, filename);
+        err = _seal_init_wav_stream(stream, filename);
+        break;
     case SEAL_OV_FMT:
-        return _seal_init_ov_stream(stream, filename);
+        err =  _seal_init_ov_stream(stream, filename);
+        break;
     case SEAL_MPG_FMT:
-        return _seal_init_mpg_stream(stream, filename);
+        err =  _seal_init_mpg_stream(stream, filename);
+        break;
     default:
-        SEAL_ABORT(SEAL_BAD_AUDIO, 0);
-    }
-}
-
-seal_stream_t*
-seal_open_stream(const char* filename, seal_fmt_t fmt)
-{
-    seal_stream_t* stream;
-
-    stream = seal_alloc_stream();
-    if (stream == 0)
-        return 0;
-
-    if (seal_init_stream(stream, filename, fmt) == 0) {
-        seal_close_stream(stream);
-        return 0;
+        return SEAL_BAD_AUDIO;
     }
 
-    return stream;
+    return err;
 }
 
-int
-seal_stream(seal_stream_t* stream, seal_raw_t* raw)
+seal_err_t
+seal_stream(seal_stream_t* stream, seal_raw_t* raw, size_t* psize)
 {
     assert(raw->size > 0);
 
-    SEAL_CHK(stream->id != 0, SEAL_STREAM_UNOPENED, 0);
+    if (stream->id == 0)
+        return SEAL_STREAM_UNOPENED;
 
     switch (stream->fmt) {
     case SEAL_WAV_FMT:
-        return _seal_stream_wav(stream, raw);
+        return _seal_stream_wav(stream, raw, psize);
     case SEAL_OV_FMT:
-        return _seal_stream_ov(stream, raw);
+        return _seal_stream_ov(stream, raw, psize);
     case SEAL_MPG_FMT:
-        return _seal_stream_mpg(stream, raw);
+        return _seal_stream_mpg(stream, raw, psize);
     default:
-        SEAL_ABORT(SEAL_BAD_AUDIO, 0);
+        return SEAL_BAD_AUDIO;
     }
 }
 
-void
+seal_err_t
 seal_rewind_stream(seal_stream_t* stream)
 {
-    assert(stream->id != 0);
-
-    if (stream->id != 0) {
-        switch (stream->fmt) {
-        case SEAL_WAV_FMT:
-            _seal_rewind_wav_stream(stream);
-            break;
-        case SEAL_OV_FMT:
-            _seal_rewind_ov_stream(stream);
-            break;
-        case SEAL_MPG_FMT:
-            _seal_rewind_mpg_stream(stream);
-            break;
-        }
-    }
-}
-
-int
-seal_close_stream(seal_stream_t* stream)
-{
-    SEAL_CHK(stream->id != 0, SEAL_STREAM_UNOPENED, 0);
-    SEAL_CHK(!stream->in_use, SEAL_STREAM_INUSE, 0);
+    if (stream->id == 0)
+        return SEAL_STREAM_UNOPENED;
 
     switch (stream->fmt) {
     case SEAL_WAV_FMT:
-        _seal_close_wav_stream(stream);
-        break;
+        return _seal_rewind_wav_stream(stream);
     case SEAL_OV_FMT:
-        _seal_close_ov_stream(stream);
-        break;
+        return _seal_rewind_ov_stream(stream);
     case SEAL_MPG_FMT:
-        _seal_close_mpg_stream(stream);
-        break;
+        return _seal_rewind_mpg_stream(stream);
+    default:
+        return SEAL_BAD_AUDIO;
     }
-    stream->id = 0;
 
-    return 1;
+    return SEAL_OK;
 }
 
-int
-seal_free_stream(seal_stream_t* stream)
+seal_err_t
+seal_close_stream(seal_stream_t* stream)
 {
-    if (stream->id != 0 && seal_close_stream(stream) == 0)
-        return 0;
+    seal_err_t err;
 
-    _seal_free(stream);
+    if (stream->id == 0)
+        return SEAL_STREAM_UNOPENED;
 
-    return 1;
+    switch (stream->fmt) {
+    case SEAL_WAV_FMT:
+        err = _seal_close_wav_stream(stream);
+        break;
+    case SEAL_OV_FMT:
+        err = _seal_close_ov_stream(stream);
+        break;
+    case SEAL_MPG_FMT:
+        err = _seal_close_mpg_stream(stream);
+        break;
+    default:
+        return SEAL_BAD_AUDIO;
+    }
+    if (err == SEAL_OK)
+        stream->id = 0;
+
+    return SEAL_OK;
 }

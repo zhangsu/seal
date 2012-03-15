@@ -4,16 +4,12 @@
  * See COPYING attached with the library.
  *
  * threading.h is an abstraction layer for thread-related operations, which
- * ensures SEAL's thread-safety and is intended for internal use only (so
- * treat all these as implementation details).
+ * ensures SEAL's thread-safety.
  */
 
 #ifndef _SEAL_THREADING_H_
 #define _SEAL_THREADING_H_
 
-typedef void* _seal_lock_t;
-typedef void* _seal_tls_t;
-typedef void* _seal_thread_t;
 typedef void* _seal_routine_t(void*);
 
 /*
@@ -24,20 +20,14 @@ typedef void* _seal_routine_t(void*);
 //#define SEAL_NO_THREAD_SAFETY
 
 /* Mutex. */
-_seal_lock_t _seal_create_lock(void);
-void _seal_destroy_lock(_seal_lock_t);
-void _seal_lock(_seal_lock_t);
-void _seal_unlock(_seal_lock_t);
-
-/* Thread-local storage. */
-_seal_tls_t _seal_alloc_tls(void);
-void _seal_free_tls(_seal_tls_t);
-void _seal_set_tls(_seal_tls_t, void* /*value*/);
-void* _seal_get_tls(_seal_tls_t);
+void* _seal_create_lock(void);
+void _seal_destroy_lock(void* /*lock*/);
+void _seal_lock(void* /*lock*/);
+void _seal_unlock(void* /*lock*/);
 
 /* Thread manipulations. */
-_seal_thread_t _seal_create_thread(_seal_routine_t*, void* /*args*/);
-void _seal_join_thread(_seal_thread_t);
-int _seal_calling_thread_is(_seal_thread_t);
+void* _seal_create_thread(_seal_routine_t*, void* /*args*/);
+void _seal_join_thread(void* /*thread*/);
+int _seal_calling_thread_is(void* /*thread*/);
 
 #endif /* _SEAL_THREADING_H_ */
