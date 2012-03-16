@@ -19,6 +19,7 @@ seal_set_src_pos
 seal_set_src_vel
 seal_set_src_pitch
 seal_set_src_gain
+seal_set_src_auto_updated
 seal_set_src_relative
 seal_set_src_looping
 seal_get_src_queue_size
@@ -29,6 +30,7 @@ seal_get_src_pos
 seal_get_src_vel
 seal_get_src_pitch
 seal_get_src_gain
+seal_is_src_auto_updated
 seal_is_src_relative
 seal_is_src_looping
 seal_get_src_type
