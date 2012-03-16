@@ -136,8 +136,11 @@ void
 seal_cleanup(void)
 {
     ALCdevice* device;
-
     ALCcontext* context;
+
+    if (openal_lock == 0)
+        return;
+
     _seal_destroy_lock(openal_lock);
 
     mpg123_exit();
