@@ -16,7 +16,7 @@ TESTOBJDIR      = $(OBJDIR)/test
 
 LIBS            = -lopenal -lmpg123
 
-SEALOBJ         = $(addprefix $(SEALOBJDIR)/, buf.o core.o effect_slot.o err.o fmt.o listener.o mid.o mpg.o ov.o raw.o reader.o reverb.o src.o stream.o threading.o wav.o)
+SEALOBJ         = $(addprefix $(SEALOBJDIR)/, buf.o core.o effect_slot.o err.o fmt.o listener.o mpg.o ov.o raw.o reader.o reverb.o src.o stream.o threading.o wav.o)
 LIBOGGOBJ       = $(addprefix $(LIBOGGOBJDIR)/, bitwise.o framing.o)
 LIBVORBISOBJ    = $(addprefix $(LIBVORBISOBJDIR)/, bitrate.o block.o codebook.o envelope.o floor0.o floor1.o info.o lookup.o lpc.o lsp.o mapping0.o mdct.o psy.o registry.o res0.o sharedbook.o smallft.o synthesis.o vorbisfile.o window.o)
 TESTOBJ         = $(addprefix $(TESTOBJDIR)/, test.o test_listener.o test_src.o)
@@ -63,7 +63,7 @@ $(SEALOUTPUT) : $(SEALOBJ) $(LIBOGGOBJ) $(LIBVORBISOBJ)
 $(SEALOBJDIR)/buf.o : buf.c buf.h core.h raw.h fmt.h wav.h stream.h ov.h mpg.h err.h | $(SEALOBJDIR)/
 	$(COMPILE)
 
-$(SEALOBJDIR)/core.o : core.c core.h threading.h mid.h err.h | $(SEALOBJDIR)/
+$(SEALOBJDIR)/core.o : core.c core.h threading.h err.h | $(SEALOBJDIR)/
 	$(COMPILE)
 
 $(SEALOBJDIR)/effect_slot.o : effect_slot.c effect_slot.h core.h err.h | $(SEALOBJDIR)/
@@ -76,9 +76,6 @@ $(SEALOBJDIR)/fmt.o : fmt.c fmt.h reader.h err.h | $(SEALOBJDIR)/
 	$(COMPILE)
 
 $(SEALOBJDIR)/listener.o : listener.c listener.h core.h err.h | $(SEALOBJDIR)/
-	$(COMPILE)
-
-$(SEALOBJDIR)/mid.o : mid.c mid.h err.h | $(SEALOBJDIR)/
 	$(COMPILE)
 
 $(SEALOBJDIR)/mpg.o : mpg.c mpg.h raw.h stream.h fmt.h err.h | $(SEALOBJDIR)/

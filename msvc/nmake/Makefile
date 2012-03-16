@@ -9,7 +9,7 @@ LIBVORBISSRCDIR = ../../src/libvorbis
 LIBDIR          = ../../lib
 TESTSRCDIR      = ../../test
 LIBS            = ../../lib/OpenAL32.lib ../../lib/libmpg123.lib
-SEALOBJ         = buf.obj core.obj effect_slot.obj err.obj fmt.obj listener.obj mid.obj mpg.obj ov.obj raw.obj reader.obj reverb.obj src.obj stream.obj threading.obj wav.obj
+SEALOBJ         = buf.obj core.obj effect_slot.obj err.obj fmt.obj listener.obj mpg.obj ov.obj raw.obj reader.obj reverb.obj src.obj stream.obj threading.obj wav.obj
 LIBOGGOBJ       = bitwise.obj framing.obj
 LIBVORBISOBJ    = bitrate.obj block.obj codebook.obj envelope.obj floor0.obj floor1.obj info.obj lookup.obj lpc.obj lsp.obj mapping0.obj mdct.obj psy.obj registry.obj res0.obj sharedbook.obj smallft.obj synthesis.obj vorbisfile.obj window.obj
 TESTOBJ         = test.obj test_listener.obj test_src.obj
@@ -40,7 +40,7 @@ $(SEALOUTPUT) : $(SEALOBJ) $(LIBOGGOBJ) $(LIBVORBISOBJ)
 buf.obj : $(SEALSRCDIR)/buf.c $(HEADERDIR)/buf.h $(HEADERDIR)/core.h $(HEADERDIR)/raw.h $(HEADERDIR)/fmt.h $(SEALSRCDIR)/wav.h $(HEADERDIR)/stream.h $(SEALSRCDIR)/ov.h $(SEALSRCDIR)/mpg.h $(HEADERDIR)/err.h
 	$(CC) $(CFLAGS) $(SEALSRCDIR)/buf.c
 
-core.obj : $(SEALSRCDIR)/core.c $(HEADERDIR)/core.h $(SEALSRCDIR)/threading.h $(HEADERDIR)/mid.h $(HEADERDIR)/err.h
+core.obj : $(SEALSRCDIR)/core.c $(HEADERDIR)/core.h $(SEALSRCDIR)/threading.h $(HEADERDIR)/err.h
 	$(CC) $(CFLAGS) $(SEALSRCDIR)/core.c
 
 effect_slot.obj : $(SEALSRCDIR)/effect_slot.c $(HEADERDIR)/effect_slot.h $(HEADERDIR)/core.h $(HEADERDIR)/err.h
@@ -54,9 +54,6 @@ fmt.obj : $(SEALSRCDIR)/fmt.c $(HEADERDIR)/fmt.h $(SEALSRCDIR)/reader.h $(HEADER
 
 listener.obj : $(SEALSRCDIR)/listener.c $(HEADERDIR)/listener.h $(HEADERDIR)/core.h $(HEADERDIR)/err.h
 	$(CC) $(CFLAGS) $(SEALSRCDIR)/listener.c
-
-mid.obj : $(SEALSRCDIR)/mid.c $(HEADERDIR)/mid.h $(HEADERDIR)/err.h
-	$(CC) $(CFLAGS) $(SEALSRCDIR)/mid.c
 
 mpg.obj : $(SEALSRCDIR)/mpg.c $(SEALSRCDIR)/mpg.h $(HEADERDIR)/raw.h $(HEADERDIR)/stream.h $(HEADERDIR)/fmt.h $(HEADERDIR)/err.h
 	$(CC) $(CFLAGS) $(SEALSRCDIR)/mpg.c
