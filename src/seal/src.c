@@ -569,12 +569,13 @@ seal_set_src_auto_updated(seal_src_t* src, char auto_updated)
 seal_err_t
 seal_set_src_relative(seal_src_t* src, char relative)
 {
-    return seti(src, AL_SOURCE_RELATIVE, relative);
+    return seti(src, AL_SOURCE_RELATIVE, relative != 0);
 }
 
 seal_err_t
 seal_set_src_looping(seal_src_t* src, char looping)
 {
+    looping = looping != 0;
     /*
      * Streaming does not work with OpenAL's looping as the queuing buffers
      * will never become `processed' when `AL_LOOPING' is true, so set
