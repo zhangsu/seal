@@ -37,8 +37,6 @@ seal_get_err_msg(seal_err_t err)
 
     case SEAL_STREAM_UNOPENED:
         return "Cannot use the uninitialized stream";
-    case SEAL_STREAM_INUSE:
-        return "The operation cannot be done as the stream is still in use";
     case SEAL_MIXING_STREAM_FMT:
         return "Cannot attach a stream with a different audio format than "
                "that of the currently attached stream";
