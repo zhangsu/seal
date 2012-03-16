@@ -148,7 +148,7 @@ static void*
 update(void* args)
 {
     seal_src_t* src = args;
-    seal_err_t err;
+    seal_err_t err = SEAL_OK;
 
     while (alIsSource(src->id)) {
         seal_src_state_t state;
