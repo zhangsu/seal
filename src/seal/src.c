@@ -17,6 +17,8 @@
 #include <seal/err.h>
 #include "threading.h"
 
+typedef void queue_op_t(unsigned int, int, unsigned int*);
+
 enum
 {
     /* 2^24=16777216. */
@@ -162,8 +164,7 @@ update(void* args)
 }
 
 static seal_err_t
-queue_op(seal_src_t* src, int nbufs, unsigned int* bufs,
-         void (*op)(unsigned int, int, unsigned int*))
+queue_op(seal_src_t* src, int nbufs, unsigned int* bufs, queue_op_t* op)
 {
     _seal_lock_openal();
     op(src->id, nbufs, bufs);
@@ -174,7 +175,7 @@ queue_op(seal_src_t* src, int nbufs, unsigned int* bufs,
 static seal_err_t
 queue_bufs(seal_src_t* src, int nbufs, unsigned int* bufs)
 {
-    return queue_op(src, nbufs, bufs, alSourceQueueBuffers);
+    return queue_op(src, nbufs, bufs, (queue_op_t*) alSourceQueueBuffers);
 }
 
 static seal_err_t
