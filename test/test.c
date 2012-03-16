@@ -56,21 +56,7 @@ assert(int expr, const char* filename, int linenum)
 }
 
 void
-assert_no_err(const char* filename, int linenum)
+assert_ok(seal_err_t err, const char* filename, int linenum)
 {
-    assert(seal_get_err() == SEAL_OK, filename, linenum);
-}
-
-void
-assert_ok(int expr, const char* filename, int linenum)
-{
-    assert(expr, filename, linenum);
-    assert_no_err(filename, linenum);
-}
-
-void
-assert_fail(int expr, seal_err_t err, const char* filename, int linenum)
-{
-    assert(expr, filename, linenum);
-    assert(seal_get_err() == err, filename, linenum);
+    assert(err == SEAL_OK, filename, linenum);
 }
