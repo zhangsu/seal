@@ -299,13 +299,14 @@ seal_play_src(seal_src_t* src)
         seal_err_t err = seal_get_src_state(src, &state);
         if (err != SEAL_OK)
             return err;
-        if (state == SEAL_PLAYING)
+        if (state == SEAL_PLAYING) {
             /* Source and its updater will be stopped after this. */
             if ((err = restart_queuing(src)) != SEAL_OK)
                 return err;
-        else
+        } else {
             /* In case the old updater is not done. */
             wait4updater(src);
+        }
         /* Stream some data so plackback can start immediately. */
         if ((err = seal_update_src(src)) != SEAL_OK)
             return err;
