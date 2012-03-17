@@ -182,11 +182,6 @@ _seal_delete_objs(int n, const unsigned int* objs,
 seal_err_t
 _seal_init_obj(void* obj, _seal_openal_initializer_t* allocate)
 {
-    _seal_lock_openal();
-    allocate(1, (unsigned int*) obj);
-
-    return _seal_get_openal_err();
-
     /* Hack: assuming the object id is always at offset 0. */
     return _seal_gen_objs(1, obj, allocate);
 }
