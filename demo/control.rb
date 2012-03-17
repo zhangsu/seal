@@ -1,4 +1,4 @@
-require './seal'
+require_relative 'seal'
 
 include Seal
 
