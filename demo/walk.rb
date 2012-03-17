@@ -9,7 +9,7 @@ UNIT_PER_100MS = RATE / 10.0
 puts "
 Note: spatialization only works on monophonic (single-channel) sound.
 
-You, the listener, are at (0, 0, 0) in a Euclidean space.
+You, the listener, are at (0, 0, 0) in an Euclidean space.
 The sound source is currently also at (0, 0, 0).
 You move around by entering a new destination coordinate, which is represented
 by a 3-tuple of real numbers separated by white spaces.
