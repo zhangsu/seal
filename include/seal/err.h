@@ -12,8 +12,6 @@
 #ifndef _SEAL_ERR_H_
 #define _SEAL_ERR_H_
 
-#include <al/al.h>
-
 enum seal_err_t
 {
     SEAL_OK,
