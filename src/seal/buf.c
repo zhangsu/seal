@@ -70,7 +70,7 @@ _seal_raw2buf(unsigned int buf, seal_raw_t* raw)
 
     _seal_lock_openal();
     alBufferData(buf, _seal_get_buf_fmt(raw->attr.nchannels,
-                                            raw->attr.bit_depth),
+                                        raw->attr.bit_depth),
                  raw->data, raw->size, raw->attr.freq);
 
     return _seal_get_openal_err();
