@@ -357,7 +357,7 @@ seal_detach_src_audio(seal_src_t* src)
 {
     seal_err_t err;
     
-    if ((err = empty_queue(src)) != SEAL_OK)
+    if ((err = ensure_queue_empty(src)) != SEAL_OK)
         return err;
 
     /* Sets the state to `SEAL_INITIAL' for consistency. */
