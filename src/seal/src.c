@@ -218,7 +218,7 @@ stop_then_clean_queue(seal_src_t* src)
 {
     seal_err_t err;
     
-    if ((err = operate(src, alSourceStop)) == SEAL_OK)
+    if ((err = operate(src, alSourceStop)) != SEAL_OK)
         return err;
 
     return clean_queue(src);
