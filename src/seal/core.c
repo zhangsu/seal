@@ -142,6 +142,7 @@ seal_cleanup(void)
         return;
 
     _seal_destroy_lock(openal_lock);
+    openal_lock = 0;
 
     mpg123_exit();
 
