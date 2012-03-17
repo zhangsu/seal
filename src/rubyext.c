@@ -21,7 +21,7 @@ static const char PLAYING_SYMBOL[] = "playing";
 static const char PAUSED_SYMBOL[] = "paused";
 static const char STOPPED_SYMBOL[] = "stopped";
 
-VALUE
+static VALUE
 name2sym(const char* name)
 {
     return ID2SYM(rb_intern(name));
@@ -35,51 +35,51 @@ validate_memory(void* memory)
     return memory;
 }
 
-void
+static void
 check_seal_err(seal_err_t err)
 {
     if (err != SEAL_OK)
         rb_raise(eSealError, "%s", seal_get_err_msg(err));
 }
 
-void
+static void
 free_obj(void* obj, void *destroy)
 {
     ((void (*)(void*)) destroy)(obj);
     free(obj);
 }
 
-void
+static void
 free_src(void* src)
 {
     free_obj(src, seal_destroy_src);
 }
 
-void
+static void
 free_buf(void* buf)
 {
     free_obj(buf, seal_destroy_buf);
 }
 
-void
+static void
 free_stream(void* stream)
 {
     free_obj(stream, seal_close_stream);
 }
 
-void
+static void
 free_reverb(void* reverb)
 {
     free_obj(reverb, seal_destroy_reverb);
 }
 
-void
+static void
 free_effect_slot(void* effect_slot)
 {
     free_obj(effect_slot, seal_destroy_effect_slot);
 }
 
-VALUE
+static VALUE
 alloc(VALUE klass, size_t size, void* free)
 {
     void* obj;
@@ -89,7 +89,7 @@ alloc(VALUE klass, size_t size, void* free)
     return Data_Wrap_Struct(klass, 0, free, obj);
 }
 
-seal_fmt_t
+static seal_fmt_t
 map_format(VALUE symbol)
 {
     if (NIL_P(symbol))
@@ -104,7 +104,7 @@ map_format(VALUE symbol)
         return SEAL_MPG_FMT;
 }
 
-void
+static void
 input_audio(int argc, VALUE* argv, void* media, void* _input)
 {
     typedef seal_err_t inputter_t(void*, const char*, seal_fmt_t);
@@ -118,7 +118,7 @@ input_audio(int argc, VALUE* argv, void* media, void* _input)
                          map_format(format)));
 }
 
-VALUE
+static VALUE
 get_buf_attr(VALUE rbuf, seal_err_t (*get)(seal_buf_t*, int*))
 {
     int value;
@@ -128,7 +128,7 @@ get_buf_attr(VALUE rbuf, seal_err_t (*get)(seal_buf_t*, int*))
     return INT2NUM(value);
 }
 
-void
+static void
 extract3float(VALUE rarr, float* x, float* y, float* z)
 {
     rarr = rb_convert_type(rarr, T_ARRAY, "Array", "to_a");
@@ -137,7 +137,7 @@ extract3float(VALUE rarr, float* x, float* y, float* z)
     *z = NUM2DBL(rb_ary_entry(rarr, 2));
 }
 
-VALUE
+static VALUE
 set_src3float(VALUE rsrc, VALUE rarr,
               seal_err_t (*set)(seal_src_t*, float, float, float))
 {
@@ -149,7 +149,7 @@ set_src3float(VALUE rsrc, VALUE rarr,
     return rarr;
 }
 
-VALUE
+static VALUE
 set_listener3float(VALUE rarr, seal_err_t (*set)(float, float, float))
 {
     float x, y, z;
@@ -160,7 +160,7 @@ set_listener3float(VALUE rarr, seal_err_t (*set)(float, float, float))
     return rarr;
 }
 
-void
+static void
 convert_bulk_float(VALUE* rtuple, float* tuple, int len)
 {
     int i;
@@ -168,7 +168,7 @@ convert_bulk_float(VALUE* rtuple, float* tuple, int len)
         rtuple[i] = rb_float_new(tuple[i]);
 }
 
-VALUE
+static VALUE
 get_src3float(VALUE rsrc,
               seal_err_t (*get)(seal_src_t*, float*, float*, float*))
 {
@@ -181,7 +181,7 @@ get_src3float(VALUE rsrc,
     return rb_ary_new4(3, rtuple);
 }
 
-VALUE
+static VALUE
 get_listener3float(seal_err_t (*get)(float*, float*, float*))
 {
     float tuple[3];
@@ -193,7 +193,7 @@ get_listener3float(seal_err_t (*get)(float*, float*, float*))
     return rb_ary_new4(3, rtuple);
 }
 
-VALUE
+static VALUE
 set_src_float(VALUE rsrc, VALUE rflt, seal_err_t (*set)(seal_src_t*, float))
 {
     check_seal_err(set(DATA_PTR(rsrc), NUM2DBL(rflt)));
@@ -201,7 +201,7 @@ set_src_float(VALUE rsrc, VALUE rflt, seal_err_t (*set)(seal_src_t*, float))
     return rflt;
 }
 
-VALUE
+static VALUE
 set_listener_float(VALUE rflt, seal_err_t (*set)(float))
 {
     check_seal_err(set(NUM2DBL(rflt)));
@@ -209,7 +209,7 @@ set_listener_float(VALUE rflt, seal_err_t (*set)(float))
     return rflt;
 }
 
-VALUE
+static VALUE
 get_src_float(VALUE rsrc, seal_err_t (*get)(seal_src_t*, float*))
 {
     float value;
@@ -219,7 +219,7 @@ get_src_float(VALUE rsrc, seal_err_t (*get)(seal_src_t*, float*))
     return rb_float_new(value);
 }
 
-VALUE
+static VALUE
 get_listener_float(seal_err_t (*get)(float*))
 {
     float value;
@@ -229,7 +229,7 @@ get_listener_float(seal_err_t (*get)(float*))
     return rb_float_new(value);
 }
 
-VALUE
+static VALUE
 set_src_fixnum(VALUE rsrc, VALUE rfixnum,
                seal_err_t (*set)(seal_src_t*, size_t))
 {
@@ -238,7 +238,7 @@ set_src_fixnum(VALUE rsrc, VALUE rfixnum,
     return rfixnum;
 }
 
-VALUE
+static VALUE
 get_src_fixnum(VALUE rsrc, seal_err_t (*get)(seal_src_t*, size_t*))
 {
     size_t size;
@@ -248,7 +248,7 @@ get_src_fixnum(VALUE rsrc, seal_err_t (*get)(seal_src_t*, size_t*))
     return ULONG2NUM(size);
 }
 
-VALUE
+static VALUE
 set_src_bool(VALUE rsrc, VALUE rbool, seal_err_t (*set)(seal_src_t*, char))
 {
     check_seal_err(set(DATA_PTR(rsrc), RTEST(rbool)));
@@ -256,7 +256,7 @@ set_src_bool(VALUE rsrc, VALUE rbool, seal_err_t (*set)(seal_src_t*, char))
     return rbool;
 }
 
-VALUE
+static VALUE
 get_src_bool(VALUE rsrc, seal_err_t (*get)(seal_src_t*, char*))
 {
     char bool;
@@ -266,7 +266,7 @@ get_src_bool(VALUE rsrc, seal_err_t (*get)(seal_src_t*, char*))
     return bool ? Qtrue : Qfalse;
 }
 
-VALUE
+static VALUE
 src_op(VALUE rsrc, seal_err_t (*op)(seal_src_t*))
 {
     check_seal_err(op(DATA_PTR(rsrc)));
@@ -274,7 +274,7 @@ src_op(VALUE rsrc, seal_err_t (*op)(seal_src_t*))
     return rsrc;
 }
 
-seal_stream_t*
+static seal_stream_t*
 extract_stream(VALUE rstream)
 {
     return DATA_PTR(rstream);
@@ -285,7 +285,7 @@ extract_stream(VALUE rstream)
  *      Audio.startup       -> nil
  *      Audio.startup(str)  -> nil
  */
-VALUE
+static VALUE
 startup(int argc, VALUE* argv)
 {
     VALUE rstring;
@@ -301,7 +301,7 @@ startup(int argc, VALUE* argv)
  *  call-seq:
  *      Audio.cleanup   -> nil
  */
-VALUE
+static VALUE
 cleanup()
 {
     seal_cleanup();
@@ -313,7 +313,7 @@ cleanup()
  *  call-seq:
  *      Seal::Buffer.allocate   -> buffer
  */
-VALUE
+static VALUE
 alloc_buf(VALUE klass)
 {
     return alloc(klass, sizeof (seal_buf_t), seal_destroy_buf);
@@ -323,7 +323,7 @@ alloc_buf(VALUE klass)
  *  call-seq:
  *      Seal::Buffer.new(filename [, format])   -> buffer
  */
-VALUE
+static VALUE
 init_buf(int argc, VALUE* argv, VALUE rbuf)
 {
     seal_buf_t* buf;
@@ -339,7 +339,7 @@ init_buf(int argc, VALUE* argv, VALUE rbuf)
  *  call-seq:
  *      Seal::Buffer.load(filename [, format])   -> buffer
  */
-VALUE
+static VALUE
 load_buf(int argc, VALUE* argv, VALUE rbuf)
 {
     input_audio(argc, argv, DATA_PTR(rbuf), seal_load2buf);
@@ -351,7 +351,7 @@ load_buf(int argc, VALUE* argv, VALUE rbuf)
  *  call-seq:
  *      buffer.size ->  fixnum
  */
-VALUE
+static VALUE
 get_buf_size(VALUE rbuf)
 {
     return get_buf_attr(rbuf, seal_get_buf_size);
@@ -361,7 +361,7 @@ get_buf_size(VALUE rbuf)
  *  call-seq:
  *      buffer.frequency    -> fixnum
  */
-VALUE
+static VALUE
 get_buf_freq(VALUE rbuf)
 {
     return get_buf_attr(rbuf, seal_get_buf_freq);
@@ -371,7 +371,7 @@ get_buf_freq(VALUE rbuf)
  *  call-seq:
  *      buffer.bit_depth    -> fixnum
  */
-VALUE
+static VALUE
 get_buf_bps(VALUE rbuf)
 {
     return get_buf_attr(rbuf, seal_get_buf_bps);
@@ -381,7 +381,7 @@ get_buf_bps(VALUE rbuf)
  *  call-seq:
  *      buffer.channel_count    -> fixnum
  */
-VALUE
+static VALUE
 get_buf_nchannels(VALUE rbuf)
 {
     return get_buf_attr(rbuf, seal_get_buf_nchannels);
@@ -391,7 +391,7 @@ get_buf_nchannels(VALUE rbuf)
  *  call-seq:
  *      Seal::Stream.allocate   -> stream
  */
-VALUE
+static VALUE
 alloc_stream(VALUE klass)
 {
     return alloc(klass, sizeof (seal_stream_t), seal_close_stream);
@@ -402,7 +402,7 @@ alloc_stream(VALUE klass)
  *      Seal::Stream.new(filename [, format])   -> stream
  *      Seal::Stream.open(filename [, format])  -> stream
  */
-VALUE
+static VALUE
 init_stream(int argc, VALUE* argv, VALUE rstream)
 {
     input_audio(argc, argv, DATA_PTR(rstream), seal_open_stream);
@@ -414,7 +414,7 @@ init_stream(int argc, VALUE* argv, VALUE rstream)
  *  call-seq:
  *      stream.frequency    -> fixnum
  */
-VALUE
+static VALUE
 get_stream_freq(VALUE rstream)
 {
     return INT2NUM(extract_stream(rstream)->attr.freq);
@@ -424,7 +424,7 @@ get_stream_freq(VALUE rstream)
  *  call-seq:
  *      stream.bit_depth    -> fixnum
  */
-VALUE
+static VALUE
 get_stream_bps(VALUE rstream)
 {
     return INT2NUM(extract_stream(rstream)->attr.bit_depth);
@@ -434,7 +434,7 @@ get_stream_bps(VALUE rstream)
  *  call-seq:
  *      stream.channel_count    -> fixnum
  */
-VALUE
+static VALUE
 get_stream_nchannels(VALUE rstream)
 {
     return INT2NUM(extract_stream(rstream)->attr.nchannels);
@@ -444,7 +444,7 @@ get_stream_nchannels(VALUE rstream)
  *  call-seq:
  *      stream.rewind   -> stream
  */
-VALUE
+static VALUE
 rewind_stream(VALUE rstream)
 {
     seal_rewind_stream(DATA_PTR(rstream));
@@ -456,7 +456,7 @@ rewind_stream(VALUE rstream)
  *  call-seq:
  *      stream.close    -> stream
  */
-VALUE
+static VALUE
 close_stream(VALUE rstream)
 {
     check_seal_err(seal_close_stream(DATA_PTR(rstream)));
@@ -468,7 +468,7 @@ close_stream(VALUE rstream)
  *  call-seq:
  *      Seal::Source.allocate -> source
  */
-VALUE
+static VALUE
 alloc_src(VALUE klass)
 {
     return alloc(klass, sizeof (seal_src_t), seal_destroy_src);
@@ -478,7 +478,7 @@ alloc_src(VALUE klass)
  *  call-seq:
  *      Seal::Source.new  -> source
  */
-VALUE
+static VALUE
 init_src(VALUE rsrc)
 {
     check_seal_err(seal_init_src(DATA_PTR(rsrc)));
@@ -489,7 +489,7 @@ init_src(VALUE rsrc)
  *  call-seq:
  *      source.play ->  source
  */
-VALUE
+static VALUE
 play_src(VALUE rsrc)
 {
     return src_op(rsrc, seal_play_src);
@@ -499,7 +499,7 @@ play_src(VALUE rsrc)
  *  call-seq:
  *      source.pause -> source
  */
-VALUE
+static VALUE
 pause_src(VALUE rsrc)
 {
     return src_op(rsrc, seal_pause_src);
@@ -509,7 +509,7 @@ pause_src(VALUE rsrc)
  *  call-seq:
  *      source.stop ->  source
  */
-VALUE
+static VALUE
 stop_src(VALUE rsrc)
 {
     return src_op(rsrc, seal_stop_src);
@@ -519,7 +519,7 @@ stop_src(VALUE rsrc)
  *  call-seq:
  *      source.rewind ->    source
  */
-VALUE
+static VALUE
 rewind_src(VALUE rsrc)
 {
     return src_op(rsrc, seal_rewind_src);
@@ -529,7 +529,7 @@ rewind_src(VALUE rsrc)
  *  call-seq:
  *      source.detach -> source
  */
-VALUE
+static VALUE
 detach_src_audio(VALUE rsrc)
 {
     return src_op(rsrc, seal_detach_src_audio);
@@ -539,7 +539,7 @@ detach_src_audio(VALUE rsrc)
  *  call-seq:
  *      source.buffer = buffer  -> buffer
  */
-VALUE
+static VALUE
 set_src_buf(VALUE rsrc, VALUE rbuf)
 {
     seal_buf_t* buf;
@@ -555,7 +555,7 @@ set_src_buf(VALUE rsrc, VALUE rbuf)
  *  call-seq:
  *      source.buffer ->    buffer
  */
-VALUE
+static VALUE
 get_src_buf(VALUE rsrc)
 {
     return rb_iv_get(rsrc, "@buffer");
@@ -565,7 +565,7 @@ get_src_buf(VALUE rsrc)
  *  call-seq:
  *      source.stream = stream  -> stream
  */
-VALUE
+static VALUE
 set_src_stream(VALUE rsrc, VALUE rstream)
 {
     seal_stream_t* stream;
@@ -581,7 +581,7 @@ set_src_stream(VALUE rsrc, VALUE rstream)
  *  call-seq:
  *      source.stream   -> stream
  */
-VALUE
+static VALUE
 get_src_stream(VALUE rsrc)
 {
     return rb_iv_get(rsrc, "@stream");
@@ -591,7 +591,7 @@ get_src_stream(VALUE rsrc)
  *  call-seq:
  *      source.update   -> source
  */
-VALUE update_src(VALUE rsrc)
+static VALUE update_src(VALUE rsrc)
 {
     return src_op(rsrc, seal_update_src);
 }
@@ -600,7 +600,7 @@ VALUE update_src(VALUE rsrc)
  *  call-seq:
  *      source.position = [flt, flt, flt]   -> [flt, flt, flt]
  */
-VALUE
+static VALUE
 set_src_pos(VALUE rsrc, VALUE rarr)
 {
     return set_src3float(rsrc, rarr, seal_set_src_pos);
@@ -610,7 +610,7 @@ set_src_pos(VALUE rsrc, VALUE rarr)
  *  call-seq:
  *      source.position -> [flt, flt, flt]
  */
-VALUE
+static VALUE
 get_src_pos(VALUE rsrc)
 {
     return get_src3float(rsrc, seal_get_src_pos);
@@ -620,7 +620,7 @@ get_src_pos(VALUE rsrc)
  *  call-seq:
  *      source.velocity = [flt, flt, flt]   -> [flt, flt, flt]
  */
-VALUE
+static VALUE
 set_src_vel(VALUE rsrc, VALUE rarr)
 {
     return set_src3float(rsrc, rarr, seal_set_src_vel);
@@ -630,7 +630,7 @@ set_src_vel(VALUE rsrc, VALUE rarr)
  *  call-seq:
  *      source.velocity -> [flt, flt, flt]
  */
-VALUE
+static VALUE
 get_src_vel(VALUE rsrc)
 {
     return get_src3float(rsrc, seal_get_src_vel);
@@ -640,7 +640,7 @@ get_src_vel(VALUE rsrc)
  *  call-seq:
  *      source.pitch = flt  -> [flt, flt, flt]
  */
-VALUE
+static VALUE
 set_src_pitch(VALUE rsrc, VALUE pitch)
 {
     return set_src_float(rsrc, pitch, seal_set_src_pitch);
@@ -650,7 +650,7 @@ set_src_pitch(VALUE rsrc, VALUE pitch)
  *  call-seq:
  *      source.pitch    -> flt
  */
-VALUE
+static VALUE
 get_src_pitch(VALUE rsrc)
 {
     return get_src_float(rsrc, seal_get_src_pitch);
@@ -660,7 +660,7 @@ get_src_pitch(VALUE rsrc)
  *  call-seq:
  *      source.gain = flt   -> [flt, flt, flt]
  */
-VALUE
+static VALUE
 set_src_gain(VALUE rsrc, VALUE gain)
 {
     return set_src_float(rsrc, gain, seal_set_src_gain);
@@ -670,7 +670,7 @@ set_src_gain(VALUE rsrc, VALUE gain)
  *  call-seq:
  *      source.gain -> flt
  */
-VALUE
+static VALUE
 get_src_gain(VALUE rsrc)
 {
     return get_src_float(rsrc, seal_get_src_gain);
@@ -680,7 +680,7 @@ get_src_gain(VALUE rsrc)
  *  call-seq:
  *      source.relative = true or false -> true or false
  */
-VALUE
+static VALUE
 set_src_relative(VALUE rsrc, VALUE rbool)
 {
     return set_src_bool(rsrc, rbool, seal_set_src_relative);
@@ -690,7 +690,7 @@ set_src_relative(VALUE rsrc, VALUE rbool)
  *  call-seq:
  *      source.relative -> true or false
  */
-VALUE
+static VALUE
 is_src_relative(VALUE rsrc)
 {
     return get_src_bool(rsrc, seal_is_src_relative);
@@ -700,7 +700,7 @@ is_src_relative(VALUE rsrc)
  *  call-seq:
  *      source.looping = true or false  -> true or false
  */
-VALUE
+static VALUE
 set_src_looping(VALUE rsrc, VALUE rbool)
 {
     return set_src_bool(rsrc, rbool, seal_set_src_looping);
@@ -710,7 +710,7 @@ set_src_looping(VALUE rsrc, VALUE rbool)
  *  call-seq:
  *      source.looping  -> true or false
  */
-VALUE
+static VALUE
 is_src_looping(VALUE rsrc)
 {
     return get_src_bool(rsrc, seal_is_src_looping);
@@ -720,7 +720,8 @@ is_src_looping(VALUE rsrc)
  *  call-seq:
  *      source.queue_size = fixnum  -> true or false
  */
-VALUE set_src_queue_size(VALUE rsrc, VALUE size)
+static VALUE
+set_src_queue_size(VALUE rsrc, VALUE size)
 {
     return set_src_fixnum(rsrc, size, seal_set_src_queue_size);
 }
@@ -729,7 +730,7 @@ VALUE set_src_queue_size(VALUE rsrc, VALUE size)
  *  call-seq:
  *      source.queue_size   -> fixnum
  */
-VALUE
+static VALUE
 get_src_queue_size(VALUE rsrc)
 {
     return get_src_fixnum(rsrc, seal_get_src_queue_size);
@@ -739,7 +740,7 @@ get_src_queue_size(VALUE rsrc)
  *  call-seq:
  *      source.chunk_size = fixnum  -> true or false
  */
-VALUE
+static VALUE
 set_src_chunk_size(VALUE rsrc, VALUE size)
 {
     return set_src_fixnum(rsrc, size, seal_set_src_chunk_size);
@@ -749,7 +750,7 @@ set_src_chunk_size(VALUE rsrc, VALUE size)
  *  call-seq:
  *      source.chunk_size   -> fixnum
  */
-VALUE
+static VALUE
 get_src_chunk_size(VALUE rsrc)
 {
     return get_src_fixnum(rsrc, seal_get_src_chunk_size);
@@ -759,7 +760,7 @@ get_src_chunk_size(VALUE rsrc)
  *  call-seq:
  *      source.type -> :streaming or :static
  */
-VALUE
+static VALUE
 get_src_type(VALUE rsrc)
 {
     seal_src_type_t type;
@@ -779,7 +780,7 @@ get_src_type(VALUE rsrc)
  *  call-seq:
  *      source.state    -> :playing, :paused, :stopped or :initial
  */
-VALUE
+static VALUE
 get_src_state(VALUE rsrc)
 {
     seal_src_state_t state;
@@ -801,7 +802,7 @@ get_src_state(VALUE rsrc)
  *  call-seq:
  *      Audio.listener  -> listener
  */
-VALUE
+static VALUE
 get_listener()
 {
     return rb_const_get(mSeal, rb_intern("LISTENER"));
@@ -811,7 +812,7 @@ get_listener()
  *  call-seq:
  *      Audio.listener.gain = flt   -> [flt, flt, flt]
  */
-VALUE
+static VALUE
 set_listener_gain(VALUE rlistener, VALUE gain)
 {
     return set_listener_float(gain, seal_set_listener_gain);
@@ -821,7 +822,7 @@ set_listener_gain(VALUE rlistener, VALUE gain)
  *  call-seq:
  *      Audio.listener.gain -> flt
  */
-VALUE
+static VALUE
 get_listener_gain(VALUE rlistener)
 {
     return get_listener_float(seal_get_listener_gain);
@@ -831,7 +832,7 @@ get_listener_gain(VALUE rlistener)
  *  call-seq:
  *      Audio.listener.position = [flt, flt, flt]   -> [flt, flt, flt]
  */
-VALUE
+static VALUE
 set_listener_pos(VALUE rlistener, VALUE rarr)
 {
     return set_listener3float(rarr, seal_set_listener_pos);
@@ -841,7 +842,7 @@ set_listener_pos(VALUE rlistener, VALUE rarr)
  *  call-seq:
  *      Audio.listener.position -> [flt, flt, flt]
  */
-VALUE
+static VALUE
 GetListenerPosition(VALUE rlistener)
 {
     return get_listener3float(seal_get_listener_pos);
@@ -851,7 +852,7 @@ GetListenerPosition(VALUE rlistener)
  *  call-seq:
  *      Audio.listener.velocity = flt, flt, flt   -> [flt, flt, flt]
  */
-VALUE
+static VALUE
 set_listener_vel(VALUE rlistener, VALUE rarr)
 {
     return set_listener3float(rarr, seal_set_listener_vel);
@@ -861,7 +862,7 @@ set_listener_vel(VALUE rlistener, VALUE rarr)
  *  call-seq:
  *      Audio.listener.position -> [flt, flt, flt]
  */
-VALUE
+static VALUE
 get_listener_vel(VALUE rlistener)
 {
     return get_listener3float(seal_get_listener_vel);
@@ -872,7 +873,7 @@ get_listener_vel(VALUE rlistener)
  *      Audio.listener.orientation = [flt, flt, flt], [flt, flt, flt]
  *          -> [[flt, flt, flt], [flt, flt, flt]]
  */
-VALUE
+static VALUE
 set_listener_orien(VALUE rlistener, VALUE rarr)
 {
     float orien[6];
@@ -898,7 +899,7 @@ set_listener_orien(VALUE rlistener, VALUE rarr)
  *      # ...
  *      up_z  # => the z component of the `up' vector
  */
-VALUE
+static VALUE
 get_listener_orien(VALUE rlistener)
 {
     float tuple[6];
@@ -913,7 +914,7 @@ get_listener_orien(VALUE rlistener)
     return rb_ary_new4(2, orien);
 }
 
-void
+static void
 bind_core(void)
 {
     mSeal = rb_define_module("Seal");
@@ -923,7 +924,7 @@ bind_core(void)
 
 }
 
-void
+static void
 bind_buf(void)
 {
     VALUE cBuffer = rb_define_class_under(mSeal, "Buffer", rb_cObject);
@@ -936,7 +937,7 @@ bind_buf(void)
     rb_define_alias(cBuffer, "load", "initialize");
 }
 
-void
+static void
 bind_stream(void)
 {
     VALUE cStream = rb_define_class_under(mSeal, "Stream", rb_cObject);
@@ -950,7 +951,7 @@ bind_stream(void)
     rb_define_alias(rb_singleton_class(cStream), "open", "new");
 }
 
-void
+static void
 bind_src(void)
 {
     VALUE cSource = rb_define_class_under(mSeal, "Source", rb_cObject);
@@ -986,7 +987,7 @@ bind_src(void)
     rb_define_method(cSource, "state", get_src_state, 0);
 }
 
-void
+static void
 bind_listener(void)
 {
     VALUE cListener = rb_define_class_under(mSeal, "Listener", rb_cObject);
