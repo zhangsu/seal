@@ -678,6 +678,26 @@ get_src_gain(VALUE rsrc)
 
 /*
  *  call-seq:
+ *      source.auto_updated = true or false -> true or false
+ */
+static VALUE
+set_src_auto_updated(VALUE rsrc, VALUE rbool)
+{
+    return set_src_bool(rsrc, rbool, seal_set_src_auto_updated);
+}
+
+/*
+ *  call-seq:
+ *      source.relative -> true or false
+ */
+static VALUE
+is_src_auto_updated(VALUE rsrc)
+{
+    return get_src_bool(rsrc, seal_is_src_auto_updated);
+}
+
+/*
+ *  call-seq:
  *      source.relative = true or false -> true or false
  */
 static VALUE
@@ -975,6 +995,8 @@ bind_src(void)
     rb_define_method(cSource, "pitch", get_src_pitch, 0);
     rb_define_method(cSource, "gain=", set_src_gain, 1);
     rb_define_method(cSource, "gain", get_src_gain, 0);
+    rb_define_method(cSource, "auto_updated=", set_src_auto_updated, 1);
+    rb_define_method(cSource, "auto_updated?", is_src_auto_updated, 0);
     rb_define_method(cSource, "relative=", set_src_relative, 1);
     rb_define_method(cSource, "relative?", is_src_relative, 0);
     rb_define_method(cSource, "looping=", set_src_looping, 1);
