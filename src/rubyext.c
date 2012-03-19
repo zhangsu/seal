@@ -45,7 +45,7 @@ check_seal_err(seal_err_t err)
 static void
 free_obj(void* obj, void *destroy)
 {
-    ((void (*)(void*)) destroy)(obj);
+    ((seal_err_t (*)(void*)) destroy)(obj);
     free(obj);
 }
 
@@ -316,7 +316,7 @@ cleanup()
 static VALUE
 alloc_buf(VALUE klass)
 {
-    return alloc(klass, sizeof (seal_buf_t), seal_destroy_buf);
+    return alloc(klass, sizeof (seal_buf_t), free_buf);
 }
 
 /*
@@ -394,7 +394,7 @@ get_buf_nchannels(VALUE rbuf)
 static VALUE
 alloc_stream(VALUE klass)
 {
-    return alloc(klass, sizeof (seal_stream_t), seal_close_stream);
+    return alloc(klass, sizeof (seal_stream_t), free_stream);
 }
 
 /*
@@ -471,7 +471,7 @@ close_stream(VALUE rstream)
 static VALUE
 alloc_src(VALUE klass)
 {
-    return alloc(klass, sizeof (seal_src_t), seal_destroy_src);
+    return alloc(klass, sizeof (seal_src_t), free_src);
 }
 
 /*
@@ -482,6 +482,7 @@ static VALUE
 init_src(VALUE rsrc)
 {
     check_seal_err(seal_init_src(DATA_PTR(rsrc)));
+
     return rsrc;
 }
 
