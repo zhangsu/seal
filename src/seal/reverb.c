@@ -36,6 +36,9 @@ seal_init_reverb(seal_reverb_t* reverb)
 seal_err_t
 seal_destroy_reverb(seal_reverb_t* reverb)
 {
+    if (alIsEffect == 0)
+        return SEAL_OK;
+
     return _seal_destroy_obj(reverb, alDeleteEffects, alIsEffect);
 }
 

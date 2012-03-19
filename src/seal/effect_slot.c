@@ -36,6 +36,9 @@ seal_init_effect_slot(seal_effect_slot_t* slot)
 seal_err_t
 seal_destroy_effect_slot(seal_effect_slot_t* slot)
 {
+    if (alIsAuxiliaryEffectSlot == 0)
+        return SEAL_OK;
+
     return _seal_destroy_obj(slot, alDeleteAuxiliaryEffectSlots,
                              alIsAuxiliaryEffectSlot);
 }

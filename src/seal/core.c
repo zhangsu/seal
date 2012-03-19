@@ -61,6 +61,12 @@ init_ext_proc(void)
         return SEAL_NO_EXT_FUNC;
 }
 
+static void
+reset_ext_proc(void)
+{
+    alIsEffect = alIsAuxiliaryEffectSlot = 0;
+}
+
 const char*
 seal_get_version(void)
 {
@@ -151,6 +157,8 @@ seal_cleanup(void)
     alcMakeContextCurrent(0);
     alcDestroyContext(context);
     alcCloseDevice(device);
+
+    reset_ext_proc();
 }
 
 int
