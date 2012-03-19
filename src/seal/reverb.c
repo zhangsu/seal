@@ -30,7 +30,15 @@ getf(seal_reverb_t* reverb, int key, float* pvalue)
 seal_err_t
 seal_init_reverb(seal_reverb_t* reverb)
 {
-    return _seal_init_obj(reverb, alGenEffects);
+    seal_err_t err;
+
+    if ((err = _seal_init_obj(reverb, alGenEffects)) != SEAL_OK)
+        return err;
+
+    _seal_lock_openal();
+    alEffecti(reverb->id, AL_EFFECT_TYPE, AL_EFFECT_REVERB);
+
+    return _seal_get_openal_err();
 }
 
 seal_err_t
