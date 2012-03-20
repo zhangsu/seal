@@ -698,7 +698,8 @@ set_src_auto_updated(VALUE rsrc, VALUE rbool)
 
 /*
  *  call-seq:
- *      source.relative -> true or false
+ *      source.auto_updated   -> true or false
+ *      source.auto_updated?  -> true or false
  */
 static VALUE
 is_src_auto_updated(VALUE rsrc)
@@ -718,7 +719,8 @@ set_src_relative(VALUE rsrc, VALUE rbool)
 
 /*
  *  call-seq:
- *      source.relative -> true or false
+ *      source.relative   -> true or false
+ *      source.relative?  -> true or false
  */
 static VALUE
 is_src_relative(VALUE rsrc)
@@ -739,6 +741,7 @@ set_src_looping(VALUE rsrc, VALUE rbool)
 /*
  *  call-seq:
  *      source.looping  -> true or false
+ *      source.looping? -> true or false
  */
 static VALUE
 is_src_looping(VALUE rsrc)
@@ -1290,11 +1293,14 @@ bind_src(void)
     rb_define_method(cSource, "gain=", set_src_gain, 1);
     rb_define_method(cSource, "gain", get_src_gain, 0);
     rb_define_method(cSource, "auto_updated=", set_src_auto_updated, 1);
-    rb_define_method(cSource, "auto_updated?", is_src_auto_updated, 0);
+    rb_define_method(cSource, "auto_updated", is_src_auto_updated, 0);
+    rb_define_alias(cSource, "auto_updated?", "auto_updated");
     rb_define_method(cSource, "relative=", set_src_relative, 1);
-    rb_define_method(cSource, "relative?", is_src_relative, 0);
+    rb_define_method(cSource, "relative", is_src_relative, 0);
+    rb_define_alias(cSource, "relative?", "relative");
     rb_define_method(cSource, "looping=", set_src_looping, 1);
-    rb_define_method(cSource, "looping?", is_src_looping, 0);
+    rb_define_method(cSource, "looping", is_src_looping, 0);
+    rb_define_alias(cSource, "looping?", "looping");
     rb_define_method(cSource, "queue_size=", set_src_queue_size, 1);
     rb_define_method(cSource, "queue_size", get_src_queue_size, 0);
     rb_define_method(cSource, "chunk_size=", set_src_chunk_size, 1);
@@ -1345,6 +1351,7 @@ bind_reverb(void)
                      set_reverb_hfdecay_limited, 1);
     rb_define_method(cReverb, "hfdecay_limited",
                      is_reverb_hfdecay_limited, 0);
+    rb_define_alias(cReverb, "hfdecay_limited?", "hfdecay_limited");
 }
 
 static void
