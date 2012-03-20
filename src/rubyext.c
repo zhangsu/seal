@@ -89,6 +89,51 @@ alloc(VALUE klass, size_t size, void* free)
     return Data_Wrap_Struct(klass, 0, free, obj);
 }
 
+
+static VALUE
+set_obj_float(VALUE robj, VALUE rflt, void* set)
+{
+    check_seal_err(((seal_err_t (*)(void*, float)) set)(
+        DATA_PTR(robj), NUM2DBL(rflt)
+    ));
+
+    return rflt;
+}
+
+static VALUE
+get_obj_float(VALUE robj, void* get)
+{
+    float flt;
+
+    check_seal_err(((seal_err_t (*)(void*, float*)) get)(
+        DATA_PTR(robj), &flt
+    ));
+
+    return rb_float_new(flt);
+}
+
+static VALUE
+set_obj_bool(VALUE robj, VALUE rbool, void* set)
+{
+    check_seal_err(((seal_err_t (*)(void*, char)) set)(
+        DATA_PTR(robj), RTEST(rbool)
+    ));
+
+    return rbool;
+}
+
+static VALUE
+get_obj_bool(VALUE robj, void* get)
+{
+    char bool;
+
+    check_seal_err(((seal_err_t (*)(void*, char*)) get)(
+        DATA_PTR(robj), &bool
+    ));
+
+    return bool ? Qtrue : Qfalse;
+}
+
 static seal_fmt_t
 map_format(VALUE symbol)
 {
@@ -194,29 +239,11 @@ get_listener3float(seal_err_t (*get)(float*, float*, float*))
 }
 
 static VALUE
-set_src_float(VALUE rsrc, VALUE rflt, seal_err_t (*set)(seal_src_t*, float))
-{
-    check_seal_err(set(DATA_PTR(rsrc), NUM2DBL(rflt)));
-
-    return rflt;
-}
-
-static VALUE
 set_listener_float(VALUE rflt, seal_err_t (*set)(float))
 {
     check_seal_err(set(NUM2DBL(rflt)));
 
     return rflt;
-}
-
-static VALUE
-get_src_float(VALUE rsrc, seal_err_t (*get)(seal_src_t*, float*))
-{
-    float value;
-
-    check_seal_err(get(DATA_PTR(rsrc), &value));
-
-    return rb_float_new(value);
 }
 
 static VALUE
@@ -246,24 +273,6 @@ get_src_fixnum(VALUE rsrc, seal_err_t (*get)(seal_src_t*, size_t*))
     check_seal_err(get(DATA_PTR(rsrc), &size));
 
     return ULONG2NUM(size);
-}
-
-static VALUE
-set_src_bool(VALUE rsrc, VALUE rbool, seal_err_t (*set)(seal_src_t*, char))
-{
-    check_seal_err(set(DATA_PTR(rsrc), RTEST(rbool)));
-
-    return rbool;
-}
-
-static VALUE
-get_src_bool(VALUE rsrc, seal_err_t (*get)(seal_src_t*, char*))
-{
-    char bool;
-
-    check_seal_err(get(DATA_PTR(rsrc), &bool));
-
-    return bool ? Qtrue : Qfalse;
 }
 
 static VALUE
@@ -644,7 +653,7 @@ get_src_vel(VALUE rsrc)
 static VALUE
 set_src_pitch(VALUE rsrc, VALUE pitch)
 {
-    return set_src_float(rsrc, pitch, seal_set_src_pitch);
+    return set_obj_float(rsrc, pitch, seal_set_src_pitch);
 }
 
 /*
@@ -654,7 +663,7 @@ set_src_pitch(VALUE rsrc, VALUE pitch)
 static VALUE
 get_src_pitch(VALUE rsrc)
 {
-    return get_src_float(rsrc, seal_get_src_pitch);
+    return get_obj_float(rsrc, seal_get_src_pitch);
 }
 
 /*
@@ -664,7 +673,7 @@ get_src_pitch(VALUE rsrc)
 static VALUE
 set_src_gain(VALUE rsrc, VALUE gain)
 {
-    return set_src_float(rsrc, gain, seal_set_src_gain);
+    return set_obj_float(rsrc, gain, seal_set_src_gain);
 }
 
 /*
@@ -674,7 +683,7 @@ set_src_gain(VALUE rsrc, VALUE gain)
 static VALUE
 get_src_gain(VALUE rsrc)
 {
-    return get_src_float(rsrc, seal_get_src_gain);
+    return get_obj_float(rsrc, seal_get_src_gain);
 }
 
 /*
@@ -684,7 +693,7 @@ get_src_gain(VALUE rsrc)
 static VALUE
 set_src_auto_updated(VALUE rsrc, VALUE rbool)
 {
-    return set_src_bool(rsrc, rbool, seal_set_src_auto_updated);
+    return set_obj_bool(rsrc, rbool, seal_set_src_auto_updated);
 }
 
 /*
@@ -694,7 +703,7 @@ set_src_auto_updated(VALUE rsrc, VALUE rbool)
 static VALUE
 is_src_auto_updated(VALUE rsrc)
 {
-    return get_src_bool(rsrc, seal_is_src_auto_updated);
+    return get_obj_bool(rsrc, seal_is_src_auto_updated);
 }
 
 /*
@@ -704,7 +713,7 @@ is_src_auto_updated(VALUE rsrc)
 static VALUE
 set_src_relative(VALUE rsrc, VALUE rbool)
 {
-    return set_src_bool(rsrc, rbool, seal_set_src_relative);
+    return set_obj_bool(rsrc, rbool, seal_set_src_relative);
 }
 
 /*
@@ -714,7 +723,7 @@ set_src_relative(VALUE rsrc, VALUE rbool)
 static VALUE
 is_src_relative(VALUE rsrc)
 {
-    return get_src_bool(rsrc, seal_is_src_relative);
+    return get_obj_bool(rsrc, seal_is_src_relative);
 }
 
 /*
@@ -724,7 +733,7 @@ is_src_relative(VALUE rsrc)
 static VALUE
 set_src_looping(VALUE rsrc, VALUE rbool)
 {
-    return set_src_bool(rsrc, rbool, seal_set_src_looping);
+    return set_obj_bool(rsrc, rbool, seal_set_src_looping);
 }
 
 /*
@@ -734,7 +743,7 @@ set_src_looping(VALUE rsrc, VALUE rbool)
 static VALUE
 is_src_looping(VALUE rsrc)
 {
-    return get_src_bool(rsrc, seal_is_src_looping);
+    return get_obj_bool(rsrc, seal_is_src_looping);
 }
 
 /*
@@ -817,6 +826,290 @@ get_src_state(VALUE rsrc)
     default:
         return name2sym(INITIAL_SYMBOL);
     }
+}
+
+/*
+ *  call-seq:
+ *      Seal::Reverb.allocate -> reverb
+ */
+static VALUE
+alloc_reverb(VALUE klass)
+{
+    return alloc(klass, sizeof (seal_reverb_t), free_reverb);
+}
+
+/*
+ *  call-seq:
+ *      Seal::Reverb.new  -> reverb
+ */
+static VALUE
+init_reverb(VALUE rreverb)
+{
+    check_seal_err(seal_init_reverb(DATA_PTR(rreverb)));
+
+    return rreverb;
+}
+
+/*
+ *  call-seq:
+ *      reverb.density = flt  -> flt
+ */
+static VALUE
+set_reverb_density(VALUE rreverb, VALUE rflt)
+{
+    return set_obj_float(rreverb, rflt, seal_set_reverb_density);
+}
+
+/*
+ *  call-seq:
+ *      reverb.density  -> flt
+ */
+static VALUE
+get_reverb_density(VALUE rreverb)
+{
+    return get_obj_float(rreverb, seal_get_reverb_density);
+}
+
+/*
+ *  call-seq:
+ *      reverb.diffusion = flt  -> flt
+ */
+static VALUE
+set_reverb_diffusion(VALUE rreverb, VALUE rflt)
+{
+    return set_obj_float(rreverb, rflt, seal_set_reverb_diffusion);
+}
+
+/*
+ *  call-seq:
+ *      reverb.diffusion  -> flt
+ */
+static VALUE
+get_reverb_diffusion(VALUE rreverb)
+{
+    return get_obj_float(rreverb, seal_get_reverb_diffusion);
+}
+
+/*
+ *  call-seq:
+ *      reverb.gain = flt  -> flt
+ */
+static VALUE
+set_reverb_gain(VALUE rreverb, VALUE rflt)
+{
+    return set_obj_float(rreverb, rflt, seal_set_reverb_gain);
+}
+
+/*
+ *  call-seq:
+ *      reverb.gain  -> flt
+ */
+static VALUE
+get_reverb_gain(VALUE rreverb)
+{
+    return get_obj_float(rreverb, seal_get_reverb_gain);
+}
+
+/*
+ *  call-seq:
+ *      reverb.hfgain = flt  -> flt
+ */
+static VALUE
+set_reverb_hfgain(VALUE rreverb, VALUE rflt)
+{
+    return set_obj_float(rreverb, rflt, seal_set_reverb_hfgain);
+}
+
+/*
+ *  call-seq:
+ *      reverb.hfgain  -> flt
+ */
+static VALUE
+get_reverb_hfgain(VALUE rreverb)
+{
+    return get_obj_float(rreverb, seal_get_reverb_hfgain);
+}
+
+/*
+ *  call-seq:
+ *      reverb.decay_time = flt  -> flt
+ */
+static VALUE
+set_reverb_decay_time(VALUE rreverb, VALUE rflt)
+{
+    return set_obj_float(rreverb, rflt, seal_set_reverb_decay_time);
+}
+
+/*
+ *  call-seq:
+ *      reverb.decay_time  -> flt
+ */
+static VALUE
+get_reverb_decay_time(VALUE rreverb)
+{
+    return get_obj_float(rreverb, seal_get_reverb_decay_time);
+}
+
+/*
+ *  call-seq:
+ *      reverb.hfdecay_ratio = flt  -> flt
+ */
+static VALUE
+set_reverb_hfdecay_ratio(VALUE rreverb, VALUE rflt)
+{
+    return set_obj_float(rreverb, rflt, seal_set_reverb_hfdecay_ratio);
+}
+
+/*
+ *  call-seq:
+ *      reverb.hfdecay_ratio  -> flt
+ */
+static VALUE
+get_reverb_hfdecay_ratio(VALUE rreverb)
+{
+    return get_obj_float(rreverb, seal_get_reverb_hfdecay_ratio);
+}
+
+/*
+ *  call-seq:
+ *      reverb.reflections_gain = flt  -> flt
+ */
+static VALUE
+set_reverb_reflections_gain(VALUE rreverb, VALUE rflt)
+{
+    return set_obj_float(rreverb, rflt, seal_set_reverb_reflections_gain);
+}
+
+/*
+ *  call-seq:
+ *      reverb.reflections_gain  -> flt
+ */
+static VALUE
+get_reverb_reflections_gain(VALUE rreverb)
+{
+    return get_obj_float(rreverb, seal_get_reverb_reflections_gain);
+}
+
+/*
+ *  call-seq:
+ *      reverb.reflections_delay = flt  -> flt
+ */
+static VALUE
+set_reverb_reflections_delay(VALUE rreverb, VALUE rflt)
+{
+    return set_obj_float(rreverb, rflt, seal_set_reverb_reflections_delay);
+}
+
+/*
+ *  call-seq:
+ *      reverb.reflections_delay  -> flt
+ */
+static VALUE
+get_reverb_reflections_delay(VALUE rreverb)
+{
+    return get_obj_float(rreverb, seal_get_reverb_reflections_delay);
+}
+
+/*
+ *  call-seq:
+ *      reverb.late_gain = flt  -> flt
+ */
+static VALUE
+set_reverb_late_gain(VALUE rreverb, VALUE rflt)
+{
+    return set_obj_float(rreverb, rflt, seal_set_reverb_late_gain);
+}
+
+/*
+ *  call-seq:
+ *      reverb.late_gain  -> flt
+ */
+static VALUE
+get_reverb_late_gain(VALUE rreverb)
+{
+    return get_obj_float(rreverb, seal_get_reverb_late_gain);
+}
+
+/*
+ *  call-seq:
+ *      reverb.late_delay = flt  -> flt
+ */
+static VALUE
+set_reverb_late_delay(VALUE rreverb, VALUE rflt)
+{
+    return set_obj_float(rreverb, rflt, seal_set_reverb_late_delay);
+}
+
+/*
+ *  call-seq:
+ *      reverb.late_delay  -> flt
+ */
+static VALUE
+get_reverb_late_delay(VALUE rreverb)
+{
+    return get_obj_float(rreverb, seal_get_reverb_late_delay);
+}
+
+/*
+ *  call-seq:
+ *      reverb.air_absorbtion_hfgain = flt  -> flt
+ */
+static VALUE
+set_reverb_air_absorbtion_hfgain(VALUE rreverb, VALUE rflt)
+{
+    return set_obj_float(rreverb, rflt,
+                         seal_set_reverb_air_absorbtion_hfgain);
+}
+
+/*
+ *  call-seq:
+ *      reverb.air_absorbtion_hfgain  -> flt
+ */
+static VALUE
+get_reverb_air_absorbtion_hfgain(VALUE rreverb)
+{
+    return get_obj_float(rreverb, seal_get_reverb_air_absorbtion_hfgain);
+}
+
+/*
+ *  call-seq:
+ *      reverb.room_rolloff_factor = flt  -> flt
+ */
+static VALUE
+set_reverb_room_rolloff_factor(VALUE rreverb, VALUE rflt)
+{
+    return set_obj_float(rreverb, rflt, seal_set_reverb_room_rolloff_factor);
+}
+
+/*
+ *  call-seq:
+ *      reverb.room_rolloff_factor  -> flt
+ */
+static VALUE
+get_reverb_room_rolloff_factor(VALUE rreverb)
+{
+    return get_obj_float(rreverb, seal_get_reverb_room_rolloff_factor);
+}
+
+/*
+ *  call-seq:
+ *      reverb.hfdecay_limited = true or false  -> true or false
+ */
+static VALUE
+set_reverb_hfdecay_limited(VALUE rreverb, VALUE rbool)
+{
+    return set_obj_bool(rreverb, rbool, seal_set_reverb_hfdecay_limited);
+}
+
+/*
+ *  call-seq:
+ *      reverb.hfdecay_limited  -> true or false
+ *      reverb.hfdecay_limited? -> true or false
+ */
+static VALUE
+is_reverb_hfdecay_limited(VALUE rreverb)
+{
+    return get_obj_bool(rreverb, seal_is_reverb_hfdecay_limited);
 }
 
 /*
@@ -1011,6 +1304,50 @@ bind_src(void)
 }
 
 static void
+bind_reverb(void)
+{
+    VALUE cReverb = rb_define_class_under(mSeal, "Reverb", rb_cObject);
+    rb_define_alloc_func(cReverb, alloc_reverb);
+    rb_define_method(cReverb, "initialize", init_reverb, 0);
+    rb_define_method(cReverb, "density=", set_reverb_diffusion, 1);
+    rb_define_method(cReverb, "density", get_reverb_diffusion, 0);
+    rb_define_method(cReverb, "diffusion=", set_reverb_diffusion, 1);
+    rb_define_method(cReverb, "diffusion", get_reverb_diffusion, 0);
+    rb_define_method(cReverb, "gain=", set_reverb_gain, 1);
+    rb_define_method(cReverb, "gain", get_reverb_gain, 0);
+    rb_define_method(cReverb, "hfgain=", set_reverb_hfgain, 1);
+    rb_define_method(cReverb, "hfgain", get_reverb_hfgain, 0);
+    rb_define_method(cReverb, "decay_time=", set_reverb_decay_time, 1);
+    rb_define_method(cReverb, "decay_time", get_reverb_decay_time, 0);
+    rb_define_method(cReverb, "hfdecay_ratio=", set_reverb_hfdecay_ratio, 1);
+    rb_define_method(cReverb, "hfdecay_ratio", get_reverb_hfdecay_ratio, 0);
+    rb_define_method(cReverb, "reflections_gain=",
+                     set_reverb_reflections_gain, 1);
+    rb_define_method(cReverb, "reflections_gain",
+                     get_reverb_reflections_gain, 0);
+    rb_define_method(cReverb, "reflections_delay=",
+                     set_reverb_reflections_delay, 1);
+    rb_define_method(cReverb, "reflections_delay",
+                     get_reverb_reflections_delay, 0);
+    rb_define_method(cReverb, "late_gain=", set_reverb_late_gain, 1);
+    rb_define_method(cReverb, "late_gain", get_reverb_late_gain, 0);
+    rb_define_method(cReverb, "late_delay=", set_reverb_late_delay, 1);
+    rb_define_method(cReverb, "late_delay", get_reverb_late_delay, 0);
+    rb_define_method(cReverb, "air_absorbtion_hfgain=",
+                     set_reverb_air_absorbtion_hfgain, 1);
+    rb_define_method(cReverb, "air_absorbtion_hfgain",
+                     get_reverb_air_absorbtion_hfgain, 0);
+    rb_define_method(cReverb, "room_rolloff_factor=",
+                     set_reverb_room_rolloff_factor, 1);
+    rb_define_method(cReverb, "room_rolloff_factor",
+                     get_reverb_room_rolloff_factor, 0);
+    rb_define_method(cReverb, "hfdecay_limited=",
+                     set_reverb_hfdecay_limited, 1);
+    rb_define_method(cReverb, "hfdecay_limited",
+                     is_reverb_hfdecay_limited, 0);
+}
+
+static void
 bind_listener(void)
 {
     VALUE cListener = rb_define_class_under(mSeal, "Listener", rb_cObject);
@@ -1037,5 +1374,6 @@ Init_seal(void)
     bind_buf();
     bind_stream();
     bind_src();
+    bind_reverb();
     bind_listener();
 }
