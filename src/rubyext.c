@@ -21,6 +21,41 @@ static const char PLAYING_SYMBOL[] = "playing";
 static const char PAUSED_SYMBOL[] = "paused";
 static const char STOPPED_SYMBOL[] = "stopped";
 
+#define DEFINE_ALLOCATOR(obj)                                               \
+static VALUE                                                                \
+alloc_##obj(VALUE klass)                                                    \
+{                                                                           \
+    return alloc(klass, sizeof (seal_##obj##_t), free_##obj);               \
+}
+
+#define DEFINE_DEALLOCATOR(obj)                                             \
+static void                                                                 \
+free_##obj(void* obj)                                                       \
+{                                                                           \
+    free_obj(obj, seal_destroy_##obj);                                      \
+}
+
+#define DEFINE_SETTER(type, obj, attr)                                      \
+static VALUE                                                                \
+set_##obj##_##attr(VALUE r##obj, VALUE value)                               \
+{                                                                           \
+    return set##_obj_##type(r##obj, value, seal_set_##obj##_##attr);        \
+}
+
+#define DEFINE_GETTER(type, obj, attr)                                      \
+static VALUE                                                                \
+get_##obj##_##attr(VALUE r##obj)                                            \
+{                                                                           \
+    return get##_obj_##type(r##obj, seal_get_##obj##_##attr);               \
+}
+
+#define DEFINE_PREDICATE(obj, attr)                                         \
+static VALUE                                                                \
+is_##obj##_##attr(VALUE r##obj)                                             \
+{                                                                           \
+    return get_obj_char(r##obj, seal_is_##obj##_##attr);                    \
+}
+
 static VALUE
 name2sym(const char* name)
 {
@@ -49,34 +84,15 @@ free_obj(void* obj, void *destroy)
     free(obj);
 }
 
-static void
-free_src(void* src)
-{
-    free_obj(src, seal_destroy_src);
-}
-
-static void
-free_buf(void* buf)
-{
-    free_obj(buf, seal_destroy_buf);
-}
+DEFINE_DEALLOCATOR(src)
+DEFINE_DEALLOCATOR(buf)
+DEFINE_DEALLOCATOR(reverb)
+DEFINE_DEALLOCATOR(effect_slot)
 
 static void
 free_stream(void* stream)
 {
     free_obj(stream, seal_close_stream);
-}
-
-static void
-free_reverb(void* reverb)
-{
-    free_obj(reverb, seal_destroy_reverb);
-}
-
-static void
-free_effect_slot(void* effect_slot)
-{
-    free_obj(effect_slot, seal_destroy_effect_slot);
 }
 
 static VALUE
@@ -89,7 +105,6 @@ alloc(VALUE klass, size_t size, void* free)
     return Data_Wrap_Struct(klass, 0, free, obj);
 }
 
-
 static VALUE
 set_obj_float(VALUE robj, VALUE rflt, void* set)
 {
@@ -101,19 +116,23 @@ set_obj_float(VALUE robj, VALUE rflt, void* set)
 }
 
 static VALUE
-get_obj_float(VALUE robj, void* get)
+set_obj_int(VALUE robj, VALUE rnum, void* set)
 {
-    float flt;
-
-    check_seal_err(((seal_err_t (*)(void*, float*)) get)(
-        DATA_PTR(robj), &flt
+    check_seal_err(((seal_err_t (*)(void*, int)) set)(
+        DATA_PTR(robj), NUM2INT(rnum)
     ));
-
-    return rb_float_new(flt);
 }
 
 static VALUE
-set_obj_bool(VALUE robj, VALUE rbool, void* set)
+set_obj_ulong(VALUE robj, VALUE rnum, void* set)
+{
+    check_seal_err(((seal_err_t (*)(void*, int)) set)(
+        DATA_PTR(robj), NUM2ULONG(rnum)
+    ));
+}
+
+static VALUE
+set_obj_char(VALUE robj, VALUE rbool, void* set)
 {
     check_seal_err(((seal_err_t (*)(void*, char)) set)(
         DATA_PTR(robj), RTEST(rbool)
@@ -122,14 +141,50 @@ set_obj_bool(VALUE robj, VALUE rbool, void* set)
     return rbool;
 }
 
+static void
+get_obj_attr(VALUE robj, void* pvalue, void* get)
+{
+    check_seal_err(((seal_err_t (*)(void*, void*)) get)(
+        DATA_PTR(robj), pvalue
+    ));
+}
+
 static VALUE
-get_obj_bool(VALUE robj, void* get)
+get_obj_float(VALUE robj, void* get)
+{
+    float flt;
+
+    get_obj_attr(robj, &flt, get);
+
+    return rb_float_new(flt);
+}
+
+static VALUE
+get_obj_int(VALUE robj, void* get)
+{
+    int integer;
+
+    get_obj_attr(robj, &integer, get);
+
+    return INT2NUM(integer);
+}
+
+static VALUE
+get_obj_ulong(VALUE robj, void* get)
+{
+    unsigned long long_integer;
+
+    get_obj_attr(robj, &long_integer, get);
+
+    return ULONG2NUM(long_integer);
+}
+
+static VALUE
+get_obj_char(VALUE robj, void* get)
 {
     char bool;
 
-    check_seal_err(((seal_err_t (*)(void*, char*)) get)(
-        DATA_PTR(robj), &bool
-    ));
+    get_obj_attr(robj, &bool, get);
 
     return bool ? Qtrue : Qfalse;
 }
@@ -161,16 +216,6 @@ input_audio(int argc, VALUE* argv, void* media, void* _input)
     rb_scan_args(argc, argv, "11", &filename, &format);
     check_seal_err(input(media, rb_string_value_ptr(&filename),
                          map_format(format)));
-}
-
-static VALUE
-get_buf_attr(VALUE rbuf, seal_err_t (*get)(seal_buf_t*, int*))
-{
-    int value;
-
-    check_seal_err(get(DATA_PTR(rbuf), &value));
-
-    return INT2NUM(value);
 }
 
 static void
@@ -257,25 +302,6 @@ get_listener_float(seal_err_t (*get)(float*))
 }
 
 static VALUE
-set_src_fixnum(VALUE rsrc, VALUE rfixnum,
-               seal_err_t (*set)(seal_src_t*, size_t))
-{
-    check_seal_err(set(DATA_PTR(rsrc), NUM2ULONG(rfixnum)));
-
-    return rfixnum;
-}
-
-static VALUE
-get_src_fixnum(VALUE rsrc, seal_err_t (*get)(seal_src_t*, size_t*))
-{
-    size_t size;
-
-    check_seal_err(get(DATA_PTR(rsrc), &size));
-
-    return ULONG2NUM(size);
-}
-
-static VALUE
 src_op(VALUE rsrc, seal_err_t (*op)(seal_src_t*))
 {
     check_seal_err(op(DATA_PTR(rsrc)));
@@ -322,11 +348,7 @@ cleanup()
  *  call-seq:
  *      Seal::Buffer.allocate   -> buffer
  */
-static VALUE
-alloc_buf(VALUE klass)
-{
-    return alloc(klass, sizeof (seal_buf_t), free_buf);
-}
+DEFINE_ALLOCATOR(buf)
 
 /*
  *  call-seq:
@@ -360,51 +382,31 @@ load_buf(int argc, VALUE* argv, VALUE rbuf)
  *  call-seq:
  *      buffer.size ->  fixnum
  */
-static VALUE
-get_buf_size(VALUE rbuf)
-{
-    return get_buf_attr(rbuf, seal_get_buf_size);
-}
+DEFINE_GETTER(int, buf, size)
 
 /*
  *  call-seq:
  *      buffer.frequency    -> fixnum
  */
-static VALUE
-get_buf_freq(VALUE rbuf)
-{
-    return get_buf_attr(rbuf, seal_get_buf_freq);
-}
+DEFINE_GETTER(int, buf, freq)
 
 /*
  *  call-seq:
  *      buffer.bit_depth    -> fixnum
  */
-static VALUE
-get_buf_bps(VALUE rbuf)
-{
-    return get_buf_attr(rbuf, seal_get_buf_bps);
-}
+DEFINE_GETTER(int, buf, bps)
 
 /*
  *  call-seq:
  *      buffer.channel_count    -> fixnum
  */
-static VALUE
-get_buf_nchannels(VALUE rbuf)
-{
-    return get_buf_attr(rbuf, seal_get_buf_nchannels);
-}
+DEFINE_GETTER(int, buf, nchannels)
 
 /*
  *  call-seq:
  *      Seal::Stream.allocate   -> stream
  */
-static VALUE
-alloc_stream(VALUE klass)
-{
-    return alloc(klass, sizeof (seal_stream_t), free_stream);
-}
+DEFINE_ALLOCATOR(stream)
 
 /*
  *  call-seq:
@@ -477,11 +479,7 @@ close_stream(VALUE rstream)
  *  call-seq:
  *      Seal::Source.allocate -> source
  */
-static VALUE
-alloc_src(VALUE klass)
-{
-    return alloc(klass, sizeof (seal_src_t), free_src);
-}
+DEFINE_ALLOCATOR(src)
 
 /*
  *  call-seq:
@@ -650,145 +648,88 @@ get_src_vel(VALUE rsrc)
  *  call-seq:
  *      source.pitch = flt  -> [flt, flt, flt]
  */
-static VALUE
-set_src_pitch(VALUE rsrc, VALUE pitch)
-{
-    return set_obj_float(rsrc, pitch, seal_set_src_pitch);
-}
+DEFINE_SETTER(float, src, pitch)
 
 /*
  *  call-seq:
  *      source.pitch    -> flt
  */
-static VALUE
-get_src_pitch(VALUE rsrc)
-{
-    return get_obj_float(rsrc, seal_get_src_pitch);
-}
+DEFINE_GETTER(float, src, pitch)
 
 /*
  *  call-seq:
  *      source.gain = flt   -> [flt, flt, flt]
  */
-static VALUE
-set_src_gain(VALUE rsrc, VALUE gain)
-{
-    return set_obj_float(rsrc, gain, seal_set_src_gain);
-}
+DEFINE_SETTER(float, src, gain)
 
 /*
  *  call-seq:
  *      source.gain -> flt
  */
-static VALUE
-get_src_gain(VALUE rsrc)
-{
-    return get_obj_float(rsrc, seal_get_src_gain);
-}
+DEFINE_GETTER(float, src, gain)
 
 /*
  *  call-seq:
  *      source.auto_updated = true or false -> true or false
  */
-static VALUE
-set_src_auto_updated(VALUE rsrc, VALUE rbool)
-{
-    return set_obj_bool(rsrc, rbool, seal_set_src_auto_updated);
-}
+DEFINE_SETTER(char, src, auto_updated)
 
 /*
  *  call-seq:
  *      source.auto_updated   -> true or false
  *      source.auto_updated?  -> true or false
  */
-static VALUE
-is_src_auto_updated(VALUE rsrc)
-{
-    return get_obj_bool(rsrc, seal_is_src_auto_updated);
-}
+DEFINE_PREDICATE(src, auto_updated)
 
 /*
  *  call-seq:
  *      source.relative = true or false -> true or false
  */
-static VALUE
-set_src_relative(VALUE rsrc, VALUE rbool)
-{
-    return set_obj_bool(rsrc, rbool, seal_set_src_relative);
-}
+DEFINE_SETTER(char, src, relative)
 
 /*
  *  call-seq:
  *      source.relative   -> true or false
  *      source.relative?  -> true or false
  */
-static VALUE
-is_src_relative(VALUE rsrc)
-{
-    return get_obj_bool(rsrc, seal_is_src_relative);
-}
+DEFINE_PREDICATE(src, relative)
 
 /*
  *  call-seq:
  *      source.looping = true or false  -> true or false
  */
-static VALUE
-set_src_looping(VALUE rsrc, VALUE rbool)
-{
-    return set_obj_bool(rsrc, rbool, seal_set_src_looping);
-}
+DEFINE_SETTER(char, src, looping)
 
 /*
  *  call-seq:
  *      source.looping  -> true or false
  *      source.looping? -> true or false
  */
-static VALUE
-is_src_looping(VALUE rsrc)
-{
-    return get_obj_bool(rsrc, seal_is_src_looping);
-}
+DEFINE_PREDICATE(src, looping)
 
 /*
  *  call-seq:
  *      source.queue_size = fixnum  -> true or false
  */
-static VALUE
-set_src_queue_size(VALUE rsrc, VALUE size)
-{
-    return set_src_fixnum(rsrc, size, seal_set_src_queue_size);
-}
+DEFINE_SETTER(float, src, queue_size)
 
 /*
  *  call-seq:
  *      source.queue_size   -> fixnum
  */
-static VALUE
-get_src_queue_size(VALUE rsrc)
-{
-    return get_src_fixnum(rsrc, seal_get_src_queue_size);
-}
+DEFINE_GETTER(float, src, queue_size)
 
 /*
  *  call-seq:
  *      source.chunk_size = fixnum  -> true or false
  */
-static VALUE
-set_src_chunk_size(VALUE rsrc, VALUE size)
-{
-    return set_src_fixnum(rsrc, size, seal_set_src_chunk_size);
-}
+DEFINE_SETTER(int, src, chunk_size)
 
 /*
  *  call-seq:
  *      source.chunk_size   -> fixnum
  */
-static VALUE
-get_src_chunk_size(VALUE rsrc)
-{
-    return get_src_fixnum(rsrc, seal_get_src_chunk_size);
-}
-
+DEFINE_GETTER(int, src, chunk_size)
 /*
  *  call-seq:
  *      source.type -> :streaming or :static
@@ -835,11 +776,7 @@ get_src_state(VALUE rsrc)
  *  call-seq:
  *      Seal::Reverb.allocate -> reverb
  */
-static VALUE
-alloc_reverb(VALUE klass)
-{
-    return alloc(klass, sizeof (seal_reverb_t), free_reverb);
-}
+DEFINE_ALLOCATOR(reverb)
 
 /*
  *  call-seq:
@@ -857,263 +794,157 @@ init_reverb(VALUE rreverb)
  *  call-seq:
  *      reverb.density = flt  -> flt
  */
-static VALUE
-set_reverb_density(VALUE rreverb, VALUE rflt)
-{
-    return set_obj_float(rreverb, rflt, seal_set_reverb_density);
-}
+DEFINE_SETTER(float, reverb, density)
 
 /*
  *  call-seq:
  *      reverb.density  -> flt
  */
-static VALUE
-get_reverb_density(VALUE rreverb)
-{
-    return get_obj_float(rreverb, seal_get_reverb_density);
-}
+DEFINE_GETTER(float, reverb, density)
 
 /*
  *  call-seq:
  *      reverb.diffusion = flt  -> flt
  */
-static VALUE
-set_reverb_diffusion(VALUE rreverb, VALUE rflt)
-{
-    return set_obj_float(rreverb, rflt, seal_set_reverb_diffusion);
-}
+DEFINE_SETTER(float, reverb, diffusion)
 
 /*
  *  call-seq:
  *      reverb.diffusion  -> flt
  */
-static VALUE
-get_reverb_diffusion(VALUE rreverb)
-{
-    return get_obj_float(rreverb, seal_get_reverb_diffusion);
-}
+DEFINE_GETTER(float, reverb, diffusion)
 
 /*
  *  call-seq:
  *      reverb.gain = flt  -> flt
  */
-static VALUE
-set_reverb_gain(VALUE rreverb, VALUE rflt)
-{
-    return set_obj_float(rreverb, rflt, seal_set_reverb_gain);
-}
+DEFINE_SETTER(float, reverb, gain)
 
 /*
  *  call-seq:
  *      reverb.gain  -> flt
  */
-static VALUE
-get_reverb_gain(VALUE rreverb)
-{
-    return get_obj_float(rreverb, seal_get_reverb_gain);
-}
+DEFINE_GETTER(float, reverb, gain)
 
 /*
  *  call-seq:
  *      reverb.hfgain = flt  -> flt
  */
-static VALUE
-set_reverb_hfgain(VALUE rreverb, VALUE rflt)
-{
-    return set_obj_float(rreverb, rflt, seal_set_reverb_hfgain);
-}
+DEFINE_SETTER(float, reverb, hfgain)
 
 /*
  *  call-seq:
  *      reverb.hfgain  -> flt
  */
-static VALUE
-get_reverb_hfgain(VALUE rreverb)
-{
-    return get_obj_float(rreverb, seal_get_reverb_hfgain);
-}
+DEFINE_GETTER(float, reverb, hfgain)
 
 /*
  *  call-seq:
  *      reverb.decay_time = flt  -> flt
  */
-static VALUE
-set_reverb_decay_time(VALUE rreverb, VALUE rflt)
-{
-    return set_obj_float(rreverb, rflt, seal_set_reverb_decay_time);
-}
+DEFINE_SETTER(float, reverb, decay_time)
 
 /*
  *  call-seq:
  *      reverb.decay_time  -> flt
  */
-static VALUE
-get_reverb_decay_time(VALUE rreverb)
-{
-    return get_obj_float(rreverb, seal_get_reverb_decay_time);
-}
+DEFINE_GETTER(float, reverb, decay_time)
 
 /*
  *  call-seq:
  *      reverb.hfdecay_ratio = flt  -> flt
  */
-static VALUE
-set_reverb_hfdecay_ratio(VALUE rreverb, VALUE rflt)
-{
-    return set_obj_float(rreverb, rflt, seal_set_reverb_hfdecay_ratio);
-}
+DEFINE_SETTER(float, reverb, hfdecay_ratio)
 
 /*
  *  call-seq:
  *      reverb.hfdecay_ratio  -> flt
  */
-static VALUE
-get_reverb_hfdecay_ratio(VALUE rreverb)
-{
-    return get_obj_float(rreverb, seal_get_reverb_hfdecay_ratio);
-}
+DEFINE_GETTER(float, reverb, hfdecay_ratio)
 
 /*
  *  call-seq:
  *      reverb.reflections_gain = flt  -> flt
  */
-static VALUE
-set_reverb_reflections_gain(VALUE rreverb, VALUE rflt)
-{
-    return set_obj_float(rreverb, rflt, seal_set_reverb_reflections_gain);
-}
+DEFINE_SETTER(float, reverb, reflections_gain)
 
 /*
  *  call-seq:
  *      reverb.reflections_gain  -> flt
  */
-static VALUE
-get_reverb_reflections_gain(VALUE rreverb)
-{
-    return get_obj_float(rreverb, seal_get_reverb_reflections_gain);
-}
+DEFINE_GETTER(float, reverb, reflections_gain)
 
 /*
  *  call-seq:
  *      reverb.reflections_delay = flt  -> flt
  */
-static VALUE
-set_reverb_reflections_delay(VALUE rreverb, VALUE rflt)
-{
-    return set_obj_float(rreverb, rflt, seal_set_reverb_reflections_delay);
-}
+DEFINE_SETTER(float, reverb, reflections_delay)
 
 /*
  *  call-seq:
  *      reverb.reflections_delay  -> flt
  */
-static VALUE
-get_reverb_reflections_delay(VALUE rreverb)
-{
-    return get_obj_float(rreverb, seal_get_reverb_reflections_delay);
-}
+DEFINE_GETTER(float, reverb, reflections_delay)
 
 /*
  *  call-seq:
  *      reverb.late_gain = flt  -> flt
  */
-static VALUE
-set_reverb_late_gain(VALUE rreverb, VALUE rflt)
-{
-    return set_obj_float(rreverb, rflt, seal_set_reverb_late_gain);
-}
+DEFINE_SETTER(float, reverb, late_gain)
 
 /*
  *  call-seq:
  *      reverb.late_gain  -> flt
  */
-static VALUE
-get_reverb_late_gain(VALUE rreverb)
-{
-    return get_obj_float(rreverb, seal_get_reverb_late_gain);
-}
+DEFINE_GETTER(float, reverb, late_gain)
 
 /*
  *  call-seq:
  *      reverb.late_delay = flt  -> flt
  */
-static VALUE
-set_reverb_late_delay(VALUE rreverb, VALUE rflt)
-{
-    return set_obj_float(rreverb, rflt, seal_set_reverb_late_delay);
-}
+DEFINE_SETTER(float, reverb, late_delay)
 
 /*
  *  call-seq:
  *      reverb.late_delay  -> flt
  */
-static VALUE
-get_reverb_late_delay(VALUE rreverb)
-{
-    return get_obj_float(rreverb, seal_get_reverb_late_delay);
-}
-
+DEFINE_GETTER(float, reverb, late_delay)
 /*
  *  call-seq:
  *      reverb.air_absorbtion_hfgain = flt  -> flt
  */
-static VALUE
-set_reverb_air_absorbtion_hfgain(VALUE rreverb, VALUE rflt)
-{
-    return set_obj_float(rreverb, rflt,
-                         seal_set_reverb_air_absorbtion_hfgain);
-}
+DEFINE_SETTER(float, reverb, air_absorbtion_hfgain)
 
 /*
  *  call-seq:
  *      reverb.air_absorbtion_hfgain  -> flt
  */
-static VALUE
-get_reverb_air_absorbtion_hfgain(VALUE rreverb)
-{
-    return get_obj_float(rreverb, seal_get_reverb_air_absorbtion_hfgain);
-}
+DEFINE_GETTER(float, reverb, air_absorbtion_hfgain)
 
 /*
  *  call-seq:
  *      reverb.room_rolloff_factor = flt  -> flt
  */
-static VALUE
-set_reverb_room_rolloff_factor(VALUE rreverb, VALUE rflt)
-{
-    return set_obj_float(rreverb, rflt, seal_set_reverb_room_rolloff_factor);
-}
+DEFINE_SETTER(float, reverb, room_rolloff_factor)
 
 /*
  *  call-seq:
  *      reverb.room_rolloff_factor  -> flt
  */
-static VALUE
-get_reverb_room_rolloff_factor(VALUE rreverb)
-{
-    return get_obj_float(rreverb, seal_get_reverb_room_rolloff_factor);
-}
+DEFINE_GETTER(float, reverb, room_rolloff_factor)
 
 /*
  *  call-seq:
  *      reverb.hfdecay_limited = true or false  -> true or false
  */
-static VALUE
-set_reverb_hfdecay_limited(VALUE rreverb, VALUE rbool)
-{
-    return set_obj_bool(rreverb, rbool, seal_set_reverb_hfdecay_limited);
-}
+DEFINE_SETTER(char, reverb, hfdecay_limited)
 
 /*
  *  call-seq:
  *      reverb.hfdecay_limited  -> true or false
  *      reverb.hfdecay_limited? -> true or false
  */
-static VALUE
-is_reverb_hfdecay_limited(VALUE rreverb)
-{
-    return get_obj_bool(rreverb, seal_is_reverb_hfdecay_limited);
-}
+DEFINE_PREDICATE(reverb, hfdecay_limited)
 
 /*
  *  call-seq:
