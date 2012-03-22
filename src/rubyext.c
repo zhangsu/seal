@@ -56,6 +56,21 @@ is_##obj##_##attr(VALUE r##obj)                                             \
     return get_obj_char(r##obj, seal_is_##obj##_##attr);                    \
 }
 
+#define DEFINE_LISTENER_SETTER(type, attr)                                  \
+static VALUE                                                                \
+set_listener_##attr(VALUE rlistener, VALUE value)                           \
+{                                                                           \
+    return set_listener_##type(value, seal_set_listener_##attr);            \
+}
+
+#define DEFINE_LISTENER_GETTER(type, attr)                                  \
+static VALUE                                                                \
+get_listener_##attr(VALUE rlistener)                                        \
+{                                                                           \
+    return get_listener_##type(seal_get_listener_##attr);                   \
+}
+
+
 static VALUE
 name2sym(const char* name)
 {
@@ -105,6 +120,23 @@ alloc(VALUE klass, size_t size, void* free)
     return Data_Wrap_Struct(klass, 0, free, obj);
 }
 
+static void
+extract_3float(VALUE rarr, float* x, float* y, float* z)
+{
+    rarr = rb_convert_type(rarr, T_ARRAY, "Array", "to_a");
+    *x = NUM2DBL(rb_ary_entry(rarr, 0));
+    *y = NUM2DBL(rb_ary_entry(rarr, 1));
+    *z = NUM2DBL(rb_ary_entry(rarr, 2));
+}
+
+static void
+convert_bulk_float(VALUE* rtuple, float* tuple, int len)
+{
+    int i;
+    for (i = 0; i < len; ++i)
+        rtuple[i] = rb_float_new(tuple[i]);
+}
+
 static VALUE
 set_obj_float(VALUE robj, VALUE rflt, void* set)
 {
@@ -139,6 +171,20 @@ set_obj_char(VALUE robj, VALUE rbool, void* set)
     ));
 
     return rbool;
+}
+
+static VALUE
+set_obj_3float(VALUE robj, VALUE rarr, void* set)
+{
+    float x, y, z;
+
+    rb_p(Qtrue);
+    extract_3float(rarr, &x, &y, &z);
+    check_seal_err(((seal_err_t (*)(void*, float, float, float)) set)(
+        DATA_PTR(robj), x, y, z
+    ));
+
+    return rarr;
 }
 
 static void
@@ -189,6 +235,20 @@ get_obj_char(VALUE robj, void* get)
     return bool ? Qtrue : Qfalse;
 }
 
+static VALUE
+get_obj_3float(VALUE robj, void* get)
+{
+    float tuple[3];
+    VALUE rtuple[3];
+
+    check_seal_err(((seal_err_t (*)(void*, float*, float*, float*)) get)(
+        DATA_PTR(robj), tuple, tuple + 1, tuple + 2
+    ));
+    convert_bulk_float(rtuple, tuple, 3);
+
+    return rb_ary_new4(3, rtuple);
+}
+
 static seal_fmt_t
 map_format(VALUE symbol)
 {
@@ -218,61 +278,20 @@ input_audio(int argc, VALUE* argv, void* media, void* _input)
                          map_format(format)));
 }
 
-static void
-extract3float(VALUE rarr, float* x, float* y, float* z)
-{
-    rarr = rb_convert_type(rarr, T_ARRAY, "Array", "to_a");
-    *x = NUM2DBL(rb_ary_entry(rarr, 0));
-    *y = NUM2DBL(rb_ary_entry(rarr, 1));
-    *z = NUM2DBL(rb_ary_entry(rarr, 2));
-}
-
 static VALUE
-set_src3float(VALUE rsrc, VALUE rarr,
-              seal_err_t (*set)(seal_src_t*, float, float, float))
+set_listener_3float(VALUE rarr, seal_err_t (*set)(float, float, float))
 {
     float x, y, z;
 
-    extract3float(rarr, &x, &y, &z);
-    check_seal_err(set(DATA_PTR(rsrc), x, y, z));
-
-    return rarr;
-}
-
-static VALUE
-set_listener3float(VALUE rarr, seal_err_t (*set)(float, float, float))
-{
-    float x, y, z;
-
-    extract3float(rarr, &x, &y, &z);
+    rb_p(rarr);
+    extract_3float(rarr, &x, &y, &z);
     check_seal_err(set(x, y, z));
 
     return rarr;
 }
 
-static void
-convert_bulk_float(VALUE* rtuple, float* tuple, int len)
-{
-    int i;
-    for (i = 0; i < len; ++i)
-        rtuple[i] = rb_float_new(tuple[i]);
-}
-
 static VALUE
-get_src3float(VALUE rsrc,
-              seal_err_t (*get)(seal_src_t*, float*, float*, float*))
-{
-    float tuple[3];
-    VALUE rtuple[3];
-
-    check_seal_err(get(DATA_PTR(rsrc), tuple, tuple + 1, tuple + 2));
-    convert_bulk_float(rtuple, tuple, 3);
-
-    return rb_ary_new4(3, rtuple);
-}
-
-static VALUE
-get_listener3float(seal_err_t (*get)(float*, float*, float*))
+get_listener_3float(seal_err_t (*get)(float*, float*, float*))
 {
     float tuple[3];
     VALUE rtuple[3];
@@ -296,7 +315,7 @@ get_listener_float(seal_err_t (*get)(float*))
 {
     float value;
 
-    get(&value);
+    check_seal_err(get(&value));
 
     return rb_float_new(value);
 }
@@ -608,41 +627,25 @@ static VALUE update_src(VALUE rsrc)
  *  call-seq:
  *      source.position = [flt, flt, flt]   -> [flt, flt, flt]
  */
-static VALUE
-set_src_pos(VALUE rsrc, VALUE rarr)
-{
-    return set_src3float(rsrc, rarr, seal_set_src_pos);
-}
+DEFINE_SETTER(3float, src, pos)
 
 /*
  *  call-seq:
  *      source.position -> [flt, flt, flt]
  */
-static VALUE
-get_src_pos(VALUE rsrc)
-{
-    return get_src3float(rsrc, seal_get_src_pos);
-}
+DEFINE_GETTER(3float, src, pos)
 
 /*
  *  call-seq:
  *      source.velocity = [flt, flt, flt]   -> [flt, flt, flt]
  */
-static VALUE
-set_src_vel(VALUE rsrc, VALUE rarr)
-{
-    return set_src3float(rsrc, rarr, seal_set_src_vel);
-}
+DEFINE_SETTER(3float, src, vel)
 
 /*
  *  call-seq:
  *      source.velocity -> [flt, flt, flt]
  */
-static VALUE
-get_src_vel(VALUE rsrc)
-{
-    return get_src3float(rsrc, seal_get_src_vel);
-}
+DEFINE_GETTER(3float, src, vel)
 
 /*
  *  call-seq:
@@ -960,61 +963,38 @@ get_listener()
  *  call-seq:
  *      Audio.listener.gain = flt   -> [flt, flt, flt]
  */
-static VALUE
-set_listener_gain(VALUE rlistener, VALUE gain)
-{
-    return set_listener_float(gain, seal_set_listener_gain);
-}
+DEFINE_LISTENER_SETTER(float, gain)
 
 /*
  *  call-seq:
  *      Audio.listener.gain -> flt
  */
-static VALUE
-get_listener_gain(VALUE rlistener)
-{
-    return get_listener_float(seal_get_listener_gain);
-}
+DEFINE_LISTENER_GETTER(float, gain)
 
 /*
  *  call-seq:
  *      Audio.listener.position = [flt, flt, flt]   -> [flt, flt, flt]
  */
-static VALUE
-set_listener_pos(VALUE rlistener, VALUE rarr)
-{
-    return set_listener3float(rarr, seal_set_listener_pos);
-}
+DEFINE_LISTENER_SETTER(3float, pos)
 
 /*
  *  call-seq:
  *      Audio.listener.position -> [flt, flt, flt]
  */
-static VALUE
-GetListenerPosition(VALUE rlistener)
-{
-    return get_listener3float(seal_get_listener_pos);
-}
+DEFINE_LISTENER_GETTER(3float, pos)
 
 /*
  *  call-seq:
  *      Audio.listener.velocity = flt, flt, flt   -> [flt, flt, flt]
  */
-static VALUE
-set_listener_vel(VALUE rlistener, VALUE rarr)
-{
-    return set_listener3float(rarr, seal_set_listener_vel);
-}
+DEFINE_LISTENER_SETTER(3float, vel)
+
 
 /*
  *  call-seq:
- *      Audio.listener.position -> [flt, flt, flt]
+ *      Audio.listener.velocity -> [flt, flt, flt]
  */
-static VALUE
-get_listener_vel(VALUE rlistener)
-{
-    return get_listener3float(seal_get_listener_vel);
-}
+DEFINE_LISTENER_GETTER(3float, vel)
 
 /*
  *  call-seq:
@@ -1027,8 +1007,8 @@ set_listener_orien(VALUE rlistener, VALUE rarr)
     float orien[6];
 
     rarr = rb_convert_type(rarr, T_ARRAY, "Array", "to_a");
-    extract3float(rb_ary_entry(rarr, 0), orien, orien + 1, orien + 2);
-    extract3float(rb_ary_entry(rarr, 1), orien + 3, orien + 4, orien + 5);
+    extract_3float(rb_ary_entry(rarr, 0), orien, orien + 1, orien + 2);
+    extract_3float(rb_ary_entry(rarr, 1), orien + 3, orien + 4, orien + 5);
     check_seal_err(seal_set_listener_orien(orien));
 
     return rarr;
@@ -1210,7 +1190,7 @@ bind_listener(void)
     rb_undef_alloc_func(cListener);
     rb_undef_method(rb_singleton_class(cListener), "new");
     rb_define_method(cListener, "position=", set_listener_pos, 1);
-    rb_define_method(cListener, "position", GetListenerPosition, 0);
+    rb_define_method(cListener, "position", get_listener_pos, 0);
     rb_define_method(cListener, "velocity=", set_listener_vel, 1);
     rb_define_method(cListener, "velocity", get_listener_vel, 0);
     rb_define_method(cListener, "gain=", set_listener_gain, 1);
