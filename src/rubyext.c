@@ -1065,11 +1065,15 @@ get_listener_orien(VALUE rlistener)
 static void
 bind_core(void)
 {
+    VALUE mFormat;
     mSeal = rb_define_module("Seal");
     eSealError = rb_define_class("SealError", rb_eException);
     rb_define_singleton_method(mSeal, "startup", startup, -1);
     rb_define_singleton_method(mSeal, "cleanup", cleanup, 0);
-
+    mFormat = rb_define_module_under(mSeal, "Format");
+    rb_define_const(mFormat, "WAV", name2sym(WAV_SYMBOL));
+    rb_define_const(mFormat, "OV", name2sym(OV_SYMBOL));
+    rb_define_const(mFormat, "MPG", name2sym(MPG_SYMBOL));
 }
 
 static void
@@ -1102,6 +1106,8 @@ bind_stream(void)
 static void
 bind_src(void)
 {
+    VALUE mState;
+    VALUE mType;
     VALUE cSource = rb_define_class_under(mSeal, "Source", rb_cObject);
     rb_define_alloc_func(cSource, alloc_src);
     rb_define_method(cSource, "initialize", init_src, 0);
@@ -1138,6 +1144,15 @@ bind_src(void)
     rb_define_method(cSource, "chunk_size", get_src_chunk_size, 0);
     rb_define_method(cSource, "type", get_src_type, 0);
     rb_define_method(cSource, "state", get_src_state, 0);
+    mState = rb_define_module_under(cSource, "State");
+    rb_define_const(mState, "INITIAL", name2sym(INITIAL_SYMBOL));
+    rb_define_const(mState, "PLAYING", name2sym(PLAYING_SYMBOL));
+    rb_define_const(mState, "PAUSED", name2sym(PAUSED_SYMBOL));
+    rb_define_const(mState, "STOPPED", name2sym(STOPPED_SYMBOL));
+    mType = rb_define_module_under(cSource, "Type");
+    rb_define_const(mType, "UNDETERMINED", name2sym(UNDETERMINED_SYMBOL));
+    rb_define_const(mType, "STATIC", name2sym(STATIC_SYMBOL));
+    rb_define_const(mType, "STREAMING", name2sym(STREAMING_SYMBOL));
 }
 
 static void

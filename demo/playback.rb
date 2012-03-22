@@ -6,6 +6,6 @@ src = Seal::Source.new
 src.stream = Seal::Stream.open('pipa.ogg')
 src.play
 
-sleep 1 while src.state == :playing
+sleep 1 while src.state == Seal::Source::State::PLAYING
 
 Seal.cleanup
