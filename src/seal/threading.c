@@ -4,6 +4,7 @@
  * COPYING attached with the library.
  */
 
+#include <stdlib.h>
 #include <stdint.h>
 #include <seal/core.h>
 #include "threading.h"
@@ -22,7 +23,7 @@ void _seal_unlock(void* placeholder) {}
 void*
 _seal_create_lock(void)
 {
-    pthread_mutex_t* lock = _seal_malloc(sizeof (pthread_mutex_t));
+    pthread_mutex_t* lock = malloc(sizeof (pthread_mutex_t));
     pthread_mutex_init(lock, 0);
 
     return lock;
@@ -43,7 +44,7 @@ _seal_lock(void* lock)
 }
 
 void
-_seal_unlock(_seal_lock_t lock)
+_seal_unlock(void* lock)
 {
     pthread_mutex_unlock(lock);
 }
@@ -84,7 +85,7 @@ _seal_unlock(void* lock)
 #include <unistd.h>
 
 void*
-_seal_create_thread(_seal_routine_t_t* routine, void* args)
+_seal_create_thread(_seal_routine_t* routine, void* args)
 {
     pthread_t thread;
 

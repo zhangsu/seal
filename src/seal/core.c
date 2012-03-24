@@ -225,6 +225,8 @@ _seal_sleep(unsigned int millisec)
     SleepEx(millisec, 0);
 }
 
+#endif /* __unix__, _WIN32 */
+
 void
 _seal_lock_openal(void)
 {
@@ -237,4 +239,3 @@ _seal_unlock_openal(void)
     _seal_unlock(openal_lock);
 }
 
-#endif /* __unix__, _WIN32 */
