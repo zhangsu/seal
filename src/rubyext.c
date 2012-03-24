@@ -178,7 +178,6 @@ set_obj_3float(VALUE robj, VALUE rarr, void* set)
 {
     float x, y, z;
 
-    rb_p(Qtrue);
     extract_3float(rarr, &x, &y, &z);
     check_seal_err(((seal_err_t (*)(void*, float, float, float)) set)(
         DATA_PTR(robj), x, y, z
@@ -283,7 +282,6 @@ set_listener_3float(VALUE rarr, seal_err_t (*set)(float, float, float))
 {
     float x, y, z;
 
-    rb_p(rarr);
     extract_3float(rarr, &x, &y, &z);
     check_seal_err(set(x, y, z));
 
