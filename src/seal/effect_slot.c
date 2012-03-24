@@ -86,15 +86,12 @@ seal_set_effect_slot_auto(seal_effect_slot_t* slot, char automatic)
     return seti(slot, AL_EFFECTSLOT_AUXILIARY_SEND_AUTO, automatic);
 }
 
-seal_err_t
-seal_get_effect_slot_effect(seal_effect_slot_t* slot, void* effect)
+void*
+seal_get_effect_slot_effect(seal_effect_slot_t* slot)
 {
     assert(alIsAuxiliaryEffectSlot(slot->id));
 
-    /* Hack: assuming the effect id is always at offset 0. */
-    *(unsigned int*) effect = *(unsigned int*) slot->effect;
-
-    return SEAL_OK;
+    return slot->effect;
 }
 
 seal_err_t
