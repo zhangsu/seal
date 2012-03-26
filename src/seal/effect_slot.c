@@ -23,7 +23,7 @@ geti(seal_effect_slot_t* slot, int key, int* pvalue)
 
     _seal_lock_openal();
     alGetAuxiliaryEffectSloti(slot->id, key, pvalue);
-    
+
     return _seal_get_openal_err();
 }
 
@@ -44,27 +44,17 @@ seal_destroy_effect_slot(seal_effect_slot_t* slot)
 }
 
 seal_err_t
-seal_fill_effect_slot(seal_effect_slot_t* slot, void* effect)
+seal_set_effect_slot_effect(seal_effect_slot_t* slot, void* effect)
 {
     seal_err_t err;
 
     assert(effect != 0);
 
     /* Hack: assuming the effect slot id is always at offset 0. */
-    err = seti(slot, AL_EFFECTSLOT_EFFECT, *(unsigned int*) slot);
+    err = seti(slot, AL_EFFECTSLOT_EFFECT,
+               effect == 0 ? AL_EFFECT_NULL : *(unsigned int*) effect);
     if (err == SEAL_OK)
         slot->effect = effect;
-
-    return err;
-}
-
-seal_err_t
-seal_unfill_effect_slot(seal_effect_slot_t* slot)
-{
-    seal_err_t err;
-    
-    if ((err = seti(slot, AL_EFFECTSLOT_EFFECT, AL_EFFECT_NULL)) == SEAL_OK)
-        slot->effect = 0;
 
     return err;
 }

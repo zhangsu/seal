@@ -33,19 +33,12 @@ seal_err_t seal_destroy_effect_slot(seal_effect_slot_t*);
 
 /*
  * Fills an effect slot with an effect object, then the effect Slot will
- * become ready to be mixed with sources.
+ * become ready to be mixed with sources. Pass 0 to unfill the slot.
  *
  * @param effect_slot the effect slot to fill
  * @param effect      the effect to fill the effect slot with
  */
-seal_err_t seal_fill_effect_slot(seal_effect_slot_t*, void* /*effect*/);
-
-/*
- * Unfills an effect slot.
- *
- * @param effect_slot the effect slot to unfill
- */
-seal_err_t seal_unfill_effect_slot(seal_effect_slot_t*);
+seal_err_t seal_set_effect_slot_effect(seal_effect_slot_t*, void* /*effect*/);
 
 /*
  * Sets the output level of an effect Slot in the interval [0.0f, 1.0f]. A
