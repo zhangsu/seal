@@ -334,8 +334,8 @@ extract_stream(VALUE rstream)
 
 /*
  *  call-seq:
- *      Audio.startup       -> nil
- *      Audio.startup(str)  -> nil
+ *      Seal.startup       -> nil
+ *      Seal.startup(str)  -> nil
  */
 static VALUE
 startup(int argc, VALUE* argv)
@@ -351,7 +351,7 @@ startup(int argc, VALUE* argv)
 
 /*
  *  call-seq:
- *      Audio.cleanup   -> nil
+ *      Seal.cleanup   -> nil
  */
 static VALUE
 cleanup()
@@ -949,7 +949,82 @@ DEFINE_PREDICATE(reverb, hfdecay_limited)
 
 /*
  *  call-seq:
- *      Audio.listener  -> listener
+ *      EffectSlot.allocate -> effect_slot
+ */
+DEFINE_ALLOCATOR(effect_slot)
+
+/*
+ *  call-seq:
+ *      effect_slot.effect = effect -> effect
+ */
+static VALUE
+set_effect_slot_effect(VALUE rslot, VALUE reffect)
+{
+    void* effect;
+
+    Data_Get_Struct(reffect, void*, effect);
+    check_seal_err(seal_set_effect_slot_effect(DATA_PTR(rslot), effect));
+    rb_iv_set(rslot, "@effect", reffect);
+
+    return reffect;
+}
+
+/*
+ *  call-seq:
+ *      EffectSlot.new          -> effect_slot
+ *      EffectSlot.new(effect)  -> effect_slot
+ */
+static VALUE
+init_effect_slot(int argc, VALUE* argv, VALUE rslot)
+{
+    VALUE reffect;
+
+    rb_scan_args(argc, argv, "01", &reffect);
+    check_seal_err(seal_init_effect_slot(DATA_PTR(rslot)));
+    if (!NIL_P(reffect))
+        set_effect_slot_effect(rslot, reffect);
+
+    return rslot;
+}
+
+/*
+ *  call-seq:
+ *      effect_slot.effect  -> effect
+ */
+static VALUE
+get_effect_slot_effect(VALUE rslot)
+{
+    return rb_iv_get(rslot, "@effect");
+}
+
+/*
+ *  call-seq:
+ *      effect_slot.gain = flt  -> flt
+ */
+DEFINE_SETTER(float, effect_slot, gain)
+
+/*
+ *  call-seq:
+ *      effect_slot.gain    -> flt
+ */
+DEFINE_GETTER(float, effect_slot, gain)
+
+/*
+ *  call-seq:
+ *      effect_slot.auto = true or false    -> true or false
+ */
+DEFINE_SETTER(char, effect_slot, auto)
+
+/*
+ *  call-seq:
+ *      effect_slot.auto    -> true or false
+ *      effect_slot.auto?   -> true or false
+ */
+DEFINE_PREDICATE(effect_slot, auto)
+
+/*
+ *  call-seq:
+ *      Seal.listener  -> listener
  */
 static VALUE
 get_listener()
@@ -959,44 +1034,44 @@ get_listener()
 
 /*
  *  call-seq:
- *      Audio.listener.gain = flt   -> [flt, flt, flt]
+ *      Seal.listener.gain = flt   -> [flt, flt, flt]
  */
 DEFINE_LISTENER_SETTER(float, gain)
 
 /*
  *  call-seq:
- *      Audio.listener.gain -> flt
+ *      Seal.listener.gain -> flt
  */
 DEFINE_LISTENER_GETTER(float, gain)
 
 /*
  *  call-seq:
- *      Audio.listener.position = [flt, flt, flt]   -> [flt, flt, flt]
+ *      Seal.listener.position = [flt, flt, flt]   -> [flt, flt, flt]
  */
 DEFINE_LISTENER_SETTER(3float, pos)
 
 /*
  *  call-seq:
- *      Audio.listener.position -> [flt, flt, flt]
+ *      Seal.listener.position -> [flt, flt, flt]
  */
 DEFINE_LISTENER_GETTER(3float, pos)
 
 /*
  *  call-seq:
- *      Audio.listener.velocity = flt, flt, flt   -> [flt, flt, flt]
+ *      Seal.listener.velocity = flt, flt, flt   -> [flt, flt, flt]
  */
 DEFINE_LISTENER_SETTER(3float, vel)
 
 
 /*
  *  call-seq:
- *      Audio.listener.velocity -> [flt, flt, flt]
+ *      Seal.listener.velocity -> [flt, flt, flt]
  */
 DEFINE_LISTENER_GETTER(3float, vel)
 
 /*
  *  call-seq:
- *      Audio.listener.orientation = [flt, flt, flt], [flt, flt, flt]
+ *      Seal.listener.orientation = [flt, flt, flt], [flt, flt, flt]
  *          -> [[flt, flt, flt], [flt, flt, flt]]
  */
 static VALUE
@@ -1014,13 +1089,13 @@ set_listener_orien(VALUE rlistener, VALUE rarr)
 
 /*
  *  call-seq:
- *      Audio.listener.orientation  -> [[flt, flt, flt], [flt, flt, flt]]
+ *      Seal.listener.orientation  -> [[flt, flt, flt], [flt, flt, flt]]
  *
  *  Examples:
- *      at, up = Audio.listener.orientation
+ *      at, up = Seal.listener.orientation
  *      at    # => the `at' vector [flt, flt, flt]
  *      up    # => the `up' vector [flt, flt, flt]
- *      (at_x, at_y, ay_z), (up_x, up_y, up_z) = Audio.listener.orientation
+ *      (at_x, at_y, ay_z), (up_x, up_y, up_z) = Seal.listener.orientation
  *      at_x  # => the x component of the `at' vector
  *      # ...
  *      up_z  # => the z component of the `up' vector
@@ -1179,6 +1254,21 @@ bind_reverb(void)
 }
 
 static void
+bind_effect_slot(void)
+{
+    VALUE cEffectSlot = rb_define_class_under(mSeal, "EffectSlot", rb_cObject);
+    rb_define_alloc_func(cEffectSlot, alloc_effect_slot);
+    rb_define_method(cEffectSlot, "initialize", init_effect_slot, -1);
+    rb_define_method(cEffectSlot, "effect=", set_effect_slot_effect, 1);
+    rb_define_method(cEffectSlot, "effect", get_effect_slot_effect, 0);
+    rb_define_method(cEffectSlot, "gain=", set_effect_slot_gain, 1);
+    rb_define_method(cEffectSlot, "gain", get_effect_slot_gain, 0);
+    rb_define_method(cEffectSlot, "auto=", set_effect_slot_auto, 1);
+    rb_define_method(cEffectSlot, "auto", is_effect_slot_auto, 0);
+    rb_define_alias(cEffectSlot, "auto?", "auto");
+}
+
+static void
 bind_listener(void)
 {
     VALUE cListener = rb_define_class_under(mSeal, "Listener", rb_cObject);
@@ -1206,5 +1296,6 @@ Init_seal(void)
     bind_stream();
     bind_src();
     bind_reverb();
+    bind_effect_slot();
     bind_listener();
 }
