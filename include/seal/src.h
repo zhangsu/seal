@@ -257,9 +257,9 @@ seal_err_t seal_set_src_gain(seal_src_t*, float /*gain*/);
  * effect the next time the source gets played.
  *
  * @param src           the source to set the auto update flag of
- * @param auto_updated  1 to set it auto update or otherwise 0
+ * @param automatic     1 to set it auto update or otherwise 0
  */
-seal_err_t seal_set_src_auto_updated(seal_src_t*, char /*auto_updated*/);
+seal_err_t seal_set_src_auto(seal_src_t*, char /*automatic*/);
 
 /*
  * Sets whether a source's position, velocity, cone and direction are all
@@ -365,11 +365,11 @@ seal_err_t seal_get_src_gain(seal_src_t*, float* /*pgain*/);
  * Determines if a source is automatically updated. The default is true
  * (nonzero).
  *
- * @see         seal_set_src_auto_update
+ * @see         seal_set_src_auto
  * @param src   the source to determine
  * @param pauto the receiver of the auto update flag
  */
-seal_err_t seal_is_src_auto_updated(seal_src_t*, char* /*pauto*/);
+seal_err_t seal_is_src_auto(seal_src_t*, char* /*pauto*/);
 
 /*
  * Determines if a source is relative. The default is false (0).
@@ -425,7 +425,7 @@ struct seal_src_t
     size_t         chunk_size   : 24;
     size_t         queue_size   : 6;
     unsigned int   looping      : 1;
-    unsigned int   auto_updated : 1;
+    unsigned int   automatic    : 1;
 };
 
 #endif /* _SEAL_SRC_H_ */

@@ -268,7 +268,7 @@ seal_init_src(seal_src_t* src)
         src->chunk_size = DEFAULT_CHUNK_SIZE;
         src->queue_size = DEFAULT_QUEUE_SIZE;
         src->looping = 0;
-        src->auto_updated = 1;
+        src->automatic = 1;
     }
 
     return err;
@@ -309,7 +309,7 @@ seal_play_src(seal_src_t* src)
         /* Stream some data so plackback can start immediately. */
         if ((err = seal_update_src(src)) != SEAL_OK)
             return err;
-        if (src->auto_updated)
+        if (src->automatic)
             src->updater = _seal_create_thread(update, src);
     }
 
@@ -559,9 +559,9 @@ seal_set_src_gain(seal_src_t* src, float gain)
 }
 
 seal_err_t
-seal_set_src_auto_updated(seal_src_t* src, char auto_updated)
+seal_set_src_auto(seal_src_t* src, char automatic)
 {
-    src->auto_updated = auto_updated != 0;
+    src->automatic = automatic != 0;
 
     return SEAL_OK;
 }
@@ -653,11 +653,11 @@ seal_get_src_gain(seal_src_t* src, float* pgain)
 }
 
 seal_err_t
-seal_is_src_auto_updated(seal_src_t* src, char* pauto)
+seal_is_src_auto(seal_src_t* src, char* pauto)
 {
     assert(alIsSource(src->id));
 
-    *pauto = src->auto_updated;
+    *pauto = src->automatic;
 
     return SEAL_OK;
 }

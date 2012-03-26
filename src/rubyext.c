@@ -671,16 +671,16 @@ DEFINE_GETTER(float, src, gain)
 
 /*
  *  call-seq:
- *      source.auto_updated = true or false -> true or false
+ *      source.auto = true or false -> true or false
  */
-DEFINE_SETTER(char, src, auto_updated)
+DEFINE_SETTER(char, src, auto)
 
 /*
  *  call-seq:
- *      source.auto_updated   -> true or false
- *      source.auto_updated?  -> true or false
+ *      source.auto     -> true or false
+ *      source.auto?    -> true or false
  */
-DEFINE_PREDICATE(src, auto_updated)
+DEFINE_PREDICATE(src, auto)
 
 /*
  *  call-seq:
@@ -1107,9 +1107,9 @@ bind_src(void)
     rb_define_method(cSource, "pitch", get_src_pitch, 0);
     rb_define_method(cSource, "gain=", set_src_gain, 1);
     rb_define_method(cSource, "gain", get_src_gain, 0);
-    rb_define_method(cSource, "auto_updated=", set_src_auto_updated, 1);
-    rb_define_method(cSource, "auto_updated", is_src_auto_updated, 0);
-    rb_define_alias(cSource, "auto_updated?", "auto_updated");
+    rb_define_method(cSource, "auto=", set_src_auto, 1);
+    rb_define_method(cSource, "auto", is_src_auto, 0);
+    rb_define_alias(cSource, "auto?", "auto");
     rb_define_method(cSource, "relative=", set_src_relative, 1);
     rb_define_method(cSource, "relative", is_src_relative, 0);
     rb_define_alias(cSource, "relative?", "relative");
