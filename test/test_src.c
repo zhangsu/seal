@@ -428,19 +428,19 @@ test_src_simple_attr(void)
     ASSERT_OK(seal_is_src_relative(psrc, pboolean));
     ASSERT(boolean);
 
-    ASSERT_OK(seal_is_src_auto_updated(psrc, pboolean));
+    ASSERT_OK(seal_is_src_auto(psrc, pboolean));
     ASSERT(boolean);
-    ASSERT_OK(seal_set_src_auto_updated(psrc, 1));
-    ASSERT_OK(seal_is_src_auto_updated(psrc, pboolean));
+    ASSERT_OK(seal_set_src_auto(psrc, 1));
+    ASSERT_OK(seal_is_src_auto(psrc, pboolean));
     ASSERT(boolean);
-    ASSERT_OK(seal_set_src_auto_updated(psrc, 0));
-    ASSERT_OK(seal_is_src_auto_updated(psrc, pboolean));
+    ASSERT_OK(seal_set_src_auto(psrc, 0));
+    ASSERT_OK(seal_is_src_auto(psrc, pboolean));
     ASSERT(!boolean);
-    ASSERT_OK(seal_set_src_auto_updated(psrc, -1));
-    ASSERT_OK(seal_is_src_auto_updated(psrc, pboolean));
+    ASSERT_OK(seal_set_src_auto(psrc, -1));
+    ASSERT_OK(seal_is_src_auto(psrc, pboolean));
     ASSERT(boolean);
-    ASSERT_OK(seal_set_src_auto_updated(psrc, 2));
-    ASSERT_OK(seal_is_src_auto_updated(psrc, pboolean));
+    ASSERT_OK(seal_set_src_auto(psrc, 2));
+    ASSERT_OK(seal_is_src_auto(psrc, pboolean));
     ASSERT(boolean);
 
     ASSERT_OK(seal_destroy_src(psrc));
