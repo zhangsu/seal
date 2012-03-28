@@ -961,9 +961,15 @@ static VALUE
 set_effect_slot_effect(VALUE rslot, VALUE reffect)
 {
     void* effect;
+    seal_err_t err;
 
-    Data_Get_Struct(reffect, void*, effect);
-    check_seal_err(seal_set_effect_slot_effect(DATA_PTR(rslot), effect));
+    if (NIL_P(reffect)) {
+        err = seal_set_effect_slot_effect(DATA_PTR(rslot), 0);
+    } else {
+        Data_Get_Struct(reffect, void*, effect);
+        err = seal_set_effect_slot_effect(DATA_PTR(rslot), effect);
+    }
+    check_seal_err(err);
     rb_iv_set(rslot, "@effect", reffect);
 
     return reffect;
