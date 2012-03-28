@@ -52,7 +52,7 @@ operate(seal_src_t* src, void (*op)(unsigned int))
 
     _seal_lock_openal();
     op(src->id);
-    
+
     return _seal_get_openal_err();
 }
 
@@ -96,7 +96,7 @@ get3f(seal_src_t* src, int key, float* px, float* py, float* pz)
 
     _seal_lock_openal();
     alGetSource3f(src->id, key, px, py, pz);
-    
+
     return _seal_get_openal_err();
 }
 
@@ -128,7 +128,7 @@ getb(seal_src_t* src, int key, char* pvalue)
 {
     int value;
     seal_err_t err;
-    
+
     if ((err = geti(src, key, &value)) == SEAL_OK)
         *pvalue = value;
 
@@ -217,7 +217,7 @@ static seal_err_t
 stop_then_clean_queue(seal_src_t* src)
 {
     seal_err_t err;
-    
+
     if ((err = operate(src, alSourceStop)) != SEAL_OK)
         return err;
 
@@ -228,7 +228,7 @@ static seal_err_t
 restart_queuing(seal_src_t* src)
 {
     seal_err_t err;
-    
+
     if ((err = stop_then_clean_queue(src)) != SEAL_OK)
         return err;
 
@@ -355,7 +355,7 @@ seal_err_t
 seal_detach_src_audio(seal_src_t* src)
 {
     seal_err_t err;
-    
+
     if ((err = ensure_queue_empty(src)) != SEAL_OK)
         return err;
 
@@ -683,7 +683,7 @@ seal_get_src_type(seal_src_t* src, seal_src_type_t* ptype)
 {
     int type;
     seal_err_t err;
-    
+
     if ((err = geti(src, AL_SOURCE_TYPE, &type)) == SEAL_OK) {
         switch (type) {
         case AL_STATIC:
@@ -705,7 +705,7 @@ seal_get_src_state(seal_src_t* src, seal_src_state_t* pstate)
 {
     int state;
     seal_err_t err;
-    
+
     if ((err = geti(src, AL_SOURCE_STATE, &state)) == SEAL_OK) {
         switch (state) {
         case AL_PLAYING:
