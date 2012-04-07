@@ -18,20 +18,22 @@
 static void* openal_lock;
 static int neffects_per_src = -1;
 
-_seal_openal_initializer_t* alGenEffects;
-_seal_openal_destroyer_t* alDeleteEffects;
-_seal_openal_validator_t* alIsEffect;
-LPALEFFECTF alEffectf;
-LPALEFFECTI alEffecti;
-LPALGETEFFECTF alGetEffectf;
-LPALGETEFFECTI alGetEffecti;
-_seal_openal_initializer_t* alGenAuxiliaryEffectSlots;
-_seal_openal_destroyer_t* alDeleteAuxiliaryEffectSlots;
-_seal_openal_validator_t* alIsAuxiliaryEffectSlot;
-LPALAUXILIARYEFFECTSLOTI alAuxiliaryEffectSloti;
-LPALAUXILIARYEFFECTSLOTF alAuxiliaryEffectSlotf;
-LPALGETAUXILIARYEFFECTSLOTI alGetAuxiliaryEffectSloti;
-LPALGETAUXILIARYEFFECTSLOTF alGetAuxiliaryEffectSlotf;
+static void nop() {}
+
+_seal_openal_initializer_t* alGenEffects = (void*) nop;
+_seal_openal_destroyer_t* alDeleteEffects = (void*) nop;
+_seal_openal_validator_t* alIsEffect = (void*) nop;
+LPALEFFECTF alEffectf = (void*) nop;
+LPALEFFECTI alEffecti = (void*) nop;
+LPALGETEFFECTF alGetEffectf = (void*) nop;
+LPALGETEFFECTI alGetEffecti = (void*) nop;
+_seal_openal_initializer_t* alGenAuxiliaryEffectSlots = (void*) nop;
+_seal_openal_destroyer_t* alDeleteAuxiliaryEffectSlots = (void*) nop;
+_seal_openal_validator_t* alIsAuxiliaryEffectSlot = (void*) nop;
+LPALAUXILIARYEFFECTSLOTI alAuxiliaryEffectSloti = (void*) nop;
+LPALAUXILIARYEFFECTSLOTF alAuxiliaryEffectSlotf = (void*) nop;
+LPALGETAUXILIARYEFFECTSLOTI alGetAuxiliaryEffectSloti = (void*) nop;
+LPALGETAUXILIARYEFFECTSLOTF alGetAuxiliaryEffectSlotf = (void*) nop;
 
 static seal_err_t
 init_ext_proc(void)
