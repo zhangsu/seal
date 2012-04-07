@@ -102,7 +102,7 @@ free_obj(void* obj, void *destroy)
 DEFINE_DEALLOCATOR(src)
 DEFINE_DEALLOCATOR(buf)
 DEFINE_DEALLOCATOR(reverb)
-DEFINE_DEALLOCATOR(effect_slot)
+DEFINE_DEALLOCATOR(efs)
 
 static void
 free_stream(void* stream)
@@ -951,23 +951,23 @@ DEFINE_PREDICATE(reverb, hfdecay_limited)
  *  call-seq:
  *      EffectSlot.allocate -> effect_slot
  */
-DEFINE_ALLOCATOR(effect_slot)
+DEFINE_ALLOCATOR(efs)
 
 /*
  *  call-seq:
  *      effect_slot.effect = effect -> effect
  */
 static VALUE
-set_effect_slot_effect(VALUE rslot, VALUE reffect)
+set_efs_effect(VALUE rslot, VALUE reffect)
 {
     void* effect;
     seal_err_t err;
 
     if (NIL_P(reffect)) {
-        err = seal_set_effect_slot_effect(DATA_PTR(rslot), 0);
+        err = seal_set_efs_effect(DATA_PTR(rslot), 0);
     } else {
         Data_Get_Struct(reffect, void*, effect);
-        err = seal_set_effect_slot_effect(DATA_PTR(rslot), effect);
+        err = seal_set_efs_effect(DATA_PTR(rslot), effect);
     }
     check_seal_err(err);
     rb_iv_set(rslot, "@effect", reffect);
@@ -981,14 +981,14 @@ set_effect_slot_effect(VALUE rslot, VALUE reffect)
  *      EffectSlot.new(effect)  -> effect_slot
  */
 static VALUE
-init_effect_slot(int argc, VALUE* argv, VALUE rslot)
+init_efs(int argc, VALUE* argv, VALUE rslot)
 {
     VALUE reffect;
 
     rb_scan_args(argc, argv, "01", &reffect);
-    check_seal_err(seal_init_effect_slot(DATA_PTR(rslot)));
+    check_seal_err(seal_init_efs(DATA_PTR(rslot)));
     if (!NIL_P(reffect))
-        set_effect_slot_effect(rslot, reffect);
+        set_efs_effect(rslot, reffect);
 
     return rslot;
 }
@@ -998,7 +998,7 @@ init_effect_slot(int argc, VALUE* argv, VALUE rslot)
  *      effect_slot.effect  -> effect
  */
 static VALUE
-get_effect_slot_effect(VALUE rslot)
+get_efs_effect(VALUE rslot)
 {
     return rb_iv_get(rslot, "@effect");
 }
@@ -1007,26 +1007,26 @@ get_effect_slot_effect(VALUE rslot)
  *  call-seq:
  *      effect_slot.gain = flt  -> flt
  */
-DEFINE_SETTER(float, effect_slot, gain)
+DEFINE_SETTER(float, efs, gain)
 
 /*
  *  call-seq:
  *      effect_slot.gain    -> flt
  */
-DEFINE_GETTER(float, effect_slot, gain)
+DEFINE_GETTER(float, efs, gain)
 
 /*
  *  call-seq:
  *      effect_slot.auto = true or false    -> true or false
  */
-DEFINE_SETTER(char, effect_slot, auto)
+DEFINE_SETTER(char, efs, auto)
 
 /*
  *  call-seq:
  *      effect_slot.auto    -> true or false
  *      effect_slot.auto?   -> true or false
  */
-DEFINE_PREDICATE(effect_slot, auto)
+DEFINE_PREDICATE(efs, auto)
 
 /*
  *  call-seq:
@@ -1260,17 +1260,17 @@ bind_reverb(void)
 }
 
 static void
-bind_effect_slot(void)
+bind_efs(void)
 {
     VALUE cEffectSlot = rb_define_class_under(mSeal, "EffectSlot", rb_cObject);
-    rb_define_alloc_func(cEffectSlot, alloc_effect_slot);
-    rb_define_method(cEffectSlot, "initialize", init_effect_slot, -1);
-    rb_define_method(cEffectSlot, "effect=", set_effect_slot_effect, 1);
-    rb_define_method(cEffectSlot, "effect", get_effect_slot_effect, 0);
-    rb_define_method(cEffectSlot, "gain=", set_effect_slot_gain, 1);
-    rb_define_method(cEffectSlot, "gain", get_effect_slot_gain, 0);
-    rb_define_method(cEffectSlot, "auto=", set_effect_slot_auto, 1);
-    rb_define_method(cEffectSlot, "auto", is_effect_slot_auto, 0);
+    rb_define_alloc_func(cEffectSlot, alloc_efs);
+    rb_define_method(cEffectSlot, "initialize", init_efs, -1);
+    rb_define_method(cEffectSlot, "effect=", set_efs_effect, 1);
+    rb_define_method(cEffectSlot, "effect", get_efs_effect, 0);
+    rb_define_method(cEffectSlot, "gain=", set_efs_gain, 1);
+    rb_define_method(cEffectSlot, "gain", get_efs_gain, 0);
+    rb_define_method(cEffectSlot, "auto=", set_efs_auto, 1);
+    rb_define_method(cEffectSlot, "auto", is_efs_auto, 0);
     rb_define_alias(cEffectSlot, "auto?", "auto");
 }
 
@@ -1302,6 +1302,6 @@ Init_seal(void)
     bind_stream();
     bind_src();
     bind_reverb();
-    bind_effect_slot();
+    bind_efs();
     bind_listener();
 }

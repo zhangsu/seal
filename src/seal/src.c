@@ -13,7 +13,7 @@
 #include <seal/core.h>
 #include <seal/buf.h>
 #include <seal/stream.h>
-#include <seal/effect_slot.h>
+#include <seal/efs.h>
 #include <seal/err.h>
 #include "threading.h"
 
@@ -423,7 +423,7 @@ seal_set_src_stream(seal_src_t* src, seal_stream_t* stream)
 }
 
 seal_err_t
-seal_mix_src_effect(seal_src_t* src, int index, seal_effect_slot_t* slot)
+seal_mix_src_effect(seal_src_t* src, int index, seal_efs_t* slot)
 {
     assert(alIsSource(src->id) && slot != 0);
 

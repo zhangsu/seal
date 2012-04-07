@@ -54,7 +54,7 @@
     <ClCompile Include="..\..\src\seal\reverb.c">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\seal\effect_slot.c">
+    <ClCompile Include="..\..\src\seal\efs.c">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -104,7 +104,7 @@
     <ClInclude Include="..\..\src\seal\wav.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\seal\effect_slot.h">
+    <ClInclude Include="..\..\include\seal\efs.h">
       <Filter>include\seal</Filter>
     </ClInclude>
   </ItemGroup>

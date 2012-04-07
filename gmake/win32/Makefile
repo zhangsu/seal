@@ -16,7 +16,7 @@ LIBVORBISOBJDIR = $(OBJDIR)/libvorbis
 TESTOBJDIR      = $(OBJDIR)/test
 
 LIBS            = $(addprefix $(LIBDIR)/, OpenAL32.lib libmpg123.lib)
-SEALOBJ         = $(addprefix $(SEALOBJDIR)/, buf.o core.o effect_slot.o err.o fmt.o listener.o mpg.o ov.o raw.o reader.o reverb.o src.o stream.o threading.o wav.o)
+SEALOBJ         = $(addprefix $(SEALOBJDIR)/, buf.o core.o efs.o err.o fmt.o listener.o mpg.o ov.o raw.o reader.o reverb.o src.o stream.o threading.o wav.o)
 LIBOGGOBJ       = $(addprefix $(LIBOGGOBJDIR)/, bitwise.o framing.o)
 LIBVORBISOBJ    = $(addprefix $(LIBVORBISOBJDIR)/, bitrate.o block.o codebook.o envelope.o floor0.o floor1.o info.o lookup.o lpc.o lsp.o mapping0.o mdct.o psy.o registry.o res0.o sharedbook.o smallft.o synthesis.o vorbisfile.o window.o)
 TESTOBJ         = $(addprefix $(TESTOBJDIR)/, test.o test_listener.o test_src.o)
@@ -76,7 +76,7 @@ $(SEALOBJDIR)/buf.o : buf.c buf.h core.h raw.h fmt.h wav.h stream.h ov.h mpg.h e
 $(SEALOBJDIR)/core.o : core.c core.h threading.h err.h | $(SEALOBJDIR)/
 	$(COMPILE)
 
-$(SEALOBJDIR)/effect_slot.o : effect_slot.c effect_slot.h core.h err.h | $(SEALOBJDIR)/
+$(SEALOBJDIR)/efs.o : efs.c efs.h core.h err.h | $(SEALOBJDIR)/
 	$(COMPILE)
 
 $(SEALOBJDIR)/err.o : err.c err.h core.h threading.h | $(SEALOBJDIR)/
@@ -103,7 +103,7 @@ $(SEALOBJDIR)/reader.o : reader.c reader.h err.h | $(SEALOBJDIR)/
 $(SEALOBJDIR)/reverb.o : reverb.c reverb.h core.h err.h | $(SEALOBJDIR)/
 	$(COMPILE)
 
-$(SEALOBJDIR)/src.o : src.c src.h core.h buf.h raw.h fmt.h stream.h effect_slot.h err.h | $(SEALOBJDIR)/
+$(SEALOBJDIR)/src.o : src.c src.h core.h buf.h raw.h fmt.h stream.h efs.h err.h | $(SEALOBJDIR)/
 	$(COMPILE)
 
 $(SEALOBJDIR)/stream.o : stream.c stream.h core.h raw.h fmt.h wav.h ov.h mpg.h err.h | $(SEALOBJDIR)/

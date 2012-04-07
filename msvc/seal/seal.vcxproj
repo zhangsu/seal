@@ -149,7 +149,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\src\seal\buf.c" />
     <ClCompile Include="..\..\src\seal\core.c" />
-    <ClCompile Include="..\..\src\seal\effect_slot.c" />
+    <ClCompile Include="..\..\src\seal\efs.c" />
     <ClCompile Include="..\..\src\seal\err.c" />
     <ClCompile Include="..\..\src\seal\fmt.c" />
     <ClCompile Include="..\..\src\seal\listener.c" />
@@ -167,7 +167,7 @@
     <ClInclude Include="..\..\include\seal.h" />
     <ClInclude Include="..\..\include\seal\buf.h" />
     <ClInclude Include="..\..\include\seal\core.h" />
-    <ClInclude Include="..\..\include\seal\effect_slot.h" />
+    <ClInclude Include="..\..\include\seal\efs.h" />
     <ClInclude Include="..\..\include\seal\err.h" />
     <ClInclude Include="..\..\include\seal\fmt.h" />
     <ClInclude Include="..\..\include\seal\listener.h" />

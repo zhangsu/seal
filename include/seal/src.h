@@ -13,7 +13,7 @@
 #include <stddef.h>
 #include "buf.h"
 #include "stream.h"
-#include "effect_slot.h"
+#include "efs.h"
 #include "err.h"
 
 /*
@@ -152,7 +152,7 @@ seal_err_t seal_set_src_stream(seal_src_t*, seal_stream_t*);
  * @param slot      the slot that contains the effect to mix
  */
 seal_err_t seal_mix_src_effect(seal_src_t*, int /*index*/,
-                               seal_effect_slot_t* /*slot*/);
+                               seal_efs_t* /*slot*/);
 
 /*
  * Updates a streaming source. If the source is not up-to-date, the playback
