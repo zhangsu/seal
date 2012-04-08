@@ -7,7 +7,6 @@
 #include <assert.h>
 #include <al/al.h>
 #include <seal/listener.h>
-#include <seal/core.h>
 #include <seal/err.h>
 
 static seal_err_t

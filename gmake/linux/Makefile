@@ -63,28 +63,28 @@ $(SEALOUTPUT) : $(SEALOBJ) $(LIBOGGOBJ) $(LIBVORBISOBJ)
 $(SEALOBJDIR)/buf.o : buf.c buf.h core.h raw.h fmt.h wav.h stream.h ov.h mpg.h err.h | $(SEALOBJDIR)/
 	$(COMPILE)
 
-$(SEALOBJDIR)/core.o : core.c core.h threading.h err.h | $(SEALOBJDIR)/
+$(SEALOBJDIR)/core.o : core.c core.h err.h | $(SEALOBJDIR)/
 	$(COMPILE)
 
 $(SEALOBJDIR)/efs.o : efs.c efs.h core.h err.h | $(SEALOBJDIR)/
 	$(COMPILE)
 
-$(SEALOBJDIR)/err.o : err.c err.h core.h threading.h | $(SEALOBJDIR)/
+$(SEALOBJDIR)/err.o : err.c err.h | $(SEALOBJDIR)/
 	$(COMPILE)
 
 $(SEALOBJDIR)/fmt.o : fmt.c fmt.h reader.h err.h | $(SEALOBJDIR)/
 	$(COMPILE)
 
-$(SEALOBJDIR)/listener.o : listener.c listener.h core.h err.h | $(SEALOBJDIR)/
+$(SEALOBJDIR)/listener.o : listener.c listener.h err.h | $(SEALOBJDIR)/
 	$(COMPILE)
 
 $(SEALOBJDIR)/mpg.o : mpg.c mpg.h raw.h stream.h fmt.h err.h | $(SEALOBJDIR)/
 	$(COMPILE)
 
-$(SEALOBJDIR)/ov.o : ov.c ov.h core.h raw.h stream.h fmt.h reader.h err.h | $(SEALOBJDIR)/
+$(SEALOBJDIR)/ov.o : ov.c ov.h raw.h stream.h fmt.h reader.h err.h | $(SEALOBJDIR)/
 	$(COMPILE)
 
-$(SEALOBJDIR)/raw.o : raw.c raw.h core.h err.h | $(SEALOBJDIR)/
+$(SEALOBJDIR)/raw.o : raw.c raw.h err.h | $(SEALOBJDIR)/
 	$(COMPILE)
 
 $(SEALOBJDIR)/reader.o : reader.c reader.h err.h | $(SEALOBJDIR)/
@@ -93,16 +93,16 @@ $(SEALOBJDIR)/reader.o : reader.c reader.h err.h | $(SEALOBJDIR)/
 $(SEALOBJDIR)/reverb.o : reverb.c reverb.h core.h err.h | $(SEALOBJDIR)/
 	$(COMPILE)
 
-$(SEALOBJDIR)/src.o : src.c src.h core.h buf.h raw.h fmt.h stream.h efs.h err.h | $(SEALOBJDIR)/
+$(SEALOBJDIR)/src.o : src.c src.h core.h buf.h raw.h fmt.h stream.h efs.h err.h threading.h | $(SEALOBJDIR)/
 	$(COMPILE)
 
-$(SEALOBJDIR)/stream.o : stream.c stream.h core.h raw.h fmt.h wav.h ov.h mpg.h err.h | $(SEALOBJDIR)/
+$(SEALOBJDIR)/stream.o : stream.c stream.h raw.h fmt.h wav.h ov.h mpg.h err.h | $(SEALOBJDIR)/
 	$(COMPILE)
 
-$(SEALOBJDIR)/threading.o : threading.c threading.h core.h | $(SEALOBJDIR)/
+$(SEALOBJDIR)/threading.o : threading.c threading.h | $(SEALOBJDIR)/
 	$(COMPILE)
 
-$(SEALOBJDIR)/wav.o : wav.c wav.h core.h raw.h stream.h fmt.h reader.h err.h | $(SEALOBJDIR)/
+$(SEALOBJDIR)/wav.o : wav.c wav.h raw.h stream.h fmt.h reader.h err.h | $(SEALOBJDIR)/
 	$(COMPILE)
 
 $(LIBOGGOBJDIR)/%.o : %.c | $(LIBOGGOBJDIR)/

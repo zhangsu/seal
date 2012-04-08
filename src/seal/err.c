@@ -6,7 +6,6 @@
 
 #include <al/al.h>
 #include <seal/err.h>
-#include <seal/core.h>
 
 const char*
 seal_get_err_msg(seal_err_t err)

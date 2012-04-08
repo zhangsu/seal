@@ -7,7 +7,6 @@
 #include <stddef.h>
 #include <assert.h>
 #include <seal/stream.h>
-#include <seal/core.h>
 #include <seal/raw.h>
 #include <seal/fmt.h>
 #include <seal/err.h>

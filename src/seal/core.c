@@ -12,7 +12,6 @@
 #include <mpg123/mpg123.h>
 #include <seal/core.h>
 #include <seal/err.h>
-#include "threading.h"
 
 static int neffects_per_src = -1;
 

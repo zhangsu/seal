@@ -40,28 +40,28 @@ $(SEALOUTPUT) : $(SEALOBJ) $(LIBOGGOBJ) $(LIBVORBISOBJ)
 buf.obj : $(SEALSRCDIR)/buf.c $(HEADERDIR)/buf.h $(HEADERDIR)/core.h $(HEADERDIR)/raw.h $(HEADERDIR)/fmt.h $(SEALSRCDIR)/wav.h $(HEADERDIR)/stream.h $(SEALSRCDIR)/ov.h $(SEALSRCDIR)/mpg.h $(HEADERDIR)/err.h
 	$(CC) $(CFLAGS) $(SEALSRCDIR)/buf.c
 
-core.obj : $(SEALSRCDIR)/core.c $(HEADERDIR)/core.h $(SEALSRCDIR)/threading.h $(HEADERDIR)/err.h
+core.obj : $(SEALSRCDIR)/core.c $(HEADERDIR)/core.h $(HEADERDIR)/err.h
 	$(CC) $(CFLAGS) $(SEALSRCDIR)/core.c
 
 efs.obj : $(SEALSRCDIR)/efs.c $(HEADERDIR)/efs.h $(HEADERDIR)/core.h $(HEADERDIR)/err.h
 	$(CC) $(CFLAGS) $(SEALSRCDIR)/efs.c
 
-err.obj : $(SEALSRCDIR)/err.c $(HEADERDIR)/err.h $(HEADERDIR)/core.h $(SEALSRCDIR)/threading.h
+err.obj : $(SEALSRCDIR)/err.c $(HEADERDIR)/err.h
 	$(CC) $(CFLAGS) $(SEALSRCDIR)/err.c
 
 fmt.obj : $(SEALSRCDIR)/fmt.c $(HEADERDIR)/fmt.h $(SEALSRCDIR)/reader.h $(HEADERDIR)/err.h
 	$(CC) $(CFLAGS) $(SEALSRCDIR)/fmt.c
 
-listener.obj : $(SEALSRCDIR)/listener.c $(HEADERDIR)/listener.h $(HEADERDIR)/core.h $(HEADERDIR)/err.h
+listener.obj : $(SEALSRCDIR)/listener.c $(HEADERDIR)/listener.h $(HEADERDIR)/err.h
 	$(CC) $(CFLAGS) $(SEALSRCDIR)/listener.c
 
 mpg.obj : $(SEALSRCDIR)/mpg.c $(SEALSRCDIR)/mpg.h $(HEADERDIR)/raw.h $(HEADERDIR)/stream.h $(HEADERDIR)/fmt.h $(HEADERDIR)/err.h
 	$(CC) $(CFLAGS) $(SEALSRCDIR)/mpg.c
 
-ov.obj : $(SEALSRCDIR)/ov.c $(SEALSRCDIR)/ov.h $(HEADERDIR)/core.h $(HEADERDIR)/raw.h $(HEADERDIR)/stream.h $(HEADERDIR)/fmt.h $(SEALSRCDIR)/reader.h $(HEADERDIR)/err.h
+ov.obj : $(SEALSRCDIR)/ov.c $(SEALSRCDIR)/ov.h $(HEADERDIR)/ $(HEADERDIR)/raw.h $(HEADERDIR)/stream.h $(HEADERDIR)/fmt.h $(SEALSRCDIR)/reader.h $(HEADERDIR)/err.h
 	$(CC) $(CFLAGS) $(SEALSRCDIR)/ov.c
 
-raw.obj : $(SEALSRCDIR)/raw.c $(HEADERDIR)/raw.h $(HEADERDIR)/core.h $(HEADERDIR)/err.h
+raw.obj : $(SEALSRCDIR)/raw.c $(HEADERDIR)/raw.h $(HEADERDIR)/err.h
 	$(CC) $(CFLAGS) $(SEALSRCDIR)/raw.c
 
 reader.obj : $(SEALSRCDIR)/reader.c $(SEALSRCDIR)/reader.h $(HEADERDIR)/err.h
@@ -70,16 +70,16 @@ reader.obj : $(SEALSRCDIR)/reader.c $(SEALSRCDIR)/reader.h $(HEADERDIR)/err.h
 reverb.obj : $(SEALSRCDIR)/reverb.c $(HEADERDIR)/reverb.h $(HEADERDIR)/core.h $(HEADERDIR)/err.h
 	$(CC) $(CFLAGS) $(SEALSRCDIR)/reverb.c
 
-src.obj : $(SEALSRCDIR)/src.c $(HEADERDIR)/src.h $(HEADERDIR)/core.h $(HEADERDIR)/buf.h $(HEADERDIR)/raw.h $(HEADERDIR)/fmt.h $(HEADERDIR)/stream.h $(HEADERDIR)/efs.h $(HEADERDIR)/err.h
+src.obj : $(SEALSRCDIR)/src.c $(HEADERDIR)/src.h $(HEADERDIR)/core.h $(HEADERDIR)/buf.h $(HEADERDIR)/raw.h $(HEADERDIR)/fmt.h $(HEADERDIR)/stream.h $(HEADERDIR)/efs.h $(HEADERDIR)/err.h $(SEALSRCDIR)/threading.h
 	$(CC) $(CFLAGS) $(SEALSRCDIR)/src.c
 
-stream.obj : $(SEALSRCDIR)/stream.c $(HEADERDIR)/stream.h $(HEADERDIR)/core.h $(HEADERDIR)/raw.h $(HEADERDIR)/fmt.h $(SEALSRCDIR)/wav.h $(SEALSRCDIR)/ov.h $(SEALSRCDIR)/mpg.h $(HEADERDIR)/err.h
+stream.obj : $(SEALSRCDIR)/stream.c $(HEADERDIR)/stream.h $(HEADERDIR)/raw.h $(HEADERDIR)/fmt.h $(SEALSRCDIR)/wav.h $(SEALSRCDIR)/ov.h $(SEALSRCDIR)/mpg.h $(HEADERDIR)/err.h
 	$(CC) $(CFLAGS) $(SEALSRCDIR)/stream.c
 
-threading.obj : $(SEALSRCDIR)/threading.c $(SEALSRCDIR)/threading.h $(HEADERDIR)/core.h
+threading.obj : $(SEALSRCDIR)/threading.c $(SEALSRCDIR)/threading.h
 	$(CC) $(CFLAGS) $(SEALSRCDIR)/threading.c
 
-wav.obj : $(SEALSRCDIR)/wav.c $(SEALSRCDIR)/wav.h $(HEADERDIR)/core.h $(HEADERDIR)/raw.h $(HEADERDIR)/stream.h $(HEADERDIR)/fmt.h $(SEALSRCDIR)/reader.h $(HEADERDIR)/err.h
+wav.obj : $(SEALSRCDIR)/wav.c $(SEALSRCDIR)/wav.h $(HEADERDIR)/raw.h $(HEADERDIR)/stream.h $(HEADERDIR)/fmt.h $(SEALSRCDIR)/reader.h $(HEADERDIR)/err.h
 	$(CC) $(CFLAGS) $(SEALSRCDIR)/wav.c
 
 bitwise.obj : $(LIBOGGSRCDIR)/bitwise.c

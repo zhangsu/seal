@@ -6,7 +6,6 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <seal/core.h>
 #include <seal/raw.h>
 #include <seal/stream.h>
 #include <seal/err.h>

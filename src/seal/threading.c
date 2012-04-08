@@ -6,7 +6,6 @@
 
 #include <stdlib.h>
 #include <stdint.h>
-#include <seal/core.h>
 #include "threading.h"
 
 #if defined (__unix__)

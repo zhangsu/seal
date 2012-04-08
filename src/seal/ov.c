@@ -8,7 +8,6 @@
 #include <vorbis/codec.h>
 #define OV_EXCLUDE_STATIC_CALLBACKS
 #include <vorbis/vorbisfile.h>
-#include <seal/core.h>
 #include <seal/raw.h>
 #include <seal/stream.h>
 #include <seal/err.h>
