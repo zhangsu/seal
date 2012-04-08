@@ -53,15 +53,6 @@ const char* seal_get_version(void);
 
 void _seal_sleep(unsigned int millisec);
 
-/*
- * OpenAL's error state is not thread-safe and so semaphores are needed unless
- * SEAL_NO_THREAD_SAFETY is defined. Ideally we should lock only before
- * setting the error and unlock after retrieving the error, but that requires
- * a modification to the OpenAL implementation being used...
- */
-void _seal_lock_openal(void);
-void _seal_unlock_openal(void);
-
 /* Common helpers. */
 typedef void _seal_openal_initializer_t(int, unsigned int*);
 typedef void _seal_openal_destroyer_t(int, const unsigned int*);

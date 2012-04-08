@@ -14,8 +14,6 @@
 #include <seal/err.h>
 #include "threading.h"
 
-/* Global lock on OpenAL functions. */
-static void* openal_lock;
 static int neffects_per_src = -1;
 
 static void nop() {}
@@ -126,8 +124,6 @@ seal_startup(const char* device_name)
 
     alcGetIntegerv(device, ALC_MAX_AUXILIARY_SENDS, 1, &neffects_per_src);
 
-    openal_lock = _seal_create_lock();
-
     return SEAL_OK;
 
 clean_all:
@@ -145,12 +141,6 @@ seal_cleanup(void)
 {
     ALCdevice* device;
     ALCcontext* context;
-
-    if (openal_lock == 0)
-        return;
-
-    _seal_destroy_lock(openal_lock);
-    openal_lock = 0;
 
     mpg123_exit();
 
@@ -173,7 +163,6 @@ seal_get_neffects_per_src(void)
 seal_err_t _seal_gen_objs(int n, unsigned int* objs,
                           _seal_openal_initializer_t* generate)
 {
-    _seal_lock_openal();
     generate(n, objs);
 
     return _seal_get_openal_err();
@@ -183,7 +172,6 @@ seal_err_t
 _seal_delete_objs(int n, const unsigned int* objs,
                   _seal_openal_destroyer_t* destroy)
 {
-    _seal_lock_openal();
     destroy(n, objs);
 
     return _seal_get_openal_err();
@@ -228,16 +216,3 @@ _seal_sleep(unsigned int millisec)
 }
 
 #endif /* __unix__, _WIN32 */
-
-void
-_seal_lock_openal(void)
-{
-    _seal_lock(openal_lock);
-}
-
-void
-_seal_unlock_openal(void)
-{
-    _seal_unlock(openal_lock);
-}
-

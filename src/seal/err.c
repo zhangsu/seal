@@ -96,36 +96,21 @@ seal_get_err_msg(seal_err_t err)
     }
 }
 
-/*
- * Always call `_seal_lock_openal' before calling an OpenAL function that
- * could possibly raise an OpenAL error, and then call this function to get
- * the error which will automatically release the lock.
- */
 seal_err_t
 _seal_get_openal_err(void)
 {
-    seal_err_t err;
-
     switch (alGetError()) {
     case AL_INVALID_NAME:
-        err = SEAL_BAD_OBJ;
-        break;
+        return SEAL_BAD_OBJ;
     case AL_INVALID_ENUM:
-        err = SEAL_BAD_ENUM;
-        break;
+        return SEAL_BAD_ENUM;
     case AL_INVALID_VALUE:
-        err = SEAL_BAD_VAL;
-        break;
+        return SEAL_BAD_VAL;
     case AL_INVALID_OPERATION:
-        err = SEAL_BAD_OP;
-        break;
+        return SEAL_BAD_OP;
     case AL_OUT_OF_MEMORY:
-        err = SEAL_CANNOT_ALLOC_MEM;
-        break;
+        return SEAL_CANNOT_ALLOC_MEM;
     default:
-        err = SEAL_OK;
+        return SEAL_OK;
     }
-    _seal_unlock_openal();
-
-    return err;
 }

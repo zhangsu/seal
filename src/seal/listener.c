@@ -13,7 +13,6 @@
 static seal_err_t
 setf(int key, float value)
 {
-    _seal_lock_openal();
     alListenerf(key, value);
 
     return _seal_get_openal_err();
@@ -22,7 +21,6 @@ setf(int key, float value)
 static seal_err_t
 set3f(int key, float x, float y, float z)
 {
-    _seal_lock_openal();
     alListener3f(key, x, y, z);
 
     return _seal_get_openal_err();
@@ -33,7 +31,6 @@ setfv(int key, float* vector)
 {
     assert(vector != 0);
 
-    _seal_lock_openal();
     alListenerfv(key, vector);
 
     return _seal_get_openal_err();
@@ -42,7 +39,6 @@ setfv(int key, float* vector)
 static seal_err_t
 getf(int key, float* pvalue)
 {
-    _seal_lock_openal();
     alGetListenerf(key, pvalue);
 
     return _seal_get_openal_err();
@@ -53,7 +49,6 @@ get3f(int key, float* px, float* py, float* pz)
 {
     assert(px != 0 && py != 0 && pz != 0);
 
-    _seal_lock_openal();
     alGetListener3f(key, px, py, pz);
 
     return _seal_get_openal_err();
@@ -64,7 +59,6 @@ getfv(int key, float* vector)
 {
     assert(vector != 0);
 
-    _seal_lock_openal();
     alGetListenerfv(key, vector);
     if (_seal_get_openal_err() == 0)
         return 0;

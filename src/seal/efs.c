@@ -10,7 +10,6 @@ seti(seal_efs_t* slot, int key, int value)
 {
     assert(alIsAuxiliaryEffectSlot(slot->id));
 
-    _seal_lock_openal();
     alAuxiliaryEffectSloti(slot->id, key, value);
 
     return _seal_get_openal_err();
@@ -21,7 +20,6 @@ geti(seal_efs_t* slot, int key, int* pvalue)
 {
     assert(alIsAuxiliaryEffectSlot(slot->id));
 
-    _seal_lock_openal();
     alGetAuxiliaryEffectSloti(slot->id, key, pvalue);
 
     return _seal_get_openal_err();
@@ -64,7 +62,6 @@ seal_set_efs_gain(seal_efs_t* slot, float gain)
 {
     assert(alIsAuxiliaryEffectSlot(slot->id));
 
-    _seal_lock_openal();
     alAuxiliaryEffectSlotf(slot->id, AL_EFFECTSLOT_GAIN, gain);
 
     return _seal_get_openal_err();
@@ -89,7 +86,6 @@ seal_get_efs_gain(seal_efs_t* slot, float* pgain)
 {
     assert(alIsAuxiliaryEffectSlot(slot->id));
 
-    _seal_lock_openal();
     alGetAuxiliaryEffectSlotf(slot->id, AL_EFFECTSLOT_GAIN, pgain);
 
     return _seal_get_openal_err();

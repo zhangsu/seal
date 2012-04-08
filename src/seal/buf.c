@@ -21,7 +21,6 @@ geti(seal_buf_t* buf, int key, int* pvalue)
 {
     assert(alIsBuffer(buf->id));
 
-    _seal_lock_openal();
     alGetBufferi(buf->id, key, pvalue);
 
     return _seal_get_openal_err();
@@ -68,7 +67,6 @@ _seal_raw2buf(unsigned int buf, seal_raw_t* raw)
 {
     assert(raw != 0 && alIsBuffer(buf));
 
-    _seal_lock_openal();
     alBufferData(buf, _seal_get_buf_fmt(raw->attr.nchannels,
                                         raw->attr.bit_depth),
                  raw->data, raw->size, raw->attr.freq);

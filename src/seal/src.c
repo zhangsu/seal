@@ -50,7 +50,6 @@ operate(seal_src_t* src, void (*op)(unsigned int))
 {
     assert(alIsSource(src->id));
 
-    _seal_lock_openal();
     op(src->id);
 
     return _seal_get_openal_err();
@@ -61,7 +60,6 @@ set3f(seal_src_t* src, int key, float x, float y, float z)
 {
     assert(alIsSource(src->id));
 
-    _seal_lock_openal();
     alSource3f(src->id, key, x, y, z);
 
     return _seal_get_openal_err();
@@ -72,7 +70,6 @@ seti(seal_src_t* src, int key, int value)
 {
     assert(alIsSource(src->id));
 
-    _seal_lock_openal();
     alSourcei(src->id, key, value);
 
     return _seal_get_openal_err();
@@ -83,7 +80,6 @@ setf(seal_src_t* src, int key, float value)
 {
     assert(alIsSource(src->id));
 
-    _seal_lock_openal();
     alSourcef(src->id, key, value);
 
     return _seal_get_openal_err();
@@ -94,7 +90,6 @@ get3f(seal_src_t* src, int key, float* px, float* py, float* pz)
 {
     assert(alIsSource(src->id));
 
-    _seal_lock_openal();
     alGetSource3f(src->id, key, px, py, pz);
 
     return _seal_get_openal_err();
@@ -105,7 +100,6 @@ geti(seal_src_t* src, int key, int* pvalue)
 {
     assert(alIsSource(src->id));
 
-    _seal_lock_openal();
     alGetSourcei(src->id, key, pvalue);
 
     return _seal_get_openal_err();
@@ -116,7 +110,6 @@ getf(seal_src_t* src, int key, float* pvalue)
 {
     assert(alIsSource(src->id));
 
-    _seal_lock_openal();
     alGetSourcef(src->id, key, pvalue);
 
     return _seal_get_openal_err();
@@ -166,7 +159,6 @@ update(void* args)
 static seal_err_t
 queue_op(seal_src_t* src, int nbufs, unsigned int* bufs, queue_op_t* op)
 {
-    _seal_lock_openal();
     op(src->id, nbufs, bufs);
 
     return _seal_get_openal_err();
@@ -427,7 +419,6 @@ seal_mix_src_effect(seal_src_t* src, int index, seal_efs_t* slot)
 {
     assert(alIsSource(src->id) && slot != 0);
 
-    _seal_lock_openal();
     alSource3i(src->id, AL_AUXILIARY_SEND_FILTER, slot->id, index,
                AL_FILTER_NULL);
 

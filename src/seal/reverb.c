@@ -10,7 +10,6 @@ setf(seal_reverb_t* reverb, int key, float value)
 {
     assert(alIsEffect(reverb->id));
 
-    _seal_lock_openal();
     alEffectf(reverb->id, key, value);
 
     return _seal_get_openal_err();
@@ -21,7 +20,6 @@ getf(seal_reverb_t* reverb, int key, float* pvalue)
 {
     assert(alIsEffect(reverb->id));
 
-    _seal_lock_openal();
     alGetEffectf(reverb->id, key, pvalue);
 
     return _seal_get_openal_err();
@@ -35,7 +33,6 @@ seal_init_reverb(seal_reverb_t* reverb)
     if ((err = _seal_init_obj(reverb, alGenEffects)) != SEAL_OK)
         return err;
 
-    _seal_lock_openal();
     alEffecti(reverb->id, AL_EFFECT_TYPE, AL_EFFECT_REVERB);
 
     return _seal_get_openal_err();
@@ -127,7 +124,6 @@ seal_set_reverb_hfdecay_limited(seal_reverb_t* reverb, char limited)
 {
     assert(alIsEffect(reverb->id));
 
-    _seal_lock_openal();
     alEffecti(reverb->id, AL_REVERB_DECAY_HFLIMIT, limited);
 
     return _seal_get_openal_err();
@@ -213,7 +209,6 @@ seal_is_reverb_hfdecay_limited(seal_reverb_t* reverb, char* plimited)
 
     assert(alIsEffect(reverb->id));
 
-    _seal_lock_openal();
     alGetEffecti(reverb->id, AL_REVERB_DECAY_HFLIMIT, &limited);
     if ((err = _seal_get_openal_err()) == SEAL_OK)
         *plimited = limited;
