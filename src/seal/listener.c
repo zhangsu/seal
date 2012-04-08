@@ -52,10 +52,8 @@ static seal_err_t
 getfv(int key, float* vector)
 {
     alGetListenerfv(key, vector);
-    if (_seal_get_openal_err() == 0)
-        return 0;
 
-    return 1;
+    return _seal_get_openal_err();
 }
 
 seal_err_t

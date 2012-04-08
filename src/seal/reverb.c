@@ -11,7 +11,6 @@ seal_init_reverb(seal_reverb_t* reverb)
 
     if ((err = _seal_init_obj(reverb, alGenEffects)) != SEAL_OK)
         return err;
-
     alEffecti(reverb->id, AL_EFFECT_TYPE, AL_EFFECT_REVERB);
 
     return _seal_get_openal_err();
@@ -100,9 +99,7 @@ seal_set_reverb_room_rolloff_factor(seal_reverb_t* reverb, float factor)
 seal_err_t
 seal_set_reverb_hfdecay_limited(seal_reverb_t* reverb, char limited)
 {
-    alEffecti(reverb->id, AL_REVERB_DECAY_HFLIMIT, limited);
-
-    return _seal_get_openal_err();
+    return _seal_seti(reverb, AL_REVERB_DECAY_HFLIMIT, limited, alEffecti);
 }
 
 seal_err_t

@@ -34,9 +34,7 @@ seal_set_efs_effect(seal_efs_t* slot, void* effect)
 seal_err_t
 seal_set_efs_gain(seal_efs_t* slot, float gain)
 {
-    alAuxiliaryEffectSlotf(slot->id, AL_EFFECTSLOT_GAIN, gain);
-
-    return _seal_get_openal_err();
+    return _seal_setf(slot, AL_EFFECTSLOT_GAIN, gain, alAuxiliaryEffectSlotf);
 }
 
 seal_err_t
@@ -55,9 +53,8 @@ seal_get_efs_effect(seal_efs_t* slot)
 seal_err_t
 seal_get_efs_gain(seal_efs_t* slot, float* pgain)
 {
-    alGetAuxiliaryEffectSlotf(slot->id, AL_EFFECTSLOT_GAIN, pgain);
-
-    return _seal_get_openal_err();
+    return _seal_getf(slot, AL_EFFECTSLOT_GAIN, pgain,
+                      alGetAuxiliaryEffectSlotf);
 }
 
 seal_err_t
