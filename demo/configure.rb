@@ -15,7 +15,6 @@ if target_os =~ /mswin|mingw/
   lib_dir = "#{root_dir}/lib"
   cp "#{lib_dir}/libmpg123.dll", '.'
   cp "#{lib_dir}/OpenAL32.dll", '.'
-  cp "#{lib_dir}/wrap_oal.dll", '.'
   have_library('OpenAL32', 'alcOpenDevice')
   have_library('libmpg123', 'mpg123_init')
 elsif target_os =~ /linux/
