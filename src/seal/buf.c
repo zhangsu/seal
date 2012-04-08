@@ -5,7 +5,6 @@
  */
 
 #include <stdlib.h>
-#include <assert.h>
 #include <al/al.h>
 #include <seal/buf.h>
 #include <seal/core.h>
@@ -34,8 +33,6 @@ seal_load2buf(seal_buf_t* buf, const char* filename, seal_fmt_t fmt)
     seal_raw_t raw;
     seal_err_t err;
 
-    assert(alIsBuffer(buf->id));
-
     /* `raw.data' will be dynamically allocated by the callee. */
     if ((err = seal_load(&raw, filename, fmt)) != SEAL_OK)
         return err;
@@ -55,8 +52,6 @@ seal_raw2buf(seal_buf_t* buf, seal_raw_t* raw)
 seal_err_t
 _seal_raw2buf(unsigned int buf, seal_raw_t* raw)
 {
-    assert(raw != 0 && alIsBuffer(buf));
-
     alBufferData(buf, _seal_get_buf_fmt(raw->attr.nchannels,
                                         raw->attr.bit_depth),
                  raw->data, raw->size, raw->attr.freq);
@@ -93,8 +88,6 @@ seal_load(seal_raw_t* raw, const char* filename, seal_fmt_t fmt)
 {
     seal_err_t err;
 
-    assert(raw != 0);
-
     if ((err = seal_ensure_fmt_known(filename, &fmt)) != SEAL_OK)
         return err;
 
@@ -124,8 +117,6 @@ seal_load(seal_raw_t* raw, const char* filename, seal_fmt_t fmt)
 int
 _seal_get_buf_fmt(int nchannels, int bit_depth)
 {
-    assert(nchannels > 0 && bit_depth > 0);
-
     if (nchannels == 1)
         RETURN_FMT_CONST(bit_depth, MONO);
     else

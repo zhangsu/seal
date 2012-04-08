@@ -5,7 +5,6 @@
  */
 
 #include <stddef.h>
-#include <assert.h>
 #include <seal/stream.h>
 #include <seal/raw.h>
 #include <seal/fmt.h>
@@ -42,8 +41,6 @@ seal_open_stream(seal_stream_t* stream, const char* filename, seal_fmt_t fmt)
 seal_err_t
 seal_stream(seal_stream_t* stream, seal_raw_t* raw, size_t* psize)
 {
-    assert(raw->size > 0);
-
     if (stream->id == 0)
         return SEAL_STREAM_UNOPENED;
 

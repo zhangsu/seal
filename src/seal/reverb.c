@@ -1,4 +1,3 @@
-#include <assert.h>
 #include <al/al.h>
 #include <al/efx.h>
 #include <seal/reverb.h>
@@ -101,8 +100,6 @@ seal_set_reverb_room_rolloff_factor(seal_reverb_t* reverb, float factor)
 seal_err_t
 seal_set_reverb_hfdecay_limited(seal_reverb_t* reverb, char limited)
 {
-    assert(alIsEffect(reverb->id));
-
     alEffecti(reverb->id, AL_REVERB_DECAY_HFLIMIT, limited);
 
     return _seal_get_openal_err();
@@ -191,8 +188,6 @@ seal_is_reverb_hfdecay_limited(seal_reverb_t* reverb, char* plimited)
 {
     int limited;
     seal_err_t err;
-
-    assert(alIsEffect(reverb->id));
 
     alGetEffecti(reverb->id, AL_REVERB_DECAY_HFLIMIT, &limited);
     if ((err = _seal_get_openal_err()) == SEAL_OK)

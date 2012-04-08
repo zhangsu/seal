@@ -6,7 +6,6 @@
 
 #include <string.h>
 #include <stdlib.h>
-#include <assert.h>
 #include <al/al.h>
 #include <al/efx.h>
 #include <seal/src.h>
@@ -48,8 +47,6 @@ limit_val(int val, int lower_bound, int upper_bound)
 static seal_err_t
 operate(seal_src_t* src, void (*op)(unsigned int))
 {
-    assert(alIsSource(src->id));
-
     op(src->id);
 
     return _seal_get_openal_err();
@@ -58,8 +55,6 @@ operate(seal_src_t* src, void (*op)(unsigned int))
 static seal_err_t
 set3f(seal_src_t* src, int key, float x, float y, float z)
 {
-    assert(alIsSource(src->id));
-
     alSource3f(src->id, key, x, y, z);
 
     return _seal_get_openal_err();
@@ -68,8 +63,6 @@ set3f(seal_src_t* src, int key, float x, float y, float z)
 static seal_err_t
 get3f(seal_src_t* src, int key, float* px, float* py, float* pz)
 {
-    assert(alIsSource(src->id));
-
     alGetSource3f(src->id, key, px, py, pz);
 
     return _seal_get_openal_err();
@@ -330,8 +323,6 @@ seal_set_src_buf(seal_src_t* src, seal_buf_t* buf)
 {
     seal_err_t err;
 
-    assert(alIsSource(src->id) && buf != 0);
-
     /* Make sure `src' is not currently a streaming source. */
     if (src->stream != 0)
         return SEAL_MIXING_SRC_TYPE;
@@ -351,8 +342,6 @@ seal_err_t
 seal_set_src_stream(seal_src_t* src, seal_stream_t* stream)
 {
     seal_err_t err;
-
-    assert(alIsSource(src->id) && stream != 0);
 
     if (stream == src->stream)
         return SEAL_OK;
@@ -380,8 +369,6 @@ seal_set_src_stream(seal_src_t* src, seal_stream_t* stream)
 seal_err_t
 seal_mix_src_effect(seal_src_t* src, int index, seal_efs_t* slot)
 {
-    assert(alIsSource(src->id) && slot != 0);
-
     alSource3i(src->id, AL_AUXILIARY_SEND_FILTER, slot->id, index,
                AL_FILTER_NULL);
 
@@ -473,8 +460,6 @@ start_streaming:
 seal_err_t
 seal_set_src_queue_size(seal_src_t* src, size_t size)
 {
-    assert(alIsSource(src->id));
-
     src->queue_size = limit_val(size, MIN_QUEUE_SIZE, MAX_QUEUE_SIZE);
 
     return SEAL_OK;
@@ -483,8 +468,6 @@ seal_set_src_queue_size(seal_src_t* src, size_t size)
 seal_err_t
 seal_set_src_chunk_size(seal_src_t* src, size_t size)
 {
-    assert(alIsSource(src->id));
-
     src->chunk_size = limit_val(size, MIN_CHUNK_SIZE, MAX_CHUNK_SIZE)
                       / MIN_CHUNK_SIZE * MIN_CHUNK_SIZE;
 
@@ -552,24 +535,18 @@ seal_set_src_looping(seal_src_t* src, char looping)
 seal_buf_t*
 seal_get_src_buf(seal_src_t* src)
 {
-    assert(alIsSource(src->id));
-
     return src->buf;
 }
 
 seal_stream_t*
 seal_get_src_stream(seal_src_t* src)
 {
-    assert(alIsSource(src->id));
-
     return src->stream;
 }
 
 seal_err_t
 seal_get_src_queue_size(seal_src_t* src, size_t* psize)
 {
-    assert(alIsSource(src->id));
-
     *psize = src->queue_size;
 
     return SEAL_OK;
@@ -578,8 +555,6 @@ seal_get_src_queue_size(seal_src_t* src, size_t* psize)
 seal_err_t
 seal_get_src_chunk_size(seal_src_t* src, size_t* psize)
 {
-    assert(alIsSource(src->id));
-
     *psize = src->chunk_size;
 
     return SEAL_OK;
@@ -612,8 +587,6 @@ seal_get_src_gain(seal_src_t* src, float* pgain)
 seal_err_t
 seal_is_src_auto(seal_src_t* src, char* pauto)
 {
-    assert(alIsSource(src->id));
-
     *pauto = src->automatic;
 
     return SEAL_OK;
@@ -628,8 +601,6 @@ seal_is_src_relative(seal_src_t* src, char* prelative)
 seal_err_t
 seal_is_src_looping(seal_src_t* src, char* plooping)
 {
-    assert(alIsSource(src->id));
-
     *plooping = src->looping;
 
     return SEAL_OK;

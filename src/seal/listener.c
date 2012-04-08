@@ -4,7 +4,6 @@
  * attached with the library.
  */
 
-#include <assert.h>
 #include <al/al.h>
 #include <seal/listener.h>
 #include <seal/err.h>
@@ -28,8 +27,6 @@ set3f(int key, float x, float y, float z)
 static seal_err_t
 setfv(int key, float* vector)
 {
-    assert(vector != 0);
-
     alListenerfv(key, vector);
 
     return _seal_get_openal_err();
@@ -46,8 +43,6 @@ getf(int key, float* pval)
 static seal_err_t
 get3f(int key, float* px, float* py, float* pz)
 {
-    assert(px != 0 && py != 0 && pz != 0);
-
     alGetListener3f(key, px, py, pz);
 
     return _seal_get_openal_err();
@@ -56,8 +51,6 @@ get3f(int key, float* px, float* py, float* pz)
 static seal_err_t
 getfv(int key, float* vector)
 {
-    assert(vector != 0);
-
     alGetListenerfv(key, vector);
     if (_seal_get_openal_err() == 0)
         return 0;

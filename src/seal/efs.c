@@ -1,4 +1,3 @@
-#include <assert.h>
 #include <al/al.h>
 #include <al/efx.h>
 #include <seal/efs.h>
@@ -23,8 +22,6 @@ seal_set_efs_effect(seal_efs_t* slot, void* effect)
 {
     seal_err_t err;
 
-    assert(effect != 0);
-
     err = _seal_seti(slot, AL_EFFECTSLOT_EFFECT,
                      effect == 0 ? AL_EFFECT_NULL : _seal_openal_id(effect),
                      alAuxiliaryEffectSloti);
@@ -37,8 +34,6 @@ seal_set_efs_effect(seal_efs_t* slot, void* effect)
 seal_err_t
 seal_set_efs_gain(seal_efs_t* slot, float gain)
 {
-    assert(alIsAuxiliaryEffectSlot(slot->id));
-
     alAuxiliaryEffectSlotf(slot->id, AL_EFFECTSLOT_GAIN, gain);
 
     return _seal_get_openal_err();
@@ -54,16 +49,12 @@ seal_set_efs_auto(seal_efs_t* slot, char automatic)
 void*
 seal_get_efs_effect(seal_efs_t* slot)
 {
-    assert(alIsAuxiliaryEffectSlot(slot->id));
-
     return slot->effect;
 }
 
 seal_err_t
 seal_get_efs_gain(seal_efs_t* slot, float* pgain)
 {
-    assert(alIsAuxiliaryEffectSlot(slot->id));
-
     alGetAuxiliaryEffectSlotf(slot->id, AL_EFFECTSLOT_GAIN, pgain);
 
     return _seal_get_openal_err();

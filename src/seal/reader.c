@@ -10,7 +10,6 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stddef.h>
-#include <assert.h>
 #include <seal/err.h>
 #include "reader.h"
 
@@ -62,8 +61,6 @@ _seal_fclose(FILE* file)
 {                                                                           \
     size_t _i_;                                                             \
                                                                             \
-    assert((buf) != 0 && (size) > 0);                                       \
-                                                                            \
     fread((buf), sizeof (uint##nbits##_t), (size), (file));                 \
     for (_i_ = 0; _i_ < (size); ++_i_) {                                    \
         *(buf) = raw2le##nbits((uint8_t*) (buf));                           \
@@ -93,8 +90,6 @@ _seal_skip(uint32_t nbytes, void* file)
 {
     uint32_t i;
     static uint8_t junk[JUNK_BUF_SIZE];
-
-    assert(file != 0);
 
     for (i = JUNK_BUF_SIZE; i <= nbytes; i += JUNK_BUF_SIZE)
         fread(junk, 1, JUNK_BUF_SIZE, file);

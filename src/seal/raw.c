@@ -6,7 +6,6 @@
 
 #include <stdlib.h>
 #include <stddef.h>
-#include <assert.h>
 #include <seal/raw.h>
 #include <seal/err.h>
 
@@ -28,8 +27,6 @@ realloc_raw_data(seal_raw_t* raw, size_t size)
 seal_err_t
 seal_alloc_raw_data(seal_raw_t* raw, size_t size)
 {
-    assert(size > 0);
-
     raw->size = size;
     raw->data = malloc(size);
     if (raw->data == 0)

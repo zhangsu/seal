@@ -6,7 +6,6 @@
 
 #include <stdio.h>
 #include <stdint.h>
-#include <assert.h>
 #include <seal/fmt.h>
 #include <seal/err.h>
 #include "reader.h"
