@@ -193,7 +193,7 @@ seal_err_t
 seal_init_src(seal_src_t* src)
 {
     seal_err_t err = _seal_init_obj(src, alGenSources);
-    /* @todo fix error checking on uninitialized (but allocated) source. */
+
     if (err == SEAL_OK) {
         src->buf = 0;
         src->stream = 0;

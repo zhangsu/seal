@@ -161,10 +161,6 @@ seal_err_t seal_mix_src_effect(seal_src_t*, int /*index*/,
  * update is on.
  *
  * @param src       the source to update
- * @todo remove the next return statement...?
- * @return          nonzero if successfully updated, 0 if end of stream is
- *                  reached and the source is not looping; -1 if an error
- *                  occurs
  */
 seal_err_t seal_update_src(seal_src_t*);
 

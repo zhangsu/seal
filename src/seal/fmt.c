@@ -64,7 +64,6 @@ seal_recognize_fmt(const char* filename, seal_fmt_t* pfmt)
         break;
     }
 
-    /* @TODO fix AND operation. */
     if ((magic_nums[0] & TAG_) == TAG_ ||
         (magic_nums[0] & ID3_) == ID3_ ||
         (magic_nums[0] & SYNC) == SYNC) {
