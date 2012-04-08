@@ -41,7 +41,7 @@ endif
 
 .PHONY : clean
 
-all : $(SEALOUTPUT) $(TESTOUTPUT) $(addprefix $(OBJDIR)/, OpenAL32.dll libmpg123.dll wrap_oal.dll)
+all : $(SEALOUTPUT) $(TESTOUTPUT) $(addprefix $(OBJDIR)/, OpenAL32.dll libmpg123.dll)
 
 $(SEALOBJDIR)/ :
 	$(MKDIR) $(SEALOBJDIR)/

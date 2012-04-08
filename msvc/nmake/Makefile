@@ -18,7 +18,7 @@ SEALOUTPUT      = seal.dll
 SEALLIBOUTPUT   = seal.lib
 TESTOUTPUT      = test.exe
 
-all : $(SEALOUTPUT) $(TESTOUTPUT) OpenAL32.dll libmpg123.dll wrap_oal.dll
+all : $(SEALOUTPUT) $(TESTOUTPUT) OpenAL32.dll libmpg123.dll
 
 OpenAL32.dll : $(LIBDIR)/$@
 	copy /Y ..\..\lib\$@ .
@@ -58,7 +58,7 @@ listener.obj : $(SEALSRCDIR)/listener.c $(HEADERDIR)/listener.h $(HEADERDIR)/err
 mpg.obj : $(SEALSRCDIR)/mpg.c $(SEALSRCDIR)/mpg.h $(HEADERDIR)/raw.h $(HEADERDIR)/stream.h $(HEADERDIR)/fmt.h $(HEADERDIR)/err.h
 	$(CC) $(CFLAGS) $(SEALSRCDIR)/mpg.c
 
-ov.obj : $(SEALSRCDIR)/ov.c $(SEALSRCDIR)/ov.h $(HEADERDIR)/ $(HEADERDIR)/raw.h $(HEADERDIR)/stream.h $(HEADERDIR)/fmt.h $(SEALSRCDIR)/reader.h $(HEADERDIR)/err.h
+ov.obj : $(SEALSRCDIR)/ov.c $(SEALSRCDIR)/ov.h $(HEADERDIR)/raw.h $(HEADERDIR)/stream.h $(HEADERDIR)/fmt.h $(SEALSRCDIR)/reader.h $(HEADERDIR)/err.h
 	$(CC) $(CFLAGS) $(SEALSRCDIR)/ov.c
 
 raw.obj : $(SEALSRCDIR)/raw.c $(HEADERDIR)/raw.h $(HEADERDIR)/err.h
