@@ -173,8 +173,15 @@ seal_get_neffects_per_src(void)
     return neffects_per_src;
 }
 
+unsigned int
+_seal_openal_id(void* obj)
+{
+    /* Hack: assuming the object id is always at offset 0. */
+    return *(unsigned int*) obj;
+}
 
-seal_err_t _seal_gen_objs(int n, unsigned int* objs,
+seal_err_t
+_seal_gen_objs(int n, unsigned int* objs,
                           _seal_openal_initializer_t* generate)
 {
     generate(n, objs);
@@ -194,7 +201,6 @@ _seal_delete_objs(int n, const unsigned int* objs,
 seal_err_t
 _seal_init_obj(void* obj, _seal_openal_initializer_t* allocate)
 {
-    /* Hack: assuming the object id is always at offset 0. */
     return _seal_gen_objs(1, obj, allocate);
 }
 
@@ -202,8 +208,7 @@ seal_err_t
 _seal_destroy_obj(void* obj, _seal_openal_destroyer_t* destroy,
                   _seal_openal_validator_t* valid)
 {
-    /* Hack: assuming the object id is always at offset 0. */
-    if (valid(*(unsigned int*) obj))
+    if (valid(_seal_openal_id(obj)))
         return _seal_delete_objs(1, obj, destroy);
 
     return SEAL_OK;
@@ -213,8 +218,7 @@ seal_err_t
 _seal_setf(void* obj, int key, float val, _seal_openal_setterf* set,
            _seal_openal_validator_t* valid)
 {
-    /* Hack: assuming the object id is always at offset 0. */
-    unsigned int id = *(unsigned int*) obj;
+    unsigned int id = _seal_openal_id(obj);
 
     assert(valid(id));
     set(id, key, val);
@@ -226,8 +230,7 @@ seal_err_t
 _seal_getf(void* obj, int key, float* pval, _seal_openal_getterf* get,
            _seal_openal_validator_t* valid)
 {
-    /* Hack: assuming the object id is always at offset 0. */
-    unsigned int id = *(unsigned int*) obj;
+    unsigned int id = _seal_openal_id(obj);
 
     assert(valid(id));
     get(id, key, pval);

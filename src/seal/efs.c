@@ -45,9 +45,8 @@ seal_set_efs_effect(seal_efs_t* slot, void* effect)
 
     assert(effect != 0);
 
-    /* Hack: assuming the effect slot id is always at offset 0. */
     err = seti(slot, AL_EFFECTSLOT_EFFECT,
-               effect == 0 ? AL_EFFECT_NULL : *(unsigned int*) effect);
+               effect == 0 ? AL_EFFECT_NULL : _seal_openal_id(effect));
     if (err == SEAL_OK)
         slot->effect = effect;
 
