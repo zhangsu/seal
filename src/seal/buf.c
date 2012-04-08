@@ -16,16 +16,6 @@
 #include "mpg.h"
 #include "wav.h"
 
-static seal_err_t
-geti(seal_buf_t* buf, int key, int* pval)
-{
-    assert(alIsBuffer(buf->id));
-
-    alGetBufferi(buf->id, key, pval);
-
-    return _seal_get_openal_err();
-}
-
 seal_err_t
 seal_init_buf(seal_buf_t* buf)
 {
@@ -77,25 +67,25 @@ _seal_raw2buf(unsigned int buf, seal_raw_t* raw)
 seal_err_t
 seal_get_buf_size(seal_buf_t* buf, int* psize)
 {
-    return geti(buf, AL_SIZE, psize);
+    return _seal_geti(buf, AL_SIZE, psize, alGetBufferi);
 }
 
 seal_err_t
 seal_get_buf_freq(seal_buf_t* buf, int* pfreq)
 {
-    return geti(buf, AL_FREQUENCY, pfreq);
+    return _seal_geti(buf, AL_FREQUENCY, pfreq, alGetBufferi);
 }
 
 seal_err_t
 seal_get_buf_bps(seal_buf_t* buf, int* pbps)
 {
-    return geti(buf, AL_BITS, pbps);
+    return _seal_geti(buf, AL_BITS, pbps, alGetBufferi);
 }
 
 seal_err_t
 seal_get_buf_nchannels(seal_buf_t* buf, int* pnchannels)
 {
-    return geti(buf, AL_CHANNELS, pnchannels);
+    return _seal_geti(buf, AL_CHANNELS, pnchannels, alGetBufferi);
 }
 
 seal_err_t

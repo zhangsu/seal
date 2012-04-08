@@ -59,6 +59,8 @@ typedef void _seal_openal_destroyer_t(int, const unsigned int*);
 typedef char _seal_openal_validator_t(unsigned int);
 typedef void _seal_openal_setterf(unsigned int, int, float);
 typedef void _seal_openal_getterf(unsigned int, int, float*);
+typedef void _seal_openal_setteri(unsigned int, int, int);
+typedef void _seal_openal_getteri(unsigned int, int, int*);
 /* Common helpers. */
 unsigned int _seal_openal_id(void*);
 seal_err_t _seal_gen_objs(int, unsigned int*, _seal_openal_initializer_t*);
@@ -67,10 +69,10 @@ seal_err_t _seal_delete_objs(int, const unsigned int*,
 seal_err_t _seal_init_obj(void*, _seal_openal_initializer_t*);
 seal_err_t _seal_destroy_obj(void*, _seal_openal_destroyer_t*,
                              _seal_openal_validator_t*);
-seal_err_t _seal_setf(void*, int, float, _seal_openal_setterf*,
-                      _seal_openal_validator_t*);
-seal_err_t _seal_getf(void*, int, float*, _seal_openal_getterf*,
-                      _seal_openal_validator_t*);
+seal_err_t _seal_setf(void*, int, float, _seal_openal_setterf*);
+seal_err_t _seal_getf(void*, int, float*, _seal_openal_getterf*);
+seal_err_t _seal_seti(void*, int, int, _seal_openal_setteri*);
+seal_err_t _seal_geti(void*, int, int*, _seal_openal_getteri*);
 
 /* OpenAL effect extension functions. */
 extern _seal_openal_initializer_t* alGenEffects;

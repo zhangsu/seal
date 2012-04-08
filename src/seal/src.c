@@ -66,31 +66,11 @@ set3f(seal_src_t* src, int key, float x, float y, float z)
 }
 
 static seal_err_t
-seti(seal_src_t* src, int key, int val)
-{
-    assert(alIsSource(src->id));
-
-    alSourcei(src->id, key, val);
-
-    return _seal_get_openal_err();
-}
-
-static seal_err_t
 get3f(seal_src_t* src, int key, float* px, float* py, float* pz)
 {
     assert(alIsSource(src->id));
 
     alGetSource3f(src->id, key, px, py, pz);
-
-    return _seal_get_openal_err();
-}
-
-static seal_err_t
-geti(seal_src_t* src, int key, int* pval)
-{
-    assert(alIsSource(src->id));
-
-    alGetSourcei(src->id, key, pval);
 
     return _seal_get_openal_err();
 }
@@ -102,7 +82,8 @@ getb(seal_src_t* src, int key, char* pval)
     int val;
     seal_err_t err;
 
-    if ((err = geti(src, key, &val)) == SEAL_OK)
+    err = _seal_geti(src, key, &val, alGetSourcei);
+    if (err == SEAL_OK)
         *pval = val;
 
     return err;
@@ -165,8 +146,9 @@ clean_queue(seal_src_t* src)
 
     /* Do not let the updater touch anything when cleaning the queue. */
     wait4updater(src);
-
-    if ((err = geti(src, AL_BUFFERS_PROCESSED, &nbufs_processed)) != SEAL_OK)
+    err = _seal_geti(src, AL_BUFFERS_PROCESSED, &nbufs_processed,
+                     alGetSourcei);
+    if (err != SEAL_OK)
         return err;
 
     bufs = malloc(sizeof (unsigned int) * nbufs_processed);
@@ -335,7 +317,7 @@ seal_detach_src_audio(seal_src_t* src)
     if ((err = operate(src, alSourceRewind)) != SEAL_OK)
         return err;
 
-    if ((err = seti(src, AL_BUFFER, AL_NONE)) == SEAL_OK) {
+    if ((err = _seal_seti(src, AL_BUFFER, AL_NONE, alSourcei)) == SEAL_OK) {
         src->buf = 0;
         src->stream = 0;
     }
@@ -355,10 +337,11 @@ seal_set_src_buf(seal_src_t* src, seal_buf_t* buf)
         return SEAL_MIXING_SRC_TYPE;
 
     /* Carry the previous looping state over for static sources. */
-    if ((err = seti(src, AL_LOOPING, src->looping)) != SEAL_OK)
+    err = _seal_seti(src, AL_LOOPING, src->looping, alSourcei);
+    if (err != SEAL_OK)
         return err;
 
-    if ((err = seti(src, AL_BUFFER, buf->id)) == SEAL_OK)
+    if ((err = _seal_seti(src, AL_BUFFER, buf->id, alSourcei)) == SEAL_OK)
         src->buf = buf;
 
     return err;
@@ -385,7 +368,7 @@ seal_set_src_stream(seal_src_t* src, seal_stream_t* stream)
         return SEAL_MIXING_STREAM_FMT;
 
     /* Never use AL_LOOPING for streaming sources. */
-    if ((err = seti(src, AL_LOOPING, 0)) != SEAL_OK)
+    if ((err = _seal_seti(src, AL_LOOPING, 0, alSourcei)) != SEAL_OK)
         return err;
 
     src->stream = stream;
@@ -428,9 +411,12 @@ seal_update_src(seal_src_t* src)
     for (;;) {
         int nqueued, nprocessed;
 
-        if ((err = geti(src, AL_BUFFERS_QUEUED, &nqueued)) != SEAL_OK)
+        err = _seal_geti(src, AL_BUFFERS_QUEUED, &nqueued, alGetSourcei);
+        if (err != SEAL_OK)
             return err;
-        if ((err = geti(src, AL_BUFFERS_PROCESSED, &nprocessed)) != SEAL_OK)
+        err = _seal_geti(src, AL_BUFFERS_PROCESSED, &nprocessed,
+                         alGetSourcei);
+        if (err != SEAL_OK)
             return err;
 
         /* Remove processed buffers from the queue if possible. */
@@ -520,13 +506,13 @@ seal_set_src_vel(seal_src_t* src, float x, float y, float z)
 seal_err_t
 seal_set_src_pitch(seal_src_t* src, float pitch)
 {
-    return _seal_setf(src, AL_PITCH, pitch, alSourcef, alIsSource);
+    return _seal_setf(src, AL_PITCH, pitch, alSourcef);
 }
 
 seal_err_t
 seal_set_src_gain(seal_src_t* src, float gain)
 {
-    return _seal_setf(src, AL_GAIN, gain, alSourcef, alIsSource);
+    return _seal_setf(src, AL_GAIN, gain, alSourcef);
 }
 
 seal_err_t
@@ -540,7 +526,7 @@ seal_set_src_auto(seal_src_t* src, char automatic)
 seal_err_t
 seal_set_src_relative(seal_src_t* src, char relative)
 {
-    return seti(src, AL_SOURCE_RELATIVE, relative != 0);
+    return _seal_seti(src, AL_SOURCE_RELATIVE, relative != 0, alSourcei);
 }
 
 seal_err_t
@@ -553,7 +539,7 @@ seal_set_src_looping(seal_src_t* src, char looping)
      * `AL_LOOPING' only for static sources.
      */
     if (src->stream == 0) {
-        seal_err_t err = seti(src, AL_LOOPING, looping);
+        seal_err_t err = _seal_seti(src, AL_LOOPING, looping, alSourcei);
         if (err != SEAL_OK)
             return err;
     }
@@ -614,13 +600,13 @@ seal_get_src_vel(seal_src_t* src, float* px, float* py, float* pz)
 seal_err_t
 seal_get_src_pitch(seal_src_t* src, float* ppitch)
 {
-    return _seal_getf(src, AL_PITCH, ppitch, alGetSourcef, alIsSource);
+    return _seal_getf(src, AL_PITCH, ppitch, alGetSourcef);
 }
 
 seal_err_t
 seal_get_src_gain(seal_src_t* src, float* pgain)
 {
-    return _seal_getf(src, AL_GAIN, pgain, alGetSourcef, alIsSource);
+    return _seal_getf(src, AL_GAIN, pgain, alGetSourcef);
 }
 
 seal_err_t
@@ -655,7 +641,8 @@ seal_get_src_type(seal_src_t* src, seal_src_type_t* ptype)
     int type;
     seal_err_t err;
 
-    if ((err = geti(src, AL_SOURCE_TYPE, &type)) == SEAL_OK) {
+    err = _seal_geti(src, AL_SOURCE_TYPE, &type, alGetSourcei);
+    if (err == SEAL_OK) {
         switch (type) {
         case AL_STATIC:
             *ptype = SEAL_STATIC;
@@ -677,7 +664,8 @@ seal_get_src_state(seal_src_t* src, seal_src_state_t* pstate)
     int state;
     seal_err_t err;
 
-    if ((err = geti(src, AL_SOURCE_STATE, &state)) == SEAL_OK) {
+    err = _seal_geti(src, AL_SOURCE_STATE, &state, alGetSourcei);
+    if (err == SEAL_OK) {
         switch (state) {
         case AL_PLAYING:
             *pstate = SEAL_PLAYING;

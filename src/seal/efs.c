@@ -5,26 +5,6 @@
 #include <seal/core.h>
 #include <seal/err.h>
 
-static seal_err_t
-seti(seal_efs_t* slot, int key, int val)
-{
-    assert(alIsAuxiliaryEffectSlot(slot->id));
-
-    alAuxiliaryEffectSloti(slot->id, key, val);
-
-    return _seal_get_openal_err();
-}
-
-static seal_err_t
-geti(seal_efs_t* slot, int key, int* pval)
-{
-    assert(alIsAuxiliaryEffectSlot(slot->id));
-
-    alGetAuxiliaryEffectSloti(slot->id, key, pval);
-
-    return _seal_get_openal_err();
-}
-
 seal_err_t
 seal_init_efs(seal_efs_t* slot)
 {
@@ -45,8 +25,9 @@ seal_set_efs_effect(seal_efs_t* slot, void* effect)
 
     assert(effect != 0);
 
-    err = seti(slot, AL_EFFECTSLOT_EFFECT,
-               effect == 0 ? AL_EFFECT_NULL : _seal_openal_id(effect));
+    err = _seal_seti(slot, AL_EFFECTSLOT_EFFECT,
+                     effect == 0 ? AL_EFFECT_NULL : _seal_openal_id(effect),
+                     alAuxiliaryEffectSloti);
     if (err == SEAL_OK)
         slot->effect = effect;
 
@@ -66,7 +47,8 @@ seal_set_efs_gain(seal_efs_t* slot, float gain)
 seal_err_t
 seal_set_efs_auto(seal_efs_t* slot, char automatic)
 {
-    return seti(slot, AL_EFFECTSLOT_AUXILIARY_SEND_AUTO, automatic);
+    return _seal_seti(slot, AL_EFFECTSLOT_AUXILIARY_SEND_AUTO, automatic,
+                      alAuxiliaryEffectSloti);
 }
 
 void*
@@ -93,7 +75,8 @@ seal_is_efs_auto(seal_efs_t* slot, char* pauto)
     int automatic;
     seal_err_t err;
 
-    err = geti(slot, AL_EFFECTSLOT_AUXILIARY_SEND_AUTO, &automatic);
+    err = _seal_geti(slot, AL_EFFECTSLOT_AUXILIARY_SEND_AUTO, &automatic,
+                     alGetAuxiliaryEffectSloti);
     if (err == SEAL_OK)
         *pauto = automatic;
 

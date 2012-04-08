@@ -6,7 +6,6 @@
 
 #include <stdlib.h>
 #include <stddef.h>
-#include <assert.h>
 #include <al/al.h>
 #include <al/alc.h>
 #include <al/efx.h>
@@ -215,25 +214,33 @@ _seal_destroy_obj(void* obj, _seal_openal_destroyer_t* destroy,
 }
 
 seal_err_t
-_seal_setf(void* obj, int key, float val, _seal_openal_setterf* set,
-           _seal_openal_validator_t* valid)
+_seal_setf(void* obj, int key, float val, _seal_openal_setterf* set)
 {
-    unsigned int id = _seal_openal_id(obj);
-
-    assert(valid(id));
-    set(id, key, val);
+    set(_seal_openal_id(obj), key, val);
 
     return _seal_get_openal_err();
 }
 
 seal_err_t
-_seal_getf(void* obj, int key, float* pval, _seal_openal_getterf* get,
-           _seal_openal_validator_t* valid)
+_seal_getf(void* obj, int key, float* pval, _seal_openal_getterf* get)
 {
-    unsigned int id = _seal_openal_id(obj);
+    get(_seal_openal_id(obj), key, pval);
 
-    assert(valid(id));
-    get(id, key, pval);
+    return _seal_get_openal_err();
+}
+
+seal_err_t
+_seal_seti(void* obj, int key, int val, _seal_openal_setteri* set)
+{
+    set(_seal_openal_id(obj), key, val);
+
+    return _seal_get_openal_err();
+}
+
+seal_err_t
+_seal_geti(void* obj, int key, int* pval, _seal_openal_getteri* get)
+{
+    get(_seal_openal_id(obj), key, pval);
 
     return _seal_get_openal_err();
 }
