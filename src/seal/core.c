@@ -245,6 +245,19 @@ _seal_geti(void* obj, int key, int* pval, _seal_openal_getteri* get)
     return _seal_get_openal_err();
 }
 
+seal_err_t
+_seal_getb(void* obj, int key, char* pval, _seal_openal_getteri* get)
+{
+    int val;
+    seal_err_t err;
+
+    err = _seal_geti(obj, key, &val, get);
+    if (err == SEAL_OK)
+        *pval = val;
+
+    return err;
+}
+
 #if defined (__unix__)
 
 #include <unistd.h>

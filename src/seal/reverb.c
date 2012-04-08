@@ -183,12 +183,6 @@ seal_get_reverb_room_rolloff_factor(seal_reverb_t* reverb, float* pfactor)
 seal_err_t
 seal_is_reverb_hfdecay_limited(seal_reverb_t* reverb, char* plimited)
 {
-    int limited;
-    seal_err_t err;
-
-    alGetEffecti(reverb->id, AL_REVERB_DECAY_HFLIMIT, &limited);
-    if ((err = _seal_get_openal_err()) == SEAL_OK)
-        *plimited = limited;
-
-    return err;
+    return _seal_getb(reverb, AL_REVERB_DECAY_HFLIMIT, plimited,
+                      alGetEffecti);
 }

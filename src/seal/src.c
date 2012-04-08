@@ -68,20 +68,6 @@ get3f(seal_src_t* src, int key, float* px, float* py, float* pz)
     return _seal_get_openal_err();
 }
 
-/* @todo factor this function. */
-static seal_err_t
-getb(seal_src_t* src, int key, char* pval)
-{
-    int val;
-    seal_err_t err;
-
-    err = _seal_geti(src, key, &val, alGetSourcei);
-    if (err == SEAL_OK)
-        *pval = val;
-
-    return err;
-}
-
 static void
 wait4updater(seal_src_t* src)
 {
@@ -595,7 +581,7 @@ seal_is_src_auto(seal_src_t* src, char* pauto)
 seal_err_t
 seal_is_src_relative(seal_src_t* src, char* prelative)
 {
-    return getb(src, AL_SOURCE_RELATIVE, prelative);
+    return _seal_getb(src, AL_SOURCE_RELATIVE, prelative, alGetSourcei);
 }
 
 seal_err_t

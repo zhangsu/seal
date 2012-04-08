@@ -60,13 +60,6 @@ seal_get_efs_gain(seal_efs_t* slot, float* pgain)
 seal_err_t
 seal_is_efs_auto(seal_efs_t* slot, char* pauto)
 {
-    int automatic;
-    seal_err_t err;
-
-    err = _seal_geti(slot, AL_EFFECTSLOT_AUXILIARY_SEND_AUTO, &automatic,
-                     alGetAuxiliaryEffectSloti);
-    if (err == SEAL_OK)
-        *pauto = automatic;
-
-    return err;
+    return _seal_getb(slot, AL_EFFECTSLOT_AUXILIARY_SEND_AUTO, pauto,
+                      alGetAuxiliaryEffectSloti);
 }
