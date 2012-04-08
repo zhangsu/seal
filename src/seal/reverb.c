@@ -5,26 +5,6 @@
 #include <seal/core.h>
 #include <seal/err.h>
 
-static seal_err_t
-setf(seal_reverb_t* reverb, int key, float value)
-{
-    assert(alIsEffect(reverb->id));
-
-    alEffectf(reverb->id, key, value);
-
-    return _seal_get_openal_err();
-}
-
-static seal_err_t
-getf(seal_reverb_t* reverb, int key, float* pvalue)
-{
-    assert(alIsEffect(reverb->id));
-
-    alGetEffectf(reverb->id, key, pvalue);
-
-    return _seal_get_openal_err();
-}
-
 seal_err_t
 seal_init_reverb(seal_reverb_t* reverb)
 {
@@ -47,73 +27,84 @@ seal_destroy_reverb(seal_reverb_t* reverb)
 seal_err_t
 seal_set_reverb_density(seal_reverb_t* reverb, float density)
 {
-    return setf(reverb, AL_REVERB_DENSITY, density);
+    return _seal_setf(reverb, AL_REVERB_DENSITY, density, alEffectf,
+                      alIsEffect);
 }
 
 seal_err_t
 seal_set_reverb_diffusion(seal_reverb_t* reverb, float diffusion)
 {
-    return setf(reverb, AL_REVERB_DIFFUSION, diffusion);
+    return _seal_setf(reverb, AL_REVERB_DIFFUSION, diffusion, alEffectf,
+                      alIsEffect);
 }
 
 seal_err_t
 seal_set_reverb_gain(seal_reverb_t* reverb, float gain)
 {
-    return setf(reverb, AL_REVERB_GAIN, gain);
+    return _seal_setf(reverb, AL_REVERB_GAIN, gain, alEffectf, alIsEffect);
 }
 
 seal_err_t
 seal_set_reverb_hfgain(seal_reverb_t* reverb, float hfgain)
 {
-    return setf(reverb, AL_REVERB_GAINHF, hfgain);
+    return _seal_setf(reverb, AL_REVERB_GAINHF, hfgain, alEffectf,
+                      alIsEffect);
 }
 
 seal_err_t
 seal_set_reverb_decay_time(seal_reverb_t* reverb, float time)
 {
-    return setf(reverb, AL_REVERB_DECAY_TIME, time);
+    return _seal_setf(reverb, AL_REVERB_DECAY_TIME, time, alEffectf,
+                      alIsEffect);
 }
 
 seal_err_t
 seal_set_reverb_hfdecay_ratio(seal_reverb_t* reverb, float ratio)
 {
-    return setf(reverb, AL_REVERB_DECAY_HFRATIO, ratio);
+    return _seal_setf(reverb, AL_REVERB_DECAY_HFRATIO, ratio, alEffectf,
+                      alIsEffect);
 }
 
 seal_err_t
 seal_set_reverb_reflections_gain(seal_reverb_t* reverb, float gain)
 {
-    return setf(reverb, AL_REVERB_REFLECTIONS_GAIN, gain);
+    return _seal_setf(reverb, AL_REVERB_REFLECTIONS_GAIN, gain, alEffectf,
+                      alIsEffect);
 }
 
 seal_err_t
 seal_set_reverb_reflections_delay(seal_reverb_t* reverb, float delay)
 {
-    return setf(reverb, AL_REVERB_REFLECTIONS_DELAY, delay);
+    return _seal_setf(reverb, AL_REVERB_REFLECTIONS_DELAY, delay, alEffectf,
+                      alIsEffect);
 }
 
 seal_err_t
 seal_set_reverb_late_gain(seal_reverb_t* reverb, float gain)
 {
-    return setf(reverb, AL_REVERB_LATE_REVERB_GAIN, gain);
+    return _seal_setf(reverb, AL_REVERB_LATE_REVERB_GAIN, gain, alEffectf,
+                      alIsEffect);
 }
 
 seal_err_t
 seal_set_reverb_late_delay(seal_reverb_t* reverb, float delay)
 {
-    return setf(reverb, AL_REVERB_LATE_REVERB_DELAY, delay);
+    return _seal_setf(reverb, AL_REVERB_LATE_REVERB_DELAY, delay, alEffectf,
+                      alIsEffect);
 }
 
 seal_err_t
 seal_set_reverb_air_absorbtion_hfgain(seal_reverb_t* reverb, float hfgain)
 {
-    return setf(reverb, AL_REVERB_AIR_ABSORPTION_GAINHF, hfgain);
+    return _seal_setf(reverb, AL_REVERB_AIR_ABSORPTION_GAINHF, hfgain,
+                      alEffectf, alIsEffect);
 }
 
 seal_err_t
 seal_set_reverb_room_rolloff_factor(seal_reverb_t* reverb, float factor)
 {
-    return setf(reverb, AL_REVERB_ROOM_ROLLOFF_FACTOR, factor);
+    return _seal_setf(reverb, AL_REVERB_ROOM_ROLLOFF_FACTOR, factor,
+                      alEffectf, alIsEffect);
 }
 
 seal_err_t
@@ -129,73 +120,85 @@ seal_set_reverb_hfdecay_limited(seal_reverb_t* reverb, char limited)
 seal_err_t
 seal_get_reverb_density(seal_reverb_t* reverb, float* pdensity)
 {
-    return getf(reverb, AL_REVERB_DENSITY, pdensity);
+    return _seal_getf(reverb, AL_REVERB_DENSITY, pdensity, alGetEffectf,
+                      alIsEffect);
 }
 
 seal_err_t
 seal_get_reverb_diffusion(seal_reverb_t* reverb, float* pdiffusion)
 {
-    return getf(reverb,  AL_REVERB_DIFFUSION, pdiffusion);
+    return _seal_getf(reverb,  AL_REVERB_DIFFUSION, pdiffusion, alGetEffectf,
+                      alIsEffect);
 }
 
 seal_err_t
 seal_get_reverb_gain(seal_reverb_t* reverb, float* pgain)
 {
-    return getf(reverb,  AL_REVERB_GAIN, pgain);
+    return _seal_getf(reverb,  AL_REVERB_GAIN, pgain, alGetEffectf,
+                      alIsEffect);
 }
 
 seal_err_t
 seal_get_reverb_hfgain(seal_reverb_t* reverb, float* phfgain)
 {
-    return getf(reverb,  AL_REVERB_GAINHF, phfgain);
+    return _seal_getf(reverb,  AL_REVERB_GAINHF, phfgain, alGetEffectf,
+                      alIsEffect);
 }
 
 seal_err_t
 seal_get_reverb_decay_time(seal_reverb_t* reverb, float* ptime)
 {
-    return getf(reverb,  AL_REVERB_DECAY_TIME, ptime);
+    return _seal_getf(reverb,  AL_REVERB_DECAY_TIME, ptime, alGetEffectf,
+                      alIsEffect);
 }
 
 seal_err_t
 seal_get_reverb_hfdecay_ratio(seal_reverb_t* reverb, float* pratio)
 {
-    return getf(reverb,  AL_REVERB_DECAY_HFRATIO, pratio);
+    return _seal_getf(reverb,  AL_REVERB_DECAY_HFRATIO, pratio, alGetEffectf,
+                      alIsEffect);
 }
 
 seal_err_t
 seal_get_reverb_reflections_gain(seal_reverb_t* reverb, float* pgain)
 {
-    return getf(reverb,  AL_REVERB_REFLECTIONS_GAIN, pgain);
+    return _seal_getf(reverb,  AL_REVERB_REFLECTIONS_GAIN, pgain,
+                      alGetEffectf, alIsEffect);
 }
 
 seal_err_t
 seal_get_reverb_reflections_delay(seal_reverb_t* reverb, float* pdelay)
 {
-    return getf(reverb,  AL_REVERB_REFLECTIONS_DELAY, pdelay);
+    return _seal_getf(reverb,  AL_REVERB_REFLECTIONS_DELAY, pdelay,
+                      alGetEffectf, alIsEffect);
 }
 
 seal_err_t
 seal_get_reverb_late_gain(seal_reverb_t* reverb, float* pgain)
 {
-    return getf(reverb,  AL_REVERB_LATE_REVERB_GAIN, pgain);
+    return _seal_getf(reverb,  AL_REVERB_LATE_REVERB_GAIN, pgain,
+                      alGetEffectf, alIsEffect);
 }
 
 seal_err_t
 seal_get_reverb_late_delay(seal_reverb_t* reverb, float* pdelay)
 {
-    return getf(reverb,  AL_REVERB_LATE_REVERB_DELAY, pdelay);
+    return _seal_getf(reverb,  AL_REVERB_LATE_REVERB_DELAY, pdelay,
+                      alGetEffectf, alIsEffect);
 }
 
 seal_err_t
 seal_get_reverb_air_absorbtion_hfgain(seal_reverb_t* reverb, float* phfgain)
 {
-    return getf(reverb,  AL_REVERB_ROOM_ROLLOFF_FACTOR, phfgain);
+    return _seal_getf(reverb,  AL_REVERB_ROOM_ROLLOFF_FACTOR, phfgain,
+                      alGetEffectf, alIsEffect);
 }
 
 seal_err_t
 seal_get_reverb_room_rolloff_factor(seal_reverb_t* reverb, float* pfactor)
 {
-    return getf(reverb,  AL_REVERB_AIR_ABSORPTION_GAINHF, pfactor);
+    return _seal_getf(reverb,  AL_REVERB_AIR_ABSORPTION_GAINHF, pfactor,
+                      alGetEffectf, alIsEffect);
 }
 
 seal_err_t

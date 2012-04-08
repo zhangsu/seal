@@ -35,14 +35,14 @@ static const size_t MAX_CHUNK_SIZE     = CHUNK_STORAGE_CAP -
                                          CHUNK_STORAGE_CAP % MIN_CHUNK_SIZE;
 
 static int
-limit_value(int value, int lower_bound, int upper_bound)
+limit_val(int val, int lower_bound, int upper_bound)
 {
-    if (value < lower_bound)
+    if (val < lower_bound)
         return lower_bound;
-    else if (value > upper_bound)
+    else if (val > upper_bound)
         return upper_bound;
     else
-        return value;
+        return val;
 }
 
 static seal_err_t
@@ -66,21 +66,11 @@ set3f(seal_src_t* src, int key, float x, float y, float z)
 }
 
 static seal_err_t
-seti(seal_src_t* src, int key, int value)
+seti(seal_src_t* src, int key, int val)
 {
     assert(alIsSource(src->id));
 
-    alSourcei(src->id, key, value);
-
-    return _seal_get_openal_err();
-}
-
-static seal_err_t
-setf(seal_src_t* src, int key, float value)
-{
-    assert(alIsSource(src->id));
-
-    alSourcef(src->id, key, value);
+    alSourcei(src->id, key, val);
 
     return _seal_get_openal_err();
 }
@@ -96,34 +86,24 @@ get3f(seal_src_t* src, int key, float* px, float* py, float* pz)
 }
 
 static seal_err_t
-geti(seal_src_t* src, int key, int* pvalue)
+geti(seal_src_t* src, int key, int* pval)
 {
     assert(alIsSource(src->id));
 
-    alGetSourcei(src->id, key, pvalue);
-
-    return _seal_get_openal_err();
-}
-
-static seal_err_t
-getf(seal_src_t* src, int key, float* pvalue)
-{
-    assert(alIsSource(src->id));
-
-    alGetSourcef(src->id, key, pvalue);
+    alGetSourcei(src->id, key, pval);
 
     return _seal_get_openal_err();
 }
 
 /* @todo factor this function. */
 static seal_err_t
-getb(seal_src_t* src, int key, char* pvalue)
+getb(seal_src_t* src, int key, char* pval)
 {
-    int value;
+    int val;
     seal_err_t err;
 
-    if ((err = geti(src, key, &value)) == SEAL_OK)
-        *pvalue = value;
+    if ((err = geti(src, key, &val)) == SEAL_OK)
+        *pval = val;
 
     return err;
 }
@@ -509,7 +489,7 @@ seal_set_src_queue_size(seal_src_t* src, size_t size)
 {
     assert(alIsSource(src->id));
 
-    src->queue_size = limit_value(size, MIN_QUEUE_SIZE, MAX_QUEUE_SIZE);
+    src->queue_size = limit_val(size, MIN_QUEUE_SIZE, MAX_QUEUE_SIZE);
 
     return SEAL_OK;
 }
@@ -519,7 +499,7 @@ seal_set_src_chunk_size(seal_src_t* src, size_t size)
 {
     assert(alIsSource(src->id));
 
-    src->chunk_size = limit_value(size, MIN_CHUNK_SIZE, MAX_CHUNK_SIZE)
+    src->chunk_size = limit_val(size, MIN_CHUNK_SIZE, MAX_CHUNK_SIZE)
                       / MIN_CHUNK_SIZE * MIN_CHUNK_SIZE;
 
     return SEAL_OK;
@@ -540,13 +520,13 @@ seal_set_src_vel(seal_src_t* src, float x, float y, float z)
 seal_err_t
 seal_set_src_pitch(seal_src_t* src, float pitch)
 {
-    return setf(src, AL_PITCH, pitch);
+    return _seal_setf(src, AL_PITCH, pitch, alSourcef, alIsSource);
 }
 
 seal_err_t
 seal_set_src_gain(seal_src_t* src, float gain)
 {
-    return setf(src, AL_GAIN, gain);
+    return _seal_setf(src, AL_GAIN, gain, alSourcef, alIsSource);
 }
 
 seal_err_t
@@ -634,13 +614,13 @@ seal_get_src_vel(seal_src_t* src, float* px, float* py, float* pz)
 seal_err_t
 seal_get_src_pitch(seal_src_t* src, float* ppitch)
 {
-    return getf(src, AL_PITCH, ppitch);
+    return _seal_getf(src, AL_PITCH, ppitch, alGetSourcef, alIsSource);
 }
 
 seal_err_t
 seal_get_src_gain(seal_src_t* src, float* pgain)
 {
-    return getf(src, AL_GAIN, pgain);
+    return _seal_getf(src, AL_GAIN, pgain, alGetSourcef, alIsSource);
 }
 
 seal_err_t

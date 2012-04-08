@@ -6,21 +6,21 @@
 #include <seal/err.h>
 
 static seal_err_t
-seti(seal_efs_t* slot, int key, int value)
+seti(seal_efs_t* slot, int key, int val)
 {
     assert(alIsAuxiliaryEffectSlot(slot->id));
 
-    alAuxiliaryEffectSloti(slot->id, key, value);
+    alAuxiliaryEffectSloti(slot->id, key, val);
 
     return _seal_get_openal_err();
 }
 
 static seal_err_t
-geti(seal_efs_t* slot, int key, int* pvalue)
+geti(seal_efs_t* slot, int key, int* pval)
 {
     assert(alIsAuxiliaryEffectSlot(slot->id));
 
-    alGetAuxiliaryEffectSloti(slot->id, key, pvalue);
+    alGetAuxiliaryEffectSloti(slot->id, key, pval);
 
     return _seal_get_openal_err();
 }

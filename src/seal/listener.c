@@ -10,9 +10,9 @@
 #include <seal/err.h>
 
 static seal_err_t
-setf(int key, float value)
+setf(int key, float val)
 {
-    alListenerf(key, value);
+    alListenerf(key, val);
 
     return _seal_get_openal_err();
 }
@@ -36,9 +36,9 @@ setfv(int key, float* vector)
 }
 
 static seal_err_t
-getf(int key, float* pvalue)
+getf(int key, float* pval)
 {
-    alGetListenerf(key, pvalue);
+    alGetListenerf(key, pval);
 
     return _seal_get_openal_err();
 }

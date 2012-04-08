@@ -6,6 +6,7 @@
 
 #include <stdlib.h>
 #include <stddef.h>
+#include <assert.h>
 #include <al/al.h>
 #include <al/alc.h>
 #include <al/efx.h>
@@ -199,13 +200,39 @@ _seal_init_obj(void* obj, _seal_openal_initializer_t* allocate)
 
 seal_err_t
 _seal_destroy_obj(void* obj, _seal_openal_destroyer_t* destroy,
-                  _seal_openal_validator_t* validate)
+                  _seal_openal_validator_t* valid)
 {
     /* Hack: assuming the object id is always at offset 0. */
-    if (validate(*(unsigned int*) obj))
+    if (valid(*(unsigned int*) obj))
         return _seal_delete_objs(1, obj, destroy);
 
     return SEAL_OK;
+}
+
+seal_err_t
+_seal_setf(void* obj, int key, float val, _seal_openal_setterf* set,
+           _seal_openal_validator_t* valid)
+{
+    /* Hack: assuming the object id is always at offset 0. */
+    unsigned int id = *(unsigned int*) obj;
+
+    assert(valid(id));
+    set(id, key, val);
+
+    return _seal_get_openal_err();
+}
+
+seal_err_t
+_seal_getf(void* obj, int key, float* pval, _seal_openal_getterf* get,
+           _seal_openal_validator_t* valid)
+{
+    /* Hack: assuming the object id is always at offset 0. */
+    unsigned int id = *(unsigned int*) obj;
+
+    assert(valid(id));
+    get(id, key, pval);
+
+    return _seal_get_openal_err();
 }
 
 #if defined (__unix__)

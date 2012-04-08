@@ -17,11 +17,11 @@
 #include "wav.h"
 
 static seal_err_t
-geti(seal_buf_t* buf, int key, int* pvalue)
+geti(seal_buf_t* buf, int key, int* pval)
 {
     assert(alIsBuffer(buf->id));
 
-    alGetBufferi(buf->id, key, pvalue);
+    alGetBufferi(buf->id, key, pval);
 
     return _seal_get_openal_err();
 }
