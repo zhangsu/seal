@@ -34,9 +34,6 @@ seal_init_efs(seal_efs_t* slot)
 seal_err_t
 seal_destroy_efs(seal_efs_t* slot)
 {
-    if (alIsAuxiliaryEffectSlot == 0)
-        return SEAL_OK;
-
     return _seal_destroy_obj(slot, alDeleteAuxiliaryEffectSlots,
                              alIsAuxiliaryEffectSlot);
 }

@@ -16,22 +16,29 @@
 
 static int neffects_per_src = -1;
 
-static void nop() {}
+void _seal_nop() {}
+void* _seal_nop_func() { return 0; }
 
-_seal_openal_initializer_t* alGenEffects = (void*) nop;
-_seal_openal_destroyer_t* alDeleteEffects = (void*) nop;
-_seal_openal_validator_t* alIsEffect = (void*) nop;
-LPALEFFECTF alEffectf = (void*) nop;
-LPALEFFECTI alEffecti = (void*) nop;
-LPALGETEFFECTF alGetEffectf = (void*) nop;
-LPALGETEFFECTI alGetEffecti = (void*) nop;
-_seal_openal_initializer_t* alGenAuxiliaryEffectSlots = (void*) nop;
-_seal_openal_destroyer_t* alDeleteAuxiliaryEffectSlots = (void*) nop;
-_seal_openal_validator_t* alIsAuxiliaryEffectSlot = (void*) nop;
-LPALAUXILIARYEFFECTSLOTI alAuxiliaryEffectSloti = (void*) nop;
-LPALAUXILIARYEFFECTSLOTF alAuxiliaryEffectSlotf = (void*) nop;
-LPALGETAUXILIARYEFFECTSLOTI alGetAuxiliaryEffectSloti = (void*) nop;
-LPALGETAUXILIARYEFFECTSLOTF alGetAuxiliaryEffectSlotf = (void*) nop;
+_seal_openal_initializer_t* alGenEffects = (void*) _seal_nop;
+_seal_openal_destroyer_t* alDeleteEffects = (void*) _seal_nop;
+_seal_openal_validator_t* alIsEffect = (void*) _seal_nop_func;
+LPALEFFECTF alEffectf = (void*) _seal_nop;
+LPALEFFECTI alEffecti = (void*) _seal_nop;
+LPALGETEFFECTF alGetEffectf = (void*) _seal_nop;
+LPALGETEFFECTI alGetEffecti = (void*) _seal_nop;
+_seal_openal_initializer_t* alGenAuxiliaryEffectSlots = (void*) _seal_nop;
+_seal_openal_destroyer_t* alDeleteAuxiliaryEffectSlots = (void*) _seal_nop;
+_seal_openal_validator_t* alIsAuxiliaryEffectSlot = (void*) _seal_nop_func;
+LPALAUXILIARYEFFECTSLOTI alAuxiliaryEffectSloti = (void*) _seal_nop;
+LPALAUXILIARYEFFECTSLOTF alAuxiliaryEffectSlotf = (void*) _seal_nop;
+LPALGETAUXILIARYEFFECTSLOTI alGetAuxiliaryEffectSloti = (void*) _seal_nop;
+LPALGETAUXILIARYEFFECTSLOTF alGetAuxiliaryEffectSlotf = (void*) _seal_nop;
+
+const char*
+seal_get_version(void)
+{
+    return "0.2.0";
+}
 
 static seal_err_t
 init_ext_proc(void)
@@ -64,13 +71,20 @@ init_ext_proc(void)
 static void
 reset_ext_proc(void)
 {
-    alIsEffect = alIsAuxiliaryEffectSlot = 0;
-}
-
-const char*
-seal_get_version(void)
-{
-    return "0.2.0";
+    alGenEffects = (void*) _seal_nop;
+    alDeleteEffects = (void*) _seal_nop;
+    alIsEffect = (void*) _seal_nop_func;
+    alEffectf = (void*) _seal_nop;
+    alEffecti = (void*) _seal_nop;
+    alGetEffectf = (void*) _seal_nop;
+    alGetEffecti = (void*) _seal_nop;
+    alGenAuxiliaryEffectSlots = (void*) _seal_nop;
+    alDeleteAuxiliaryEffectSlots = (void*) _seal_nop;
+    alIsAuxiliaryEffectSlot = (void*) _seal_nop_func;
+    alAuxiliaryEffectSloti = (void*) _seal_nop;
+    alAuxiliaryEffectSlotf = (void*) _seal_nop;
+    alGetAuxiliaryEffectSloti = (void*) _seal_nop;
+    alGetAuxiliaryEffectSlotf = (void*) _seal_nop;
 }
 
 /*
