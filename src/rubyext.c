@@ -775,6 +775,21 @@ get_src_state(VALUE rsrc)
 
 /*
  *  call-seq:
+ *      slot.feed(index, slot)    -> slot
+ */
+static VALUE
+feed_efs(VALUE rslot, VALUE rindex, VALUE rsrc)
+{
+    seal_src_t* src;
+
+    Data_Get_Struct(rsrc, seal_src_t, src);
+    check_seal_err(seal_feed_efs(DATA_PTR(rslot), NUM2INT(rindex), src));
+
+    return rslot;
+}
+
+/*
+ *  call-seq:
  *      Seal::Reverb.allocate -> reverb
  */
 DEFINE_ALLOCATOR(reverb)
@@ -1267,6 +1282,7 @@ bind_efs(void)
     rb_define_method(cEffectSlot, "initialize", init_efs, -1);
     rb_define_method(cEffectSlot, "effect=", set_efs_effect, 1);
     rb_define_method(cEffectSlot, "effect", get_efs_effect, 0);
+    rb_define_method(cEffectSlot, "feed", feed_efs, 2);
     rb_define_method(cEffectSlot, "gain=", set_efs_gain, 1);
     rb_define_method(cEffectSlot, "gain", get_efs_gain, 0);
     rb_define_method(cEffectSlot, "auto=", set_efs_auto, 1);

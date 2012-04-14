@@ -353,15 +353,6 @@ seal_set_src_stream(seal_src_t* src, seal_stream_t* stream)
 }
 
 seal_err_t
-seal_mix_src_effect(seal_src_t* src, int index, seal_efs_t* slot)
-{
-    alSource3i(src->id, AL_AUXILIARY_SEND_FILTER, slot->id, index,
-               AL_FILTER_NULL);
-
-    return _seal_get_openal_err();
-}
-
-seal_err_t
 seal_update_src(seal_src_t* src)
 {
     unsigned int buf;

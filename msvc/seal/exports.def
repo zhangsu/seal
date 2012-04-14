@@ -81,5 +81,15 @@ seal_get_reverb_late_delay
 seal_get_reverb_air_absorbtion_hfgain
 seal_get_reverb_room_rolloff_factor
 seal_is_reverb_hfdecay_limited
+seal_init_efs
+seal_destroy_efs
+seal_set_efs_effect
+seal_feed_efs
+seal_set_efs_gain
+seal_set_efs_auto
+seal_get_efs_effect
+seal_get_efs_gain
+
+seal_is_efs_auto
 seal_get_err_msg
 _seal_sleep

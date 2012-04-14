@@ -11,6 +11,7 @@
 #ifndef _SEAL_EFS_H_
 #define _SEAL_EFS_H_
 
+#include "src.h"
 #include "err.h"
 
 typedef struct seal_efs_t seal_efs_t;
@@ -39,6 +40,18 @@ seal_err_t seal_destroy_efs(seal_efs_t*);
  * @param effect    the effect to fill the effect slot with
  */
 seal_err_t seal_set_efs_effect(seal_efs_t*, void* /*effect*/);
+
+/*
+ * Mixes an sound effect loaded into an effect slot with a source's output.
+ * Later calls to this function with a different effect slot and the same
+ * index will override the old effect slot association.
+ *
+ * @see             seal_get_neffects_per_src
+ * @param efs       the slot that contains the effect to mix
+ * @param index     the zero-based index of the effect
+ * @param src       the source that feeds the effect slot
+ */
+seal_err_t seal_feed_efs(seal_efs_t*, int /*index*/, seal_src_t*);
 
 /*
  * Sets the output level of an effect Slot in the interval [0.0f, 1.0f]. A
