@@ -8,8 +8,6 @@
 #include <seal.h>
 #include "ruby.h"
 
-static VALUE mSeal;
-static VALUE eSealError;
 static const char WAV_SYMBOL[] = "wav";
 static const char OV_SYMBOL[] = "ov";
 static const char MPG_SYMBOL[] = "mpg";
@@ -20,6 +18,9 @@ static const char INITIAL_SYMBOL[] = "initial";
 static const char PLAYING_SYMBOL[] = "playing";
 static const char PAUSED_SYMBOL[] = "paused";
 static const char STOPPED_SYMBOL[] = "stopped";
+
+static VALUE mSeal;
+static VALUE eSealError;
 
 #define DEFINE_ALLOCATOR(obj)                                               \
 static VALUE                                                                \
@@ -1137,6 +1138,13 @@ get_listener_orien(VALUE rlistener)
 }
 
 static void
+singletonify(VALUE klass)
+{
+    rb_undef_alloc_func(klass);
+    rb_undef_method(rb_singleton_class(klass), "new");
+}
+
+static void
 bind_core(void)
 {
     VALUE mFormat;
@@ -1297,8 +1305,7 @@ bind_listener(void)
     VALUE listener = rb_data_object_alloc(cListener, 0, 0, 0);
     rb_define_const(mSeal, "LISTENER", listener);
     rb_define_singleton_method(mSeal, "listener", get_listener, 0);
-    rb_undef_alloc_func(cListener);
-    rb_undef_method(rb_singleton_class(cListener), "new");
+    singletonify(cListener);
     rb_define_method(cListener, "position=", set_listener_pos, 1);
     rb_define_method(cListener, "position", get_listener_pos, 0);
     rb_define_method(cListener, "velocity=", set_listener_vel, 1);
