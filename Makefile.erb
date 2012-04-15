@@ -10,6 +10,7 @@ OUTPUT      = <%= options[:output] %>
 MKDIR       = <%= options[:mkdir] %>
 CP          = <%= options[:cp] %>
 RM          = <%= options[:rm] %>
+RMDIR       = <%= options[:rmdir] %>
 
 PROJDIR     = <%= PROJ_DIR %>
 
@@ -22,7 +23,7 @@ $(OUTPUT): $(OBJECTS)
 
 <% RULE_GROUPS.each do |dir, rule_group| %>
 <%= timestamp = dir.dir_timestamp %>:
-	$(MKDIR) <%= dir %>
+	$(MKDIR) <%= dir %> || echo OK
 	echo > <%= timestamp %>
 <% for rule in rule_group %>
 <%= rule %>
@@ -30,9 +31,9 @@ $(OUTPUT): $(OBJECTS)
 <% end %>
 <% end %>
 
-clean:
-<% RULE_GROUPS.each_key do |dir| %>
+clean:<% RULE_GROUPS.each_key do |dir| %>
 	$(RM) <%= dir %>
+	$(RMDIR) <%= dir %> || echo OK
 <% end %>
 	$(RM) $(OUTPUT)
-	$(RM) *.dll
+	$(RM) *.dll *.exp *.lib *.manifest

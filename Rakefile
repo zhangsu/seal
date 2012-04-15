@@ -13,12 +13,16 @@ end
 # Makefile generation tasks.
 # Requires GCC for dependency generation.
 namespace :mf do
+  $, = ' '
   # Project directory relative to Makefile.
   # Assuming all Makefiles are at the same (directory tree) level.
   PROJ_DIR          = File.join('..', '..', '..')
   INCLUDE_DIR       = File.join(PROJ_DIR, 'include')
   LIB_DIR           = File.join(PROJ_DIR, 'lib')
   MAKEFILE_TEMPLATE = File.join(PROJ_DIR, 'Makefile.erb')
+  # Library input list for Win32.
+  LIBS              = [File.join(LIB_DIR, 'OpenAL32.lib'),
+                       File.join(LIB_DIR, 'libmpg123.lib')].join
 
   task :prepare do |t|
     report(t)
@@ -58,12 +62,8 @@ namespace :mf do
       Dir.chdir(dirname) { make_makefile(options) }      
     end
 
-    $, = ' '
     filenames   = Dir.chdir('src') { Dir['*/*.c'] }
     OBJECTS     = filenames.map(&:object_filename).join
-    # Library input list for Win32.
-    LIBS        = [File.join(LIB_DIR, 'OpenAL32.lib'),
-                   File.join(LIB_DIR, 'libmpg123.lib')].join
 
     RULE_GROUPS = {}
     workers = []
@@ -87,16 +87,16 @@ namespace :mf do
   desc 'Generate Makefile for all compilers on all platforms'
   task :all => [:'gcc:all', :'msvc:all']
 
-  namespace :gcc do |; options|
+  namespace :gcc do |; gcc_options|
     gcc_options = {
       cc:     'gcc',
       linker: 'gcc',
       flags:  '-Wextra -O3',
       cflags: "-I#{INCLUDE_DIR} -DNDEBUG -c",
       lflags: '-shared',
-      mkdir:  'mkdir',
+      mkdir:  'mkdir -p',
       rm:     'rm -rf',
-      cp:     'cp',
+      rmdir:  'rmdir',
       coflag: '-o ',
       loflag: '-o ',
     }
@@ -105,9 +105,8 @@ namespace :mf do
     task :all => [:linux, :win32]
 
     desc 'Generate Makefile for GCC on Linux'
-    task :linux => :prepare do |t|
+    task :linux => :prepare do |t; options|
       report(t)
-      
       options = gcc_options.merge(
         libs:   '-lopenal -lmpg123',
         output: 'libseal.so',
@@ -117,7 +116,7 @@ namespace :mf do
     end
 
     desc 'Generate Makefile for GCC on Win32'
-    task :win32 => :prepare do |t|
+    task :win32 => :prepare do |t; options|
       report(t)
       options = gcc_options.merge(
         libs:   LIBS,
@@ -128,31 +127,31 @@ namespace :mf do
     end
   end
 
-  namespace :msvc do
+  namespace :msvc do |; msvc_options|
     msvc_options = {
       cc:     'cl',
       linker: 'link',
-      flags:  '',
-      cflags: "",
-      lflags: '',
+      cflags: '/c /Ob2ity /Gd /GL /Gy /MD /DNDEBUG '\
+              "/I #{INCLUDE_DIR} /TC /nologo",
+      lflags: '/DLL /LTCG /OPT:REF /OPT:ICF=3 /MANIFEST /NOLOGO '\
+              '/DEF:$(PROJDIR)/msvc/seal/exports.def',
       mkdir:  'mkdir',
-      rm:     'del',
-      cp:     'copy',
+      rm:     'del /F /S /Q',
+      rmdir:  'rmdir',
+      cp:     'copy /Y',
       coflag: '/Fo',
-      loflag: '',
+      loflag: '/OUT:',
+      libs:   LIBS,
+      output: 'seal.dll',
     }
 
     desc 'Generate Makefile for MSVC on all platforms'
     task :all => :win32
 
     desc 'Generate Makefile for MSVC on all Win32'
-    task :win32 => :prepare do |t|
+    task :win32 => :prepare do |t; options|
       report(t)
-      options = msvc_options.merge(
-        libs:   LIBS,
-        output: 'seal.dll',
-      )
-      make_makefile_in(File.join('make', 'msvc', 'win32'), options)
+      make_makefile_in(File.join('make', 'msvc', 'win32'), msvc_options)
     end
   end
 end
