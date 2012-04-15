@@ -5,11 +5,10 @@
  */
 
 #include <stdio.h>
+#include <stdint.h>
 #include <seal/fmt.h>
-#include <seal/pstdint.h>
-#include <seal/reader.h>
 #include <seal/err.h>
-#include <assert.h>
+#include "reader.h"
 
 enum
 {
@@ -30,17 +29,15 @@ static const unsigned int ID3_ = SEAL_MKTAG('I', 'D', '3', 0);
 /* MP3 Sync identifier. */
 static const unsigned int SYNC = 0xf0ff;
 
-seal_fmt_t
-seal_recognize_fmt(const char* filename)
+seal_err_t
+seal_recognize_fmt(const char* filename, seal_fmt_t* pfmt)
 {
     FILE* audio;
     uint32_t magic_nums[SAMPLE_SIZE];
 
-    assert(filename != 0);
-
     audio = _seal_fopen(filename);
     if (audio == 0)
-        return SEAL_UNKNOWN_FMT;
+        return SEAL_CANNOT_OPEN_FILE;
 
     /* Gets the magic numbers in little-endian. */
     _seal_read_uint32le(magic_nums, SAMPLE_SIZE, audio);
@@ -51,32 +48,39 @@ seal_recognize_fmt(const char* filename)
     case RIFF:
         switch (magic_nums[2]) {
         case WAVE:
-            return SEAL_WAV_FMT;
+            *pfmt = SEAL_WAV_FMT;
+            return SEAL_OK;
         }
         break;
     case OGGS:
-        return SEAL_OV_FMT;
+        *pfmt = SEAL_OV_FMT;
+        return SEAL_OK;
     case APET:
         switch (magic_nums[1]) {
         case AGEX:
-            return SEAL_MPG_FMT;
+            *pfmt = SEAL_MPG_FMT;
+            return SEAL_OK;
         }
         break;
     }
 
     if ((magic_nums[0] & TAG_) == TAG_ ||
         (magic_nums[0] & ID3_) == ID3_ ||
-        (magic_nums[0] & SYNC) == SYNC)
-        return SEAL_MPG_FMT;
+        (magic_nums[0] & SYNC) == SYNC) {
+        *pfmt = SEAL_MPG_FMT;
+        return SEAL_OK;
+    }
 
-    SEAL_ABORT(SEAL_BAD_AUDIO, SEAL_UNKNOWN_FMT);
+    *pfmt = SEAL_UNKNOWN_FMT;
+
+    return SEAL_BAD_AUDIO;
 }
 
-int
+seal_err_t
 seal_ensure_fmt_known(const char* filename, seal_fmt_t* pfmt)
 {
     if (*pfmt == SEAL_UNKNOWN_FMT)
-        *pfmt = seal_recognize_fmt(filename);
+        return seal_recognize_fmt(filename, pfmt);
 
-    return *pfmt != SEAL_UNKNOWN_FMT;
+    return SEAL_OK;
 }

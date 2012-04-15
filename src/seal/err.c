@@ -4,33 +4,8 @@
  * attached with the library.
  */
 
-#ifndef NDEBUG
-# include <stdio.h>
-#endif
 #include <al/al.h>
 #include <seal/err.h>
-#include <seal/core.h>
-#include <seal/threading.h>
-
-/* Thread-local error state. Initialized and uninitialized in core.c. */
-_seal_tls_t _seal_err;
-
-seal_err_t
-seal_get_err(void)
-{
-    seal_err_t err;
-    
-    err = seal_peek_err();
-    _seal_set_tls(_seal_err, (void*) SEAL_OK);
-
-    return err;
-}
-
-seal_err_t
-seal_peek_err(void)
-{
-    return (seal_err_t) _seal_get_tls(_seal_err);
-}
 
 const char*
 seal_get_err_msg(seal_err_t err)
@@ -39,49 +14,40 @@ seal_get_err_msg(seal_err_t err)
     case SEAL_OK:
         return 0;
 
-    case SEAL_OPEN_DEVICE_FAILED:
-        return "Failed opening the specified device";
+    case SEAL_BAD_OBJ:
+        return "Invalid object";
+    case SEAL_BAD_ENUM:
+        return "Invalid token";
+    case SEAL_BAD_VAL:
+        return "Invalid parameter value";
+    case SEAL_BAD_OP:
+        return "Invalid operation";
+
+    case SEAL_CANNOT_OPEN_DEVICE:
+        return "Cannot open the specified device";
+    case SEAL_NO_EFX:
+        return "The effect module is not found";
+    case SEAL_NO_EXT_FUNC:
+        return "The required extension functions are not found";
     case SEAL_BAD_DEVICE:
         return "Invalid device";
-    case SEAL_CREATE_CONTEXT_FAILED:
-        return "Failed creating an additional context for the device";
+    case SEAL_CANNOT_CREATE_CONTEXT:
+        return "Cannot create an additional context for the device";
 
-    case SEAL_ALLOC_BUF_FAILED:
-        return "Failed allocating buffer(s) due to lack of physical memory";
-    case SEAL_FREE_BUF_FAILED:
-        return "Failed freeing buffer(s)";
-    case SEAL_BUF_INUSE:
-        return "The operation cannot be done as the buffer is still in use";
-
-    case SEAL_ALLOC_STREAM_FAILED:
-        return "Failed allocating the stream";
     case SEAL_STREAM_UNOPENED:
         return "Cannot use the uninitialized stream";
-    case SEAL_STREAM_ALREADY_OPENED:
-        return "Cannot re-initialize the already-opened stream";
-    case SEAL_STREAM_INUSE:
-        return "The operation cannot be done as the stream is still in use";
     case SEAL_MIXING_STREAM_FMT:
         return "Cannot attach a stream with a different audio format than "
                "that of the currently attached stream";
 
-    case SEAL_ALLOC_SRC_FAILED:
-        return "Failed allocating the source due to lack of resources";
-    case SEAL_BAD_SRC_ATTR_VAL:
-        return "Invalid source attribute value";
-    case SEAL_BAD_SRC_OP:
-        return "Invalid operation on the source";
     case SEAL_MIXING_SRC_TYPE:
         return "Cannot attach a stream to a static source or "
                "attach a buffer to a streaming source";
 
-    case SEAL_BAD_LISTENER_ATTR_VAL:
-        return "Invalid listener attribute value";
-
-    case SEAL_OPEN_FILE_FAILED:
-        return "Failed opening the specified file";
-    case SEAL_MEM_ALLOC_FAILED:
-        return "Failed allocating memory";
+    case SEAL_CANNOT_OPEN_FILE:
+        return "Cannot open the specified file";
+    case SEAL_CANNOT_ALLOC_MEM:
+        return "Cannot allocate additional memory";
 
     case SEAL_BAD_AUDIO:
         return "The specified audio file format is unsupported";
@@ -99,54 +65,51 @@ seal_get_err_msg(seal_err_t err)
         return "The specified WAVE file has an invalid number of channels";
     case FILE_BAD_WAV_FREQ:
         return "The specified WAVE file has an invalid sample rate";
+    case SEAL_CANNOT_REWIND_WAV:
+        return "Failed rewinding the specified WAVE file";
 
-    case SEAL_OPEN_OV_FAILED:
+    case SEAL_CANNOT_OPEN_OV:
         return "Failed openning the specified Ogg Vorbis file";
-    case SEAL_GET_OV_INFO_FAILED:
+    case SEAL_CANNOT_GET_OV_INFO:
         return "Failed getting info from the specified Ogg Vorbis file";
-    case SEAL_READ_OV_FAILED:
+    case SEAL_CANNOT_READ_OV:
         return "Failed reading the specified Ogg Vorbis file";
+    case SEAL_CANNOT_REWIND_OV:
+        return "Failed rewinding the specified Ogg Vorbis file";
+    case SEAL_CANNOT_CLOSE_OV:
+        return "Failed closing the specified Ogg Vorbis file";
 
-    case SEAL_INIT_MPG_FAILED:
+    case SEAL_CANNOT_INIT_MPG:
         return "Failed initializing MPEG decoder";
-    case SEAL_GET_MPG_INFO_FAILED:
+    case SEAL_CANNOT_GET_MPG_INFO:
         return "Failed getting info from the specified MPEG file";
-    case SEAL_READ_MPG_FAILED:
+    case SEAL_CANNOT_READ_MPG:
         return "Failed reading the specified MPEG file";
-
-    case SEAL_OPEN_MID_FAILED:
-        return "Failed openning the specified MIDI file "
-               "or initializing the MIDI device";
-    case SEAL_PLAY_MID_FAILED:
-        return "Failed playing the specified MIDI file";
+    case SEAL_CANNOT_REWIND_MPG:
+        return "Failed rewinding the specified MPEG file";
+    case SEAL_CANNOT_CLOSE_MPG:
+        return "Failed closing the specified MPEG file";
 
     default:
         return "Unkown error";
     }
 }
 
-void
-_seal_set_err(seal_err_t err)
+seal_err_t
+_seal_get_openal_err(void)
 {
-    _seal_set_tls(_seal_err, (void*) err);
-#ifndef NDEBUG
-    if (err != SEAL_OK)
-        fprintf(stderr, "[SEAL][DEBUG] %s\n", seal_get_err_msg(err));
-#endif
-}
-
-/*
- * Always call `_seal_lock_al' before calling an OpenAL function that could
- * possibly raise an OpenAL error, and then call this function to get the
- * error.
- */
-int
-_seal_get_al_err(void)
-{
-    int err;
-    
-    err = alGetError();
-    _seal_unlock_al();
-
-    return err;
+    switch (alGetError()) {
+    case AL_INVALID_NAME:
+        return SEAL_BAD_OBJ;
+    case AL_INVALID_ENUM:
+        return SEAL_BAD_ENUM;
+    case AL_INVALID_VALUE:
+        return SEAL_BAD_VAL;
+    case AL_INVALID_OPERATION:
+        return SEAL_BAD_OP;
+    case AL_OUT_OF_MEMORY:
+        return SEAL_CANNOT_ALLOC_MEM;
+    default:
+        return SEAL_OK;
+    }
 }

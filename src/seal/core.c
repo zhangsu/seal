@@ -4,67 +4,148 @@
  * attached with the library.
  */
 
+#include <stdlib.h>
 #include <stddef.h>
-#include <malloc.h>
 #include <al/al.h>
 #include <al/alc.h>
+#include <al/efx.h>
 #include <mpg123/mpg123.h>
 #include <seal/core.h>
-#include <seal/threading.h>
-#include <seal/mid.h>
 #include <seal/err.h>
 
-/* Defined in err.c. */
-extern _seal_tls_t _seal_err;
-/* Global lock on OpenAL functions. */
-static _seal_lock_t al_lock;
+static int neffects_per_src = -1;
+
+void _seal_nop() {}
+void* _seal_nop_func() { return 0; }
+
+_seal_openal_initializer_t* alGenEffects = (void*) _seal_nop;
+_seal_openal_destroyer_t* alDeleteEffects = (void*) _seal_nop;
+_seal_openal_validator_t* alIsEffect = (void*) _seal_nop_func;
+LPALEFFECTF alEffectf = (void*) _seal_nop;
+LPALEFFECTI alEffecti = (void*) _seal_nop;
+LPALGETEFFECTF alGetEffectf = (void*) _seal_nop;
+LPALGETEFFECTI alGetEffecti = (void*) _seal_nop;
+_seal_openal_initializer_t* alGenAuxiliaryEffectSlots = (void*) _seal_nop;
+_seal_openal_destroyer_t* alDeleteAuxiliaryEffectSlots = (void*) _seal_nop;
+_seal_openal_validator_t* alIsAuxiliaryEffectSlot = (void*) _seal_nop_func;
+LPALAUXILIARYEFFECTSLOTI alAuxiliaryEffectSloti = (void*) _seal_nop;
+LPALAUXILIARYEFFECTSLOTF alAuxiliaryEffectSlotf = (void*) _seal_nop;
+LPALGETAUXILIARYEFFECTSLOTI alGetAuxiliaryEffectSloti = (void*) _seal_nop;
+LPALGETAUXILIARYEFFECTSLOTF alGetAuxiliaryEffectSlotf = (void*) _seal_nop;
 
 const char*
-seal_get_verion(void)
+seal_get_version(void)
 {
     return "0.2.0";
+}
+
+static seal_err_t
+init_ext_proc(void)
+{
+    alGenEffects = alGetProcAddress("alGenEffects");
+    alDeleteEffects = alGetProcAddress("alDeleteEffects");
+    alIsEffect = alGetProcAddress("alIsEffect");
+    alEffectf = alGetProcAddress("alEffectf");
+    alEffecti = alGetProcAddress("alEffecti");
+    alGetEffectf = alGetProcAddress("alGetEffectf");
+    alGetEffecti = alGetProcAddress("alGetEffecti");
+    alGenAuxiliaryEffectSlots = alGetProcAddress("alGenAuxiliaryEffectSlots");
+    alDeleteAuxiliaryEffectSlots =
+        alGetProcAddress("alDeleteAuxiliaryEffectSlots");
+    alIsAuxiliaryEffectSlot = alGetProcAddress("alIsAuxiliaryEffectSlot");
+    alAuxiliaryEffectSloti = alGetProcAddress("alAuxiliaryEffectSloti");
+    alAuxiliaryEffectSlotf = alGetProcAddress("alAuxiliaryEffectSlotf");
+    alGetAuxiliaryEffectSloti = alGetProcAddress("alGetAuxiliaryEffectSloti");
+    alGetAuxiliaryEffectSlotf = alGetProcAddress("alGetAuxiliaryEffectSlotf");
+    if (alGenEffects && alDeleteEffects && alIsEffect && alGetEffectf
+        && alGetEffecti && alEffectf && alGenAuxiliaryEffectSlots
+        && alDeleteAuxiliaryEffectSlots && alIsAuxiliaryEffectSlot
+        && alAuxiliaryEffectSloti && alAuxiliaryEffectSlotf
+        && alGetAuxiliaryEffectSloti && alGetAuxiliaryEffectSlotf)
+        return SEAL_OK;
+    else
+        return SEAL_NO_EXT_FUNC;
+}
+
+static void
+reset_ext_proc(void)
+{
+    alGenEffects = (void*) _seal_nop;
+    alDeleteEffects = (void*) _seal_nop;
+    alIsEffect = (void*) _seal_nop_func;
+    alEffectf = (void*) _seal_nop;
+    alEffecti = (void*) _seal_nop;
+    alGetEffectf = (void*) _seal_nop;
+    alGetEffecti = (void*) _seal_nop;
+    alGenAuxiliaryEffectSlots = (void*) _seal_nop;
+    alDeleteAuxiliaryEffectSlots = (void*) _seal_nop;
+    alIsAuxiliaryEffectSlot = (void*) _seal_nop_func;
+    alAuxiliaryEffectSloti = (void*) _seal_nop;
+    alAuxiliaryEffectSlotf = (void*) _seal_nop;
+    alGetAuxiliaryEffectSloti = (void*) _seal_nop;
+    alGetAuxiliaryEffectSlotf = (void*) _seal_nop;
 }
 
 /*
  * Initializes the specified device and creates a single context. SEAL
  * currently does not make use of multiple contexts.
  */
-int
+seal_err_t
 seal_startup(const char* device_name)
 {
     ALCdevice* device;
     ALCcontext* context;
+    seal_err_t err;
+    ALint attr[] = { ALC_MAX_AUXILIARY_SENDS, 4, 0, 0 };
 
+    /* Initialize device. */
     device = alcOpenDevice(device_name);
-    SEAL_CHK(device != 0, SEAL_OPEN_DEVICE_FAILED, 0);
+    if (device == 0)
+        return SEAL_CANNOT_OPEN_DEVICE;
+    alcGetError(device);
 
-    context = alcCreateContext(device, 0);
-    switch (alcGetError(device)) {
-    case ALC_INVALID_VALUE:
-        SEAL_ABORT_S(SEAL_CREATE_CONTEXT_FAILED, cleanup);
-    case ALC_INVALID_DEVICE:
-        SEAL_ABORT_S(SEAL_BAD_DEVICE, cleanup);
+    /* Initialize extensions. */
+    if (!alcIsExtensionPresent(device, ALC_EXT_EFX_NAME)) {
+        err = SEAL_NO_EFX;
+        goto clean_device;
     }
 
+    /* Initialize context. */
+    context = alcCreateContext(device, attr);
+    switch (alcGetError(device)) {
+    case ALC_INVALID_VALUE:
+        err = SEAL_CANNOT_CREATE_CONTEXT;
+        goto clean_device;
+    case ALC_INVALID_DEVICE:
+        err = SEAL_BAD_DEVICE;
+        goto clean_device;
+    }
     alcMakeContextCurrent(context);
+
+    err = init_ext_proc();
+    if (err != SEAL_OK)
+        goto clean_all;
+
+    /* Initialize libmpg123 (thread-unsafe). */
+    if (mpg123_init() != MPG123_OK) {
+        err = SEAL_CANNOT_INIT_MPG;
+        goto clean_all;
+    }
 
     /* Reset OpenAL's error state. */
     alGetError();
 
-    /* `mpg123_init' is thread-unsafe. */
-    SEAL_CHK_S(mpg123_init() == MPG123_OK && seal_midi_startup() != 0,
-               SEAL_INIT_MPG_FAILED, cleanup);
+    alcGetIntegerv(device, ALC_MAX_AUXILIARY_SENDS, 1, &neffects_per_src);
 
-    al_lock = _seal_create_lock();
-    _seal_err = _seal_alloc_tls();
-    _seal_set_tls(_seal_err, (void*) SEAL_OK);
+    return SEAL_OK;
 
-    return 1;
-
-cleanup:
+clean_all:
+    alcMakeContextCurrent(0);
+    alcDestroyContext(context);
+clean_device:
     alcCloseDevice(device);
 
-    return 0;
+    return err;
 }
 
 /* Finalizes the current device and context. */
@@ -74,64 +155,127 @@ seal_cleanup(void)
     ALCdevice* device;
     ALCcontext* context;
 
-    _seal_free_tls(_seal_err);
-    _seal_destroy_lock(al_lock);
-
     mpg123_exit();
-    seal_midi_cleanup();
 
     context = alcGetCurrentContext();
     device = alcGetContextsDevice(context);
     alcMakeContextCurrent(0);
     alcDestroyContext(context);
     alcCloseDevice(device);
+
+    reset_ext_proc();
 }
+
+int
+seal_get_neffects_per_src(void)
+{
+    return neffects_per_src;
+}
+
+unsigned int
+_seal_openal_id(void* obj)
+{
+    /* Hack: assuming the object id is always at offset 0. */
+    return *(unsigned int*) obj;
+}
+
+seal_err_t
+_seal_gen_objs(int n, unsigned int* objs,
+                          _seal_openal_initializer_t* generate)
+{
+    generate(n, objs);
+
+    return _seal_get_openal_err();
+}
+
+seal_err_t
+_seal_delete_objs(int n, const unsigned int* objs,
+                  _seal_openal_destroyer_t* destroy)
+{
+    destroy(n, objs);
+
+    return _seal_get_openal_err();
+}
+
+seal_err_t
+_seal_init_obj(void* obj, _seal_openal_initializer_t* allocate)
+{
+    return _seal_gen_objs(1, obj, allocate);
+}
+
+seal_err_t
+_seal_destroy_obj(void* obj, _seal_openal_destroyer_t* destroy,
+                  _seal_openal_validator_t* valid)
+{
+    if (valid(_seal_openal_id(obj)))
+        return _seal_delete_objs(1, obj, destroy);
+
+    return SEAL_OK;
+}
+
+seal_err_t
+_seal_setf(void* obj, int key, float val, _seal_openal_setterf* set)
+{
+    set(_seal_openal_id(obj), key, val);
+
+    return _seal_get_openal_err();
+}
+
+seal_err_t
+_seal_getf(void* obj, int key, float* pval, _seal_openal_getterf* get)
+{
+    get(_seal_openal_id(obj), key, pval);
+
+    return _seal_get_openal_err();
+}
+
+seal_err_t
+_seal_seti(void* obj, int key, int val, _seal_openal_setteri* set)
+{
+    set(_seal_openal_id(obj), key, val);
+
+    return _seal_get_openal_err();
+}
+
+seal_err_t
+_seal_geti(void* obj, int key, int* pval, _seal_openal_getteri* get)
+{
+    get(_seal_openal_id(obj), key, pval);
+
+    return _seal_get_openal_err();
+}
+
+seal_err_t
+_seal_getb(void* obj, int key, char* pval, _seal_openal_getteri* get)
+{
+    int val;
+    seal_err_t err;
+
+    err = _seal_geti(obj, key, &val, get);
+    if (err == SEAL_OK)
+        *pval = val;
+
+    return err;
+}
+
+#if defined (__unix__)
+
+#include <unistd.h>
 
 void
-_seal_lock_al(void)
+_seal_sleep(unsigned int millisec)
 {
-    _seal_lock(al_lock);
+    usleep(millisec * 1000);
 }
+
+#elif defined (_WIN32)
+
+#include <Windows.h>
 
 void
-_seal_unlock_al(void)
+_seal_sleep(unsigned int millisec)
 {
-    _seal_unlock(al_lock);
+    SleepEx(millisec, 0);
 }
 
-void*
-_seal_malloc(size_t size)
-{
-    void* mem;
-    
-    mem = malloc(size);
-    SEAL_CHK(mem != 0, SEAL_MEM_ALLOC_FAILED, 0);
-
-    return mem;
-}
-
-void*
-_seal_calloc(size_t count, size_t size)
-{
-    void* mem;
-
-    mem = calloc(count, size);
-    SEAL_CHK(mem != 0, SEAL_MEM_ALLOC_FAILED, 0);
-
-    return mem;
-}
-
-void*
-_seal_realloc(void* mem, size_t size)
-{
-    mem = realloc(mem, size);
-    SEAL_CHK(mem != 0, SEAL_MEM_ALLOC_FAILED, 0);
-
-    return mem;
-}
-
-void
-_seal_free(void* mem)
-{
-    free(mem);
-}
+#endif /* __unix__, _WIN32 */

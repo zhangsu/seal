@@ -1,8 +1,8 @@
-require './seal'
+require_relative 'seal'
 
-include Audio
+include Seal
 
-Audio.startup
+Seal.startup
 
 pipa = Source.new
 people = Source.new
@@ -48,4 +48,4 @@ loop do
 
 end
 
-Audio.cleanup
+Seal.cleanup

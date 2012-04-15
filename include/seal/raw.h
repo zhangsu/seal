@@ -11,7 +11,7 @@
 #define _SEAL_RAW_H_
 
 #include <stddef.h>
-#include "pstdint.h"
+#include "err.h"
 
 /* Raw PCM data. */
 typedef struct seal_raw_t seal_raw_t;
@@ -49,27 +49,12 @@ extern "C" {
 #endif
 
 /*
- * Allocates a `seal_raw_t'.
- *
- * @return  the newly allocated `seal_raw_t' if successful or otherwise 0
- */
-seal_raw_t* seal_alloc_raw(void);
-
-/*
- * Frees a `seal_raw_t' structure allocated by `seal_alloc_raw'.
- *
- * @param raw   the raw structure to free
- */
-void seal_free_raw(seal_raw_t*);
-
-/*
  * Allocates the memory pointed by `raw->data'.
  *
  * @param raw   the raw structure with the `data' field to allocate
  * @param size  the size of the memory to allocate
- * @return      nonzero if successful or otherwise 0
  */
-int seal_alloc_raw_data(seal_raw_t*, size_t);
+seal_err_t seal_alloc_raw_data(seal_raw_t*, size_t);
 
 /*
  * Deallocates the memory pointed by `raw->data'.
@@ -82,9 +67,8 @@ void seal_free_raw_data(seal_raw_t*);
  * Extends the size of the memory pointed by `raw->data'.
  *
  * @param raw   the raw structure with the `data' field to extend
- * @return      nonzero if successful or otherwise 0
  */
-int seal_extend_raw_data(seal_raw_t*);
+seal_err_t seal_extend_raw_data(seal_raw_t*);
 
 /*
  * Ensures the size of the memory pointed by `raw->data' is larger than `size'
@@ -92,9 +76,8 @@ int seal_extend_raw_data(seal_raw_t*);
  *
  * @param raw   the raw structure with the `data' field to ensure
  * @param size  the size to ensure `raw->data' to have
- * @return      nonzero if successful or otherwise 0
  */
-int seal_ensure_raw_data_size(seal_raw_t*, size_t);
+seal_err_t seal_ensure_raw_data_size(seal_raw_t*, size_t);
 
 #ifdef __cplusplus
 }

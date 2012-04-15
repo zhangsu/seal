@@ -1,9 +1,9 @@
-require './seal'
+require_relative 'seal'
 
-Audio.startup
+Seal.startup
 
-src = Audio::Source.new
-src.stream = Audio::Stream.open('pipa.ogg')
+src = Seal::Source.new
+src.stream = Seal::Stream.open('pipa.ogg')
 src.play
 src.looping = true
 
@@ -21,4 +21,4 @@ until (c = $stdin.getc) =~ /q/i
   end
 end
 
-Audio.cleanup
+Seal.cleanup

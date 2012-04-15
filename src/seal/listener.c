@@ -6,70 +6,100 @@
 
 #include <al/al.h>
 #include <seal/listener.h>
-#include <seal/core.h>
 #include <seal/err.h>
-#include <assert.h>
 
-int
+static seal_err_t
+setf(int key, float val)
+{
+    alListenerf(key, val);
+
+    return _seal_get_openal_err();
+}
+
+static seal_err_t
+set3f(int key, float x, float y, float z)
+{
+    alListener3f(key, x, y, z);
+
+    return _seal_get_openal_err();
+}
+
+static seal_err_t
+setfv(int key, float* vector)
+{
+    alListenerfv(key, vector);
+
+    return _seal_get_openal_err();
+}
+
+static seal_err_t
+getf(int key, float* pval)
+{
+    alGetListenerf(key, pval);
+
+    return _seal_get_openal_err();
+}
+
+static seal_err_t
+get3f(int key, float* px, float* py, float* pz)
+{
+    alGetListener3f(key, px, py, pz);
+
+    return _seal_get_openal_err();
+}
+
+static seal_err_t
+getfv(int key, float* vector)
+{
+    alGetListenerfv(key, vector);
+
+    return _seal_get_openal_err();
+}
+
+seal_err_t
 seal_set_listener_gain(float gain)
 {
-    _seal_lock_al();
-    alListenerf(AL_GAIN, gain);
-    SEAL_CHK_AL(AL_INVALID_VALUE, SEAL_BAD_LISTENER_ATTR_VAL, 0);
-
-    return 1;
+    return setf(AL_GAIN, gain);
 }
 
-void
+seal_err_t
 seal_set_listener_pos(float x, float y, float z)
 {
-    alListener3f(AL_POSITION, x, y, z);
+    return set3f(AL_POSITION, x, y, z);
 }
 
-void
+seal_err_t
 seal_set_listener_vel(float x, float y, float z)
 {
-    alListener3f(AL_VELOCITY, x, y, z);
+    return set3f(AL_VELOCITY, x, y, z);
 }
 
-void
+seal_err_t
 seal_set_listener_orien(float* orien)
 {
-    assert(orien != 0);
-
-    alListenerfv(AL_ORIENTATION, orien);
+    return setfv(AL_ORIENTATION, orien);
 }
 
-float
-seal_get_listener_gain(void)
+seal_err_t
+seal_get_listener_gain(float* pgain)
 {
-    float gain;
-
-    alGetListenerf(AL_GAIN, &gain);
-
-    return gain;
+    return getf(AL_GAIN, pgain);
 }
 
-void
-seal_get_listener_pos(float* x, float* y, float* z)
+seal_err_t
+seal_get_listener_pos(float* px, float* py, float* pz)
 {
-    assert(x != 0 && y != 0 && z != 0);
-
-    alGetListener3f(AL_POSITION, x, y, z);
+    return get3f(AL_POSITION, px, py, pz);
 }
 
-void
-seal_get_listener_vel(float* x, float* y, float* z)
+seal_err_t
+seal_get_listener_vel(float* px, float* py, float* pz)
 {
-    assert(x != 0 && y != 0 && z != 0);
-
-    alGetListener3f(AL_VELOCITY, x, y, z);
+    return get3f(AL_VELOCITY, px, py, pz);
 }
 
-void
+seal_err_t
 seal_get_listener_orien(float* orien)
 {
-    assert(orien != 0);
-
-    alGetListenerfv(AL_ORIENTATION, orien);
+    return getfv(AL_ORIENTATION, orien);
 }
