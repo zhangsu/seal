@@ -23,6 +23,7 @@ namespace :mf do
   # Library input list for Win32.
   LIBS              = [File.join(LIB_DIR, 'OpenAL32.lib'),
                        File.join(LIB_DIR, 'libmpg123.lib')].join
+  DLLS              = ['OpenAL32.dll', 'libmpg123.dll']
 
   task :prepare do |t|
     report(t)
@@ -87,6 +88,7 @@ namespace :mf do
   desc 'Generate Makefile for all compilers on all platforms'
   task :all => [:'gcc:all', :'msvc:all']
 
+  # Assuming UN*X shell.
   namespace :gcc do |; gcc_options|
     gcc_options = {
       cc:     'gcc',
@@ -94,11 +96,11 @@ namespace :mf do
       flags:  '-Wextra -O3',
       cflags: "-I#{INCLUDE_DIR} -DNDEBUG -c",
       lflags: '-shared',
+      coflag: '-o ',
+      loflag: '-o ',
       mkdir:  'mkdir -p',
       rm:     'rm -rf',
       rmdir:  'rmdir',
-      coflag: '-o ',
-      loflag: '-o ',
     }
 
     desc 'Generate Makefile for GCC on all platforms'
@@ -109,6 +111,7 @@ namespace :mf do
       report(t)
       options = gcc_options.merge(
         libs:   '-lopenal -lmpg123',
+        dlls:   [],
         output: 'libseal.so',
       )
       options[:cflags] += ' -fPIC'
@@ -119,30 +122,35 @@ namespace :mf do
     task :win32 => :prepare do |t; options|
       report(t)
       options = gcc_options.merge(
-        libs:   LIBS,
-        output: 'seal.dll',
+        libs:     LIBS,
+        dlls:     DLLS.map { |dll| File.join(LIB_DIR, dll) },
+        output:   'seal.dll',
+        cp:       'cp',
       )
       options[:lflags] += ' $(PROJDIR)/msvc/seal/exports.def'
       make_makefile_in(File.join('make', 'gcc', 'win32'), options)
     end
   end
 
+  # Assuming MS-DOS command prompt.
   namespace :msvc do |; msvc_options|
     msvc_options = {
-      cc:     'cl',
-      linker: 'link',
-      cflags: '/c /Ob2ity /Gd /GL /Gy /MD /DNDEBUG '\
-              "/I #{INCLUDE_DIR} /TC /nologo",
-      lflags: '/DLL /LTCG /OPT:REF /OPT:ICF=3 /MANIFEST /NOLOGO '\
-              '/DEF:$(PROJDIR)/msvc/seal/exports.def',
-      mkdir:  'mkdir',
-      rm:     'del /F /S /Q',
-      rmdir:  'rmdir',
-      cp:     'copy /Y',
-      coflag: '/Fo',
-      loflag: '/OUT:',
-      libs:   LIBS,
-      output: 'seal.dll',
+      cc:         'cl',
+      linker:     'link',
+      cflags:     '/c /Ob2ity /Gd /GL /Gy /MD /DNDEBUG '\
+                  "/I #{INCLUDE_DIR} /TC /nologo",
+      lflags:     '/DLL /LTCG /OPT:REF /OPT:ICF=3 /MANIFEST /NOLOGO '\
+                  '/DEF:$(PROJDIR)/msvc/seal/exports.def',
+      libs:       LIBS,
+      dlls:       DLLS.map { |dll| LIB_DIR.gsub(/\/|$/, '\\') + dll },
+      coflag:     '/Fo',
+      loflag:     '/OUT:',
+      output:     'seal.dll',
+      after_link: 'mt -nologo -manifest $@.manifest -outputresource:$@;1',
+      mkdir:      'mkdir',
+      rm:         'del /F /S /Q',
+      rmdir:      'rmdir',
+      cp:         'copy /Y',
     }
 
     desc 'Generate Makefile for MSVC on all platforms'

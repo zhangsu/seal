@@ -16,10 +16,19 @@ PROJDIR     = <%= PROJ_DIR %>
 
 OBJECTS     = <%= OBJECTS %>
 
-all : $(OUTPUT)
+<% dlls = options[:dlls] %>
+<% dlls_basename = dlls.map { |dll| File.basename(dll) } %>
+
+all : $(OUTPUT) <%= dlls_basename.join %>
+
+<% dlls.size.times do |i| %>
+<%= dlls_basename[i] %>:
+	$(CP) <%= dlls[i] %> .
+<% end %>
 
 $(OUTPUT): $(OBJECTS)
 	$(LINKER) $(OBJECTS) $(LIBS) $(LFLAGS) $(LOFLAG)$@
+	<%= options[:after_link] %>
 
 <% RULE_GROUPS.each do |dir, rule_group| %>
 <%= timestamp = dir.dir_timestamp %>:
