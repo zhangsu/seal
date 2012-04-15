@@ -36,6 +36,15 @@ namespace :mf do
         `gcc -I#{INCLUDE_DIR} -MM -MT #{object_filename} \
           #{File.join(PROJ_DIR, 'src', self)}`.strip
       end
+
+      def dir_timestamp
+        File.join(self, 'timestamp')
+      end
+
+      def second_token
+        self =~ /:\s+\S+[\s\\]+(\S+)/
+        $1
+      end
     end
 
     def make_makefile(options)
@@ -64,6 +73,7 @@ namespace :mf do
       workers << Thread.new do
         rule = filename.rule
         key = rule.target_dirname
+        rule.sub!(/:/, ': ' + key.dir_timestamp)
         Thread.exclusive do
           RULE_GROUPS[key] ||= []
           RULE_GROUPS[key] << rule

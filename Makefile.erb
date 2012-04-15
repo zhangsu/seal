@@ -21,11 +21,12 @@ $(OUTPUT): $(OBJECTS)
 	$(LINKER) $(LFLAGS) $(LOFLAG)$@ $(OBJECTS) $(LIBS)
 
 <% RULE_GROUPS.each do |dir, rule_group| %>
-<%= dir %>:
-	$(MKDIR) $@
+<%= timestamp = dir.dir_timestamp %>:
+	$(MKDIR) <%= dir %>
+	echo > <%= timestamp %>
 <% for rule in rule_group %>
 <%= rule %>
-	$(CC) $(CFLAGS) $(OFLAG)$@ $<
+	$(CC) $(CFLAGS) $(COFLAG)$@ <%= rule.second_token %>
 <% end %>
 <% end %>
 
