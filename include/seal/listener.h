@@ -10,6 +10,8 @@
 #ifndef _SEAL_LISTENER_H_
 #define _SEAL_LISTENER_H_
 
+#include "err.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -20,9 +22,8 @@ extern "C" {
  * an attenuation of 6 dB; 0.0f means silence.
  *
  * @param gain  the scalar amplitude multiplier in the interval [0.0f, +inf.)
- * @return      nonzero if successful or otherwise 0
  */
-int seal_set_listener_gain(float /*gain*/);
+seal_err_t seal_set_listener_gain(float /*gain*/);
 
 /*
  * Sets the position of the listener in a right-handed Cartesian coordinate
@@ -32,7 +33,7 @@ int seal_set_listener_gain(float /*gain*/);
  * @param y     the y position to set
  * @param z     the z position to set
  */
-void seal_set_listener_pos(float /*x*/, float /*y*/, float /*z*/);
+seal_err_t seal_set_listener_pos(float /*x*/, float /*y*/, float /*z*/);
 
 /*
  * Sets the velocity of the listener in a right-handed Cartesian coordinate
@@ -43,7 +44,7 @@ void seal_set_listener_pos(float /*x*/, float /*y*/, float /*z*/);
  * @param y     the y velocity to set
  * @param z     the z velocity to set
  */
-void seal_set_listener_vel(float /*x*/, float /*y*/, float /*z*/);
+seal_err_t seal_set_listener_vel(float /*x*/, float /*y*/, float /*z*/);
 
 /*
  * Sets the orientation of the listener.
@@ -54,37 +55,36 @@ void seal_set_listener_vel(float /*x*/, float /*y*/, float /*z*/);
  *              'up' direction for the listener. These two vectors must be
  *              linearly independent, must not be NaN and must not be
  *              normalized. Otherwise, the operation is undefined
- * @return      nonzero if successful or otherwise 0
  */
-void seal_set_listener_orien(float* /*orien*/);
+seal_err_t seal_set_listener_orien(float* /*orien*/);
 
 /*
  * Gets the gain of the listener. The default is 1.0f.
  *
  * @see         seal_set_listener_gain
- * @return      the gain
+ * @param pgain the receiver of the gain
  */
-float seal_get_listener_gain(void);
+seal_err_t seal_get_listener_gain(float* /*pgain*/);
 
 /*
  * Gets the position of the listener. The default is ( 0.0f, 0.0f, 0.0f ).
  *
  * @see         seal_set_listener_pos
- * @param x     receives the x position
- * @param y     receives the y position
- * @param z     receives the z position
+ * @param px    the receiver of the x position
+ * @param py    the receiver of the y position
+ * @param pz    the receiver of the z position
  */
-void seal_get_listener_pos(float* /*x*/, float* /*y*/, float* /*z*/);
+seal_err_t seal_get_listener_pos(float* /*px*/, float* /*py*/, float* /*pz*/);
 
 /*
  * Gets the velocity of the listener. The default is ( 0.0f, 0.0f, 0.0f ).
  *
  * @see         seal_set_listener_vel
- * @param x     receives the x velocity
- * @param y     receives the y velocity
- * @param z     receives the z velocity
+ * @param px    the receiver of the x velocity
+ * @param py    the receiver of the y velocity
+ * @param pz    the receiver of the z velocity
  */
-void seal_get_listener_vel(float* /*x*/, float* /*y*/, float* /*z*/);
+seal_err_t seal_get_listener_vel(float* /*px*/, float* /*py*/, float* /*pz*/);
 
 /*
  * Gets the orientation of the listener. The default is
@@ -93,9 +93,8 @@ void seal_get_listener_vel(float* /*x*/, float* /*y*/, float* /*z*/);
  * @see seal_set_listener_orien
  * @param orien the array of a pair of 3-tuple that receives the 'at' vector
  *              and the 'up' vector
- * @return      nonzero if successful or otherwise 0
  */
-void seal_get_listener_orien(float* /*orien*/);
+seal_err_t seal_get_listener_orien(float* /*orien*/);
 
 #ifdef __cplusplus
 }

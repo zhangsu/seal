@@ -12,37 +12,30 @@
 #ifndef _SEAL_ERR_H_
 #define _SEAL_ERR_H_
 
-#include <al/al.h>
-
 enum seal_err_t
 {
     SEAL_OK,
 
-    SEAL_OPEN_DEVICE_FAILED,
+    SEAL_BAD_OBJ,
+    SEAL_BAD_ENUM,
+    SEAL_BAD_VAL,
+    SEAL_BAD_OP,
+
+    SEAL_CANNOT_OPEN_DEVICE,
+    SEAL_NO_EFX,
+    SEAL_NO_EXT_FUNC,
     SEAL_BAD_DEVICE,
-    SEAL_CREATE_CONTEXT_FAILED,
+    SEAL_CANNOT_CREATE_CONTEXT,
 
-    SEAL_ALLOC_BUF_FAILED,
-    SEAL_FREE_BUF_FAILED,
-    SEAL_BUF_INUSE,
-
-    SEAL_ALLOC_STREAM_FAILED,
-    SEAL_STREAM_ALREADY_OPENED,
     SEAL_STREAM_UNOPENED,
-    SEAL_STREAM_INUSE,
     SEAL_MIXING_STREAM_FMT,
 
-    SEAL_ALLOC_SRC_FAILED,
-    SEAL_BAD_SRC_ATTR_VAL,
-    SEAL_BAD_SRC_OP,
     SEAL_MIXING_SRC_TYPE,
 
-    SEAL_BAD_LISTENER_ATTR_VAL,
-
-    SEAL_OPEN_FILE_FAILED,
+    SEAL_CANNOT_OPEN_FILE,
     SEAL_BAD_AUDIO,
 
-    SEAL_MEM_ALLOC_FAILED,
+    SEAL_CANNOT_ALLOC_MEM,
 
     SEAL_BAD_WAV_SUBTYPE,
     SEAL_BAD_WAV_CHUNK,
@@ -51,17 +44,19 @@ enum seal_err_t
     SEAL_BAD_WAV_BPS,
     SEAL_BAD_WAV_NCHANNELS,
     FILE_BAD_WAV_FREQ,
+    SEAL_CANNOT_REWIND_WAV,
 
-    SEAL_OPEN_OV_FAILED,
-    SEAL_GET_OV_INFO_FAILED,
-    SEAL_READ_OV_FAILED,
+    SEAL_CANNOT_OPEN_OV,
+    SEAL_CANNOT_GET_OV_INFO,
+    SEAL_CANNOT_READ_OV,
+    SEAL_CANNOT_REWIND_OV,
+    SEAL_CANNOT_CLOSE_OV,
 
-    SEAL_INIT_MPG_FAILED,
-    SEAL_GET_MPG_INFO_FAILED,
-    SEAL_READ_MPG_FAILED,
-
-    SEAL_OPEN_MID_FAILED,
-    SEAL_PLAY_MID_FAILED
+    SEAL_CANNOT_INIT_MPG,
+    SEAL_CANNOT_GET_MPG_INFO,
+    SEAL_CANNOT_READ_MPG,
+    SEAL_CANNOT_REWIND_MPG,
+    SEAL_CANNOT_CLOSE_MPG,
 };
 
 typedef enum seal_err_t seal_err_t;
@@ -71,20 +66,6 @@ extern "C" {
 #endif
 
 /*
- * Gets the thread-local SEAL error state and clears it to SEAL_OK.
- *
- * @return  the error state
- */
-seal_err_t seal_get_err(void);
-
-/*
- * Peeks the thread-local SEAL error state without clearing it to SEAL_OK.
- *
- * @return  the error state
- */
-seal_err_t seal_peek_err(void);
-
-/*
  * Gets a SEAL error message.
  *
  * @param err   the error to get the message associated with
@@ -92,93 +73,19 @@ seal_err_t seal_peek_err(void);
  */
 const char* seal_get_err_msg(seal_err_t);
 
-/* IMPLEMENTATION DETAILS STARTS FROM HERE. */
-
-/*
- * Sets the thread-local SEAL error state.
- *
- * @param err the error to set
- */
-void _seal_set_err(seal_err_t);
-
-/*
- * Retrieves the last OpenAL error.
- *
- * @return  the error
- */
-int _seal_get_al_err(void);
-
 #ifdef __cplusplus
 }
 #endif
 
 /*
- * Some syntactic sugars for SEAL error checking. No multiple evaluation.
- * SEAL_CHK_AL_* asserts there is no OpenAL error so far.
- * SEAL_CHK_* (without the "AL") asserts an expression evaluates to true.
- * Macros with suffix `_S' also does clean-up by jumping to a local label that
- * starts the clean-up process.
+ *****************************************************************************
+ * Below are **implementation details**.
+ *****************************************************************************
  */
 
-/* Sets an error and returns with a specified value. */
-#define SEAL_ABORT(err, ret) do                                             \
-{                                                                           \
-    _seal_set_err(err);                                                     \
-    return ret;                                                             \
-} while (0)
-
-/* Sets an error and jumps to a specified label. */
-#define SEAL_ABORT_S(err, label) do                                         \
-{                                                                           \
-    _seal_set_err(err);                                                     \
-    goto label;                                                             \
-} while (0)
-
-/* Asserts `expr' evaluates to true and returns. */
-#define SEAL_CHK(expr, err, ret) if (!(expr)) SEAL_ABORT(err, ret)
-
-/* Asserts `expr' evaluates to true and jumps. */
-#define SEAL_CHK_S(expr, err, label) if (!(expr)) SEAL_ABORT_S(err, label)
-
-/* Checks and maps 3 OpenAL errors to 3 SEAL errors. */
-#define SEAL_CHK_AL3(alerr1, err1, alerr2, err2, alerr3, err3, ret) do      \
-{                                                                           \
-    switch (_seal_get_al_err()) {                                           \
-    case (alerr1):                                                          \
-        SEAL_ABORT(err1, ret);                                              \
-    case (alerr2):                                                          \
-        SEAL_ABORT(err2, ret);                                              \
-    case (alerr3):                                                          \
-        SEAL_ABORT(err3, ret);                                              \
-    }                                                                       \
-} while (0)
-
-/* Checks and maps 2 OpenAL errors to 2 SEAL errors. */
-#define SEAL_CHK_AL2(alerr1, err1, alerr2, err2, ret) do                    \
-{                                                                           \
-    switch (_seal_get_al_err()) {                                           \
-    case (alerr1):                                                          \
-        SEAL_ABORT(err1, ret);                                              \
-    case (alerr2):                                                          \
-        SEAL_ABORT(err2, ret);                                              \
-    }                                                                       \
-} while (0)
-
-/* Checks and maps an OpenAL errors to a SEAL errors. */
-#define SEAL_CHK_AL2_S(alerr1, err1, alerr2, err2, label) do                \
-{                                                                           \
-    switch (_seal_get_al_err()) {                                           \
-    case (alerr1):                                                          \
-        SEAL_ABORT_S(err1, label);                                          \
-    case (alerr2):                                                          \
-        SEAL_ABORT_S(err2, label);                                          \
-    }                                                                       \
-} while (0)
-
-#define SEAL_CHK_AL(alerr, err, ret)                                        \
-    SEAL_CHK((_seal_get_al_err() != (alerr)), err, ret)
-
-#define SEAL_CHK_AL_S(alerr, err, label)                                    \
-    SEAL_CHK_S(_seal_get_al_err() != (alerr), err, label)
+/*
+ * @return  the OpenAL error as a SEAL error
+ */
+seal_err_t _seal_get_openal_err(void);
 
 #endif /* _SEAL_ERR_H_ */

@@ -10,13 +10,11 @@
 #define _SEAL_CORE_H_
 
 #include <stddef.h>
+#include "err.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-/* Gets the SEAL version string. */
-const char* seal_get_verion(void);
 
 /*
  * Initializes SEAL by specifying the device name. This function is not
@@ -25,36 +23,73 @@ const char* seal_get_verion(void);
  * `seal_starup' twice in a row.
  *
  * @param device_name   the name of a device; 0 to use the default one
- * @return              nonzero if successful or otherwise 0
  */
-int seal_startup(const char* /*device_name*/);
+seal_err_t seal_startup(const char* /*device_name*/);
 
 /* Uninitializes SEAL and invalidate all SEAL objects. Thread-unsafe. */
 void seal_cleanup(void);
+
+/*
+ * @return  the maximum number of effects a source can mix concurrently.
+ */
+int seal_get_neffects_per_src(void);
+
+/*
+ * Gets the SEAL version string.
+ *
+ * @return  the version string
+ */
+const char* seal_get_version(void);
 
 #ifdef __cplusplus
 }
 #endif
 
-/* IMPLEMENTATION DETAILS STARTS FROM HERE. */
-
 /*
- * OpenAL's error state is not thread-safe and so semaphores are needed unless
- * SEAL_NO_THREAD_SAFETY is defined. Ideally we should lock only before
- * setting the error and unlock after retrieving the error, but that requires
- * a modification to the OpenAL implementation being used... */
-void _seal_lock_al(void);
-void _seal_unlock_al(void);
+ *****************************************************************************
+ * Below are **implementation details**.
+ *****************************************************************************
+ */
 
-/* Memory operations. */
-void* _seal_malloc(size_t);
-void* _seal_calloc(size_t /*count*/, size_t /*size*/);
-void* _seal_realloc(void* /*mem*/, size_t);
-void _seal_free(void* /*mem*/);
+void _seal_sleep(unsigned int millisec);
 
-/* Interfaces for working with dynamic libraries. */
-void* _seal_open_lib(const char* /*lib_filename*/);
-void* _seal_get_sym(void* /*lib*/, const char* /*symbol*/);
-void _seal_close_lib(void* /*lib*/);
+/* Common types. */
+typedef void _seal_openal_initializer_t(int, unsigned int*);
+typedef void _seal_openal_destroyer_t(int, const unsigned int*);
+typedef char _seal_openal_validator_t(unsigned int);
+typedef void _seal_openal_setterf(unsigned int, int, float);
+typedef void _seal_openal_getterf(unsigned int, int, float*);
+typedef void _seal_openal_setteri(unsigned int, int, int);
+typedef void _seal_openal_getteri(unsigned int, int, int*);
+
+/* Common helpers. */
+unsigned int _seal_openal_id(void*);
+seal_err_t _seal_gen_objs(int, unsigned int*, _seal_openal_initializer_t*);
+seal_err_t _seal_delete_objs(int, const unsigned int*,
+                             _seal_openal_destroyer_t*);
+seal_err_t _seal_init_obj(void*, _seal_openal_initializer_t*);
+seal_err_t _seal_destroy_obj(void*, _seal_openal_destroyer_t*,
+                             _seal_openal_validator_t*);
+seal_err_t _seal_setf(void*, int, float, _seal_openal_setterf*);
+seal_err_t _seal_getf(void*, int, float*, _seal_openal_getterf*);
+seal_err_t _seal_seti(void*, int, int, _seal_openal_setteri*);
+seal_err_t _seal_geti(void*, int, int*, _seal_openal_getteri*);
+seal_err_t _seal_getb(void*, int, char*, _seal_openal_getteri*);
+
+/* OpenAL effect extension functions. */
+extern _seal_openal_initializer_t* alGenEffects;
+extern _seal_openal_destroyer_t* alDeleteEffects;
+extern _seal_openal_validator_t* alIsEffect;
+extern _seal_openal_setterf* alEffectf;
+extern void (*alEffecti)(unsigned int, int, int);
+extern _seal_openal_getterf* alGetEffectf;
+extern void (*alGetEffecti)(unsigned int, int, int*);
+extern _seal_openal_initializer_t* alGenAuxiliaryEffectSlots;
+extern _seal_openal_destroyer_t* alDeleteAuxiliaryEffectSlots;
+extern _seal_openal_validator_t* alIsAuxiliaryEffectSlot;
+extern void (*alAuxiliaryEffectSloti)(unsigned int, int, int);
+extern void (*alAuxiliaryEffectSlotf)(unsigned int, int, float);
+extern void (*alGetAuxiliaryEffectSloti)(unsigned int, int, int*);
+extern void (*alGetAuxiliaryEffectSlotf)(unsigned int, int, float*);
 
 #endif /* _SEAL_CORE_H_ */

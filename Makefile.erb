@@ -1,0 +1,48 @@
+CC          = <%= options[:cc] %>
+LINKER      = <%= options[:linker] %>
+CFLAGS      = <%= "#{options[:flags]} #{options[:cflags]}" %>
+LFLAGS      = <%= "#{options[:flags]} #{options[:lflags]}" %>
+LIBS        = <%= options[:libs] %>
+COFLAG      = <%= options[:coflag] %>
+LOFLAG      = <%= options[:loflag] %>
+OUTPUT      = <%= options[:output] %>
+
+MKDIR       = <%= options[:mkdir] %>
+CP          = <%= options[:cp] %>
+RM          = <%= options[:rm] %>
+RMDIR       = <%= options[:rmdir] %>
+
+PROJDIR     = <%= PROJ_DIR %>
+
+OBJECTS     = <%= OBJECTS %>
+
+<% dlls = options[:dlls] %>
+<% dlls_basename = dlls.map { |dll| File.basename(dll) } %>
+
+all : $(OUTPUT) <%= dlls_basename.join %>
+
+<% dlls.size.times do |i| %>
+<%= dlls_basename[i] %>:
+	$(CP) <%= dlls[i] %> .
+<% end %>
+
+$(OUTPUT): $(OBJECTS)
+	$(LINKER) $(OBJECTS) $(LIBS) $(LFLAGS) $(LOFLAG)$@
+	<%= options[:after_link] %>
+
+<% RULE_GROUPS.each do |dir, rule_group| %>
+<%= timestamp = dir.dir_timestamp %>:
+	$(MKDIR) <%= dir %> || echo OK
+	echo > <%= timestamp %>
+<% for rule in rule_group %>
+<%= rule %>
+	$(CC) $(CFLAGS) <%= rule.second_token %> $(COFLAG)$@
+<% end %>
+<% end %>
+
+clean:<% RULE_GROUPS.each_key do |dir| %>
+	$(RM) <%= dir %>
+	$(RMDIR) <%= dir %> || echo OK
+<% end %>
+	$(RM) $(OUTPUT)
+	$(RM) *.dll *.exp *.lib *.manifest

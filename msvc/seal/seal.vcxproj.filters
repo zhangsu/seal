@@ -48,10 +48,13 @@
     <ClCompile Include="..\..\src\seal\fmt.c">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\seal\mid.c">
+    <ClCompile Include="..\..\src\seal\ov.c">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\seal\ov.c">
+    <ClCompile Include="..\..\src\seal\reverb.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\seal\efs.c">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -71,37 +74,37 @@
     <ClInclude Include="..\..\include\seal\src.h">
       <Filter>include\seal</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\seal\wav.h">
-      <Filter>include\seal</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\seal.h">
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\seal\listener.h">
       <Filter>include\seal</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\seal\threading.h">
-      <Filter>include\seal</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\seal\pstdint.h">
-      <Filter>include\seal</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\seal\reader.h">
-      <Filter>include\seal</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\seal\stream.h">
-      <Filter>include\seal</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\seal\mpg.h">
       <Filter>include\seal</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\seal\fmt.h">
       <Filter>include\seal</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\seal\mid.h">
+    <ClInclude Include="..\..\include\seal\reverb.h">
       <Filter>include\seal</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\seal\ov.h">
+    <ClInclude Include="..\..\src\seal\mpg.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\seal\ov.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\seal\reader.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\seal\threading.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\seal\wav.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\seal\efs.h">
       <Filter>include\seal</Filter>
     </ClInclude>
   </ItemGroup>

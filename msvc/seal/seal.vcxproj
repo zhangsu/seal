@@ -25,7 +25,7 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>NotSet</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -41,7 +41,7 @@
     <GenerateManifest>false</GenerateManifest>
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>..\..\include;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include;</IncludePath>
-    <LibraryPath>..\..\lib;.;$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSdkDir)lib;$(FrameworkSDKDir)\lib</LibraryPath>
+    <LibraryPath>..\..\lib;$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSdkDir)lib;$(FrameworkSDKDir)\lib</LibraryPath>
     <SourcePath>..\..\src\seal;$(VCInstallDir)atlmfc\src\mfc;$(VCInstallDir)atlmfc\src\mfcm;$(VCInstallDir)atlmfc\src\atl;$(VCInstallDir)crt\src;</SourcePath>
     <OutDir>$(SolutionDir)Debug\</OutDir>
     <EmbedManifest>true</EmbedManifest>
@@ -51,7 +51,7 @@
     <GenerateManifest>false</GenerateManifest>
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>..\..\include;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include;</IncludePath>
-    <LibraryPath>..\..\lib\win32;$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSdkDir)lib;$(FrameworkSDKDir)\lib</LibraryPath>
+    <LibraryPath>..\..\lib;$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSdkDir)lib;$(FrameworkSDKDir)\lib</LibraryPath>
     <SourcePath>..\..\src\seal;$(VCInstallDir)atlmfc\src\mfc;$(VCInstallDir)atlmfc\src\mfcm;$(VCInstallDir)atlmfc\src\atl;$(VCInstallDir)crt\src;</SourcePath>
     <OutDir>$(SolutionDir)Release\</OutDir>
     <EmbedManifest>true</EmbedManifest>
@@ -142,20 +142,22 @@
       </Path>
     </BuildLog>
     <PostBuildEvent>
-      <Command>copy ..\..\lib\win32\*.dll ..\Release /Y</Command>
+      <Command>copy ..\..\lib\*.dll ..\Release /Y</Command>
+      <Message>Copy required DLLs</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\seal\buf.c" />
     <ClCompile Include="..\..\src\seal\core.c" />
+    <ClCompile Include="..\..\src\seal\efs.c" />
     <ClCompile Include="..\..\src\seal\err.c" />
     <ClCompile Include="..\..\src\seal\fmt.c" />
     <ClCompile Include="..\..\src\seal\listener.c" />
-    <ClCompile Include="..\..\src\seal\mid.c" />
     <ClCompile Include="..\..\src\seal\mpg.c" />
     <ClCompile Include="..\..\src\seal\ov.c" />
     <ClCompile Include="..\..\src\seal\raw.c" />
     <ClCompile Include="..\..\src\seal\reader.c" />
+    <ClCompile Include="..\..\src\seal\reverb.c" />
     <ClCompile Include="..\..\src\seal\src.c" />
     <ClCompile Include="..\..\src\seal\stream.c" />
     <ClCompile Include="..\..\src\seal\threading.c" />
@@ -165,19 +167,19 @@
     <ClInclude Include="..\..\include\seal.h" />
     <ClInclude Include="..\..\include\seal\buf.h" />
     <ClInclude Include="..\..\include\seal\core.h" />
+    <ClInclude Include="..\..\include\seal\efs.h" />
     <ClInclude Include="..\..\include\seal\err.h" />
     <ClInclude Include="..\..\include\seal\fmt.h" />
     <ClInclude Include="..\..\include\seal\listener.h" />
-    <ClInclude Include="..\..\include\seal\mid.h" />
-    <ClInclude Include="..\..\include\seal\mpg.h" />
-    <ClInclude Include="..\..\include\seal\ov.h" />
-    <ClInclude Include="..\..\include\seal\pstdint.h" />
     <ClInclude Include="..\..\include\seal\raw.h" />
-    <ClInclude Include="..\..\include\seal\reader.h" />
+    <ClInclude Include="..\..\include\seal\reverb.h" />
     <ClInclude Include="..\..\include\seal\src.h" />
     <ClInclude Include="..\..\include\seal\stream.h" />
-    <ClInclude Include="..\..\include\seal\threading.h" />
-    <ClInclude Include="..\..\include\seal\wav.h" />
+    <ClInclude Include="..\..\src\seal\mpg.h" />
+    <ClInclude Include="..\..\src\seal\ov.h" />
+    <ClInclude Include="..\..\src\seal\reader.h" />
+    <ClInclude Include="..\..\src\seal\threading.h" />
+    <ClInclude Include="..\..\src\seal\wav.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\libvorbis\libvorbis.vcxproj">
