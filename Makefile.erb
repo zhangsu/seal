@@ -3,7 +3,8 @@ LINKER      = <%= options[:linker] %>
 CFLAGS      = <%= "#{options[:flags]} #{options[:cflags]}" %>
 LFLAGS      = <%= "#{options[:flags]} #{options[:lflags]}" %>
 LIBS        = <%= options[:libs] %>
-OFLAG       = <%= options[:oflag] %>
+COFLAG      = <%= options[:coflag] %>
+LOFLAG      = <%= options[:loflag] %>
 OUTPUT      = <%= options[:output] %>
 
 MKDIR       = <%= options[:mkdir] %>
@@ -17,7 +18,7 @@ OBJECTS     = <%= OBJECTS %>
 all : $(OUTPUT)
 
 $(OUTPUT): $(OBJECTS)
-	$(LINK) $(LFLAGS) $(LIBS)
+	$(LINKER) $(LFLAGS) $(LOFLAG)$@ $(OBJECTS) $(LIBS)
 
 <% RULE_GROUPS.each do |dir, rule_group| %>
 <%= dir %>:

@@ -87,7 +87,8 @@ namespace :mf do
       mkdir:  'mkdir',
       rm:     'rm -rf',
       cp:     'cp',
-      oflag:  '-o ',
+      coflag: '-o ',
+      loflag: '-o ',
     }
 
     desc 'Generate Makefile for GCC on all platforms'
@@ -126,7 +127,8 @@ namespace :mf do
       mkdir:  'mkdir',
       rm:     'del',
       cp:     'copy',
-      oflag:  '/Fo',
+      coflag: '/Fo',
+      loflag: '',
     }
 
     desc 'Generate Makefile for MSVC on all platforms'
