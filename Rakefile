@@ -63,8 +63,8 @@ namespace :mf do
     filenames.each do |filename|
       workers << Thread.new do
         rule = filename.rule
+        key = rule.target_dirname
         Thread.exclusive do
-          key = rule.target_dirname
           RULE_GROUPS[key] ||= []
           RULE_GROUPS[key] << rule
         end
