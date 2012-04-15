@@ -18,7 +18,7 @@ tested at the moment.
 
 ## Build
 
--   ### GCC + GNU Make + Linux + UN*X shell
+-   GCC + GNU Make + Linux + UN*X shell
 
     install [libopenal]
     (http://connect.creativelabs.com/openal/Downloads/Forms/AllItems.aspx)
@@ -28,21 +28,21 @@ tested at the moment.
         $ cd make/gcc/linux
         $ make
 
--   ### GCC + GNU Make + MinGW + UN*X shell
+-   GCC + GNU Make + MinGW + UN*X shell
 
         $ cd make/gcc/win32
         $ make
 
--   ### MSVC + nmake + Command Promt
+-   MSVC + nmake + Command Promt
 
         > cd make/msvc/win32
         > nmake
 
--   ### MSVC + Microsoft Visual Studio 2010
+-   MSVC + Microsoft Visual Studio 2010
 
     use the solution and project files under /msvc.
 
--   ### Ruby extension
+-   Ruby extension
 
         $ cd demo
         $ ruby configure.rb
