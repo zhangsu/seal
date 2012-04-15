@@ -39,7 +39,7 @@ namespace :mf do
     end
 
     def make_makefile(options)
-      open 'Makefile', 'w' do |f|
+      open 'Makefile', 'wb' do |f|
         template = File.read(MAKEFILE_TEMPLATE)
         f << ERB.new(template).result(binding)
       end
