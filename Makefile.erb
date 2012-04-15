@@ -18,7 +18,7 @@ OBJECTS     = <%= OBJECTS %>
 all : $(OUTPUT)
 
 $(OUTPUT): $(OBJECTS)
-	$(LINKER) $(LFLAGS) $(LOFLAG)$@ $(OBJECTS) $(LIBS)
+	$(LINKER) $(OBJECTS) $(LIBS) $(LFLAGS) $(LOFLAG)$@
 
 <% RULE_GROUPS.each do |dir, rule_group| %>
 <%= timestamp = dir.dir_timestamp %>:
@@ -26,7 +26,7 @@ $(OUTPUT): $(OBJECTS)
 	echo > <%= timestamp %>
 <% for rule in rule_group %>
 <%= rule %>
-	$(CC) $(CFLAGS) $(COFLAG)$@ <%= rule.second_token %>
+	$(CC) $(CFLAGS) <%= rule.second_token %> $(COFLAG)$@
 <% end %>
 <% end %>
 

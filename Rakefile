@@ -123,6 +123,7 @@ namespace :mf do
         libs:   LIBS,
         output: 'seal.dll',
       )
+      options[:lflags] += ' $(PROJDIR)/msvc/seal/exports.def'
       make_makefile_in(File.join('make', 'gcc', 'win32'), options)
     end
   end
