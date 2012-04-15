@@ -1,0 +1,36 @@
+CC          = <%= options[:cc] %>
+LINKER      = <%= options[:linker] %>
+CFLAGS      = <%= "#{options[:flags]} #{options[:cflags]}" %>
+LFLAGS      = <%= "#{options[:flags]} #{options[:lflags]}" %>
+LIBS        = <%= options[:libs] %>
+OFLAG       = <%= options[:oflag] %>
+OUTPUT      = <%= options[:output] %>
+
+MKDIR       = <%= options[:mkdir] %>
+CP          = <%= options[:cp] %>
+RM          = <%= options[:rm] %>
+
+PROJDIR     = <%= PROJ_DIR %>
+
+OBJECTS     = <%= OBJECTS %>
+
+all : $(OUTPUT)
+
+$(OUTPUT): $(OBJECTS)
+	$(LINK) $(LFLAGS) $(LIBS)
+
+<% RULE_GROUPS.each do |dir, rule_group| %>
+<%= dir %>:
+	$(MKDIR) $@
+<% for rule in rule_group %>
+<%= rule %>
+	$(CC) $(CFLAGS) $(OFLAG)$@ $<
+<% end %>
+<% end %>
+
+clean:
+	$(RM) $(SEALOBJDIR)
+	$(RM) $(LIBOGGOBJDIR)
+	$(RM) $(LIBVORBISOBJDIR)
+	$(RM) $(SEALOUTPUT)
+	$(RM) *.dll
