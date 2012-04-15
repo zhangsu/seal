@@ -29,8 +29,8 @@ $(OUTPUT): $(OBJECTS)
 <% end %>
 
 clean:
-	$(RM) $(SEALOBJDIR)
-	$(RM) $(LIBOGGOBJDIR)
-	$(RM) $(LIBVORBISOBJDIR)
-	$(RM) $(SEALOUTPUT)
+<% RULE_GROUPS.each_key do |dir| %>
+	$(RM) <%= dir %>
+<% end %>
+	$(RM) $(OUTPUT)
 	$(RM) *.dll

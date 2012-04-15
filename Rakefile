@@ -85,7 +85,7 @@ namespace :mf do
       cflags: "-I#{INCLUDE_DIR} -DNDEBUG -c",
       lflags: '-shared',
       mkdir:  'mkdir',
-      rm:     'rm',
+      rm:     'rm -rf',
       cp:     'cp',
       oflag:  '-o ',
     }
