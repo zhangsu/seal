@@ -1,8 +1,33 @@
 #include <al/al.h>
 #include <al/efx.h>
+#include <al/efx-presets.h>
 #include <seal/rvb.h>
 #include <seal/core.h>
 #include <seal/err.h>
+
+static void
+load_properties(seal_rvb_t* rvb, EFXEAXREVERBPROPERTIES properties)
+{
+    seal_set_rvb_density(rvb, properties.flDensity);
+    seal_set_rvb_diffusion(rvb, properties.flDiffusion);
+    seal_set_rvb_gain(rvb, properties.flGain);
+    seal_set_rvb_hfgain(rvb, properties.flGainHF);
+    seal_set_rvb_decay_time(rvb, properties.flDecayTime);
+    seal_set_rvb_hfdecay_ratio(rvb, properties.flDecayHFRatio);
+    seal_set_rvb_reflections_gain(rvb, properties.flReflectionsGain);
+    seal_set_rvb_reflections_delay(rvb, properties.flReflectionsDelay);
+    seal_set_rvb_late_gain(rvb, properties.flLateReverbGain);
+    seal_set_rvb_late_delay(rvb, properties.flLateReverbDelay);
+    seal_set_rvb_air_absorbtion_hfgain(rvb, properties.flAirAbsorptionGainHF);
+    seal_set_rvb_room_rolloff_factor(rvb, properties.flRoomRolloffFactor);
+    seal_set_rvb_hfdecay_limited(rvb, properties.iDecayHFLimit);
+}
+
+#define LOAD_PROPERTIES(rvb, properties) do                                 \
+{                                                                           \
+    EFXEAXREVERBPROPERTIES __properties__ = properties;                     \
+    load_properties(rvb, __properties__);                                   \
+} while (0)
 
 seal_err_t
 seal_init_rvb(seal_rvb_t* rvb)
@@ -25,7 +50,15 @@ seal_destroy_rvb(seal_rvb_t* rvb)
 seal_err_t
 seal_load_rvb_preset(seal_rvb_t* rvb, seal_rvb_preset_t preset)
 {
-    return _seal_destroy_obj(reverb, alDeleteEffects, alIsEffect);
+    switch (preset) {
+    case SEAL_GENERIC_REVERB:
+        LOAD_PROPERTIES(rvb, EFX_REVERB_PRESET_GENERIC);
+        break;
+    case SEAL_MOUNTAINS_REVERB:
+        LOAD_PROPERTIES(rvb, EFX_REVERB_PRESET_MOUNTAINS);
+        break;
+    }
+    return SEAL_OK;
 }
 
 seal_err_t

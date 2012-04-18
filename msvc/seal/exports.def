@@ -55,6 +55,7 @@ seal_rewind_stream
 seal_close_stream
 seal_init_rvb
 seal_destroy_rvb
+seal_load_rvb_preset
 seal_set_rvb_density
 seal_set_rvb_diffusion
 seal_set_rvb_gain

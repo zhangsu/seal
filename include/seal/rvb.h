@@ -12,7 +12,14 @@
 
 #include "err.h"
 
+enum seal_rvb_preset_t
+{
+    SEAL_GENERIC_REVERB,
+    SEAL_MOUNTAINS_REVERB
+};
+
 typedef struct seal_rvb_t seal_rvb_t;
+typedef enum seal_rvb_preset_t seal_rvb_preset_t;
 
 #ifdef __cplusplus
 extern "C" {
@@ -32,6 +39,14 @@ seal_err_t seal_init_rvb(seal_rvb_t*);
  * @param reverb    the reverb to destroy
  */
 seal_err_t seal_destroy_rvb(seal_rvb_t*);
+
+/*
+ * Loads the specified reverb paramter preset into a reverb object.
+ *
+ * @param reverb    the reverb to load the preset into
+ * @param preset    the preset to load
+ */
+seal_err_t seal_load_rvb_preset(seal_rvb_t*, seal_rvb_preset_t);
 
 /*
  * Sets the modal density of a reverb in the interval [0.0f, 1.0f]. The
