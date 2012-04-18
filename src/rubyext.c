@@ -102,7 +102,7 @@ free_obj(void* obj, void *destroy)
 
 DEFINE_DEALLOCATOR(src)
 DEFINE_DEALLOCATOR(buf)
-DEFINE_DEALLOCATOR(reverb)
+DEFINE_DEALLOCATOR(rvb)
 DEFINE_DEALLOCATOR(efs)
 
 static void
@@ -793,175 +793,175 @@ feed_efs(VALUE rslot, VALUE rindex, VALUE rsrc)
  *  call-seq:
  *      Seal::Reverb.allocate -> reverb
  */
-DEFINE_ALLOCATOR(reverb)
+DEFINE_ALLOCATOR(rvb)
 
 /*
  *  call-seq:
  *      Seal::Reverb.new  -> reverb
  */
 static VALUE
-init_reverb(VALUE rreverb)
+init_rvb(VALUE rrvb)
 {
-    check_seal_err(seal_init_reverb(DATA_PTR(rreverb)));
+    check_seal_err(seal_init_rvb(DATA_PTR(rrvb)));
 
-    return rreverb;
+    return rrvb;
 }
 
 /*
  *  call-seq:
  *      reverb.density = flt  -> flt
  */
-DEFINE_SETTER(float, reverb, density)
+DEFINE_SETTER(float, rvb, density)
 
 /*
  *  call-seq:
  *      reverb.density  -> flt
  */
-DEFINE_GETTER(float, reverb, density)
+DEFINE_GETTER(float, rvb, density)
 
 /*
  *  call-seq:
  *      reverb.diffusion = flt  -> flt
  */
-DEFINE_SETTER(float, reverb, diffusion)
+DEFINE_SETTER(float, rvb, diffusion)
 
 /*
  *  call-seq:
  *      reverb.diffusion  -> flt
  */
-DEFINE_GETTER(float, reverb, diffusion)
+DEFINE_GETTER(float, rvb, diffusion)
 
 /*
  *  call-seq:
  *      reverb.gain = flt  -> flt
  */
-DEFINE_SETTER(float, reverb, gain)
+DEFINE_SETTER(float, rvb, gain)
 
 /*
  *  call-seq:
  *      reverb.gain  -> flt
  */
-DEFINE_GETTER(float, reverb, gain)
+DEFINE_GETTER(float, rvb, gain)
 
 /*
  *  call-seq:
  *      reverb.hfgain = flt  -> flt
  */
-DEFINE_SETTER(float, reverb, hfgain)
+DEFINE_SETTER(float, rvb, hfgain)
 
 /*
  *  call-seq:
  *      reverb.hfgain  -> flt
  */
-DEFINE_GETTER(float, reverb, hfgain)
+DEFINE_GETTER(float, rvb, hfgain)
 
 /*
  *  call-seq:
  *      reverb.decay_time = flt  -> flt
  */
-DEFINE_SETTER(float, reverb, decay_time)
+DEFINE_SETTER(float, rvb, decay_time)
 
 /*
  *  call-seq:
  *      reverb.decay_time  -> flt
  */
-DEFINE_GETTER(float, reverb, decay_time)
+DEFINE_GETTER(float, rvb, decay_time)
 
 /*
  *  call-seq:
  *      reverb.hfdecay_ratio = flt  -> flt
  */
-DEFINE_SETTER(float, reverb, hfdecay_ratio)
+DEFINE_SETTER(float, rvb, hfdecay_ratio)
 
 /*
  *  call-seq:
  *      reverb.hfdecay_ratio  -> flt
  */
-DEFINE_GETTER(float, reverb, hfdecay_ratio)
+DEFINE_GETTER(float, rvb, hfdecay_ratio)
 
 /*
  *  call-seq:
  *      reverb.reflections_gain = flt  -> flt
  */
-DEFINE_SETTER(float, reverb, reflections_gain)
+DEFINE_SETTER(float, rvb, reflections_gain)
 
 /*
  *  call-seq:
  *      reverb.reflections_gain  -> flt
  */
-DEFINE_GETTER(float, reverb, reflections_gain)
+DEFINE_GETTER(float, rvb, reflections_gain)
 
 /*
  *  call-seq:
  *      reverb.reflections_delay = flt  -> flt
  */
-DEFINE_SETTER(float, reverb, reflections_delay)
+DEFINE_SETTER(float, rvb, reflections_delay)
 
 /*
  *  call-seq:
  *      reverb.reflections_delay  -> flt
  */
-DEFINE_GETTER(float, reverb, reflections_delay)
+DEFINE_GETTER(float, rvb, reflections_delay)
 
 /*
  *  call-seq:
  *      reverb.late_gain = flt  -> flt
  */
-DEFINE_SETTER(float, reverb, late_gain)
+DEFINE_SETTER(float, rvb, late_gain)
 
 /*
  *  call-seq:
  *      reverb.late_gain  -> flt
  */
-DEFINE_GETTER(float, reverb, late_gain)
+DEFINE_GETTER(float, rvb, late_gain)
 
 /*
  *  call-seq:
  *      reverb.late_delay = flt  -> flt
  */
-DEFINE_SETTER(float, reverb, late_delay)
+DEFINE_SETTER(float, rvb, late_delay)
 
 /*
  *  call-seq:
  *      reverb.late_delay  -> flt
  */
-DEFINE_GETTER(float, reverb, late_delay)
+DEFINE_GETTER(float, rvb, late_delay)
 /*
  *  call-seq:
  *      reverb.air_absorbtion_hfgain = flt  -> flt
  */
-DEFINE_SETTER(float, reverb, air_absorbtion_hfgain)
+DEFINE_SETTER(float, rvb, air_absorbtion_hfgain)
 
 /*
  *  call-seq:
  *      reverb.air_absorbtion_hfgain  -> flt
  */
-DEFINE_GETTER(float, reverb, air_absorbtion_hfgain)
+DEFINE_GETTER(float, rvb, air_absorbtion_hfgain)
 
 /*
  *  call-seq:
  *      reverb.room_rolloff_factor = flt  -> flt
  */
-DEFINE_SETTER(float, reverb, room_rolloff_factor)
+DEFINE_SETTER(float, rvb, room_rolloff_factor)
 
 /*
  *  call-seq:
  *      reverb.room_rolloff_factor  -> flt
  */
-DEFINE_GETTER(float, reverb, room_rolloff_factor)
+DEFINE_GETTER(float, rvb, room_rolloff_factor)
 
 /*
  *  call-seq:
  *      reverb.hfdecay_limited = true or false  -> true or false
  */
-DEFINE_SETTER(char, reverb, hfdecay_limited)
+DEFINE_SETTER(char, rvb, hfdecay_limited)
 
 /*
  *  call-seq:
  *      reverb.hfdecay_limited  -> true or false
  *      reverb.hfdecay_limited? -> true or false
  */
-DEFINE_PREDICATE(reverb, hfdecay_limited)
+DEFINE_PREDICATE(rvb, hfdecay_limited)
 
 /*
  *  call-seq:
@@ -1238,47 +1238,47 @@ bind_src(void)
 }
 
 static void
-bind_reverb(void)
+bind_rvb(void)
 {
     VALUE cReverb = rb_define_class_under(mSeal, "Reverb", rb_cObject);
-    rb_define_alloc_func(cReverb, alloc_reverb);
-    rb_define_method(cReverb, "initialize", init_reverb, 0);
-    rb_define_method(cReverb, "density=", set_reverb_diffusion, 1);
-    rb_define_method(cReverb, "density", get_reverb_diffusion, 0);
-    rb_define_method(cReverb, "diffusion=", set_reverb_diffusion, 1);
-    rb_define_method(cReverb, "diffusion", get_reverb_diffusion, 0);
-    rb_define_method(cReverb, "gain=", set_reverb_gain, 1);
-    rb_define_method(cReverb, "gain", get_reverb_gain, 0);
-    rb_define_method(cReverb, "hfgain=", set_reverb_hfgain, 1);
-    rb_define_method(cReverb, "hfgain", get_reverb_hfgain, 0);
-    rb_define_method(cReverb, "decay_time=", set_reverb_decay_time, 1);
-    rb_define_method(cReverb, "decay_time", get_reverb_decay_time, 0);
-    rb_define_method(cReverb, "hfdecay_ratio=", set_reverb_hfdecay_ratio, 1);
-    rb_define_method(cReverb, "hfdecay_ratio", get_reverb_hfdecay_ratio, 0);
+    rb_define_alloc_func(cReverb, alloc_rvb);
+    rb_define_method(cReverb, "initialize", init_rvb, 0);
+    rb_define_method(cReverb, "density=", set_rvb_diffusion, 1);
+    rb_define_method(cReverb, "density", get_rvb_diffusion, 0);
+    rb_define_method(cReverb, "diffusion=", set_rvb_diffusion, 1);
+    rb_define_method(cReverb, "diffusion", get_rvb_diffusion, 0);
+    rb_define_method(cReverb, "gain=", set_rvb_gain, 1);
+    rb_define_method(cReverb, "gain", get_rvb_gain, 0);
+    rb_define_method(cReverb, "hfgain=", set_rvb_hfgain, 1);
+    rb_define_method(cReverb, "hfgain", get_rvb_hfgain, 0);
+    rb_define_method(cReverb, "decay_time=", set_rvb_decay_time, 1);
+    rb_define_method(cReverb, "decay_time", get_rvb_decay_time, 0);
+    rb_define_method(cReverb, "hfdecay_ratio=", set_rvb_hfdecay_ratio, 1);
+    rb_define_method(cReverb, "hfdecay_ratio", get_rvb_hfdecay_ratio, 0);
     rb_define_method(cReverb, "reflections_gain=",
-                     set_reverb_reflections_gain, 1);
+                     set_rvb_reflections_gain, 1);
     rb_define_method(cReverb, "reflections_gain",
-                     get_reverb_reflections_gain, 0);
+                     get_rvb_reflections_gain, 0);
     rb_define_method(cReverb, "reflections_delay=",
-                     set_reverb_reflections_delay, 1);
+                     set_rvb_reflections_delay, 1);
     rb_define_method(cReverb, "reflections_delay",
-                     get_reverb_reflections_delay, 0);
-    rb_define_method(cReverb, "late_gain=", set_reverb_late_gain, 1);
-    rb_define_method(cReverb, "late_gain", get_reverb_late_gain, 0);
-    rb_define_method(cReverb, "late_delay=", set_reverb_late_delay, 1);
-    rb_define_method(cReverb, "late_delay", get_reverb_late_delay, 0);
+                     get_rvb_reflections_delay, 0);
+    rb_define_method(cReverb, "late_gain=", set_rvb_late_gain, 1);
+    rb_define_method(cReverb, "late_gain", get_rvb_late_gain, 0);
+    rb_define_method(cReverb, "late_delay=", set_rvb_late_delay, 1);
+    rb_define_method(cReverb, "late_delay", get_rvb_late_delay, 0);
     rb_define_method(cReverb, "air_absorbtion_hfgain=",
-                     set_reverb_air_absorbtion_hfgain, 1);
+                     set_rvb_air_absorbtion_hfgain, 1);
     rb_define_method(cReverb, "air_absorbtion_hfgain",
-                     get_reverb_air_absorbtion_hfgain, 0);
+                     get_rvb_air_absorbtion_hfgain, 0);
     rb_define_method(cReverb, "room_rolloff_factor=",
-                     set_reverb_room_rolloff_factor, 1);
+                     set_rvb_room_rolloff_factor, 1);
     rb_define_method(cReverb, "room_rolloff_factor",
-                     get_reverb_room_rolloff_factor, 0);
+                     get_rvb_room_rolloff_factor, 0);
     rb_define_method(cReverb, "hfdecay_limited=",
-                     set_reverb_hfdecay_limited, 1);
+                     set_rvb_hfdecay_limited, 1);
     rb_define_method(cReverb, "hfdecay_limited",
-                     is_reverb_hfdecay_limited, 0);
+                     is_rvb_hfdecay_limited, 0);
     rb_define_alias(cReverb, "hfdecay_limited?", "hfdecay_limited");
 }
 
@@ -1324,7 +1324,7 @@ Init_seal(void)
     bind_buf();
     bind_stream();
     bind_src();
-    bind_reverb();
+    bind_rvb();
     bind_efs();
     bind_listener();
 }

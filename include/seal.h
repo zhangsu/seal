@@ -17,7 +17,7 @@
 #include "seal/src.h"
 #include "seal/listener.h"
 #include "seal/efs.h"
-#include "seal/reverb.h"
+#include "seal/rvb.h"
 #include "seal/err.h"
 
 #endif /* _SEAL_SEAL_H_ */
