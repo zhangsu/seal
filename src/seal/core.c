@@ -258,7 +258,7 @@ _seal_getb(void* obj, int key, char* pval, _seal_openal_getteri* get)
     return err;
 }
 
-#if defined (__unix__)
+#if defined (__unix__) || defined (__APPLE_CC__)
 
 #include <unistd.h>
 
