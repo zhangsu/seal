@@ -39,13 +39,12 @@ generated specifically for MSVC and GCC (MinGW or native unix-like systems).
         make install
 
     Finally from SEAL directory:
+
         cd make/gcc/unix-like
         make
 
     Note: There has been issues compiling OpenAL on some versions of OS X
-    because LLVM is the default compiler.
-
-    I haven't had luck compiling
+    because LLVM is the default compiler. I haven't had luck compiling
     OpenAL with LLVM, so I explicitly specified GCC instead:
 
         ...
@@ -73,9 +72,10 @@ generated specifically for MSVC and GCC (MinGW or native unix-like systems).
         $ make
         
     The default output is `seal.{so,dll,bundle}`, which is a dynamic library
-    that could be required by Ruby at runtime. If you are compiling on Unix-
-    like operating systems other than Linux and Mac OS X, change the following
-    check to pass whatever platform you have:
+    that could be required by Ruby at runtime.
+
+    If you are compiling on Unix-like operating systems other than Linux and
+    Mac OS X, change the following check to pass whatever platform you have:
 
         if target_os =~ /mswin|mingw|<...>/
 
