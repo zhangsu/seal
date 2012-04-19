@@ -17,7 +17,7 @@ if target_os =~ /mswin|mingw/
   cp "#{lib_dir}/OpenAL32.dll", '.'
   have_library('OpenAL32', 'alcOpenDevice')
   have_library('libmpg123', 'mpg123_init')
-elsif target_os =~ /linux/
+elsif target_os =~ /linux|darwin/
   include_dir = "#{root_dir}"
   have_library('openal', 'alcOpenDevice')
   have_library('mpg123', 'mpg123_init')

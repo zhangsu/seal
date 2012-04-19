@@ -6,37 +6,61 @@ effect and reverberation, in a 3D space. It is built on top of [OpenAL]
 (http://connect.creativelabs.com/openal/default.aspx), adding support for
 audio streaming and audio formats like Ogg Vorbis, MPEG Audio and WAVE.
 
-## Supported Platforms
+## Platforms
 
-Windows and Linux are officially supported. The third-party libraries are
-redistributed in binary forms for 32-bit Windows only; Linux users are
-expected to install the third-party libraries by themselves (since it is
-so much easier than doing so on Windows). The Makefiles are generated
-specifically for MSVC and GCC (MinGW or native Linux). In theory seal
-is portable to all UN*X-like systems or even Darwin, but they are not being
-tested at the moment.
+Linux, Windows and Mac OS X are officially tested and supported. SEAL should
+run on all unix-like operating systems where OpenAL, libogg, libvorbis and
+libmpg123 can run, but those platforms are never tested. The Makefiles are
+generated specifically for MSVC and GCC (MinGW or native unix-like systems).
 
 ## Build
 
--   GCC + GNU Make + Linux + UN*X shell
+-   GCC + GNU Make + unix-like operating systems + UN*X shell
 
-    install [libopenal]
-    (http://connect.creativelabs.com/openal/Downloads/Forms/AllItems.aspx)
-    using CMake and [libmpg123](http://sourceforge.net/projects/mpg123/) using
-    autoconf, then
+    First, you need [CMake](http://www.cmake.org/) 2.4 or later to install
+    [libopenal]
+    (http://connect.creativelabs.com/openal/Downloads/Forms/AllItems.aspx),
+    then:
 
-        $ cd make/gcc/linux
-        $ make
+        git clone git://repo.or.cz/openal-soft.git openal-soft
+        cd openal-soft/build
+        cmake -DCMAKE_BUILD_TYPE=Release ..
+        make
+        make install
+
+    Then download libmpg123 source [here]
+    (http://sourceforge.net/projects/mpg123/files)
+    and:
+
+        cd <libmpg123_directory>
+        ./configure
+        cd src/libmpg123
+        make
+        make install
+
+    Finally from SEAL directory:
+        cd make/gcc/unix-like
+        make
+
+    Note: There has been issues compiling OpenAL on some versions of OS X
+    because LLVM is the default compiler.
+
+    I haven't had luck compiling
+    OpenAL with LLVM, so I explicitly specified GCC instead:
+
+        ...
+        CC=/usr/bin/gcc-4.2 cmake -DCMAKE_BUILD_TYPE=Release ..
+        ...
 
 -   GCC + GNU Make + MinGW + UN*X shell
 
-        $ cd make/gcc/win32
-        $ make
+        cd make/gcc/win32
+        make
 
--   MSVC + nmake + Command Promt
+-   MSVC + nmake + Command Prompt
 
-        > cd make/msvc/win32
-        > nmake
+        cd make/msvc/win32
+        nmake
 
 -   MSVC + Microsoft Visual Studio 2010
 
@@ -48,10 +72,16 @@ tested at the moment.
         $ ruby configure.rb
         $ make
         
-    The default output is `seal.{so,dll}`, which is a dynamic library that
-    could be required by Ruby at runtime.
+    The default output is `seal.{so,dll,bundle}`, which is a dynamic library
+    that could be required by Ruby at runtime. If you are compiling on Unix-
+    like operating systems other than Linux and Mac OS X, change the following
+    check to pass whatever platform you have:
 
-Note that only Windows binaries are shipped with the project.
+        if target_os =~ /mswin|mingw|<...>/
+
+Note that Win32 binaries are shipped with the project for compiling SEAL on
+Windows. You can of course compile your own copies of the dependency
+libraries on Windows, but I feel like Win32 users do not usually do that.
 
 ## Thread Safety
 
