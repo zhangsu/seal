@@ -18,9 +18,7 @@ generated specifically for MSVC and GCC (MinGW or native unix-like systems).
 -   GCC + GNU Make + unix-like operating systems + UN*X shell
 
     First, you need [CMake](http://www.cmake.org/) 2.4 or later to install
-    [libopenal]
-    (http://connect.creativelabs.com/openal/Downloads/Forms/AllItems.aspx),
-    then:
+    [libopenal](http://kcat.strangesoft.net/openal.html) as follows:
 
         git clone git://repo.or.cz/openal-soft.git openal-soft
         cd openal-soft/build
@@ -28,8 +26,7 @@ generated specifically for MSVC and GCC (MinGW or native unix-like systems).
         make
         make install
 
-    Then download libmpg123 source [here]
-    (http://sourceforge.net/projects/mpg123/files)
+    Then download [libmpg123](http://sourceforge.net/projects/mpg123/files)
     and:
 
         cd <libmpg123_directory>
