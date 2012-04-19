@@ -69,7 +69,7 @@ namespace :mf do
     RULE_GROUPS = {}
     workers = []
     # Pick one of the directories to generate all the rules.
-    Dir.chdir File.join('make', 'gcc', 'linux')
+    Dir.chdir File.join('make', 'gcc', 'unix-like')
     filenames.each do |filename|
       workers << Thread.new do
         rule = filename.rule
@@ -104,10 +104,10 @@ namespace :mf do
     }
 
     desc 'Generate Makefile for GCC on all platforms'
-    task :all => [:linux, :win32]
+    task :all => [:unix_like, :win32]
 
-    desc 'Generate Makefile for GCC on Linux'
-    task :linux => :prepare do |t; options|
+    desc 'Generate Makefile for GCC on unix-like operating systems'
+    task :unix_like => :prepare do |t; options|
       report(t)
       options = gcc_options.merge(
         libs:   '-lopenal -lmpg123',
@@ -115,7 +115,7 @@ namespace :mf do
         output: 'libseal.so',
       )
       options[:cflags] += ' -fPIC'
-      make_makefile_in(File.join('make', 'gcc', 'linux'), options)
+      make_makefile_in(File.join('make', 'gcc', 'unix-like'), options)
     end
 
     desc 'Generate Makefile for GCC on Win32'

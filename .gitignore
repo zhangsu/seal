@@ -1,5 +1,6 @@
 *.o
 *.so
+*.bundle
 *.log
 *.obj
 *.swp
@@ -7,7 +8,7 @@
 *.manifest
 *.exp
 make/*/*/*
-!make/gcc/linux/Makefile
+!make/gcc/unix-like/Makefile
 !make/gcc/win32/Makefile
 !make/msvc/win32/Makefile
 msvc/Release

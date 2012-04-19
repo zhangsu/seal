@@ -8,7 +8,7 @@
 #include <stdint.h>
 #include "threading.h"
 
-#if defined (__unix__)
+#if defined (__unix__) || defined (__APPLE_CC__)
 # include <pthread.h>
 # include <unistd.h>
 
