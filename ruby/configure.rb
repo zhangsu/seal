@@ -29,6 +29,7 @@ else
   puts 'The current operating system is not supported.'
   puts 'If, however, you are using a Unix-like system, you might still be '\
        'able to build. See README.'
+  exit
 end
 
 # Add source directories.
