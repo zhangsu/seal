@@ -9,13 +9,13 @@ audio streaming and audio formats like Ogg Vorbis, MPEG Audio and WAVE.
 ## Platforms
 
 Linux, Windows and Mac OS X are officially tested and supported. SEAL should
-run on all unix-like operating systems where OpenAL, libogg, libvorbis and
+run on all Unix-like operating systems where OpenAL, libogg, libvorbis and
 libmpg123 can run, but those platforms are never tested. The Makefiles are
-generated specifically for MSVC and GCC (MinGW or native unix-like systems).
+generated specifically for MSVC and GCC (MinGW or native Unix-like systems).
 
 ## Build
 
--   GCC + GNU Make + unix-like operating systems + UN*X shell
+-   GCC + GNU Make + Unix-like operating systems + UN*X shell
 
     First, you need [CMake](http://www.cmake.org/) 2.4 or later to install
     [libopenal](http://kcat.strangesoft.net/openal.html) as follows:
