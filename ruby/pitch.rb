@@ -3,7 +3,7 @@ require_relative 'seal'
 Seal.startup
 
 src = Seal::Source.new
-src.stream = Seal::Stream.open('pipa.ogg')
+src.stream = Seal::Stream.open('audio/pipa.ogg')
 src.play
 src.looping = true
 

@@ -18,7 +18,7 @@ You will be moving at a rate of #{RATE} unit/sec.
 "
 
 src = Seal::Source.new
-src.buffer = Seal::Buffer.new('people.ogg')
+src.stream = Seal::Stream.new('audio/people.ogg')
 src.looping = true
 src.play
 listener = Seal.listener
