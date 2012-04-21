@@ -64,7 +64,7 @@ generated specifically for MSVC and GCC (MinGW or native unix-like systems).
 
 -   Ruby extension
 
-        $ cd demo
+        $ cd ruby
         $ ruby configure.rb
         $ make
         
