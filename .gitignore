@@ -19,7 +19,6 @@ msvc/ipch/
 msvc/*.suo
 msvc/*.sdf
 msvc/*.opensdf
-demo/*.dll
-demo/*.def
-demo/Makefile
-demo/test.rb
+ruby/*.dll
+ruby/*.def
+ruby/Makefile
