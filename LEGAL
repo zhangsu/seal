@@ -1,10 +1,8 @@
 All the files distributed with SEAL are covered under the terms of the GNU
 Lesser General Public License Version 2.1 except the following:
 
-include/al/al.h
-include/al/alc.h
-lib/*/OpenAL*.*
-lib/*/wrap_oal.*
+include/al/*
+msvc/lib/*/OpenAL*.*
 
               GNU LIBRARY GENERAL PUBLIC LICENSE
                    Version 2, June 1991
@@ -445,10 +443,8 @@ lib/*/wrap_oal.*
 
                  END OF TERMS AND CONDITIONS
 
-include/ogg.h
-include/os_types.h
-src/libogg/bitwise.c
-src/libogg/framing.c
+include/ogg/*
+src/libogg/*
 
     Copyright (c) 2002, Xiph.org Foundation
 
@@ -479,47 +475,8 @@ src/libogg/framing.c
     (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
     OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     
-include/vorbis/codec.h
-include/vorbis/vorbisfile.h
-src/libvorbis/backends.h
-src/libvorbis/envelope.h
-src/libvorbis/lpc.c
-src/libvorbis/misc.h
-src/libvorbis/sharedbook.c
-src/libvorbis/bitrate.c
-src/libvorbis/floor0.c
-src/libvorbis/lpc.h
-src/libvorbis/os.h
-src/libvorbis/smallft.c
-src/libvorbis/bitrate.h
-src/libvorbis/floor1.c
-src/libvorbis/lsp.c
-src/libvorbis/psy.c
-src/libvorbis/smallft.h
-src/libvorbis/block.c
-src/libvorbis/highlevel.h
-src/libvorbis/lsp.h
-src/libvorbis/psy.h
-src/libvorbis/synthesis.c
-src/libvorbis/codebook.c
-src/libvorbis/info.c
-src/libvorbis/mapping0.c
-src/libvorbis/registry.c
-src/libvorbis/vorbisfile.c
-src/libvorbis/codebook.h
-src/libvorbis/lookup.c
-src/libvorbis/masking.h
-src/libvorbis/registry.h
-src/libvorbis/window.c
-src/libvorbis/codec_internal.h
-src/libvorbis/lookup.h
-src/libvorbis/mdct.c
-src/libvorbis/res0.c
-src/libvorbis/window.h
-src/libvorbis/envelope.c
-src/libvorbis/lookup_data.h
-src/libvorbis/mdct.h
-src/libvorbis/scales.h
+include/vorbis/*
+src/libvorbis/*
 
     Copyright (c) 2002-2008 Xiph.org Foundation
 
@@ -550,9 +507,8 @@ src/libvorbis/scales.h
     (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
     OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-include/mpg123/mpg123.h
-include/mpg123/mpg123.h.in
-lib/*/libmpg123.*
+include/mpg123/*
+msvc/lib/*/libmpg123.*
 
     These are header and binary files of libmpg123. Code is copyrighted by
     Michael Hipp, who made it free software under the terms of the LGPL 2.1.
