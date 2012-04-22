@@ -157,7 +157,7 @@
     <ClCompile Include="..\..\src\seal\ov.c" />
     <ClCompile Include="..\..\src\seal\raw.c" />
     <ClCompile Include="..\..\src\seal\reader.c" />
-    <ClCompile Include="..\..\src\seal\reverb.c" />
+    <ClCompile Include="..\..\src\seal\rvb.c" />
     <ClCompile Include="..\..\src\seal\src.c" />
     <ClCompile Include="..\..\src\seal\stream.c" />
     <ClCompile Include="..\..\src\seal\threading.c" />
@@ -172,7 +172,7 @@
     <ClInclude Include="..\..\include\seal\fmt.h" />
     <ClInclude Include="..\..\include\seal\listener.h" />
     <ClInclude Include="..\..\include\seal\raw.h" />
-    <ClInclude Include="..\..\include\seal\reverb.h" />
+    <ClInclude Include="..\..\include\seal\rvb.h" />
     <ClInclude Include="..\..\include\seal\src.h" />
     <ClInclude Include="..\..\include\seal\stream.h" />
     <ClInclude Include="..\..\src\seal\mpg.h" />

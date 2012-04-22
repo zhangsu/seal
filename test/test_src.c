@@ -191,19 +191,19 @@ test_src_buf(void)
     ASSERT_OK(seal_get_src_type(psrc, ptype));
     ASSERT(type == SEAL_STATIC);
 
-    ASSERT(seal_load2buf(pbuf, TEST_FILENAME, SEAL_WAV_FMT) == SEAL_BAD_OP);
+    ASSERT(seal_load2buf(pbuf, TEST_FILENAME, SEAL_WAV_FMT) != SEAL_OK);
     ASSERT(seal_destroy_buf(pbuf) == SEAL_BAD_OP);
     ASSERT(seal_set_src_stream(psrc, pstream) == SEAL_MIXING_SRC_TYPE);
 
     ASSERT_OK(seal_play_src(psrc));
     ASSERT(seal_set_src_buf(psrc, pbuf) == SEAL_BAD_OP);
-    ASSERT(seal_load2buf(pbuf, TEST_FILENAME, SEAL_WAV_FMT) == SEAL_BAD_OP);
+    ASSERT(seal_load2buf(pbuf, TEST_FILENAME, SEAL_WAV_FMT) != SEAL_OK);
     ASSERT(seal_destroy_buf(pbuf) == SEAL_BAD_OP);
     ASSERT(seal_set_src_stream(psrc, pstream) == SEAL_MIXING_SRC_TYPE);
 
     ASSERT_OK(seal_pause_src(psrc));
     ASSERT(seal_set_src_buf(psrc, pbuf) == SEAL_BAD_OP);
-    ASSERT(seal_load2buf(pbuf, TEST_FILENAME, SEAL_WAV_FMT) == SEAL_BAD_OP);
+    ASSERT(seal_load2buf(pbuf, TEST_FILENAME, SEAL_WAV_FMT) != SEAL_OK);
     ASSERT(seal_destroy_buf(pbuf) == SEAL_BAD_OP);
     ASSERT(seal_set_src_stream(psrc, pstream) == SEAL_MIXING_SRC_TYPE);
 
@@ -211,7 +211,7 @@ test_src_buf(void)
     ASSERT_OK(seal_set_src_buf(psrc, pbuf));
     ASSERT_OK(seal_get_src_type(psrc, ptype));
     ASSERT(type == SEAL_STATIC);
-    ASSERT(seal_load2buf(pbuf, TEST_FILENAME, SEAL_WAV_FMT) == SEAL_BAD_OP);
+    ASSERT(seal_load2buf(pbuf, TEST_FILENAME, SEAL_WAV_FMT) != SEAL_OK);
     ASSERT(seal_destroy_buf(pbuf) == SEAL_BAD_OP);
     ASSERT(seal_set_src_stream(psrc, pstream) == SEAL_MIXING_SRC_TYPE);
 

@@ -26,7 +26,7 @@ test_listener_attr(void)
     ASSERT(memcmp(pos, actual_pos, sizeof (actual_pos)) == 0);
 
     ASSERT_OK(seal_get_listener_vel(actual_vel, actual_vel + 1, actual_vel + 2));
-    ASSERT(memcmp(default_vel, actual_vel, sizeof (vel)) == 0);    
+    ASSERT(memcmp(default_vel, actual_vel, sizeof (vel)) == 0);
     ASSERT_OK(seal_set_listener_vel(vel[0], vel[1], vel[2]));
     ASSERT_OK(seal_get_listener_vel(actual_vel, actual_vel + 1, actual_vel + 2));
     ASSERT(memcmp(vel, actual_vel, sizeof (actual_vel)) == 0);
