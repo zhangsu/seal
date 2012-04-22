@@ -1,18 +1,165 @@
 /*
- * reverb.h is part of the Scorched End Audio Library (SEAL) and is licensed
+ * rvb.h is part of the Scorched End Audio Library (SEAL) and is licensed
  * under the terms of the GNU Lesser General Public License. See COPYING
  * attached with the library.
  *
- * reverb.h defines the reverberation effect type and its parameters. Effect
+ * rvb.h defines the reverberation effect type and its parameters. Effect
  * objects can be put into an effect slot for sources to use.
  */
 
-#ifndef _SEAL_REVERB_H_
-#define _SEAL_REVERB_H_
+#ifndef _SEAL_RVB_H_
+#define _SEAL_RVB_H_
 
 #include "err.h"
 
-typedef struct seal_reverb_t seal_reverb_t;
+enum seal_rvb_preset_t
+{
+    /* Default presets. */
+    SEAL_GENERIC_REVERB,
+    SEAL_PADDEDCELL_REVERB,
+    SEAL_ROOM_REVERB,
+    SEAL_BATHROOM_REVERB,
+    SEAL_LIVINGROOM_REVERB,
+    SEAL_STONEROOM_REVERB,
+    SEAL_AUDITORIUM_REVERB,
+    SEAL_CONCERTHALL_REVERB,
+    SEAL_CAVE_REVERB,
+    SEAL_ARENA_REVERB,
+    SEAL_HANGAR_REVERB,
+    SEAL_CARPETEDHALLWAY_REVERB,
+    SEAL_HALLWAY_REVERB,
+    SEAL_STONECORRIDOR_REVERB,
+    SEAL_ALLEY_REVERB,
+    SEAL_FOREST_REVERB,
+    SEAL_CITY_REVERB,
+    SEAL_MOUNTAINS_REVERB,
+    SEAL_QUARRY_REVERB,
+    SEAL_PLAIN_REVERB,
+    SEAL_PARKINGLOT_REVERB,
+    SEAL_SEWERPIPE_REVERB,
+    SEAL_UNDERWATER_REVERB,
+    SEAL_DRUGGED_REVERB,
+    SEAL_DIZZY_REVERB,
+    SEAL_PSYCHOTIC_REVERB,
+
+    /* Castle presets. */
+    SEAL_CASTLE_SMALLROOM_REVERB,
+    SEAL_CASTLE_SHORTPASSAGE_REVERB,
+    SEAL_CASTLE_MEDIUMROOM_REVERB,
+    SEAL_CASTLE_LARGEROOM_REVERB,
+    SEAL_CASTLE_LONGPASSAGE_REVERB,
+    SEAL_CASTLE_HALL_REVERB,
+    SEAL_CASTLE_CUPBOARD_REVERB,
+    SEAL_CASTLE_COURTYARD_REVERB,
+    SEAL_CASTLE_ALCOVE_REVERB,
+
+    /* Factory presets. */
+    SEAL_FACTORY_SMALLROOM_REVERB,
+    SEAL_FACTORY_SHORTPASSAGE_REVERB,
+    SEAL_FACTORY_MEDIUMROOM_REVERB,
+    SEAL_FACTORY_LARGEROOM_REVERB,
+    SEAL_FACTORY_LONGPASSAGE_REVERB,
+    SEAL_FACTORY_HALL_REVERB,
+    SEAL_FACTORY_CUPBOARD_REVERB,
+    SEAL_FACTORY_COURTYARD_REVERB,
+    SEAL_FACTORY_ALCOVE_REVERB,
+
+    /* Ice palace presets. */
+    SEAL_ICEPALACE_SMALLROOM_REVERB,
+    SEAL_ICEPALACE_SHORTPASSAGE_REVERB,
+    SEAL_ICEPALACE_MEDIUMROOM_REVERB,
+    SEAL_ICEPALACE_LARGEROOM_REVERB,
+    SEAL_ICEPALACE_LONGPASSAGE_REVERB,
+    SEAL_ICEPALACE_HALL_REVERB,
+    SEAL_ICEPALACE_CUPBOARD_REVERB,
+    SEAL_ICEPALACE_COURTYARD_REVERB,
+    SEAL_ICEPALACE_ALCOVE_REVERB,
+
+    /* Space station presets. */
+    SEAL_SPACESTATION_SMALLROOM_REVERB,
+    SEAL_SPACESTATION_SHORTPASSAGE_REVERB,
+    SEAL_SPACESTATION_MEDIUMROOM_REVERB,
+    SEAL_SPACESTATION_LARGEROOM_REVERB,
+    SEAL_SPACESTATION_LONGPASSAGE_REVERB,
+    SEAL_SPACESTATION_HALL_REVERB,
+    SEAL_SPACESTATION_CUPBOARD_REVERB,
+    SEAL_SPACESTATION_ALCOVE_REVERB,
+
+    /* Wooden galleon presets. */
+    SEAL_WOODEN_SMALLROOM_REVERB,
+    SEAL_WOODEN_SHORTPASSAGE_REVERB,
+    SEAL_WOODEN_MEDIUMROOM_REVERB,
+    SEAL_WOODEN_LARGEROOM_REVERB,
+    SEAL_WOODEN_LONGPASSAGE_REVERB,
+    SEAL_WOODEN_HALL_REVERB,
+    SEAL_WOODEN_CUPBOARD_REVERB,
+    SEAL_WOODEN_COURTYARD_REVERB,
+    SEAL_WOODEN_ALCOVE_REVERB,
+
+    /* Sports presets. */
+    SEAL_SPORT_EMPTYSTADIUM_REVERB,
+    SEAL_SPORT_SQUASHCOURT_REVERB,
+    SEAL_SPORT_SMALLSWIMMINGPOOL_REVERB,
+    SEAL_SPORT_LARGESWIMMINGPOOL_REVERB,
+    SEAL_SPORT_GYMNASIUM_REVERB,
+    SEAL_SPORT_FULLSTADIUM_REVERB,
+    SEAL_SPORT_STADIUMTANNOY_REVERB,
+
+    /* Prefab presets. */
+    SEAL_PREFAB_WORKSHOP_REVERB,
+    SEAL_PREFAB_SCHOOLROOM_REVERB,
+    SEAL_PREFAB_PRACTISEROOM_REVERB,
+    SEAL_PREFAB_OUTHOUSE_REVERB,
+    SEAL_PREFAB_CARAVAN_REVERB,
+
+    /* Dome presets. */
+    SEAL_DOME_TOMB_REVERB,
+    SEAL_DOME_SAINTPAULS_REVERB,
+
+    /* Pipe presets. */
+    SEAL_PIPE_SMALL_REVERB,
+    SEAL_PIPE_LONGTHIN_REVERB,
+    SEAL_PIPE_LARGE_REVERB,
+    SEAL_PIPE_RESONANT_REVERB,
+
+    /* Outdoors presets. */
+    SEAL_OUTDOORS_BACKYARD_REVERB,
+    SEAL_OUTDOORS_ROLLINGPLAINS_REVERB,
+    SEAL_OUTDOORS_DEEPCANYON_REVERB,
+    SEAL_OUTDOORS_CREEK_REVERB,
+    SEAL_OUTDOORS_VALLEY_REVERB,
+
+    /* Mood presets. */
+    SEAL_MOOD_HEAVEN_REVERB,
+    SEAL_MOOD_HELL_REVERB,
+    SEAL_MOOD_MEMORY_REVERB,
+
+    /* Driving presets. */
+    SEAL_DRIVING_COMMENTATOR_REVERB,
+    SEAL_DRIVING_PITGARAGE_REVERB,
+    SEAL_DRIVING_INCAR_RACER_REVERB,
+    SEAL_DRIVING_INCAR_SPORTS_REVERB,
+    SEAL_DRIVING_INCAR_LUXURY_REVERB,
+    SEAL_DRIVING_FULLGRANDSTAND_REVERB,
+    SEAL_DRIVING_EMPTYGRANDSTAND_REVERB,
+    SEAL_DRIVING_TUNNEL_REVERB,
+
+    /* City presets. */
+    SEAL_CITY_STREETS_REVERB,
+    SEAL_CITY_SUBWAY_REVERB,
+    SEAL_CITY_MUSEUM_REVERB,
+    SEAL_CITY_LIBRARY_REVERB,
+    SEAL_CITY_UNDERPASS_REVERB,
+    SEAL_CITY_ABANDONED_REVERB,
+
+    /* Misc. presets. */
+    SEAL_DUSTYROOM_REVERB,
+    SEAL_CHAPEL_REVERB,
+    SEAL_SMALLWATERROOM_REVERB
+};
+
+typedef struct seal_rvb_t seal_rvb_t;
+typedef enum seal_rvb_preset_t seal_rvb_preset_t;
 
 #ifdef __cplusplus
 extern "C" {
@@ -20,18 +167,26 @@ extern "C" {
 
 /*
  * Initializes a new reverb effect. If the reverb is no longer needed, call
- * `seal_destroy_reverb' to release the resources used by the reverb.
+ * `seal_destroy_rvb' to release the resources used by the reverb.
  *
  * @param reverb    the reverb object to initialize
  */
-seal_err_t seal_init_reverb(seal_reverb_t*);
+seal_err_t seal_init_rvb(seal_rvb_t*);
 
 /*
  * Destroys a reverb effect.
  *
  * @param reverb    the reverb to destroy
  */
-seal_err_t seal_destroy_reverb(seal_reverb_t*);
+seal_err_t seal_destroy_rvb(seal_rvb_t*);
+
+/*
+ * Loads the specified reverb paramter preset into a reverb object.
+ *
+ * @param reverb    the reverb to load the preset into
+ * @param preset    the preset to load
+ */
+seal_err_t seal_load_rvb(seal_rvb_t*, seal_rvb_preset_t);
 
 /*
  * Sets the modal density of a reverb in the interval [0.0f, 1.0f]. The
@@ -41,7 +196,7 @@ seal_err_t seal_destroy_reverb(seal_reverb_t*);
  * @param reverb    the reverb to set the density of
  * @param density   the density
  */
-seal_err_t seal_set_reverb_density(seal_reverb_t*, float /*density*/);
+seal_err_t seal_set_rvb_density(seal_rvb_t*, float /*density*/);
 
 /*
  * Sets the diffusion of a reverb in the interval [0.0f, 1.0f]. The diffusion
@@ -53,12 +208,12 @@ seal_err_t seal_set_reverb_density(seal_reverb_t*, float /*density*/);
  * @param reverb    the reverb to set the diffusion of
  * @param diffusion the diffusion
  */
-seal_err_t seal_set_reverb_diffusion(seal_reverb_t*, float /*diffusion*/);
+seal_err_t seal_set_rvb_diffusion(seal_rvb_t*, float /*diffusion*/);
 
 /*
  * Sets the gain of a reverb in the interval [0.0f, 1.0f], or from -100 dB (no
- * reflected sound at all) to 0 dB (the maximum amount). The gain is the master
- * volume control for the reflected sound (both early reflections and
+ * reflected sound at all) to 0 dB (the maximum amount). The gain is the
+ * master volume control for the reflected sound (both early reflections and
  * reverberation) that the reverb effect adds to all sources. It sets the
  * maximum amount of reflections and reverberation added to the final sound
  * mix.
@@ -66,7 +221,7 @@ seal_err_t seal_set_reverb_diffusion(seal_reverb_t*, float /*diffusion*/);
  * @param reverb    the reverb to set the gain of
  * @param gain      the gain
  */
-seal_err_t seal_set_reverb_gain(seal_reverb_t*, float /*gain*/);
+seal_err_t seal_set_rvb_gain(seal_rvb_t*, float /*gain*/);
 
 /*
  * Sets the high-frequency gain of a reverb in the interval [0.0f, 1.0f], or
@@ -79,7 +234,7 @@ seal_err_t seal_set_reverb_gain(seal_reverb_t*, float /*gain*/);
  * @param reverb    the reverb to set the high-frequency gain of
  * @param hfgain    the high-frequency gain
  */
-seal_err_t seal_set_reverb_hfgain(seal_reverb_t*, float /*hfgain*/);
+seal_err_t seal_set_rvb_hfgain(seal_rvb_t*, float /*hfgain*/);
 
 /*
  * Sets the decay time of a reverb in the interval [0.1f, 20.0f], typically
@@ -89,7 +244,7 @@ seal_err_t seal_set_reverb_hfgain(seal_reverb_t*, float /*hfgain*/);
  * @param reverb    the reverb to set the decay time of
  * @param time      the decay time
  */
-seal_err_t seal_set_reverb_decay_time(seal_reverb_t*, float /*time*/);
+seal_err_t seal_set_rvb_decay_time(seal_rvb_t*, float /*time*/);
 
 /*
  * Sets the high-frequency decay ratio, or the spectral quality of the decay
@@ -106,7 +261,7 @@ seal_err_t seal_set_reverb_decay_time(seal_reverb_t*, float /*time*/);
  * @param reverb        the reverb to set the decay high-frequency ratio of
  * @param ratio         the decay high-frequency ratio
  */
-seal_err_t seal_set_reverb_hfdecay_ratio(seal_reverb_t*, float /*ratio*/);
+seal_err_t seal_set_rvb_hfdecay_ratio(seal_rvb_t*, float /*ratio*/);
 
 /*
  * Sets the reflections gain, or the overall amount of initial reflections
@@ -126,7 +281,7 @@ seal_err_t seal_set_reverb_hfdecay_ratio(seal_reverb_t*, float /*ratio*/);
  * @param reverb    the reverb to set the reflections gain of
  * @param gain      the reflections gain
  */
-seal_err_t seal_set_reverb_reflections_gain(seal_reverb_t*, float /*gain*/);
+seal_err_t seal_set_rvb_reflections_gain(seal_rvb_t*, float /*gain*/);
 
 /*
  * Sets the reflections delay of a reverb in the interval [0.0f, 0.3f] (in
@@ -138,7 +293,7 @@ seal_err_t seal_set_reverb_reflections_gain(seal_reverb_t*, float /*gain*/);
  * @param reverb    the reverb to set the reflections delay of
  * @param delay     the reflections delay
  */
-seal_err_t seal_set_reverb_reflections_delay(seal_reverb_t*, float /*delay*/);
+seal_err_t seal_set_rvb_reflections_delay(seal_rvb_t*, float /*delay*/);
 
 /*
  * Sets the late gain, or the overall amount of later reverberation relative
@@ -153,7 +308,7 @@ seal_err_t seal_set_reverb_reflections_delay(seal_reverb_t*, float /*delay*/);
  * @param reverb    the reverb to set the late gain of
  * @param gain      the late gain
  */
-seal_err_t seal_set_reverb_late_gain(seal_reverb_t*, float /*gain*/);
+seal_err_t seal_set_rvb_late_gain(seal_rvb_t*, float /*gain*/);
 
 /*
  * Sets the late delay of a reverb in the interval [0.0f, 0.1f] (in second)
@@ -164,7 +319,7 @@ seal_err_t seal_set_reverb_late_gain(seal_reverb_t*, float /*gain*/);
  * @param reverb    the reverb to set the late delay of
  * @param delay     the late delay
  */
-seal_err_t seal_set_reverb_late_delay(seal_reverb_t*, float /*delay*/);
+seal_err_t seal_set_rvb_late_delay(seal_rvb_t*, float /*delay*/);
 
 /*
  * Sets the air absorption high-frequency gain of a reverb in the interval
@@ -180,8 +335,7 @@ seal_err_t seal_set_reverb_late_delay(seal_reverb_t*, float /*delay*/);
  * @param reverb    the reverb to set the air absorption gain of
  * @param gain      the air absorption high-frequency gain
  */
-seal_err_t seal_set_reverb_air_absorbtion_hfgain(seal_reverb_t*,
-                                                 float /*hfgain*/);
+seal_err_t seal_set_rvb_air_absorbtion_hfgain(seal_rvb_t*, float /*hfgain*/);
 
 /*
  * Sets the room rolloff factor of a reverb in the interval [0.0f, 10.0f]. It
@@ -209,8 +363,7 @@ seal_err_t seal_set_reverb_air_absorbtion_hfgain(seal_reverb_t*,
  * @param reverb    the reverb to set the room rolloff factor of
  * @param factor    the room rolloff factor
  */
-seal_err_t seal_set_reverb_room_rolloff_factor(seal_reverb_t*,
-                                               float /*factor*/);
+seal_err_t seal_set_rvb_room_rolloff_factor(seal_rvb_t*, float /*factor*/);
 
 /*
  * Sets whether the high-frequency decay time automatically stays below a
@@ -226,129 +379,128 @@ seal_err_t seal_set_reverb_room_rolloff_factor(seal_reverb_t*,
  * @param reverb    the reverb to set the high-frequency decay limit flag of
  * @param limited   1 to set it limited or otherwise 0
  */
-seal_err_t seal_set_reverb_hfdecay_limited(seal_reverb_t*, char /*limited*/);
+seal_err_t seal_set_rvb_hfdecay_limited(seal_rvb_t*, char /*limited*/);
 
 /*
  * Gets the density of a reverb. The default is 1.0f.
  *
- * @see             seal_set_reverb_density
+ * @see             seal_set_rvb_density
  * @param reverb    the source to get the density of
  * @param pdensity  the receiver of the density
  */
-seal_err_t seal_get_reverb_density(seal_reverb_t*, float* /*pdensity*/);
+seal_err_t seal_get_rvb_density(seal_rvb_t*, float* /*pdensity*/);
 
 /*
  * Gets the diffusion of a reverb. The default is 1.0f.
  *
- * @see                 seal_set_reverb_diffusion
+ * @see                 seal_set_rvb_diffusion
  * @param reverb        the source to get the diffusion of
  * @param pdiffusion    the receiver of diffusion
  */
-seal_err_t seal_get_reverb_diffusion(seal_reverb_t*, float* /*pdiffusion*/);
+seal_err_t seal_get_rvb_diffusion(seal_rvb_t*, float* /*pdiffusion*/);
 
 /*
  * Gets the gain of a reverb. The default is 0.32f.
  *
- * @see             seal_set_reverb_gain
+ * @see             seal_set_rvb_gain
  * @param reverb    the source to get the gain of
  * @param pgain     the receiver of the gain
  */
-seal_err_t seal_get_reverb_gain(seal_reverb_t*, float* /*pgain*/);
+seal_err_t seal_get_rvb_gain(seal_rvb_t*, float* /*pgain*/);
 
 /*
  * Gets the high-frequency gain of a reverb. The default is 0.89f.
  *
- * @see             seal_set_reverb_hfgain
+ * @see             seal_set_rvb_hfgain
  * @param reverb    the source to get the high-frequency gain of
  * @param phfgain   the receiver of the high-frequency gain
  */
-seal_err_t seal_get_reverb_hfgain(seal_reverb_t*, float* /*phfgain*/);
+seal_err_t seal_get_rvb_hfgain(seal_rvb_t*, float* /*phfgain*/);
 
 /*
  * Gets the decay time of a reverb. The default is 1.49f.
  *
- * @see             seal_set_reverb_decay_time
+ * @see             seal_set_rvb_decay_time
  * @param reverb    the source to get the decay time of
  * @param ptime     the receiver of the decay time
  */
-seal_err_t seal_get_reverb_decay_time(seal_reverb_t*, float* /*ptime*/);
+seal_err_t seal_get_rvb_decay_time(seal_rvb_t*, float* /*ptime*/);
 
 /*
  * Gets the high-frequency decay ratio of a reverb. The default is 0.83f.
  *
- * @see             seal_set_reverb_hfdecay_ratio
+ * @see             seal_set_rvb_hfdecay_ratio
  * @param reverb    the source to get the high-frequency decay time of
  * @param pratio    the receiver of the high-frequency decay ratio
  */
-seal_err_t seal_get_reverb_hfdecay_ratio(seal_reverb_t*, float* /*pratio*/);
+seal_err_t seal_get_rvb_hfdecay_ratio(seal_rvb_t*, float* /*pratio*/);
 
 /*
  * Gets the reflections gain of a reverb. The default is 0.05f.
  *
- * @see             seal_set_reverb_reflections_gain
+ * @see             seal_set_rvb_reflections_gain
  * @param reverb    the source to get the reflections gain of
  * @param pgain     the receiver of the reflections gain
  */
-seal_err_t seal_get_reverb_reflections_gain(seal_reverb_t*, float* /*pgain*/);
+seal_err_t seal_get_rvb_reflections_gain(seal_rvb_t*, float* /*pgain*/);
 
 /*
  * Gets the reflections delay of a reverb. The default is 0.007f.
  *
- * @see             seal_set_reverb_reflections_delay
+ * @see             seal_set_rvb_reflections_delay
  * @param reverb    the source to get the reflections delay of
  * @param pdelay    the receiver of the reflections delay
  */
-seal_err_t seal_get_reverb_reflections_delay(seal_reverb_t*,
-                                             float* /*pdelay*/);
+seal_err_t seal_get_rvb_reflections_delay(seal_rvb_t*, float* /*pdelay*/);
 
 /*
  * Gets the late gain of a reverb. The default is 1.26f.
  *
- * @see             seal_set_reverb_late_gain
+ * @see             seal_set_rvb_late_gain
  * @param reverb    the source to get the late gain of
  * @param pgain     the receiver of the late gain
  */
-seal_err_t seal_get_reverb_late_gain(seal_reverb_t*, float* /*pgain*/);
+seal_err_t seal_get_rvb_late_gain(seal_rvb_t*, float* /*pgain*/);
 
 /*
  * Gets the late delay of a reverb. The default is 0.011f.
  *
- * @see             seal_set_reverb_late_delay
+ * @see             seal_set_rvb_late_delay
  * @param reverb    the source to get the late delay of
  * @param pdelay    the receiver of the late delay
  */
-seal_err_t seal_get_reverb_late_delay(seal_reverb_t*, float* /*pdelay*/);
+seal_err_t seal_get_rvb_late_delay(seal_rvb_t*, float* /*pdelay*/);
 
 /*
  * Gets the air absorbtion high-frequency gain of a reverb. The default is
  * 0.994f.
  *
- * @see             seal_set_reverb_air_absorbtion_hfgain
+ * @see             seal_set_rvb_air_absorbtion_hfgain
  * @param reverb    the source to get the gain of
  * @param phfgain   the receiver of the air absorbtion high-frequency gain
  */
-seal_err_t seal_get_reverb_air_absorbtion_hfgain(seal_reverb_t*,
+seal_err_t seal_get_rvb_air_absorbtion_hfgain(seal_rvb_t*,
                                                  float* /*phfgain*/);
 
 /*
  * Gets the room rolloff factor of a reverb. The default is 0.0f.
  *
- * @see             seal_set_reverb_room_rolloff_factor
+ * @see             seal_set_rvb_room_rolloff_factor
  * @param reverb    the source to get the factor of
  * @param pfactor   the receiver of the room rolloff factor
  */
-seal_err_t seal_get_reverb_room_rolloff_factor(seal_reverb_t*,
+seal_err_t seal_get_rvb_room_rolloff_factor(seal_rvb_t*,
                                                float* /*pfactor*/);
 
 /*
  * Determines if the high-frequency decay of a reverb is limited. The default
  * is true (1).
  *
- * @see             seal_set_reverb_hfdecay_limited
+ * @see             seal_set_rvb_hfdecay_limited
  * @param reverb    the source to get the limited flag of
  * @param plimited  the receiver of the limited flag
  */
-seal_err_t seal_is_reverb_hfdecay_limited(seal_reverb_t*, char* /*plimited*/);
+seal_err_t seal_is_rvb_hfdecay_limited(seal_rvb_t*, char* /*plimited*/);
 
 #ifdef __cplusplus
 }
@@ -360,9 +512,9 @@ seal_err_t seal_is_reverb_hfdecay_limited(seal_reverb_t*, char* /*plimited*/);
  *****************************************************************************
  */
 
-struct seal_reverb_t
+struct seal_rvb_t
 {
     unsigned int id;
 };
 
-#endif /* _SEAL_REVERB_H_ */
+#endif /* _SEAL_RVB_H_ */

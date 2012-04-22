@@ -6,9 +6,9 @@ Seal.startup
 
 pipa = Source.new
 people = Source.new
-pipa_stream = Stream.open('pipa.ogg')
+pipa_stream = Stream.open('audio/pipa.ogg')
 pipa.stream = pipa_stream
-people.stream = Stream.open('people.ogg')
+people.stream = Stream.open('audio/people.ogg')
 pipa.looping = people.looping = true
 people.gain = 0.2
 

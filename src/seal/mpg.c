@@ -67,7 +67,7 @@ load(seal_raw_t* raw, mpg123_handle* mh)
 {
     size_t nbytes_loaded = 0;
     seal_err_t err;
-    
+
     if ((err = seal_alloc_raw_data(raw, INITIAL_BUF_SIZE)) != SEAL_OK)
         return err;
 
@@ -134,7 +134,7 @@ _seal_stream_mpg(seal_stream_t* stream, seal_raw_t* raw, size_t* psize)
     int mpg123_err;
     size_t nbytes_streamed = 0;
     seal_err_t err;
-    
+
     if ((err = seal_alloc_raw_data(&tmp_raw, raw->size)) != SEAL_OK)
         return err;
 

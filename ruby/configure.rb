@@ -10,19 +10,25 @@ src_dir = "#{root_dir}/src"
 
 $defs << '-DNDEBUG'
 
+def check_library(lib, func)
+  raise "#{lib} is not found. See README." unless have_library(lib, func)
+end
+
 if target_os =~ /mswin|mingw/
   include_dir = "#{root_dir}/include"
   lib_dir = "#{root_dir}/lib"
   cp "#{lib_dir}/libmpg123.dll", '.'
   cp "#{lib_dir}/OpenAL32.dll", '.'
-  have_library('OpenAL32', 'alcOpenDevice')
-  have_library('libmpg123', 'mpg123_init')
+  check_library('OpenAL32', 'alcOpenDevice')
+  check_library('libmpg123', 'mpg123_init')
 elsif target_os =~ /linux|darwin/
   include_dir = "#{root_dir}"
-  have_library('openal', 'alcOpenDevice')
-  have_library('mpg123', 'mpg123_init')
+  check_library('openal', 'alcOpenDevice')
+  check_library('mpg123', 'mpg123_init')
 else
-  puts 'This configuration does not support the current operating system.'
+  puts 'The current operating system is not supported.'
+  puts 'If, however, you are using a Unix-like system, you might still be '\
+       'able to build. See README.'
   exit
 end
 
