@@ -251,6 +251,12 @@ get_obj_3float(VALUE robj, void* get)
     return rb_ary_new4(3, rtuple);
 }
 
+static void
+define_enum(VALUE mModule, const char* name, int e)
+{
+    rb_define_const(mModule, name, INT2NUM(e));
+}
+
 static seal_fmt_t
 map_format(VALUE symbol)
 {
@@ -797,14 +803,33 @@ feed_efs(VALUE rslot, VALUE rindex, VALUE rsrc)
  */
 DEFINE_ALLOCATOR(rvb)
 
+static VALUE
+load_rvb(VALUE rrvb, VALUE rpreset)
+{
+    seal_rvb_t* rvb;
+
+    Data_Get_Struct(rrvb, seal_rvb_t, rvb);
+    check_seal_err(seal_load_rvb(DATA_PTR(rrvb), rpreset));
+
+    return rrvb;
+}
+
 /*
  *  call-seq:
  *      Seal::Reverb.new  -> reverb
  */
 static VALUE
-init_rvb(VALUE rrvb)
+init_rvb(int argc, VALUE* argv, VALUE rrvb)
 {
-    check_seal_err(seal_init_rvb(DATA_PTR(rrvb)));
+    seal_rvb_t* rvb;
+    VALUE rpreset;
+
+    rvb = DATA_PTR(rrvb);
+    check_seal_err(seal_init_rvb(rvb));
+
+    rb_scan_args(argc, argv, "01", &rpreset);
+    if (!NIL_P(rpreset))
+        load_rvb(rrvb, rpreset);
 
     return rrvb;
 }
@@ -1249,15 +1274,251 @@ bind_src(void)
     rb_define_method(cSource, "chunk_size", get_src_chunk_size, 0);
     rb_define_method(cSource, "type", get_src_type, 0);
     rb_define_method(cSource, "state", get_src_state, 0);
-    mState = rb_define_module_under(cSource, "State");
-    rb_define_const(mState, "INITIAL", name2sym(INITIAL_SYMBOL));
-    rb_define_const(mState, "PLAYING", name2sym(PLAYING_SYMBOL));
-    rb_define_const(mState, "PAUSED", name2sym(PAUSED_SYMBOL));
-    rb_define_const(mState, "STOPPED", name2sym(STOPPED_SYMBOL));
-    mType = rb_define_module_under(cSource, "Type");
-    rb_define_const(mType, "UNDETERMINED", name2sym(UNDETERMINED_SYMBOL));
-    rb_define_const(mType, "STATIC", name2sym(STATIC_SYMBOL));
-    rb_define_const(mType, "STREAMING", name2sym(STREAMING_SYMBOL));
+    bind_src_state(cSource);
+    bind_src_type(cSource);
+}
+
+static void
+bind_rvb_castle_presets(VALUE mPreset)
+{
+    VALUE mCastle = rb_define_module_under(mPreset, "Castle");
+    define_enum(mCastle, "SMALLROOM", SEAL_CASTLE_SMALLROOM_REVERB);
+    define_enum(mCastle, "SHORTPASSAGE", SEAL_CASTLE_SHORTPASSAGE_REVERB);
+    define_enum(mCastle, "MEDIUMROOM", SEAL_CASTLE_MEDIUMROOM_REVERB);
+    define_enum(mCastle, "LARGEROOM", SEAL_CASTLE_LARGEROOM_REVERB);
+    define_enum(mCastle, "LONGPASSAGE", SEAL_CASTLE_LONGPASSAGE_REVERB);
+    define_enum(mCastle, "HALL", SEAL_CASTLE_HALL_REVERB);
+    define_enum(mCastle, "CUPBOARD", SEAL_CASTLE_CUPBOARD_REVERB);
+    define_enum(mCastle, "COURTYARD", SEAL_CASTLE_COURTYARD_REVERB);
+    define_enum(mCastle, "ALCOVE", SEAL_CASTLE_ALCOVE_REVERB);
+}
+
+static void
+bind_rvb_factory_presets(VALUE mPreset)
+{
+    VALUE mFactory = rb_define_module_under(mPreset, "Factory");
+    define_enum(mFactory, "SMALLROOM", SEAL_FACTORY_SMALLROOM_REVERB);
+    define_enum(mFactory, "SHORTPASSAGE",
+                    SEAL_FACTORY_SHORTPASSAGE_REVERB);
+    define_enum(mFactory, "MEDIUMROOM", SEAL_FACTORY_MEDIUMROOM_REVERB);
+    define_enum(mFactory, "LARGEROOM", SEAL_FACTORY_LARGEROOM_REVERB);
+    define_enum(mFactory, "LONGPASSAGE", SEAL_FACTORY_LONGPASSAGE_REVERB);
+    define_enum(mFactory, "HALL", SEAL_FACTORY_HALL_REVERB);
+    define_enum(mFactory, "CUPBOARD", SEAL_FACTORY_CUPBOARD_REVERB);
+    define_enum(mFactory, "COURTYARD", SEAL_FACTORY_COURTYARD_REVERB);
+    define_enum(mFactory, "ALCOVE", SEAL_FACTORY_ALCOVE_REVERB);
+}
+
+static void
+bind_rvb_ice_palace_presets(VALUE mPreset)
+{
+    VALUE mIcePalace = rb_define_module_under(mPreset, "IcePalace");
+    define_enum(mIcePalace, "SMALLROOM",
+                    SEAL_ICEPALACE_SMALLROOM_REVERB);
+    define_enum(mIcePalace, "SHORTPASSAGE",
+                    SEAL_ICEPALACE_SHORTPASSAGE_REVERB);
+    define_enum(mIcePalace, "MEDIUMROOM",
+                    SEAL_ICEPALACE_MEDIUMROOM_REVERB);
+    define_enum(mIcePalace, "LARGEROOM", SEAL_ICEPALACE_LARGEROOM_REVERB);
+    define_enum(mIcePalace, "LONGPASSAGE",
+                    SEAL_ICEPALACE_LONGPASSAGE_REVERB);
+    define_enum(mIcePalace, "HALL", SEAL_ICEPALACE_HALL_REVERB);
+    define_enum(mIcePalace, "CUPBOARD", SEAL_ICEPALACE_CUPBOARD_REVERB);
+    define_enum(mIcePalace, "COURTYARD", SEAL_ICEPALACE_COURTYARD_REVERB);
+    define_enum(mIcePalace, "ALCOVE", SEAL_ICEPALACE_ALCOVE_REVERB);
+}
+
+static void
+bind_rvb_space_station_presets(VALUE mPreset)
+{
+    VALUE mSpaceStation = rb_define_module_under(mPreset, "SpaceStation");
+    define_enum(mSpaceStation, "SMALLROOM",
+                    SEAL_SPACESTATION_SMALLROOM_REVERB);
+    define_enum(mSpaceStation, "SHORTPASSAGE",
+                    SEAL_SPACESTATION_SHORTPASSAGE_REVERB);
+    define_enum(mSpaceStation, "MEDIUMROOM",
+                    SEAL_SPACESTATION_MEDIUMROOM_REVERB);
+    define_enum(mSpaceStation, "LARGEROOM",
+                    SEAL_SPACESTATION_LARGEROOM_REVERB);
+    define_enum(mSpaceStation, "LONGPASSAGE",
+                    SEAL_SPACESTATION_LONGPASSAGE_REVERB);
+    define_enum(mSpaceStation, "HALL", SEAL_SPACESTATION_HALL_REVERB);
+    define_enum(mSpaceStation, "CUPBOARD",
+                    SEAL_SPACESTATION_CUPBOARD_REVERB);
+    define_enum(mSpaceStation, "ALCOVE", SEAL_SPACESTATION_ALCOVE_REVERB);
+}
+
+static void
+bind_rvb_wooden_galleon_presets(VALUE mPreset)
+{
+    VALUE mWoodenGalleon = rb_define_module_under(mPreset, "WoodenGalleon");
+    define_enum(mWoodenGalleon, "SMALLROOM",
+                    SEAL_WOODEN_SMALLROOM_REVERB);
+    define_enum(mWoodenGalleon, "SHORTPASSAGE",
+                    SEAL_WOODEN_SHORTPASSAGE_REVERB);
+    define_enum(mWoodenGalleon, "MEDIUMROOM",
+                    SEAL_WOODEN_MEDIUMROOM_REVERB);
+    define_enum(mWoodenGalleon, "LARGEROOM",
+                    SEAL_WOODEN_LARGEROOM_REVERB);
+    define_enum(mWoodenGalleon, "LONGPASSAGE",
+                    SEAL_WOODEN_LONGPASSAGE_REVERB);
+    define_enum(mWoodenGalleon, "HALL", SEAL_WOODEN_HALL_REVERB);
+    define_enum(mWoodenGalleon, "CUPBOARD", SEAL_WOODEN_CUPBOARD_REVERB);
+    define_enum(mWoodenGalleon, "COURTYARD",
+                    SEAL_WOODEN_COURTYARD_REVERB);
+    define_enum(mWoodenGalleon, "ALCOVE", SEAL_WOODEN_ALCOVE_REVERB);
+}
+
+static void
+bind_rvb_sports_presets(VALUE mPreset)
+{
+    VALUE mSports = rb_define_module_under(mPreset, "Sports");
+    define_enum(mSports, "EMPTYSTADIUM", SEAL_SPORT_EMPTYSTADIUM_REVERB);
+    define_enum(mSports, "SQUASHCOURT", SEAL_SPORT_SQUASHCOURT_REVERB);
+    define_enum(mSports, "SMALLSWIMMINGPOOL",
+                    SEAL_SPORT_SMALLSWIMMINGPOOL_REVERB);
+    define_enum(mSports, "LARGESWIMMINGPOOL",
+                    SEAL_SPORT_LARGESWIMMINGPOOL_REVERB);
+    define_enum(mSports, "GYMNASIUM", SEAL_SPORT_GYMNASIUM_REVERB);
+    define_enum(mSports, "FULLSTADIUM", SEAL_SPORT_FULLSTADIUM_REVERB);
+    define_enum(mSports, "STADIUMTANNOY",
+                    SEAL_SPORT_STADIUMTANNOY_REVERB);
+}
+
+static void
+bind_rvb_prefab_presets(VALUE mPreset)
+{
+    VALUE mPrefab = rb_define_module_under(mPreset, "Prefab");
+    define_enum(mPrefab, "WORKSHOP", SEAL_PREFAB_WORKSHOP_REVERB);
+    define_enum(mPrefab, "SCHOOLROOM", SEAL_PREFAB_SCHOOLROOM_REVERB);
+    define_enum(mPrefab, "PRACTISEROOM", SEAL_PREFAB_PRACTISEROOM_REVERB);
+    define_enum(mPrefab, "OUTHOUSE", SEAL_PREFAB_OUTHOUSE_REVERB);
+    define_enum(mPrefab, "CARAVAN", SEAL_PREFAB_CARAVAN_REVERB);
+}
+
+static void
+bind_rvb_dome_presets(VALUE mPreset)
+{
+    VALUE mDome = rb_define_module_under(mPreset, "Dome");
+    define_enum(mDome, "TOMB", SEAL_DOME_TOMB_REVERB);
+    define_enum(mDome, "SAINTPAULS", SEAL_DOME_SAINTPAULS_REVERB);
+}
+
+static void
+bind_rvb_pipe_presets(VALUE mPreset)
+{
+    VALUE mPipe = rb_define_module_under(mPreset, "Pipe");
+    define_enum(mPipe, "SMALL", SEAL_PIPE_SMALL_REVERB);
+    define_enum(mPipe, "LONGTHIN", SEAL_PIPE_LONGTHIN_REVERB);
+    define_enum(mPipe, "LARGE", SEAL_PIPE_LARGE_REVERB);
+    define_enum(mPipe, "RESONANT", SEAL_PIPE_RESONANT_REVERB);
+}
+
+static void
+bind_rvb_outdoors_presets(VALUE mPreset)
+{
+    VALUE mOutdoors = rb_define_module_under(mPreset, "Outdoors");
+    define_enum(mOutdoors, "BACKYARD", SEAL_OUTDOORS_BACKYARD_REVERB);
+    define_enum(mOutdoors, "ROLLINGPLAINS",
+                    SEAL_OUTDOORS_ROLLINGPLAINS_REVERB);
+    define_enum(mOutdoors, "DEEPCANYON", SEAL_OUTDOORS_DEEPCANYON_REVERB);
+    define_enum(mOutdoors, "CREEK", SEAL_OUTDOORS_CREEK_REVERB);
+    define_enum(mOutdoors, "VALLEY", SEAL_OUTDOORS_VALLEY_REVERB);
+}
+
+static void
+bind_rvb_mood_presets(VALUE mPreset)
+{
+    VALUE mMood = rb_define_module_under(mPreset, "Mood");
+    define_enum(mMood, "HEAVEN", SEAL_MOOD_HEAVEN_REVERB);
+    define_enum(mMood, "HELL", SEAL_MOOD_HELL_REVERB);
+    define_enum(mMood, "MEMORY", SEAL_MOOD_MEMORY_REVERB);
+}
+
+static void
+bind_rvb_driving_presets(VALUE mPreset)
+{
+    VALUE mDriving = rb_define_module_under(mPreset, "Driving");
+    define_enum(mDriving, "COMMENTATOR", SEAL_DRIVING_COMMENTATOR_REVERB);
+    define_enum(mDriving, "PITGARAGE", SEAL_DRIVING_PITGARAGE_REVERB);
+    define_enum(mDriving, "INCAR_RACER", SEAL_DRIVING_INCAR_RACER_REVERB);
+    define_enum(mDriving, "INCAR_SPORTS",
+                    SEAL_DRIVING_INCAR_SPORTS_REVERB);
+    define_enum(mDriving, "INCAR_LUXURY",
+                    SEAL_DRIVING_INCAR_LUXURY_REVERB);
+    define_enum(mDriving, "FULLGRANDSTAND",
+                    SEAL_DRIVING_FULLGRANDSTAND_REVERB);
+    define_enum(mDriving, "EMPTYGRANDSTAND",
+                    SEAL_DRIVING_EMPTYGRANDSTAND_REVERB);
+    define_enum(mDriving, "TUNNEL", SEAL_DRIVING_TUNNEL_REVERB);
+}
+
+static void
+bind_rvb_city_presets(VALUE mPreset)
+{
+    VALUE mCity = rb_define_module_under(mPreset, "City");
+    define_enum(mCity, "STREETS", SEAL_CITY_STREETS_REVERB);
+    define_enum(mCity, "SUBWAY", SEAL_CITY_SUBWAY_REVERB);
+    define_enum(mCity, "MUSEUM", SEAL_CITY_MUSEUM_REVERB);
+    define_enum(mCity, "LIBRARY", SEAL_CITY_LIBRARY_REVERB);
+    define_enum(mCity, "UNDERPASS", SEAL_CITY_UNDERPASS_REVERB);
+    define_enum(mCity, "ABANDONED", SEAL_CITY_ABANDONED_REVERB);
+}
+
+static void
+bind_rvb_misc_presets(VALUE mPreset)
+{
+    VALUE mMisc = rb_define_module_under(mPreset, "Misc");
+    define_enum(mMisc, "DUSTYROOM", SEAL_DUSTYROOM_REVERB);
+    define_enum(mMisc, "CHAPEL", SEAL_CHAPEL_REVERB);
+    define_enum(mMisc, "SMALLWATERROOM", SEAL_SMALLWATERROOM_REVERB);
+}
+
+
+static void
+bind_rvb_presets(VALUE cReverb)
+{
+    VALUE mPreset = rb_define_module_under(cReverb, "Preset");
+    define_enum(mPreset, "GENERIC", SEAL_GENERIC_REVERB);
+    define_enum(mPreset, "PADDEDCELL", SEAL_PADDEDCELL_REVERB);
+    define_enum(mPreset, "ROOM", SEAL_ROOM_REVERB);
+    define_enum(mPreset, "BATHROOM", SEAL_BATHROOM_REVERB);
+    define_enum(mPreset, "LIVINGROOM", SEAL_LIVINGROOM_REVERB);
+    define_enum(mPreset, "STONEROOM", SEAL_STONEROOM_REVERB);
+    define_enum(mPreset, "AUDITORIUM", SEAL_AUDITORIUM_REVERB);
+    define_enum(mPreset, "CONCERTHALL", SEAL_CONCERTHALL_REVERB);
+    define_enum(mPreset, "CAVE", SEAL_CAVE_REVERB);
+    define_enum(mPreset, "ARENA", SEAL_ARENA_REVERB);
+    define_enum(mPreset, "HANGAR", SEAL_HANGAR_REVERB);
+    define_enum(mPreset, "CARPETEDHALLWAY", SEAL_CARPETEDHALLWAY_REVERB);
+    define_enum(mPreset, "HALLWAY", SEAL_HALLWAY_REVERB);
+    define_enum(mPreset, "STONECORRIDOR", SEAL_STONECORRIDOR_REVERB);
+    define_enum(mPreset, "ALLEY", SEAL_ALLEY_REVERB);
+    define_enum(mPreset, "FOREST", SEAL_FOREST_REVERB);
+    define_enum(mPreset, "CITY", SEAL_CITY_REVERB);
+    define_enum(mPreset, "MOUNTAINS", SEAL_MOUNTAINS_REVERB);
+    define_enum(mPreset, "QUARRY", SEAL_QUARRY_REVERB);
+    define_enum(mPreset, "PLAIN", SEAL_PLAIN_REVERB);
+    define_enum(mPreset, "PARKINGLOT", SEAL_PARKINGLOT_REVERB);
+    define_enum(mPreset, "SEWERPIPE", SEAL_SEWERPIPE_REVERB);
+    define_enum(mPreset, "UNDERWATER", SEAL_UNDERWATER_REVERB);
+    define_enum(mPreset, "DRUGGED", SEAL_DRUGGED_REVERB);
+    define_enum(mPreset, "DIZZY", SEAL_DIZZY_REVERB);
+    define_enum(mPreset, "PSYCHOTIC", SEAL_PSYCHOTIC_REVERB);
+    bind_rvb_castle_presets(mPreset);
+    bind_rvb_factory_presets(mPreset);
+    bind_rvb_ice_palace_presets(mPreset);
+    bind_rvb_space_station_presets(mPreset);
+    bind_rvb_wooden_galleon_presets(mPreset);
+    bind_rvb_sports_presets(mPreset);
+    bind_rvb_prefab_presets(mPreset);
+    bind_rvb_dome_presets(mPreset);
+    bind_rvb_pipe_presets(mPreset);
+    bind_rvb_outdoors_presets(mPreset);
+    bind_rvb_mood_presets(mPreset);
+    bind_rvb_driving_presets(mPreset);
+    bind_rvb_city_presets(mPreset);
+    bind_rvb_misc_presets(mPreset);
 }
 
 static void
@@ -1265,7 +1526,8 @@ bind_rvb(void)
 {
     VALUE cReverb = rb_define_class_under(mSeal, "Reverb", rb_cObject);
     rb_define_alloc_func(cReverb, alloc_rvb);
-    rb_define_method(cReverb, "initialize", init_rvb, 0);
+    rb_define_method(cReverb, "initialize", init_rvb, -1);
+    rb_define_method(cReverb, "load", load_rvb, 2);
     rb_define_method(cReverb, "density=", set_rvb_diffusion, 1);
     rb_define_method(cReverb, "density", get_rvb_diffusion, 0);
     rb_define_method(cReverb, "diffusion=", set_rvb_diffusion, 1);
@@ -1303,6 +1565,7 @@ bind_rvb(void)
     rb_define_method(cReverb, "hfdecay_limited",
                      is_rvb_hfdecay_limited, 0);
     rb_define_alias(cReverb, "hfdecay_limited?", "hfdecay_limited");
+    bind_rvb_presets(cReverb);
 }
 
 static void
