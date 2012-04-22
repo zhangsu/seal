@@ -16,7 +16,7 @@ end
 
 if target_os =~ /mswin|mingw/
   include_dir = "#{root_dir}/include"
-  lib_dir = "#{root_dir}/lib"
+  lib_dir = "#{root_dir}/msvc/lib"
   cp "#{lib_dir}/libmpg123.dll", '.'
   cp "#{lib_dir}/OpenAL32.dll", '.'
   check_library('OpenAL32', 'alcOpenDevice')

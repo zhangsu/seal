@@ -18,9 +18,9 @@ namespace :mf do
   # Assuming all Makefiles are at the same (directory tree) level.
   PROJ_DIR          = File.join('..', '..', '..')
   INCLUDE_DIR       = File.join(PROJ_DIR, 'include')
-  LIB_DIR           = File.join(PROJ_DIR, 'lib')
   MAKEFILE_TEMPLATE = File.join(PROJ_DIR, 'Makefile.erb')
-  # Library input list for Win32.
+  # Libraries for Win32.
+  LIB_DIR           = File.join(PROJ_DIR, 'msvc/lib')
   LIBS              = [File.join(LIB_DIR, 'OpenAL32.lib'),
                        File.join(LIB_DIR, 'libmpg123.lib')].join
   DLLS              = ['OpenAL32.dll', 'libmpg123.dll']
