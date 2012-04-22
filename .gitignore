@@ -19,6 +19,6 @@ msvc/ipch/
 msvc/*.suo
 msvc/*.sdf
 msvc/*.opensdf
-ruby/*.dll
-ruby/*.def
-ruby/Makefile
+ext/*.dll
+ext/*.def
+ext/Makefile
