@@ -14,7 +14,7 @@
 
 enum seal_rvb_preset_t
 {
-    /* Default Presets */
+    /* Default presets. */
     SEAL_GENERIC_REVERB,
     SEAL_PADDEDCELL_REVERB,
     SEAL_ROOM_REVERB,
@@ -42,7 +42,7 @@ enum seal_rvb_preset_t
     SEAL_DIZZY_REVERB,
     SEAL_PSYCHOTIC_REVERB,
 
-    /* Castle Presets */
+    /* Castle presets. */
     SEAL_CASTLE_SMALLROOM_REVERB,
     SEAL_CASTLE_SHORTPASSAGE_REVERB,
     SEAL_CASTLE_MEDIUMROOM_REVERB,
@@ -53,7 +53,7 @@ enum seal_rvb_preset_t
     SEAL_CASTLE_COURTYARD_REVERB,
     SEAL_CASTLE_ALCOVE_REVERB,
 
-    /* Factory Presets */
+    /* Factory presets. */
     SEAL_FACTORY_SMALLROOM_REVERB,
     SEAL_FACTORY_SHORTPASSAGE_REVERB,
     SEAL_FACTORY_MEDIUMROOM_REVERB,
@@ -64,7 +64,7 @@ enum seal_rvb_preset_t
     SEAL_FACTORY_COURTYARD_REVERB,
     SEAL_FACTORY_ALCOVE_REVERB,
 
-    /* Ice Palace Presets */
+    /* Ice palace presets. */
     SEAL_ICEPALACE_SMALLROOM_REVERB,
     SEAL_ICEPALACE_SHORTPASSAGE_REVERB,
     SEAL_ICEPALACE_MEDIUMROOM_REVERB,
@@ -75,7 +75,7 @@ enum seal_rvb_preset_t
     SEAL_ICEPALACE_COURTYARD_REVERB,
     SEAL_ICEPALACE_ALCOVE_REVERB,
 
-    /* Space Station Presets */
+    /* Space station presets. */
     SEAL_SPACESTATION_SMALLROOM_REVERB,
     SEAL_SPACESTATION_SHORTPASSAGE_REVERB,
     SEAL_SPACESTATION_MEDIUMROOM_REVERB,
@@ -85,7 +85,7 @@ enum seal_rvb_preset_t
     SEAL_SPACESTATION_CUPBOARD_REVERB,
     SEAL_SPACESTATION_ALCOVE_REVERB,
 
-    /* Wooden Galleon Presets */
+    /* Wooden galleon presets. */
     SEAL_WOODEN_SMALLROOM_REVERB,
     SEAL_WOODEN_SHORTPASSAGE_REVERB,
     SEAL_WOODEN_MEDIUMROOM_REVERB,
@@ -96,7 +96,7 @@ enum seal_rvb_preset_t
     SEAL_WOODEN_COURTYARD_REVERB,
     SEAL_WOODEN_ALCOVE_REVERB,
 
-    /* Sports Presets */
+    /* Sports presets. */
     SEAL_SPORT_EMPTYSTADIUM_REVERB,
     SEAL_SPORT_SQUASHCOURT_REVERB,
     SEAL_SPORT_SMALLSWIMMINGPOOL_REVERB,
@@ -105,34 +105,36 @@ enum seal_rvb_preset_t
     SEAL_SPORT_FULLSTADIUM_REVERB,
     SEAL_SPORT_STADIUMTANNOY_REVERB,
 
-    /* Prefab Presets */
+    /* Prefab presets. */
     SEAL_PREFAB_WORKSHOP_REVERB,
     SEAL_PREFAB_SCHOOLROOM_REVERB,
     SEAL_PREFAB_PRACTISEROOM_REVERB,
     SEAL_PREFAB_OUTHOUSE_REVERB,
     SEAL_PREFAB_CARAVAN_REVERB,
 
-    /* Dome and Pipe Presets */
+    /* Dome presets. */
     SEAL_DOME_TOMB_REVERB,
-    SEAL_PIPE_SMALL_REVERB,
     SEAL_DOME_SAINTPAULS_REVERB,
+
+    /* Pipe presets. */
+    SEAL_PIPE_SMALL_REVERB,
     SEAL_PIPE_LONGTHIN_REVERB,
     SEAL_PIPE_LARGE_REVERB,
     SEAL_PIPE_RESONANT_REVERB,
 
-    /* Outdoors Presets */
+    /* Outdoors presets. */
     SEAL_OUTDOORS_BACKYARD_REVERB,
     SEAL_OUTDOORS_ROLLINGPLAINS_REVERB,
     SEAL_OUTDOORS_DEEPCANYON_REVERB,
     SEAL_OUTDOORS_CREEK_REVERB,
     SEAL_OUTDOORS_VALLEY_REVERB,
 
-    /* Mood Presets */
+    /* Mood presets. */
     SEAL_MOOD_HEAVEN_REVERB,
     SEAL_MOOD_HELL_REVERB,
     SEAL_MOOD_MEMORY_REVERB,
 
-    /* Driving Presets */
+    /* Driving presets. */
     SEAL_DRIVING_COMMENTATOR_REVERB,
     SEAL_DRIVING_PITGARAGE_REVERB,
     SEAL_DRIVING_INCAR_RACER_REVERB,
@@ -142,7 +144,7 @@ enum seal_rvb_preset_t
     SEAL_DRIVING_EMPTYGRANDSTAND_REVERB,
     SEAL_DRIVING_TUNNEL_REVERB,
 
-    /* City Presets */
+    /* City presets. */
     SEAL_CITY_STREETS_REVERB,
     SEAL_CITY_SUBWAY_REVERB,
     SEAL_CITY_MUSEUM_REVERB,
@@ -150,7 +152,7 @@ enum seal_rvb_preset_t
     SEAL_CITY_UNDERPASS_REVERB,
     SEAL_CITY_ABANDONED_REVERB,
 
-    /* Misc. Presets */
+    /* Misc. presets. */
     SEAL_DUSTYROOM_REVERB,
     SEAL_CHAPEL_REVERB,
     SEAL_SMALLWATERROOM_REVERB
@@ -184,7 +186,7 @@ seal_err_t seal_destroy_rvb(seal_rvb_t*);
  * @param reverb    the reverb to load the preset into
  * @param preset    the preset to load
  */
-seal_err_t seal_load_rvb_preset(seal_rvb_t*, seal_rvb_preset_t);
+seal_err_t seal_load_rvb(seal_rvb_t*, seal_rvb_preset_t);
 
 /*
  * Sets the modal density of a reverb in the interval [0.0f, 1.0f]. The

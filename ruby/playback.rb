@@ -2,10 +2,10 @@ require_relative 'seal'
 
 Seal.startup
 
-src = Seal::Source.new
-src.stream = Seal::Stream.open('audio/pipa.ogg')
-src.play
+source = Seal::Source.new
+source.stream = Seal::Stream.open('audio/pipa.ogg')
+source.play
 
-sleep 1 while src.state == Seal::Source::State::PLAYING
+sleep 1 while source.state == Seal::Source::State::PLAYING
 
 Seal.cleanup

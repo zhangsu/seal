@@ -17,10 +17,10 @@ by a 3-tuple of real numbers separated by white spaces.
 You will be moving at a rate of #{RATE} unit/sec.
 "
 
-src = Seal::Source.new
-src.stream = Seal::Stream.new('audio/people.ogg')
-src.looping = true
-src.play
+source = Seal::Source.new
+source.stream = Seal::Stream.new('audio/people.ogg')
+source.looping = true
+source.play
 listener = Seal.listener
 
 loop do

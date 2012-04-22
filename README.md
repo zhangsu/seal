@@ -67,7 +67,7 @@ generated specifically for MSVC and GCC (MinGW or native Unix-like systems).
         $ cd ruby
         $ ruby configure.rb
         $ make
-        
+
     The default output is `seal.{so,dll,bundle}`, which is a dynamic library
     that could be required by Ruby at runtime.
 

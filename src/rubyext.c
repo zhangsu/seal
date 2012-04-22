@@ -8,16 +8,18 @@
 #include <seal.h>
 #include "ruby.h"
 
-static const char WAV_SYMBOL[] = "wav";
-static const char OV_SYMBOL[] = "ov";
-static const char MPG_SYMBOL[] = "mpg";
-static const char UNDETERMINED_SYMBOL[] = "undetermined";
-static const char STATIC_SYMBOL[] = "static";
-static const char STREAMING_SYMBOL[] = "streaming";
-static const char INITIAL_SYMBOL[] = "initial";
-static const char PLAYING_SYMBOL[] = "playing";
-static const char PAUSED_SYMBOL[] = "paused";
-static const char STOPPED_SYMBOL[] = "stopped";
+static const char WAV_SYM[] = "wav";
+static const char OV_SYM[] = "ov";
+static const char MPG_SYM[] = "mpg";
+
+static const char UNDETERMINED_SYM[] = "undetermined";
+static const char STATIC_SYM[] = "static";
+static const char STREAMING_SYM[] = "streaming";
+
+static const char INITIAL_SYM[] = "initial";
+static const char PLAYING_SYM[] = "playing";
+static const char PAUSED_SYM[] = "paused";
+static const char STOPPED_SYM[] = "stopped";
 
 static VALUE mSeal;
 static VALUE eSealError;
@@ -256,11 +258,11 @@ map_format(VALUE symbol)
         return SEAL_UNKNOWN_FMT;
 
     symbol = rb_convert_type(symbol, T_SYMBOL, "Symbol", "to_sym");
-    if (symbol == name2sym(WAV_SYMBOL))
+    if (symbol == name2sym(WAV_SYM))
         return SEAL_WAV_FMT;
-    else if (symbol == name2sym(OV_SYMBOL))
+    else if (symbol == name2sym(OV_SYM))
         return SEAL_OV_FMT;
-    else if (symbol == name2sym(MPG_SYMBOL))
+    else if (symbol == name2sym(MPG_SYM))
         return SEAL_MPG_FMT;
 }
 
@@ -744,11 +746,11 @@ get_src_type(VALUE rsrc)
     check_seal_err(seal_get_src_type(DATA_PTR(rsrc), &type));
     switch (type) {
     case SEAL_STATIC:
-        return name2sym(STATIC_SYMBOL);
+        return name2sym(STATIC_SYM);
     case SEAL_STREAMING:
-        return name2sym(STREAMING_SYMBOL);
+        return name2sym(STREAMING_SYM);
     default:
-        return name2sym(UNDETERMINED_SYMBOL);
+        return name2sym(UNDETERMINED_SYM);
     }
 }
 
@@ -764,13 +766,13 @@ get_src_state(VALUE rsrc)
     check_seal_err(seal_get_src_state(DATA_PTR(rsrc), &state));
     switch (state) {
     case SEAL_PLAYING:
-        return name2sym(PLAYING_SYMBOL);
+        return name2sym(PLAYING_SYM);
     case SEAL_PAUSED:
-        return name2sym(PAUSED_SYMBOL);
+        return name2sym(PAUSED_SYM);
     case SEAL_STOPPED:
-        return name2sym(STOPPED_SYMBOL);
+        return name2sym(STOPPED_SYM);
     default:
-        return name2sym(INITIAL_SYMBOL);
+        return name2sym(INITIAL_SYM);
     }
 }
 
@@ -1153,9 +1155,9 @@ bind_core(void)
     rb_define_singleton_method(mSeal, "startup", startup, -1);
     rb_define_singleton_method(mSeal, "cleanup", cleanup, 0);
     mFormat = rb_define_module_under(mSeal, "Format");
-    rb_define_const(mFormat, "WAV", name2sym(WAV_SYMBOL));
-    rb_define_const(mFormat, "OV", name2sym(OV_SYMBOL));
-    rb_define_const(mFormat, "MPG", name2sym(MPG_SYMBOL));
+    rb_define_const(mFormat, "WAV", name2sym(WAV_SYM));
+    rb_define_const(mFormat, "OV", name2sym(OV_SYM));
+    rb_define_const(mFormat, "MPG", name2sym(MPG_SYM));
 }
 
 static void
@@ -1186,10 +1188,31 @@ bind_stream(void)
 }
 
 static void
-bind_src(void)
+bind_src_state(VALUE cSource)
 {
     VALUE mState;
+
+    mState = rb_define_module_under(cSource, "State");
+    rb_define_const(mState, "INITIAL", name2sym(INITIAL_SYM));
+    rb_define_const(mState, "PLAYING", name2sym(PLAYING_SYM));
+    rb_define_const(mState, "PAUSED", name2sym(PAUSED_SYM));
+    rb_define_const(mState, "STOPPED", name2sym(STOPPED_SYM));
+}
+
+static void
+bind_src_type(VALUE cSource)
+{
     VALUE mType;
+
+    mType = rb_define_module_under(cSource, "Type");
+    rb_define_const(mType, "UNDETERMINED", name2sym(UNDETERMINED_SYM));
+    rb_define_const(mType, "STATIC", name2sym(STATIC_SYM));
+    rb_define_const(mType, "STREAMING", name2sym(STREAMING_SYM));
+}
+
+static void
+bind_src(void)
+{
     VALUE cSource = rb_define_class_under(mSeal, "Source", rb_cObject);
     rb_define_alloc_func(cSource, alloc_src);
     rb_define_method(cSource, "initialize", init_src, 0);

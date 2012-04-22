@@ -60,7 +60,7 @@ namespace :mf do
     end
 
     def make_makefile_in(dirname, options)
-      Dir.chdir(dirname) { make_makefile(options) }      
+      Dir.chdir(dirname) { make_makefile(options) }
     end
 
     filenames   = Dir.chdir('src') { Dir['*/*.c'] }

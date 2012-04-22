@@ -2,10 +2,10 @@ require_relative 'seal'
 
 Seal.startup
 
-src = Seal::Source.new
-src.stream = Seal::Stream.open('audio/pipa.ogg')
-src.play
-src.looping = true
+source = Seal::Source.new
+source.stream = Seal::Stream.open('audio/pipa.ogg')
+source.play
+source.looping = true
 
 FACTOR = 0.01
 
@@ -15,9 +15,9 @@ puts "Enter q to quit."
 
 until (c = $stdin.getc) =~ /q/i
   if c =~ /\[/i
-    src.pitch -= FACTOR
+    source.pitch -= FACTOR
   elsif c =~ /\]/i
-    src.pitch += FACTOR
+    source.pitch += FACTOR
   end
 end
 
