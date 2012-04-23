@@ -6,6 +6,82 @@ effect and reverberation, in a 3D space. It is built on top of [OpenAL]
 (http://connect.creativelabs.com/openal/default.aspx), adding support for
 audio streaming and audio formats like Ogg Vorbis, MPEG Audio and WAVE.
 
+## Basic Use
+
+Initialize SEAL:
+
+    Seal.startup
+
+    include Seal
+
+Use a source object to represent a sound source, and attach an audio buffer:
+
+    source = Source.new
+    source.buffer = Buffer.new("audio.ogg")
+
+Change the position of the source:
+
+    source.position = 3, 2, -4
+
+Change the position of the listener (a singleton of Seal::Listener):
+
+    Seal.listener.position = -1, -1, 0
+
+Play the source:
+
+    source.play
+
+In case of massive audio resource, use of buffer will eat all the memory, so
+we can use streams:
+
+    source.stream = Stream.open("background_music.ogg")
+
+Make sure to detach the audio from the source before switching from a buffer
+to a stream or vice-versa:
+
+    source.buffer = ...
+
+    # ...
+
+    source.detach
+    source.stream = ...
+
+Apply a reverberation effect to the sound source:
+
+    # Allocate an effect slot and associate a specific reverb object.
+    slot = EffectSlot.new(Reverb.new(Reverb::Preset::FOREST))
+    # Start feeding the slot.
+    slot.feed(source)
+
+You can find detailed documentations in the header files under `include/seal`
+for each of the modules.
+
+The C interface is very similar to the Ruby binding, except that some of the
+SEAL objects are abbreviated (but still more verbose than Ruby in general):
+
+src -> Source
+buf -> Buffer
+rvb -> Reverb
+efs -> EffectSlot
+
+For example:
+
+    seal_src_t src;
+    seal_buf_t buf;
+
+    seal_startup(0);
+
+    seal_init_src(&src);
+    seal_init_buf(&buf);
+    seal_load2buf(&buf, "audio.ogg", SEAL_UNKNOWN_FMT);
+    seal_set_src_buf(&src, &buf);
+    seal_play_src(&src);
+
+    // Wait to hear.
+    _seal_sleep(3000);
+
+    seal_cleanup();
+
 ## Platforms
 
 Linux, Windows and Mac OS X are officially tested and supported. SEAL should
@@ -128,7 +204,7 @@ details.
 ## Character Encoding
 
 UTF-8 should be used to encode the source code or at least the path strings so
-that SEAL can properly input audio files using paths that contain multibyte
+that SEAL can properly input audio files using paths that contain multi-byte
 (Chinese, Japanese, etc.) characters.
 
 ## Redistribution
@@ -142,7 +218,7 @@ See AUTHOR.
 ## Etymology
 
 The phrase "Scorched end" (Chinese: 焦尾; Pinyin: Jiao Wei) is a direct
-tranlation of the name of a Guqin[1] existed in China in the second
+translation of the name of a Guqin[1] existed in China in the second
 century CE. The name literally means that one end of the Qin is scorched.
 
 This Qin was found by Cai Yong.[2] According to the "History of the Later
