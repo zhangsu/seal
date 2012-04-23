@@ -198,3 +198,8 @@ namespace :demo do |; extensions, seal_artifacts, win32_artifacts|
     rm_s (seal_artifacts | win32_artifacts).map { |f| File.join('demo', f)}
   end
 end
+
+task :rdoc do
+  sh 'rdoc --exclude "[A-Z]+|demo/|ext/|include/al/|mpg123|ogg|vorbis|'\
+     'win32|make|test"'
+end
