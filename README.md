@@ -80,6 +80,10 @@ For example:
     // Wait to hear.
     _seal_sleep(3000);
 
+    seal_destroy_src(&src);
+    seal_destroy_buf(&buf);
+    seal_destroy_efs(&efs);
+    seal_destroy_rvb(&rvb);
     seal_cleanup();
 
 ## Platforms
