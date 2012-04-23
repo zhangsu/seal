@@ -51,7 +51,7 @@ Apply a reverberation effect to the sound source:
     # Allocate an effect slot and associate a specific reverb object.
     slot = EffectSlot.new(Reverb.new(Reverb::Preset::FOREST))
     # Start feeding the slot.
-    slot.feed(source)
+    slot.feed(0, source)
 
 You can find detailed documentations in the header files under `include/seal`
 for each of the modules.
