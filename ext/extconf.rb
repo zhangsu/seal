@@ -1,6 +1,7 @@
 require 'mkmf'
 require 'fileutils'
 require 'rbconfig'
+
 include FileUtils
 include RbConfig
 
@@ -11,7 +12,7 @@ src_dir = "#{root_dir}/src"
 $defs << '-DNDEBUG'
 
 def check_library(lib, func)
-  raise "#{lib} is not found. See README." unless have_library(lib, func)
+  raise "#{lib} is missing. See README." unless have_library(lib, func)
 end
 
 if target_os =~ /mswin|mingw/
@@ -29,7 +30,7 @@ else
   puts 'The current operating system is not supported.'
   puts 'If, however, you are using a Unix-like system, you might still be '\
        'able to build. See README.'
-  exit
+  exit 1
 end
 
 # Add source directories.
