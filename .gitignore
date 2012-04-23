@@ -22,3 +22,4 @@ msvc/*.opensdf
 ext/*.dll
 ext/*.def
 ext/Makefile
+demo/*.dll

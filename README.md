@@ -64,12 +64,16 @@ generated specifically for MSVC and GCC (MinGW or native Unix-like systems).
 
 -   Ruby extension
 
-        $ cd ruby
-        $ ruby configure.rb
-        $ make
+        cd ruby
+        ruby configure.rb
+        make
 
     The default output is `seal.{so,dll,bundle}`, which is a dynamic library
     that could be required by Ruby at runtime.
+
+    If you want to install the library to the default `$:` search path, then:
+
+        make install
 
     If you are compiling on Unix-like operating systems other than Linux and
     Mac OS X, change the following check to pass whatever platform you have:
@@ -79,6 +83,36 @@ generated specifically for MSVC and GCC (MinGW or native Unix-like systems).
 Note that Win32 binaries are shipped with the project for compiling SEAL on
 Windows. You can of course compile your own copies of the dependency
 libraries on Windows, but I feel like Win32 users do not usually do that.
+
+## Demos
+
+To run the demos under `demo` in Ruby, first build SEAL as a Ruby extension,
+then:
+
+    rake demo:prepare
+
+Which copies all the dependency artifacts to the demo directory.
+
+-   playback.rb
+
+    Basic playback of audio.
+
+-   control.rb
+
+    Various controls of audio like play, pause, stop.
+
+-   pitch.rb
+
+    Audio pitch shifting.
+
+-   walk.rb
+
+    3D audio positioning (attenuation).
+
+-   reverb.rb
+
+    Audio reverberation. There are lots of built-in reverb presets, but this
+    demo only simulates a large room in ice palace.
 
 ## Thread Safety
 

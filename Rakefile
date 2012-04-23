@@ -1,4 +1,7 @@
 require 'erb'
+require 'rbconfig'
+
+include RbConfig
 
 desc 'Run the default task'
 task :default => :all
@@ -164,3 +167,34 @@ namespace :mf do
   end
 end
 
+module FileUtils
+  def cp_s(src, dest, options = {})
+    src = [src] unless src.is_a? Array
+    src.each { |f| cp f, dest, options if File.exists? f }
+  end
+
+  def rm_s(list)
+    list = [list] unless list.is_a? Array
+    list.each { |f| rm f if File.exists? f }
+  end
+end
+
+namespace :demo do |; extensions, seal_artifacts, win32_artifacts|
+  seal_artifacts = %w<seal.so seal.dll seal.bundle>
+  win32_artifacts = %w<OpenAL32.dll libmpg123.dll>
+
+  desc 'Prepare all the dependencies for demos'
+  task :prepare do |t|
+    report(t)
+    cp_s(seal_artifacts.map { |f| File.join('ext', f)}, 'demo')
+    if CONFIG['target_os'] =~ /mswin|mingw/
+      cp_s(win32_artifacts.map { |f| File.join('msvc', 'lib', f)}, 'demo')
+    end
+  end
+
+  desc 'Clean demo artifacts'
+  task :clean do |t|
+    report(t)
+    rm_s (seal_artifacts | win32_artifacts).map { |f| File.join('demo', f)}
+  end
+end
