@@ -59,9 +59,9 @@ for each of the modules.
 The C interface is very similar to the Ruby binding, except that some of the
 SEAL objects are abbreviated (but still more verbose than Ruby in general):
 
-src -> Source
-buf -> Buffer
-rvb -> Reverb
+src -> Source  
+buf -> Buffer  
+rvb -> Reverb  
 efs -> EffectSlot
 
 For example:
