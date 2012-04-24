@@ -30,9 +30,9 @@ seal_err_t seal_startup(const char* /*device_name*/);
 void seal_cleanup(void);
 
 /*
- * @return  the maximum number of effects a source can mix concurrently.
+ * @return  the maximum number of effect slots a source can feed concurrently.
  */
-int seal_get_neffects_per_src(void);
+int seal_get_per_src_effect_limit(void);
 
 /*
  * Gets the SEAL version string.
