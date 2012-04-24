@@ -703,7 +703,6 @@ set_src_auto(VALUE rsrc, VALUE value)
 /*
  *  call-seq:
  *      source.auto     -> true or false
- *      source.auto?    -> true or false
  */
 static VALUE
 is_src_auto(VALUE rsrc)
@@ -724,7 +723,6 @@ set_src_relative(VALUE rsrc, VALUE value)
 /*
  *  call-seq:
  *      source.relative   -> true or false
- *      source.relative?  -> true or false
  */
 static VALUE
 is_src_relative(VALUE rsrc)
@@ -745,7 +743,6 @@ set_src_looping(VALUE rsrc, VALUE value)
 /*
  *  call-seq:
  *      source.looping  -> true or false
- *      source.looping? -> true or false
  */
 static VALUE
 is_src_looping(VALUE rsrc)
@@ -1138,7 +1135,6 @@ set_rvb_hfdecay_limited(VALUE rrvb, VALUE value)
 /*
  *  call-seq:
  *      reverb.hfdecay_limited  -> true or false
- *      reverb.hfdecay_limited? -> true or false
  */
 static VALUE
 is_rvb_hfdecay_limited(VALUE rrvb)
@@ -1235,7 +1231,6 @@ set_efs_auto(VALUE refs, VALUE value)
 /*
  *  call-seq:
  *      effect_slot.auto    -> true or false
- *      effect_slot.auto?   -> true or false
  */
 static VALUE
 is_efs_auto(VALUE refs)
