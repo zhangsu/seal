@@ -309,6 +309,12 @@ extract_stream(VALUE rstream)
  *  call-seq:
  *      Seal.startup       -> nil
  *      Seal.startup(str)  -> nil
+ *
+ * Initializes SEAL by specifying the device name <i>str</i>. This function is
+ * not re-entrant nor thread-safe and should be called only once per SEAL
+ * session. Match a call to <code>seal_startup</code> with a call to
+ * <code>seal_cleanup</code> and never call <code>seal_starup</code> twice in
+ * a row.
  */
 static VALUE
 startup(int argc, VALUE* argv)
@@ -325,6 +331,8 @@ startup(int argc, VALUE* argv)
 /*
  *  call-seq:
  *      Seal.cleanup   -> nil
+ *
+ * Uninitializes SEAL and invalidate all SEAL objects. Thread-unsafe. 
  */
 static VALUE
 cleanup()
@@ -332,6 +340,18 @@ cleanup()
     seal_cleanup();
 
     return Qnil;
+}
+
+/*
+ *  call-seq:
+ *      Seal.per_source_effect_limit    -> fixnum
+ *
+ * Returns the maximum number of effect slots a source can feed concurrently.
+ */
+ static VALUE
+per_source_effect_limit()
+{
+    return INT2NUM(seal_get_per_src_effect_limit());
 }
 
 /*
@@ -1331,14 +1351,17 @@ set_listener_orien(VALUE rlistener, VALUE rarr)
  *  call-seq:
  *      Seal.listener.orientation  -> [[flt, flt, flt], [flt, flt, flt]]
  *
- *  Examples:
+ * Gets the orientation of the listener. The default is
+ * ((0.0, 0.0, -1.0), (0.0, 1.0, 0.0)).
+ *
+ * Examples:
+ *      # at references the `at' vector [flt, flt, flt]
+ *      # up references the `up' vector [flt, flt, flt]
  *      at, up = Seal.listener.orientation
- *      at    # => the `at' vector [flt, flt, flt]
- *      up    # => the `up' vector [flt, flt, flt]
- *      (at_x, at_y, ay_z), (up_x, up_y, up_z) = Seal.listener.orientation
- *      at_x  # => the x component of the `at' vector
+ *      # at_x references the x component of the `at' vector
  *      # ...
- *      up_z  # => the z component of the `up' vector
+ *      # up_z references the z component of the `up' vector
+ *      (at_x, at_y, ay_z), (up_x, up_y, up_z) = Seal.listener.orientation
  */
 static VALUE
 get_listener_orien(VALUE rlistener)
@@ -1370,12 +1393,23 @@ bind_core(void)
     eSealError = rb_define_class("SealError", rb_eException);
     rb_define_singleton_method(mSeal, "startup", startup, -1);
     rb_define_singleton_method(mSeal, "cleanup", cleanup, 0);
+    rb_define_singleton_method(mSeal, "per_source_effect_limit",
+                               per_source_effect_limit, 0);
+    rb_define_const(mSeal, "VERSION", rb_str_new2(seal_get_version()));
     mFormat = rb_define_module_under(mSeal, "Format");
     rb_define_const(mFormat, "WAV", name2sym(WAV_SYM));
     rb_define_const(mFormat, "OV", name2sym(OV_SYM));
     rb_define_const(mFormat, "MPG", name2sym(MPG_SYM));
 }
 
+/*
+ * Document-class:  Seal::Buffer
+ *
+ * Buffers are essentially abstract representations of the (raw) audio data
+ * and are used by sources. Buffers are most suitable for small-sized sound
+ * effect which can be efficiently loaded to memory at once. Streams, on the
+ * other hand, are more suitable for long audio such as background music.
+ */
 static void
 bind_buf(void)
 {
@@ -1426,6 +1460,12 @@ bind_src_type(VALUE cSource)
     rb_define_const(mType, "STREAMING", name2sym(STREAMING_SYM));
 }
 
+/*
+ * Document-class:  Seal::Source
+ *
+ * Sources are abstract representations of sound sources which emit sound in
+ * Euclidean space.
+ */
 static void
 bind_src(void)
 {
@@ -1793,7 +1833,9 @@ bind_listener(void)
     rb_define_method(cListener, "orientation", get_listener_orien, 0);
 }
 
-/* CRuby extension entry point. */
+/*
+ * The top-level namespace of SEAL.
+ */
 void
 Init_seal(void)
 {
