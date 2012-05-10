@@ -1,6 +1,6 @@
 # Scorched End Audio Library
 
-SEAL is a C library with Ruby binding for audio rendering and manipulation,
+Seal is a C library with Ruby binding for audio rendering and manipulation,
 such as direction and distance attenuation, the simulation of the Dopplet
 effect and reverberation, in a 3D space. It is built on top of [OpenAL]
 (http://connect.creativelabs.com/openal/default.aspx), adding support for
@@ -8,56 +8,72 @@ audio streaming and audio formats like Ogg Vorbis, MPEG Audio and WAVE.
 
 ## Basic Use
 
-Initialize SEAL:
+Initialize Seal:
 
-    Seal.startup
+```ruby
+Seal.startup
 
-    include Seal
+include Seal
+```
 
 Use a source object to represent a sound source, and attach an audio buffer:
 
-    source = Source.new
-    source.buffer = Buffer.new("audio.ogg")
+```ruby
+source = Source.new
+source.buffer = Buffer.new("audio.ogg")
+```
 
 Change the position of the source:
 
-    source.position = 3, 2, -4
+```ruby
+source.position = 3, 2, -4
+```
 
 Change the position of the listener (a singleton of Seal::Listener):
 
-    Seal.listener.position = -1, -1, 0
+```ruby
+Seal.listener.position = -1, -1, 0
+```
 
 Play the source:
 
-    source.play
+```ruby
+source.play
+```
 
 In case of massive audio resource, use of buffer will eat all the memory, so
 we can use streams:
 
-    source.stream = Stream.open("background_music.ogg")
+```ruby
+source.stream = Stream.open("background_music.ogg")
+```
 
 Make sure to detach the audio from the source before switching from a buffer
 to a stream or vice-versa:
 
-    source.buffer = ...
+```ruby
+source.buffer = ...
 
-    # ...
+# ...
 
-    source.detach
-    source.stream = ...
+source.detach
+source.stream = ...
+```
 
 Apply a reverberation effect to the sound source:
 
-    # Allocate an effect slot and associate a specific reverb object.
-    slot = EffectSlot.new(Reverb.new(Reverb::Preset::FOREST))
-    # Start feeding the slot.
-    slot.feed(0, source)
+```ruby
+# Allocate an effect slot and associate a specific reverb object.
+slot = EffectSlot.new(Reverb.new(Reverb::Preset::FOREST))
+# Start feeding the slot.
+slot.feed(0, source)
+```
 
 You can find detailed documentations in the header files under `include/seal`
 for each of the modules.
 
 The C interface is very similar to the Ruby binding, except that some of the
-SEAL objects are abbreviated (but still more verbose than Ruby in general):
+Seal objects are abbreviated (but still more verbose than Ruby in general):
 
 src -> Source  
 buf -> Buffer  
@@ -66,99 +82,121 @@ efs -> EffectSlot
 
 For example:
 
-    seal_src_t src;
-    seal_buf_t buf;
+```c
+seal_src_t src;
+seal_buf_t buf;
 
-    seal_startup(0);
+seal_startup(0);
 
-    seal_init_src(&src);
-    seal_init_buf(&buf);
-    seal_load2buf(&buf, "audio.ogg", SEAL_UNKNOWN_FMT);
-    seal_set_src_buf(&src, &buf);
-    seal_play_src(&src);
+seal_init_src(&src);
+seal_init_buf(&buf);
+seal_load2buf(&buf, "audio.ogg", SEAL_UNKNOWN_FMT);
+seal_set_src_buf(&src, &buf);
+seal_play_src(&src);
 
-    // Wait to hear.
-    _seal_sleep(3000);
+// Wait to hear.
+_seal_sleep(3000);
 
-    seal_destroy_src(&src);
-    seal_destroy_buf(&buf);
-    seal_destroy_efs(&efs);
-    seal_destroy_rvb(&rvb);
-    seal_cleanup();
+seal_destroy_src(&src);
+seal_destroy_buf(&buf);
+seal_destroy_efs(&efs);
+seal_destroy_rvb(&rvb);
+seal_cleanup();
+```
 
 ## Platforms
 
-Linux, Windows and Mac OS X are officially tested and supported. SEAL should
+Linux, Windows and Mac OS X are officially tested and supported. Seal should
 run on all Unix-like operating systems where OpenAL, libogg, libvorbis and
 libmpg123 can run, but those platforms are never tested. The Makefiles are
 generated specifically for MSVC and GCC (MinGW or native Unix-like systems).
 
 ## Build
 
--   GCC + GNU Make + Unix-like operating systems + UN*X shell
+Seal has native dependencies.
 
-    First, you need [CMake](http://www.cmake.org/) 2.4 or later to install
-    [libopenal](http://kcat.strangesoft.net/openal.html) as follows:
+### GCC + GNU Make + Unix-like operating systems + UN*X shell
 
-        git clone git://repo.or.cz/openal-soft.git openal-soft
-        cd openal-soft/build
-        cmake -DCMAKE_BUILD_TYPE=Release ..
-        make
-        make install
+First, you need [CMake](http://www.cmake.org/) 2.4 or later to install
+[libopenal](http://kcat.strangesoft.net/openal.html) as follows:
 
-    Then download [libmpg123](http://sourceforge.net/projects/mpg123/files)
-    and:
+```bash
+git clone git://repo.or.cz/openal-soft.git openal-soft
+cd openal-soft/build
+cmake -DCMAKE_BUILD_TYPE=Release ..
+make
+make install
+```
 
-        cd <libmpg123_directory>
-        ./configure
-        cd src/libmpg123
-        make
-        make install
+Then download [libmpg123](http://sourceforge.net/projects/mpg123/files)
+and:
 
-    Finally from SEAL directory:
+```bash
+cd <libmpg123_directory>
+./configure
+cd src/libmpg123
+make
+make install
+```
 
-        cd make/gcc/unix-like
-        make
+Finally from Seal directory:
 
-    Note: There has been issues compiling OpenAL on some versions of OS X
-    because LLVM is the default compiler. I haven't had luck compiling
-    OpenAL with LLVM, so I explicitly specified GCC instead:
+```bash
+cd make/gcc/unix-like
+make
+```
 
-        ...
-        CC=/usr/bin/gcc-4.2 cmake -DCMAKE_BUILD_TYPE=Release ..
-        ...
+Note: There has been issues compiling OpenAL on some versions of OS X
+because LLVM is the default compiler. I haven't had luck compiling
+OpenAL with LLVM, so I explicitly specified GCC instead:
 
--   GCC + GNU Make + MinGW + UN*X shell
+```bash
+...
+CC=/usr/bin/gcc-4.2 cmake -DCMAKE_BUILD_TYPE=Release ..
+...
+```
 
-        cd make/gcc/win32
-        make
+### GCC + GNU Make + MinGW + UN*X shell
 
--   MSVC + nmake + Command Prompt
+```bash
+cd make/gcc/win32
+make
+```
 
-        cd make/msvc/win32
-        nmake
+### MSVC + nmake + Command Prompt
 
--   MSVC + Microsoft Visual Studio 2010
+```bash
+cd make/msvc/win32
+nmake
+```
 
-    use the solution and project files under /msvc.
+### MSVC + Microsoft Visual Studio 2010
 
--   Ruby extension
+use the solution and project files under /msvc.
 
-        cd ruby
-        ruby configure.rb
-        make
+### Ruby extension
 
-    The default output is `seal.{so,dll,bundle}`, which is a dynamic library
-    that could be required by Ruby at runtime.
+```bash
+cd ruby
+ruby configure.rb
+make
+```
 
-    If you want to install the library to the default `$:` search path, then:
+The default output is `seal.{so,dll,bundle}`, which is a dynamic library
+that could be required by Ruby at runtime.
 
-        make install
+If you want to install the library to the default `$:` search path, then:
 
-    If you are compiling on Unix-like operating systems other than Linux and
-    Mac OS X, change the following check to pass whatever platform you have:
+```bash
+make install
+```
 
-        if target_os =~ /mswin|mingw|<...>/
+If you are compiling on Unix-like operating systems other than Linux and
+Mac OS X, change the following check to pass whatever platform you have:
+
+```ruby
+if target_os =~ /mswin|mingw|<...>/
+```
 
 Note that Win32 binaries are shipped with the project for compiling SEAL on
 Windows. You can of course compile your own copies of the dependency
@@ -169,7 +207,9 @@ libraries on Windows, but I feel like Win32 users do not usually do that.
 To run the demos under `demo` in Ruby, first build SEAL as a Ruby extension,
 then:
 
-    rake demo:prepare
+```bash
+rake demo:prepare
+```
 
 Which copies all the dependency artifacts to the demo directory.
 
