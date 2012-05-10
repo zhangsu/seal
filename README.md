@@ -191,13 +191,6 @@ If you want to install the library to the default `$:` search path, then:
 make install
 ```
 
-If you are compiling on Unix-like operating systems other than Linux and
-Mac OS X, change the following check to pass whatever platform you have:
-
-```ruby
-if target_os =~ /mswin|mingw|<...>/
-```
-
 Note that Win32 binaries are shipped with the project for compiling SEAL on
 Windows. You can of course compile your own copies of the dependency
 libraries on Windows, but I feel like Win32 users do not usually do that.

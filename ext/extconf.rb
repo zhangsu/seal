@@ -22,15 +22,11 @@ if target_os =~ /mswin|mingw/
   cp "#{lib_dir}/OpenAL32.dll", '.'
   check_library('OpenAL32', 'alcOpenDevice')
   check_library('libmpg123', 'mpg123_init')
-elsif target_os =~ /linux|darwin/
+else
   include_dir = "#{root_dir}"
   check_library('openal', 'alcOpenDevice')
   check_library('mpg123', 'mpg123_init')
-else
-  puts 'The current operating system is not supported.'
-  puts 'If, however, you are using a Unix-like system, you might still be '\
-       'able to build. See README.'
-  exit 1
+  check_library('pthread', 'pthread_create')
 end
 
 # Add source directories.
