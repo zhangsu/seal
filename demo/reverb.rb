@@ -4,7 +4,7 @@ include Seal
 
 Seal.startup
 
-EFFECT = ARGV[0]
+EFFECT = ARGV[0] || 'FOREST'
 
 def print_constants(mod, level = 0)
   mod.constants.each do |const_key|
