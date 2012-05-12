@@ -310,8 +310,8 @@ extract_stream(VALUE rstream)
  *      Seal.startup       -> nil
  *      Seal.startup(str)  -> nil
  *
- * Initializes SEAL by specifying the device name <i>str</i>. This function is
- * not re-entrant nor thread-safe and should be called only once per SEAL
+ * Initializes Seal by specifying the device name <i>str</i>. This function is
+ * not re-entrant nor thread-safe and should be called only once per Seal
  * session. Match a call to <code>seal_startup</code> with a call to
  * <code>seal_cleanup</code> and never call <code>seal_starup</code> twice in
  * a row.
@@ -332,7 +332,7 @@ startup(int argc, VALUE* argv)
  *  call-seq:
  *      Seal.cleanup   -> nil
  *
- * Uninitializes SEAL and invalidate all SEAL objects. Thread-unsafe. 
+ * Uninitializes Seal and invalidate all Seal objects. Thread-unsafe.
  */
 static VALUE
 cleanup()
@@ -1834,7 +1834,7 @@ bind_listener(void)
 }
 
 /*
- * The top-level namespace of SEAL.
+ * The top-level namespace of Seal.
  */
 void
 Init_seal(void)

@@ -4,7 +4,7 @@
  * See COPYING attached with the library.
  *
  * threading.h is an abstraction layer for thread-related operations, which
- * ensures SEAL's thread-safety.
+ * ensures Seal's thread-safety.
  */
 
 #ifndef _SEAL_THREADING_H_

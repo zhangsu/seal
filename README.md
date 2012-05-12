@@ -191,13 +191,13 @@ If you want to install the library to the default `$:` search path, then:
 make install
 ```
 
-Note that Win32 binaries are shipped with the project for compiling SEAL on
+Note that Win32 binaries are shipped with the project for compiling Seal on
 Windows. You can of course compile your own copies of the dependency
 libraries on Windows, but I feel like Win32 users do not usually do that.
 
 ## Demos
 
-To run the demos under `demo` in Ruby, first build SEAL as a Ruby extension,
+To run the demos under `demo` in Ruby, first build Seal as a Ruby extension,
 then:
 
 ```bash
@@ -229,7 +229,7 @@ Which copies all the dependency artifacts to the demo directory.
 
 ## Thread Safety
 
-SEAL can be safely used in a multi-threaded environment so long as no SEAL
+Seal can be safely used in a multi-threaded environment so long as no Seal
 source, buffer or stream instance is accessed by different threads at the
 *same time* , which is similar to libvorbis' thread-safety conditions
 described [here](http://xiph.org/vorbis/doc/vorbisfile/threads.html).
@@ -241,7 +241,7 @@ details.
 ## Character Encoding
 
 UTF-8 should be used to encode the source code or at least the path strings so
-that SEAL can properly input audio files using paths that contain multi-byte
+that Seal can properly input audio files using paths that contain multi-byte
 (Chinese, Japanese, etc.) characters.
 
 ## Redistribution
@@ -266,7 +266,7 @@ and the sound it produced was pleasant to hear as expected. However, one
 end of the wood had already been scorched by the time Cai Yong got it,
 hence the name "Scorched end".
 
-SEAL was named so with the hope that it will be more useful than it seems
+Seal was named so with the hope that it will be more useful than it seems
 and will be discovered by the right people who need the right tool.
 
 [1] http://en.wikipedia.org/wiki/Guqin  
