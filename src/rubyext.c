@@ -1725,12 +1725,23 @@ singletonify(VALUE klass)
     rb_undef_method(rb_singleton_class(klass), "new");
 }
 
+/*
+ * Document-class: Seal::Format
+ *
+ * A collection of supported audio formats.
+ */
+
+/*
+ * Document-class: Seal::SealError
+ *
+ * The Seal Exception class.
+ */
+
 static void
 bind_core(void)
 {
     VALUE mFormat;
     mSeal = rb_define_module("Seal");
-    /* The Seal Exception class. */
     eSealError = rb_define_class_under(mSeal, "SealError", rb_eException);
     rb_define_singleton_method(mSeal, "startup", startup, -1);
     rb_define_singleton_method(mSeal, "cleanup", cleanup, 0);
@@ -1738,7 +1749,6 @@ bind_core(void)
                                per_source_effect_limit, 0);
     /* A string indicating the version of Seal. */
     rb_define_const(mSeal, "VERSION", rb_str_new2(seal_get_version()));
-    /* A collection of supported audio formats. */
     mFormat = rb_define_module_under(mSeal, "Format");
     /* WAVE format. */
     rb_define_const(mFormat, "WAV", name2sym(WAV_SYM));
