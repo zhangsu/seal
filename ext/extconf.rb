@@ -7,7 +7,7 @@ include RbConfig
 
 target_os = CONFIG['target_os']
 root_dir = '..'
-src_dir = "#{root_dir}/src"
+src_dir = File.join root_dir, 'src'
 
 $defs << '-DNDEBUG'
 
@@ -17,9 +17,9 @@ end
 
 if target_os =~ /mswin|mingw/
   include_dir = "#{root_dir}/include"
-  lib_dir = "#{root_dir}/msvc/lib"
-  cp "#{lib_dir}/libmpg123.dll", '.'
-  cp "#{lib_dir}/OpenAL32.dll", '.'
+  lib_dir = File.join root_dir, 'msvc', 'lib'
+  cp File.join(lib_dir, 'libmpg123.dll'), '.'
+  cp File.join(lib_dir, 'OpenAL32.dll'), '.'
   check_library('OpenAL32', 'alcOpenDevice')
   check_library('libmpg123', 'mpg123_init')
 else
@@ -30,7 +30,8 @@ else
 end
 
 # Add source directories.
-$VPATH << src_dir << "#{src_dir}/seal"
-$VPATH << "#{src_dir}/libogg" << "#{src_dir}/libvorbis"
+$VPATH << src_dir << File.join(src_dir, 'seal') <<
+          File.join(src_dir, 'rbext') << File.join(src_dir, 'libogg') <<
+          File.join(src_dir, 'libvorbis')
 dir_config('seal', include_dir, lib_dir)
-create_makefile('seal', '../src/**/')
+create_makefile('seal', File.join('..', 'src', '**', ''))
