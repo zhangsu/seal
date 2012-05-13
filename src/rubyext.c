@@ -556,8 +556,9 @@ init_src(VALUE rsrc)
  * playback from the beginning thus reset the sampling offset too. If the
  * source is a streaming source, restarting the playback will automatically
  * rewind the stream to the beginning. Applying to an initial or stopped
- * source will start start playing and change its state to playing. Applying
- * to a paused source will resume playing and change its state to playing.
+ * source will start start playing and change its state to State::PLAYING.
+ * Applying to a paused source will resume playing and change its state to
+ * State::PLAYING.
  */
 static VALUE
 play_src(VALUE rsrc)
@@ -570,8 +571,8 @@ play_src(VALUE rsrc)
  *      source.pause -> source
  *
  * Pauses the playing of _source_. Applying to a playing source will change
- * its state to paused. Applying to an initial, paused or stopped source has
- * no effect.
+ * its state to State::PAUSED. Applying to an initial, paused or stopped
+ * source has no effect.
  */
 static VALUE
 pause_src(VALUE rsrc)
@@ -584,8 +585,8 @@ pause_src(VALUE rsrc)
  *      source.stop ->  source
  *
  * Stops the playing of _source_. Applying to a playing or paused source will
- * change its state to stopped. Applying to an initial or stopped source has
- * no effect. Resets the sampling offset.
+ * change its state to State::STOPPED. Applying to an initial or stopped
+ * source has no effect. Resets the sampling offset.
  */
 static VALUE
 stop_src(VALUE rsrc)
@@ -598,9 +599,9 @@ stop_src(VALUE rsrc)
  *      source.rewind ->    source
  *
  * Rewinds _source_ to the beginning. Applying to a playing, paused or stopped
- * source will change its state to initial. Applying to an initial source has
- * no effect. The sampling offset will be reset to the beginning. Other
- * attributes are preserved.
+ * source will change its state to State::INITIAL. Applying to an initial
+ * source has no effect. The sampling offset will be reset to the beginning.
+ * Other attributes are preserved.
  */
 static VALUE
 rewind_src(VALUE rsrc)
@@ -613,9 +614,9 @@ rewind_src(VALUE rsrc)
  *      source.detach -> source
  *
  * Releases the current buffer or stream from _source_ (hence empties the
- * queue for streaming sources). Will reset the source type to undetermined
- * and the source state to stopped. Will not free the associated buffer or
- * stream.
+ * queue for streaming sources). Will reset the source to Type::UNDETERMINED
+ * and the source state to State::STOPPED. Will not free the associated buffer
+ * or stream.
  */
 static VALUE
 detach_src_audio(VALUE rsrc)
@@ -630,7 +631,7 @@ detach_src_audio(VALUE rsrc)
  * Associates _buffer_ with _source_ so that the source is ready to play the
  * audio contained in _buffer_. Can be applied only to sources in the initial
  * or stopped states and that are not of streaming type. If successful, the
- * source will become or remain as static type.
+ * source will become or remain as Type::STATIC.
  */
 static VALUE
 set_src_buf(VALUE rsrc, VALUE rbuf)
@@ -667,7 +668,7 @@ get_src_buf(VALUE rsrc)
  * same audio format as the old one. Also be aware of the fact that in this
  * case there could still be some chunks of the old stream at the front of the
  * streaming queue waiting to be played. If successful, the source will become
- * or remain as streaming type. The streaming queue will be filled after this
+ * or remain as Type::STREAMING. The streaming queue will be filled after this
  * call returns; after the queue starts to be played, #update should be called
  * to refill the queue.
  */
@@ -868,9 +869,8 @@ is_src_relative(VALUE rsrc)
  *      source.looping = true or false  -> true or false
  *
  * Sets whether the playback of _source_ is looping. A looping source will
- * never enter the `SEAL_STOPPED' state; it will immediate enter
- * `SEAL_INITIAL' and then SEAL_PLAYING after it reaches the end of the last
- * buffer.
+ * never enter State::STOPPED; it will immediate enter State::INITIAL and then
+ * State::Playing after it reaches the end of the last buffer.
  */
 static VALUE
 set_src_looping(VALUE rsrc, VALUE value)
