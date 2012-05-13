@@ -310,7 +310,7 @@ extract_stream(VALUE rstream)
  *      Seal.startup       -> nil
  *      Seal.startup(str)  -> nil
  *
- * Initializes Seal by specifying the device name <i>str</i>. This function is
+ * Initializes Seal by specifying the device name _str_. This function is
  * not re-entrant nor thread-safe and should be called only once per Seal
  * session. Match a call to <code>seal_startup</code> with a call to
  * <code>seal_cleanup</code> and never call <code>seal_starup</code> twice in
@@ -348,21 +348,22 @@ cleanup()
  *
  * Returns the maximum number of effect slots a source can feed concurrently.
  */
- static VALUE
+static VALUE
 per_source_effect_limit()
 {
     return INT2NUM(seal_get_per_src_effect_limit());
 }
 
-/*
- *  call-seq:
- *      Seal::Buffer.allocate   -> buffer
- */
 DEFINE_ALLOCATOR(buf)
 
 /*
  *  call-seq:
  *      Seal::Buffer.new(filename [, format])   -> buffer
+ *
+ * Initializes a new buffer and loads it with audio from _filename_. _format_
+ * specifies the format of the audio file; automatic recognition of the audio
+ * format will be attempted if _format_ is not specified. See Seal::Format for
+ * possible values. Sets all the attributes appropriately.
  */
 static VALUE
 init_buf(int argc, VALUE* argv, VALUE rbuf)
@@ -378,7 +379,13 @@ init_buf(int argc, VALUE* argv, VALUE rbuf)
 
 /*
  *  call-seq:
- *      Seal::Buffer.load(filename [, format])   -> buffer
+ *      buffer.load(filename [, format])   -> buffer
+ *
+ * Loads audio from _filename_ to _buffer_ which must not be currently used by
+ * any source. Sets all the attributes appropriately. _format_ specifies the
+ * format of the audio file; automatic recognition of the audio format will be
+ * attempted if _format_ is not specified. See Seal::Format for possible
+ * values.Sets all the attributes appropriately.
  */
 static VALUE
 load_buf(int argc, VALUE* argv, VALUE rbuf)
@@ -391,6 +398,8 @@ load_buf(int argc, VALUE* argv, VALUE rbuf)
 /*
  *  call-seq:
  *      buffer.size ->  fixnum
+ *
+ * Gets the size, in bytes, of _buffer_. The default is 0.
  */
 static VALUE
 get_buf_size(VALUE rbuf)
@@ -401,6 +410,9 @@ get_buf_size(VALUE rbuf)
 /*
  *  call-seq:
  *      buffer.frequency    -> fixnum
+ *
+ * Gets the frequency (sample rate) of the audio contained in _buffer_. The
+ * default is 0 when the buffer is not loaded.
  */
 static VALUE
 get_buf_freq(VALUE rbuf)
@@ -411,6 +423,9 @@ get_buf_freq(VALUE rbuf)
 /*
  *  call-seq:
  *      buffer.bit_depth    -> fixnum
+ *
+ * Gets the bit depth (bits per sample) of the audio contained in _buffer_.
+ * The default is 16.
  */
 static VALUE
 get_buf_bps(VALUE rbuf)
@@ -421,6 +436,9 @@ get_buf_bps(VALUE rbuf)
 /*
  *  call-seq:
  *      buffer.channel_count    -> fixnum
+ *
+ * Gets the number of channels of the audio contained in _buffer_. The default
+ * is 1.
  */
 static VALUE
 get_buf_nchannels(VALUE rbuf)
@@ -428,16 +446,16 @@ get_buf_nchannels(VALUE rbuf)
     return get_obj_int(rbuf, seal_get_buf_nchannels);
 }
 
-/*
- *  call-seq:
- *      Seal::Stream.allocate   -> stream
- */
 DEFINE_ALLOCATOR(stream)
 
 /*
  *  call-seq:
  *      Seal::Stream.new(filename [, format])   -> stream
  *      Seal::Stream.open(filename [, format])  -> stream
+ *
+ * Opens a audio stream from _filename_. _format_ specifies the format of the
+ * audio file; automatic recognition of the audio format will be attempted if
+ * _format_ is nil. See Seal::Format for possible values.
  */
 static VALUE
 init_stream(int argc, VALUE* argv, VALUE rstream)
@@ -450,6 +468,9 @@ init_stream(int argc, VALUE* argv, VALUE rstream)
 /*
  *  call-seq:
  *      stream.frequency    -> fixnum
+ *
+ * Gets the frequency (sample rate) of the audio contained in _streamed_. The
+ * default is 0 when the stream is not opened.
  */
 static VALUE
 get_stream_freq(VALUE rstream)
@@ -460,6 +481,9 @@ get_stream_freq(VALUE rstream)
 /*
  *  call-seq:
  *      stream.bit_depth    -> fixnum
+ *
+ * Gets the bit depth (bits per sample) of the audio contained in _stream_.
+ * The default is 16.
  */
 static VALUE
 get_stream_bps(VALUE rstream)
@@ -470,6 +494,9 @@ get_stream_bps(VALUE rstream)
 /*
  *  call-seq:
  *      stream.channel_count    -> fixnum
+ *
+ * Gets the number of channels of the audio contained in _stream_. The default
+ * is 1.
  */
 static VALUE
 get_stream_nchannels(VALUE rstream)
@@ -480,6 +507,8 @@ get_stream_nchannels(VALUE rstream)
 /*
  *  call-seq:
  *      stream.rewind   -> stream
+ *
+ * Rewinds _stream_ to the beginning.
  */
 static VALUE
 rewind_stream(VALUE rstream)
@@ -492,6 +521,8 @@ rewind_stream(VALUE rstream)
 /*
  *  call-seq:
  *      stream.close    -> stream
+ *
+ * Closes _stream_ which must not be used by any source.
  */
 static VALUE
 close_stream(VALUE rstream)
@@ -501,15 +532,13 @@ close_stream(VALUE rstream)
     return rstream;
 }
 
-/*
- *  call-seq:
- *      Seal::Source.allocate -> source
- */
 DEFINE_ALLOCATOR(src)
 
 /*
  *  call-seq:
  *      Seal::Source.new  -> source
+ *
+ * Initializes a new source.
  */
 static VALUE
 init_src(VALUE rsrc)
@@ -522,6 +551,13 @@ init_src(VALUE rsrc)
 /*
  *  call-seq:
  *      source.play ->  source
+ *
+ * Starts to play _source_. Applying to a playing source will restart the
+ * playback from the beginning thus reset the sampling offset too. If the
+ * source is a streaming source, restarting the playback will automatically
+ * rewind the stream to the beginning. Applying to an initial or stopped
+ * source will start start playing and change its state to playing. Applying
+ * to a paused source will resume playing and change its state to playing.
  */
 static VALUE
 play_src(VALUE rsrc)
@@ -532,6 +568,10 @@ play_src(VALUE rsrc)
 /*
  *  call-seq:
  *      source.pause -> source
+ *
+ * Pauses the playing of _source_. Applying to a playing source will change
+ * its state to paused. Applying to an initial, paused or stopped source has
+ * no effect.
  */
 static VALUE
 pause_src(VALUE rsrc)
@@ -542,6 +582,10 @@ pause_src(VALUE rsrc)
 /*
  *  call-seq:
  *      source.stop ->  source
+ *
+ * Stops the playing of _source_. Applying to a playing or paused source will
+ * change its state to stopped. Applying to an initial or stopped source has
+ * no effect. Resets the sampling offset.
  */
 static VALUE
 stop_src(VALUE rsrc)
@@ -552,6 +596,11 @@ stop_src(VALUE rsrc)
 /*
  *  call-seq:
  *      source.rewind ->    source
+ *
+ * Rewinds _source_ to the beginning. Applying to a playing, paused or stopped
+ * source will change its state to initial. Applying to an initial source has
+ * no effect. The sampling offset will be reset to the beginning. Other
+ * attributes are preserved.
  */
 static VALUE
 rewind_src(VALUE rsrc)
@@ -562,6 +611,11 @@ rewind_src(VALUE rsrc)
 /*
  *  call-seq:
  *      source.detach -> source
+ *
+ * Releases the current buffer or stream from _source_ (hence empties the
+ * queue for streaming sources). Will reset the source type to undetermined
+ * and the source state to stopped. Will not free the associated buffer or
+ * stream.
  */
 static VALUE
 detach_src_audio(VALUE rsrc)
@@ -572,6 +626,11 @@ detach_src_audio(VALUE rsrc)
 /*
  *  call-seq:
  *      source.buffer = buffer  -> buffer
+ *
+ * Associates _buffer_ with _source_ so that the source is ready to play the
+ * audio contained in _buffer_. Can be applied only to sources in the initial
+ * or stopped states and that are not of streaming type. If successful, the
+ * source will become or remain as static type.
  */
 static VALUE
 set_src_buf(VALUE rsrc, VALUE rbuf)
@@ -588,6 +647,8 @@ set_src_buf(VALUE rsrc, VALUE rbuf)
 /*
  *  call-seq:
  *      source.buffer ->    buffer
+ *
+ * Gets the buffer of _source_. The default is nil.
  */
 static VALUE
 get_src_buf(VALUE rsrc)
@@ -598,6 +659,17 @@ get_src_buf(VALUE rsrc)
 /*
  *  call-seq:
  *      source.stream = stream  -> stream
+ *
+ * Associates (opened) _stream_ with _source_ so that audio data can be
+ * continuously fetched from a file rather than loading everything to memory
+ * at once. Can be applied to sources in any playing state but not on static
+ * sources. When replacing an attached stream, the new stream must have the
+ * same audio format as the old one. Also be aware of the fact that in this
+ * case there could still be some chunks of the old stream at the front of the
+ * streaming queue waiting to be played. If successful, the source will become
+ * or remain as streaming type. The streaming queue will be filled after this
+ * call returns; after the queue starts to be played, #update should be called
+ * to refill the queue.
  */
 static VALUE
 set_src_stream(VALUE rsrc, VALUE rstream)
@@ -614,6 +686,8 @@ set_src_stream(VALUE rsrc, VALUE rstream)
 /*
  *  call-seq:
  *      source.stream   -> stream
+ *
+ * Gets the stream of _source_. The default is nil.
  */
 static VALUE
 get_src_stream(VALUE rsrc)
@@ -624,6 +698,10 @@ get_src_stream(VALUE rsrc)
 /*
  *  call-seq:
  *      source.update   -> source
+ *
+ * Updates _source_. If _source_ is not up-to-date, the playback will end
+ * before the end of the stream is reached. Does nothing if _source_ is not a
+ * streaming source. Also does nothing if auto update is on.
  */
 static VALUE update_src(VALUE rsrc)
 {
@@ -633,6 +711,9 @@ static VALUE update_src(VALUE rsrc)
 /*
  *  call-seq:
  *      source.position = [flt, flt, flt]   -> [flt, flt, flt]
+ *
+ * Sets the position of _source_ in a right-handed Cartesian coordinate
+ * system. Use of NaN and infinity is undefined. 
  */
 static VALUE
 set_src_pos(VALUE rsrc, VALUE value)
@@ -643,6 +724,8 @@ set_src_pos(VALUE rsrc, VALUE value)
 /*
  *  call-seq:
  *      source.position -> [flt, flt, flt]
+ *
+ * Gets the position of _source_. The default is ( 0.0, 0.0, 0.0 ).
  */
 static VALUE
 get_src_pos(VALUE rsrc)
@@ -653,6 +736,11 @@ get_src_pos(VALUE rsrc)
 /*
  *  call-seq:
  *      source.velocity = [flt, flt, flt]   -> [flt, flt, flt]
+ *
+ * Sets the velocity of _source_ in a right-handed Cartesian coordinate
+ * system. The velocity of the source does not affect its position but is a
+ * factor used during the Doppler effect emulation. Use of NaN is undefined.
+ *
  */
 static VALUE
 set_src_vel(VALUE rsrc, VALUE value)
@@ -663,6 +751,8 @@ set_src_vel(VALUE rsrc, VALUE value)
 /*
  *  call-seq:
  *      source.velocity -> [flt, flt, flt]
+ *
+ * Gets the velocity of _source_. The default is ( 0.0, 0.0, 0.0 ).
  */
 static VALUE
 get_src_vel(VALUE rsrc)
@@ -673,6 +763,10 @@ get_src_vel(VALUE rsrc)
 /*
  *  call-seq:
  *      source.pitch = flt  -> [flt, flt, flt]
+ *
+ * Sets the pitch shift multiplier of _source_. 1.0 means identity; each
+ * reduction by 1/2 means a pitch shift of -12 semitones; each doubling means
+ * a pitch shift of 12 semitones. Use of 0.0 is undefined.
  */
 static VALUE
 set_src_pitch(VALUE rsrc, VALUE value)
@@ -683,6 +777,8 @@ set_src_pitch(VALUE rsrc, VALUE value)
 /*
  *  call-seq:
  *      source.pitch    -> flt
+ *
+ * Gets the pitch of _source_. The default is 1.0.
  */
 static VALUE
 get_src_pitch(VALUE rsrc)
@@ -693,6 +789,9 @@ get_src_pitch(VALUE rsrc)
 /*
  *  call-seq:
  *      source.gain = flt   -> [flt, flt, flt]
+ *
+ * Sets the scalar amplitude multiplier of _source_. 1.0 means that the sound
+ * is unattenuated; 0.5 means an attenuation of 6 dB; 0.0 means silence.
  */
 static VALUE
 set_src_gain(VALUE rsrc, VALUE value)
@@ -703,6 +802,8 @@ set_src_gain(VALUE rsrc, VALUE value)
 /*
  *  call-seq:
  *      source.gain -> flt
+ *
+ * Gets the gain of _source_. The default is 1.0.
  */
 static VALUE
 get_src_gain(VALUE rsrc)
@@ -713,6 +814,11 @@ get_src_gain(VALUE rsrc)
 /*
  *  call-seq:
  *      source.auto = true or false -> true or false
+ *
+ * Sets whether _source_ should be automatically updated asynchronously by a
+ * background thread. If this thread is running, user calls to #update does
+ * nothing. If auto update is disabled after it is enabled, it will take
+ * effect the next time the source gets played.
  */
 static VALUE
 set_src_auto(VALUE rsrc, VALUE value)
@@ -723,6 +829,8 @@ set_src_auto(VALUE rsrc, VALUE value)
 /*
  *  call-seq:
  *      source.auto     -> true or false
+ *
+ * Determines if _source_ is automatically updated. The default is true.
  */
 static VALUE
 is_src_auto(VALUE rsrc)
@@ -733,6 +841,9 @@ is_src_auto(VALUE rsrc)
 /*
  *  call-seq:
  *      source.relative = true or false -> true or false
+ *
+ * Sets whether _source_'s position, velocity, cone and direction are all
+ * relative to the listener position.
  */
 static VALUE
 set_src_relative(VALUE rsrc, VALUE value)
@@ -743,6 +854,8 @@ set_src_relative(VALUE rsrc, VALUE value)
 /*
  *  call-seq:
  *      source.relative   -> true or false
+ *
+ * Determines if _source_ is relative. The default is false.
  */
 static VALUE
 is_src_relative(VALUE rsrc)
@@ -753,6 +866,11 @@ is_src_relative(VALUE rsrc)
 /*
  *  call-seq:
  *      source.looping = true or false  -> true or false
+ *
+ * Sets whether the playback of _source_ is looping. A looping source will
+ * never enter the `SEAL_STOPPED' state; it will immediate enter
+ * `SEAL_INITIAL' and then SEAL_PLAYING after it reaches the end of the last
+ * buffer.
  */
 static VALUE
 set_src_looping(VALUE rsrc, VALUE value)
@@ -763,6 +881,8 @@ set_src_looping(VALUE rsrc, VALUE value)
 /*
  *  call-seq:
  *      source.looping  -> true or false
+ *
+ * Determines if _source_ is looping. The default is false (0).
  */
 static VALUE
 is_src_looping(VALUE rsrc)
@@ -773,6 +893,16 @@ is_src_looping(VALUE rsrc)
 /*
  *  call-seq:
  *      source.queue_size = fixnum  -> true or false
+ *
+ * Sets the size of the streaming queue internally used by _source_. The queue
+ * maintains a multiple buffering mechanism when streaming the audio data.
+ * Multiple bufferring allows buffers in the queue to be processed while the
+ * one at the front of the queue is still being played. A queue of size 2
+ * (double buffering) may still be inefficient in CPU-, and I/O-bound
+ * situations while triple, or even quad buffering generally produces better
+ * sound quality in non-memory-bound situations. _fixnum_ must be in the
+ * interval [2, 127]; an out-of-bound value will be adjusted to the closest
+ * bound automatically.
  */
 static VALUE
 set_src_queue_size(VALUE rsrc, VALUE value)
@@ -783,6 +913,8 @@ set_src_queue_size(VALUE rsrc, VALUE value)
 /*
  *  call-seq:
  *      source.queue_size   -> fixnum
+ *
+ * Gets the size, in byte, of _source_'s streaming queue. The default is 3.
  */
 static VALUE
 get_src_queue_size(VALUE rsrc)
@@ -793,6 +925,13 @@ get_src_queue_size(VALUE rsrc)
 /*
  *  call-seq:
  *      source.chunk_size = fixnum  -> true or false
+ *
+ * Sets the maximum size, in byte, of the audio chunk which buffers the audio
+ * data constantly fetched from an audio stream. Using small chunks may cause
+ * playback to occur before the required audio chunk is ready, which in turn
+ * causes unexpected stop of playback. _fixnum_ must be in the interval
+ * \[9216, 16773120] and must be a multiple of 9216; non-multiple value will be
+ * adjusted to the closest smaller multiple automatically.
  */
 static VALUE
 set_src_chunk_size(VALUE rsrc, VALUE value)
@@ -803,6 +942,9 @@ set_src_chunk_size(VALUE rsrc, VALUE value)
 /*
  *  call-seq:
  *      source.chunk_size   -> fixnum
+ *
+ * Gets the size, in byte, of _source_'s streaming chunk. The default is
+ * 36864.
  */
 static VALUE
 get_src_chunk_size(VALUE rsrc)
@@ -812,6 +954,8 @@ get_src_chunk_size(VALUE rsrc)
 /*
  *  call-seq:
  *      source.type -> :streaming or :static
+ *
+ * Gets the type of _source_.
  */
 static VALUE
 get_src_type(VALUE rsrc)
@@ -832,6 +976,8 @@ get_src_type(VALUE rsrc)
 /*
  *  call-seq:
  *      source.state    -> :playing, :paused, :stopped or :initial
+ *
+ * Gets the state of _source_.
  */
 static VALUE
 get_src_state(VALUE rsrc)
@@ -851,27 +997,14 @@ get_src_state(VALUE rsrc)
     }
 }
 
-/*
- *  call-seq:
- *      slot.feed(index, slot)    -> slot
- */
-static VALUE
-feed_efs(VALUE rslot, VALUE rindex, VALUE rsrc)
-{
-    seal_src_t* src;
-
-    Data_Get_Struct(rsrc, seal_src_t, src);
-    check_seal_err(seal_feed_efs(DATA_PTR(rslot), NUM2INT(rindex), src));
-
-    return rslot;
-}
-
-/*
- *  call-seq:
- *      Seal::Reverb.allocate -> reverb
- */
 DEFINE_ALLOCATOR(rvb)
 
+/*
+ *  call-seq:
+ *      reverb.load(preset) -> reverb
+ *
+ * Loads the specified reverb paramter preset into _reverb_. 
+ */
 static VALUE
 load_rvb(VALUE rrvb, VALUE rpreset)
 {
@@ -885,7 +1018,11 @@ load_rvb(VALUE rrvb, VALUE rpreset)
 
 /*
  *  call-seq:
- *      Seal::Reverb.new  -> reverb
+ *      Seal::Reverb.new            -> reverb
+ *      Seal::Reverb.new(preset)    -> reverb
+ *
+ * Initializes a new reverb effect. If a preset is specified, initializes
+ * the reverb object to load the preset.
  */
 static VALUE
 init_rvb(int argc, VALUE* argv, VALUE rrvb)
@@ -906,6 +1043,10 @@ init_rvb(int argc, VALUE* argv, VALUE rrvb)
 /*
  *  call-seq:
  *      reverb.density = flt  -> flt
+ *
+ * Sets the modal density of _reverb_ in the interval [0.0, 1.0]. The
+ * density controls the coloration of the late reverb. The Lower the value,
+ * the more coloration.
  */
 static VALUE
 set_src_density(VALUE rrvb, VALUE value)
@@ -916,6 +1057,8 @@ set_src_density(VALUE rrvb, VALUE value)
 /*
  *  call-seq:
  *      reverb.density  -> flt
+ *
+ * Gets the density of _reverb_. The default is 1.0.
  */
 static VALUE
 get_rvb_density(VALUE rrvb)
@@ -926,6 +1069,12 @@ get_rvb_density(VALUE rrvb)
 /*
  *  call-seq:
  *      reverb.diffusion = flt  -> flt
+ *
+ * Sets the diffusion of _reverb_ in the interval [0.0, 1.0]. The diffusion
+ * controls the echo density in the reverberation decay. Reducing diffusion
+ * gives the reverberation a more "grainy" character that is especially
+ * noticeable with percussive sound sources. If you set a diffusion value of
+ * 0.0, the later reverberation sounds like a succession of distinct echoes.
  */
 static VALUE
 set_rvb_diffusion(VALUE rrvb, VALUE value)
@@ -936,6 +1085,8 @@ set_rvb_diffusion(VALUE rrvb, VALUE value)
 /*
  *  call-seq:
  *      reverb.diffusion  -> flt
+ *
+ * Gets the diffusion of _reverb_. The default is 1.0.
  */
 static VALUE
 get_rvb_diffusion(VALUE rrvb)
@@ -946,6 +1097,13 @@ get_rvb_diffusion(VALUE rrvb)
 /*
  *  call-seq:
  *      reverb.gain = flt  -> flt
+ *
+ * Sets the gain of _reverb_ in the interval [0.0, 1.0], or from -100 dB (no
+ * reflected sound at all) to 0 dB (the maximum amount). The gain is the
+ * master volume control for the reflected sound (both early reflections and
+ * reverberation) that the reverb effect adds to all sources. It sets the
+ * maximum amount of reflections and reverberation added to the final sound
+ * mix.
  */
 static VALUE
 set_rvb_gain(VALUE rrvb, VALUE value)
@@ -956,6 +1114,8 @@ set_rvb_gain(VALUE rrvb, VALUE value)
 /*
  *  call-seq:
  *      reverb.gain  -> flt
+ *
+ * Gets the gain of _reverb_. The default is 0.32f.
  */
 static VALUE
 get_rvb_gain(VALUE rrvb)
@@ -966,6 +1126,13 @@ get_rvb_gain(VALUE rrvb)
 /*
  *  call-seq:
  *      reverb.hfgain = flt  -> flt
+ *
+ * Sets the high-frequency gain of _reverb_ in the interval [0.0, 1.0], or
+ * from -100 dB (virtually no reflected sound) to 0 dB (no filter). The high-
+ * frequency gain further tweaks reflected sound by attenuating it at high
+ * frequencies. It controls a low-pass filter that applies globally to the
+ * reflected sound of all sound sources feeding the particular instance of the
+ * reverb effect.
  */
 static VALUE
 set_rvb_hfgain(VALUE rrvb, VALUE value)
@@ -976,6 +1143,8 @@ set_rvb_hfgain(VALUE rrvb, VALUE value)
 /*
  *  call-seq:
  *      reverb.hfgain  -> flt
+ *
+ * Gets the high-frequency gain of _reverb_. The default is 0.89f.
  */
 static VALUE
 get_rvb_hfgain(VALUE rrvb)
@@ -986,6 +1155,10 @@ get_rvb_hfgain(VALUE rrvb)
 /*
  *  call-seq:
  *      reverb.decay_time = flt  -> flt
+ *
+ * Sets the decay time of _reverb_ in the interval [0.1, 20.0], typically
+ * from a small room with very dead surfaces to a large room with very live
+ * surfaces.
  */
 static VALUE
 set_rvb_decay_time(VALUE rrvb, VALUE value)
@@ -996,6 +1169,8 @@ set_rvb_decay_time(VALUE rrvb, VALUE value)
 /*
  *  call-seq:
  *      reverb.decay_time  -> flt
+ *
+ * Gets the decay time of _reverb_. The default is 1.49f.
  */
 static VALUE
 get_rvb_decay_time(VALUE rrvb)
@@ -1006,6 +1181,17 @@ get_rvb_decay_time(VALUE rrvb)
 /*
  *  call-seq:
  *      reverb.hfdecay_ratio = flt  -> flt
+ *
+ * Sets the high-frequency decay ratio, or the spectral quality of the decay
+ * time of _reverb_ in the interval [0.1, 20.0]. It is the ratio of high-
+ * frequency decay time relative to the time set by decay Time. 1.0 means
+ * neutral: the decay time is equal for all frequencies. As this value
+ * increases above 1.0, the high-frequency decay time increases so it's longer
+ * than the decay time at low frequencies. You hear a more brilliant
+ * reverberation with a longer decay at high frequencies. As this value
+ * decreases below 1.0, the high-frequency decay time decreases so it's
+ * shorter than the decay time of the low frequencies. You hear a more natural
+ * reverberation.
  */
 static VALUE
 set_rvb_hfdecay_ratio(VALUE rrvb, VALUE value)
@@ -1016,6 +1202,8 @@ set_rvb_hfdecay_ratio(VALUE rrvb, VALUE value)
 /*
  *  call-seq:
  *      reverb.hfdecay_ratio  -> flt
+ *
+ * Gets the high-frequency decay ratio of _reverb_. The default is 0.83f.
  */
 static VALUE
 get_rvb_hfdecay_ratio(VALUE rrvb)
@@ -1026,6 +1214,20 @@ get_rvb_hfdecay_ratio(VALUE rrvb)
 /*
  *  call-seq:
  *      reverb.reflections_gain = flt  -> flt
+ *
+ * Sets the reflections gain, or the overall amount of initial reflections
+ * relative to the gain of _reverb_ in the interval [0.0, 3.16f], or from
+ * -100 dB (no initial reflections at all) to 10 dB. The reflections gain is
+ * corrected by the value of the gain property and does not affect the
+ * subsequent reverberation decay.
+ *
+ * You can increase the amount of initial reflections to simulate a more
+ * narrow space or closer walls, especially effective if you associate the
+ * initial reflections increase with a reduction in reflections delays by
+ * lowering the value of the reflection delay property. To simulate open or
+ * semi-open environments, you can maintain the amount of early reflections
+ * while reducing the value of the late gain property, which controls later
+ * reflections.
  */
 static VALUE
 set_rvb_reflections_gain(VALUE rrvb, VALUE value)
@@ -1036,6 +1238,8 @@ set_rvb_reflections_gain(VALUE rrvb, VALUE value)
 /*
  *  call-seq:
  *      reverb.reflections_gain  -> flt
+ *
+ * Gets the reflections gain of _reverb_. The default is 0.05f.
  */
 static VALUE
 get_rvb_reflections_gain(VALUE rrvb)
@@ -1046,6 +1250,12 @@ get_rvb_reflections_gain(VALUE rrvb)
 /*
  *  call-seq:
  *      reverb.reflections_delay = flt  -> flt
+ *
+ * Sets the reflections delay of _reverb_ in the interval [0.0, 0.3] (in
+ * seconds). It is the amount of delay between the arrival time of the direct
+ * path from the source to the first reflection from the source. You can
+ * reduce or increase this delay to simulate closer or more distant reflective
+ * surfaces and therefore control the perceived size of the room.
  */
 static VALUE
 set_rvb_reflections_delay(VALUE rrvb, VALUE value)
@@ -1056,6 +1266,8 @@ set_rvb_reflections_delay(VALUE rrvb, VALUE value)
 /*
  *  call-seq:
  *      reverb.reflections_delay  -> flt
+ *
+ * Gets the reflections delay of _reverb_. The default is 0.007f.
  */
 static VALUE
 get_rvb_reflections_delay(VALUE rrvb)
@@ -1066,6 +1278,15 @@ get_rvb_reflections_delay(VALUE rrvb)
 /*
  *  call-seq:
  *      reverb.late_gain = flt  -> flt
+ *
+ * Sets the late gain, or the overall amount of later reverberation relative
+ * to the gain of _reverb_ in the interval [0.0, 10.0], or from -100 dB (no
+ * late reverberation at all) to 20 dB.
+ *
+ * Note that late gain and decay time are independent properties: if you
+ * adjust decay time without changing late gain, the total intensity (the
+ * averaged square of the amplitude) of the late reverberation remains
+ * constant.
  */
 static VALUE
 set_rvb_late_gain(VALUE rrvb, VALUE value)
@@ -1076,6 +1297,8 @@ set_rvb_late_gain(VALUE rrvb, VALUE value)
 /*
  *  call-seq:
  *      reverb.late_gain  -> flt
+ *
+ * Gets the late gain of _reverb_. The default is 1.26f.
  */
 static VALUE
 get_rvb_late_gain(VALUE rrvb)
@@ -1086,6 +1309,11 @@ get_rvb_late_gain(VALUE rrvb)
 /*
  *  call-seq:
  *      reverb.late_delay = flt  -> flt
+ *
+ * Sets the late delay of _reverb_ in the interval [0.0, 0.1] (in second)
+ * It defines the begin time of the late reverberation relative to the time of
+ * the initial reflection (the first of the early reflections). Reducing or
+ * increasing late delay is useful for simulating a smaller or larger room.
  */
 static VALUE
 set_rvb_late_delay(VALUE rrvb, VALUE value)
@@ -1096,6 +1324,8 @@ set_rvb_late_delay(VALUE rrvb, VALUE value)
 /*
  *  call-seq:
  *      reverb.late_delay  -> flt
+ *
+ * Gets the late delay of _reverb_. The default is 0.011f.
  */
 static VALUE
 get_rvb_late_delay(VALUE rrvb)
@@ -1105,6 +1335,16 @@ get_rvb_late_delay(VALUE rrvb)
 /*
  *  call-seq:
  *      reverb.air_absorbtion_hfgain = flt  -> flt
+ *
+ * Sets the air absorption high-frequency gain of _reverb_ in the interval
+ * [0.892, 1.0]. It controls the distance-dependent attenuation at high
+ * frequencies caused by the propagation medium. It applies to reflected sound
+ * only. You can use this value to simulate sound transmission through foggy
+ * air, dry air, smoky atmosphere, and so on. The default value 0.994
+ * (-0.05 dB) per meter, which roughly corresponds to typical condition of
+ * atmospheric humidity, temperature, and so on. Lowering the value simulates
+ * a more absorbent medium (more humidity in the air, for example); raising
+ * the value simulates a less absorbent medium (dry desert air, for example).
  */
 static VALUE
 set_rvb_air_absorbtion_hfgain(VALUE rrvb, VALUE value)
@@ -1115,6 +1355,8 @@ set_rvb_air_absorbtion_hfgain(VALUE rrvb, VALUE value)
 /*
  *  call-seq:
  *      reverb.air_absorbtion_hfgain  -> flt
+ *
+ * Gets the air absorbtion high-frequency gain of _reverb_. The default is
  */
 static VALUE
 get_rvb_air_absorbtion_hfgain(VALUE rrvb)
@@ -1125,6 +1367,28 @@ get_rvb_air_absorbtion_hfgain(VALUE rrvb)
 /*
  *  call-seq:
  *      reverb.room_rolloff_factor = flt  -> flt
+ *
+ * Sets the room rolloff factor of _reverb_ in the interval [0.0, 10.0]. It
+ * is one of two methods available to attenuate the reflected sound
+ * (containing both reflections and reverberation) according to source-
+ * listener distance. It is defined the same way as the global rolloff factor,
+ * but operates on reverb sound instead of direct-path sound. Setting the room
+ * rolloff factor value to 1.0 specifies that the reflected sound will decay
+ * by 6 dB every time the distance doubles. Any value other than 1.0 is
+ * equivalent to a scaling factor applied to the quantity specified by
+ * ((source listener distance) - (Reference Distance)). Reference Distance is
+ * an OpenAL source parameter that specifies the inner border for distance
+ * rolloff effects: if the source comes closer to the listener than the
+ * reference distance, the direct-path sound isn't increased as the source
+ * comes closer to the listener, and neither is the reflected sound.
+ *
+ * The default value of Room Rolloff Factor is 0.0 because, by default, the
+ * reverb effect naturally manages the reflected sound level automatically for
+ * each sound source to simulate the natural rolloff of reflected sound vs.
+ * distance in typical rooms. (Note that this isn't the case if the source
+ * property @TODO is set to false.) You can use this value as an option to
+ * automatic control so you can exaggerate or replace the default
+ * automatically-controlled rolloff.
  */
 static VALUE
 set_rvb_room_rolloff_factor(VALUE rrvb, VALUE value)
@@ -1135,6 +1399,8 @@ set_rvb_room_rolloff_factor(VALUE rrvb, VALUE value)
 /*
  *  call-seq:
  *      reverb.room_rolloff_factor  -> flt
+ *
+ * Gets the room rolloff factor of _reverb_. The default is 0.0.
  */
 static VALUE
 get_rvb_room_rolloff_factor(VALUE rrvb)
@@ -1145,6 +1411,16 @@ get_rvb_room_rolloff_factor(VALUE rrvb)
 /*
  *  call-seq:
  *      reverb.hfdecay_limited = true or false  -> true or false
+ *
+ * Sets whether the high-frequency decay time automatically stays below a
+ * limit value that's derived from the setting of the air absorption high-
+ * frequency gain. This limit applies regardless of the setting of the
+ * decay high-frequency ratio, and the limit doesn't affect the value of decay
+ * high-frequency ratio. This limit, when on, maintains a natural sounding
+ * reverberation decay by allowing you to increase the value of decay time
+ * without the risk of getting an unnaturally long decay time at high
+ * frequencies. If this flag is set to false, high-frequency decay time isn't
+ * automatically limited.
  */
 static VALUE
 set_rvb_hfdecay_limited(VALUE rrvb, VALUE value)
@@ -1155,6 +1431,9 @@ set_rvb_hfdecay_limited(VALUE rrvb, VALUE value)
 /*
  *  call-seq:
  *      reverb.hfdecay_limited  -> true or false
+ *
+ * Determines if the high-frequency decay of _reverb_ is limited. The default
+ * is true.
  */
 static VALUE
 is_rvb_hfdecay_limited(VALUE rrvb)
@@ -1162,15 +1441,14 @@ is_rvb_hfdecay_limited(VALUE rrvb)
     return get_obj_char(rrvb, seal_is_rvb_hfdecay_limited);
 }
 
-/*
- *  call-seq:
- *      EffectSlot.allocate -> effect_slot
- */
 DEFINE_ALLOCATOR(efs)
 
 /*
  *  call-seq:
  *      effect_slot.effect = effect -> effect
+ *
+ * Fills _effect_slot_ with _effect_, then _effect_slot_ will become ready to
+ * feed sources. Pass nil to unfill the slot.
  */
 static VALUE
 set_efs_effect(VALUE rslot, VALUE reffect)
@@ -1194,6 +1472,9 @@ set_efs_effect(VALUE rslot, VALUE reffect)
  *  call-seq:
  *      EffectSlot.new          -> effect_slot
  *      EffectSlot.new(effect)  -> effect_slot
+ *
+ * Initializes a new effect slot. If an effect object is specified,
+ * initializes the effect slot to have that effect object associated.
  */
 static VALUE
 init_efs(int argc, VALUE* argv, VALUE rslot)
@@ -1211,6 +1492,8 @@ init_efs(int argc, VALUE* argv, VALUE rslot)
 /*
  *  call-seq:
  *      effect_slot.effect  -> effect
+ *
+ * Gets the effect object in _effect_slot_. The default is nil.
  */
 static VALUE
 get_efs_effect(VALUE rslot)
@@ -1220,7 +1503,29 @@ get_efs_effect(VALUE rslot)
 
 /*
  *  call-seq:
+ *      slot.feed(index, source)    -> slot
+ *
+ * Mixes a sound effect loaded into _effect_slot_ with _source_'s output.
+ * Later calls to this function with a different effect slot and the same
+ * index will override the old effect slot association.
+ */
+static VALUE
+feed_efs(VALUE rslot, VALUE rindex, VALUE rsrc)
+{
+    seal_src_t* src;
+
+    Data_Get_Struct(rsrc, seal_src_t, src);
+    check_seal_err(seal_feed_efs(DATA_PTR(rslot), NUM2INT(rindex), src));
+
+    return rslot;
+}
+
+/*
+ *  call-seq:
  *      effect_slot.gain = flt  -> flt
+ *
+ * Sets the output level of _effect_slot_ in the interval [0.0, 1.0]. A
+ * value of 0.0 mutes the output.
  */
 static VALUE
 set_efs_gain(VALUE refs, VALUE value)
@@ -1231,6 +1536,9 @@ set_efs_gain(VALUE refs, VALUE value)
 /*
  *  call-seq:
  *      effect_slot.gain    -> flt
+ *
+ * Gets the output level of _effect_slot_ in the interval. The default is
+ * 1.0.
  */
 static VALUE
 get_efs_gain(VALUE refs)
@@ -1241,6 +1549,9 @@ get_efs_gain(VALUE refs)
 /*
  *  call-seq:
  *      effect_slot.auto = true or false    -> true or false
+ *
+ * Sets whether the effect should have automatic adjustments based on the
+ * physical positions of the sources and the listener.
  */
 static VALUE
 set_efs_auto(VALUE refs, VALUE value)
@@ -1251,6 +1562,9 @@ set_efs_auto(VALUE refs, VALUE value)
 /*
  *  call-seq:
  *      effect_slot.auto    -> true or false
+ *
+ * Determines if the effect is automatically adjusted. The default is true
+ * (nonzero).
  */
 static VALUE
 is_efs_auto(VALUE refs)
@@ -1261,6 +1575,8 @@ is_efs_auto(VALUE refs)
 /*
  *  call-seq:
  *      Seal.listener  -> listener
+ *
+ * Gets the singleton Listener instance.
  */
 static VALUE
 get_listener()
@@ -1271,6 +1587,10 @@ get_listener()
 /*
  *  call-seq:
  *      Seal.listener.gain = flt   -> [flt, flt, flt]
+ *
+ * Sets the master scalar amplitude multiplier of the listener which applies
+ * to all the sources. 1.0 means that the sound is unattenuated; 0.5 means
+ * an attenuation of 6 dB; 0.0 means silence.
  */
 static VALUE
 set_listener_gain(VALUE rlistener, VALUE value)
@@ -1281,6 +1601,8 @@ set_listener_gain(VALUE rlistener, VALUE value)
 /*
  *  call-seq:
  *      Seal.listener.gain -> flt
+ *
+ * Gets the gain of the listener. The default is 1.0.
  */
 static VALUE
 get_listener_gain(VALUE rlistener, VALUE value)
@@ -1291,6 +1613,9 @@ get_listener_gain(VALUE rlistener, VALUE value)
 /*
  *  call-seq:
  *      Seal.listener.position = [flt, flt, flt]   -> [flt, flt, flt]
+ *
+ * Sets the position of the listener in a right-handed Cartesian coordinate
+ * system. Use of NaN and infinity is undefined.
  */
 static VALUE
 set_listener_pos(VALUE rlistener, VALUE value)
@@ -1301,6 +1626,8 @@ set_listener_pos(VALUE rlistener, VALUE value)
 /*
  *  call-seq:
  *      Seal.listener.position -> [flt, flt, flt]
+ *
+ * Gets the position of the listener. The default is ( 0.0, 0.0, 0.0 ).
  */
 static VALUE
 get_listener_pos(VALUE rlistener, VALUE value)
@@ -1311,6 +1638,10 @@ get_listener_pos(VALUE rlistener, VALUE value)
 /*
  *  call-seq:
  *      Seal.listener.velocity = flt, flt, flt   -> [flt, flt, flt]
+ *
+ * Sets the velocity of the listener in a right-handed Cartesian coordinate
+ * system. The velocity of the listener does not affect its position but is a
+ * factor used during the Doppler effect emulation.
  */
 static VALUE
 set_listener_vel(VALUE rlistener, VALUE value)
@@ -1322,6 +1653,8 @@ set_listener_vel(VALUE rlistener, VALUE value)
 /*
  *  call-seq:
  *      Seal.listener.velocity -> [flt, flt, flt]
+ *
+ * Gets the velocity of the listener. The default is ( 0.0, 0.0, 0.0 ).
  */
 static VALUE
 get_listener_vel(VALUE rlistener, VALUE value)
@@ -1333,6 +1666,13 @@ get_listener_vel(VALUE rlistener, VALUE value)
  *  call-seq:
  *      Seal.listener.orientation = [flt, flt, flt], [flt, flt, flt]
  *          -> [[flt, flt, flt], [flt, flt, flt]]
+ *
+ * Sets the orientation of the listener. The argument must be a pair of
+ * 3-tuple consisting of an 'at' vector and an 'up' vector, where the 'at'
+ * vector represents the 'forward' direction of the listener and the 'up'
+ * vector represents the 'up' direction for the listener. These two vectors
+ * must be linearly independent, must not be NaN and must not be normalized.
+ * Otherwise, the operation is undefined.
  */
 static VALUE
 set_listener_orien(VALUE rlistener, VALUE rarr)
@@ -1390,15 +1730,21 @@ bind_core(void)
 {
     VALUE mFormat;
     mSeal = rb_define_module("Seal");
-    eSealError = rb_define_class("SealError", rb_eException);
+    /* The Seal Exception class. */
+    eSealError = rb_define_class_under(mSeal, "SealError", rb_eException);
     rb_define_singleton_method(mSeal, "startup", startup, -1);
     rb_define_singleton_method(mSeal, "cleanup", cleanup, 0);
     rb_define_singleton_method(mSeal, "per_source_effect_limit",
                                per_source_effect_limit, 0);
+    /* A string indicating the version of Seal. */
     rb_define_const(mSeal, "VERSION", rb_str_new2(seal_get_version()));
+    /* A collection of supported audio formats. */
     mFormat = rb_define_module_under(mSeal, "Format");
+    /* WAVE format. */
     rb_define_const(mFormat, "WAV", name2sym(WAV_SYM));
+    /* Ogg Vorbis format. */
     rb_define_const(mFormat, "OV", name2sym(OV_SYM));
+    /* MPEG audio format. */
     rb_define_const(mFormat, "MPG", name2sym(MPG_SYM));
 }
 
@@ -1416,6 +1762,7 @@ bind_buf(void)
     VALUE cBuffer = rb_define_class_under(mSeal, "Buffer", rb_cObject);
     rb_define_alloc_func(cBuffer, alloc_buf);
     rb_define_method(cBuffer, "initialize", init_buf, -1);
+    rb_define_method(cBuffer, "load", load_buf, -1);
     rb_define_method(cBuffer, "size", get_buf_size, 0);
     rb_define_method(cBuffer, "frequency", get_buf_freq, 0);
     rb_define_method(cBuffer, "bit_depth", get_buf_bps, 0);
@@ -1423,6 +1770,12 @@ bind_buf(void)
     rb_define_alias(cBuffer, "load", "initialize");
 }
 
+/*
+ * Document-class:  Seal::Stream
+ *
+ * Streams are used by streaming sources to avoid loading big audio into
+ * memory. It is the front end for various decoders.
+ */
 static void
 bind_stream(void)
 {
@@ -1437,6 +1790,11 @@ bind_stream(void)
     rb_define_alias(rb_singleton_class(cStream), "open", "new");
 }
 
+/*
+ * Document-class:  Seal::Source::State
+ *
+ * A collection of Source states.
+ */
 static void
 bind_src_state(VALUE cSource)
 {
@@ -1449,14 +1807,22 @@ bind_src_state(VALUE cSource)
     rb_define_const(mState, "STOPPED", name2sym(STOPPED_SYM));
 }
 
+/*
+ * Document-class:  Seal::Source::Type
+ *
+ * A collection of Source types.
+ */
 static void
 bind_src_type(VALUE cSource)
 {
     VALUE mType;
 
     mType = rb_define_module_under(cSource, "Type");
+    /* Sources with no audio attached. */
     rb_define_const(mType, "UNDETERMINED", name2sym(UNDETERMINED_SYM));
+    /* Sources with an audio buffer attached. */
     rb_define_const(mType, "STATIC", name2sym(STATIC_SYM));
+    /* Sources with an audio stream attached. */
     rb_define_const(mType, "STREAMING", name2sym(STREAMING_SYM));
 }
 
@@ -1752,6 +2118,12 @@ bind_rvb_presets(VALUE cReverb)
     bind_rvb_misc_presets(mPreset);
 }
 
+/*
+ * Document-class:  Seal::Reverb
+ *
+ * A Reverb object is a set of parameters that define a reverberation effect.
+ * Effect objects can be put into an effect slot for sources to use.
+ */
 static void
 bind_rvb(void)
 {
@@ -1799,6 +2171,12 @@ bind_rvb(void)
     bind_rvb_presets(cReverb);
 }
 
+/*
+ * Document-class:  Seal::EffectSlot
+ *
+ * EffectSlot is the container type for effects. A source can mix an effect in
+ * an effect slot to filter the output sound.
+ */
 static void
 bind_efs(void)
 {
@@ -1815,11 +2193,18 @@ bind_efs(void)
     rb_define_alias(cEffectSlot, "auto?", "auto");
 }
 
+/*
+ * Document-class:  Seal::Listener
+ *
+ * Listener has a singleton instance representing the sole listener who hears
+ * the sound.
+ */
 static void
 bind_listener(void)
 {
     VALUE cListener = rb_define_class_under(mSeal, "Listener", rb_cObject);
     VALUE listener = rb_data_object_alloc(cListener, 0, 0, 0);
+    /* The singleton Listener instance. */
     rb_define_const(mSeal, "LISTENER", listener);
     rb_define_singleton_method(mSeal, "listener", get_listener, 0);
     singletonify(cListener);
