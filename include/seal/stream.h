@@ -71,12 +71,6 @@ seal_err_t seal_close_stream(seal_stream_t*);
 }
 #endif
 
-/*
- *****************************************************************************
- * Below are **implementation details**.
- *****************************************************************************
- */
-
 struct seal_stream_t
 {
     /* Tagged union of identifiers used by different decoder libraries. */
