@@ -177,19 +177,12 @@ use the solution and project files under /msvc.
 ### Ruby extension
 
 ```bash
-cd ruby
-ruby configure.rb
-make
+bundle install
+rake compile
 ```
 
-The default output is `seal.{so,dll,bundle}`, which is a dynamic library
+The default output is `lib/seal.{so,dll,bundle}`, which is a dynamic library
 that could be required by Ruby at runtime.
-
-If you want to install the library to the default `$:` search path, then:
-
-```bash
-make install
-```
 
 Note that Win32 binaries are shipped with the project for compiling Seal on
 Windows. You can of course compile your own copies of the dependency
