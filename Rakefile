@@ -1,5 +1,6 @@
 require 'erb'
 require 'rbconfig'
+require 'rake/extensiontask'
 
 include RbConfig
 
@@ -7,11 +8,13 @@ desc 'Run the default task'
 task :default => :all
 
 desc 'Run all tasks'
-task :all => :'mf:all'
+task :all => [:'mf:all', :compile]
 
 def report(task)
   puts "Running #{task.name}..."
 end
+
+Rake::ExtensionTask.new('seal')
 
 # Makefile generation tasks.
 # Requires GCC for dependency generation.
@@ -199,7 +202,3 @@ namespace :demo do |; extensions, seal_artifacts, win32_artifacts|
   end
 end
 
-task :rdoc do
-  sh 'rdoc --exclude "[A-Z]+|demo/|ext/|include/al/|mpg123|ogg|vorbis|'\
-     'win32|make|test"'
-end
