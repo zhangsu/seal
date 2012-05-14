@@ -6,7 +6,7 @@ include FileUtils
 include RbConfig
 
 target_os = CONFIG['target_os']
-root_dir = File.join('..', '..')
+root_dir = File.join(File.dirname(__FILE__), '..', '..')
 src_dir = File.join root_dir, 'src'
 
 $defs << '-DNDEBUG'
@@ -34,4 +34,5 @@ $VPATH << src_dir << File.join(src_dir, 'seal') <<
           File.join(src_dir, 'rbext') << File.join(src_dir, 'libogg') <<
           File.join(src_dir, 'libvorbis')
 dir_config('seal', include_dir, lib_dir)
+
 create_makefile('seal', File.join(src_dir, '**', ''))
