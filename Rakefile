@@ -182,23 +182,6 @@ module FileUtils
   end
 end
 
-namespace :demo do |; extensions, seal_artifacts, win32_artifacts|
-  seal_artifacts = %w<seal.so seal.dll seal.bundle>
-  win32_artifacts = %w<OpenAL32.dll libmpg123.dll>
-
-  desc 'Prepare all the dependencies for demos'
-  task :prepare do |t|
-    report(t)
-    cp_s(seal_artifacts.map { |f| File.join('ext', f)}, 'demo')
-    if CONFIG['target_os'] =~ /mswin|mingw/
-      cp_s(win32_artifacts.map { |f| File.join('msvc', 'lib', f)}, 'demo')
-    end
-  end
-
-  desc 'Clean demo artifacts'
-  task :clean do |t|
-    report(t)
-    rm_s (seal_artifacts | win32_artifacts).map { |f| File.join('demo', f)}
-  end
+rule /^demo:/ do |r|
+  sh 'ruby -I lib -X demo %s.rb' % r.name[/(?<=:).+/]
 end
-
