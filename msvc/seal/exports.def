@@ -1,7 +1,7 @@
 EXPORTS
 seal_startup
 seal_cleanup
-seal_get_neffects_per_src
+seal_get_per_src_effect_limit
 seal_get_version
 seal_init_src
 seal_destroy_src

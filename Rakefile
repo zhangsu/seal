@@ -1,14 +1,20 @@
 require 'erb'
+require 'rbconfig'
+require 'rake/extensiontask'
+
+include RbConfig
 
 desc 'Run the default task'
 task :default => :all
 
 desc 'Run all tasks'
-task :all => :'mf:all'
+task :all => [:'mf:all', :compile]
 
 def report(task)
   puts "Running #{task.name}..."
 end
+
+Rake::ExtensionTask.new('seal')
 
 # Makefile generation tasks.
 # Requires GCC for dependency generation.
@@ -18,9 +24,9 @@ namespace :mf do
   # Assuming all Makefiles are at the same (directory tree) level.
   PROJ_DIR          = File.join('..', '..', '..')
   INCLUDE_DIR       = File.join(PROJ_DIR, 'include')
-  LIB_DIR           = File.join(PROJ_DIR, 'lib')
   MAKEFILE_TEMPLATE = File.join(PROJ_DIR, 'Makefile.erb')
-  # Library input list for Win32.
+  # Libraries for Win32.
+  LIB_DIR           = File.join(PROJ_DIR, 'msvc/lib')
   LIBS              = [File.join(LIB_DIR, 'OpenAL32.lib'),
                        File.join(LIB_DIR, 'libmpg123.lib')].join
   DLLS              = ['OpenAL32.dll', 'libmpg123.dll']
@@ -164,3 +170,19 @@ namespace :mf do
   end
 end
 
+module FileUtils
+  def cp_s(src, dest, options = {})
+    src = [src] unless src.is_a? Array
+    src.each { |f| cp f, dest, options if File.exists? f }
+  end
+
+  def rm_s(list)
+    list = [list] unless list.is_a? Array
+    list.each { |f| rm f if File.exists? f }
+  end
+end
+
+rule /^demo:/ do |r|
+  Rake::Task[:compile].invoke
+  sh 'ruby -I lib -X demo %s.rb' % r.name[/(?<=:).+/]
+end

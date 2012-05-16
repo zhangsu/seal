@@ -13,7 +13,7 @@
 #include <seal/core.h>
 #include <seal/err.h>
 
-static int neffects_per_src = -1;
+static int per_src_effect_limit = -1;
 
 void _seal_nop() {}
 void* _seal_nop_func() { return 0; }
@@ -36,7 +36,7 @@ LPALGETAUXILIARYEFFECTSLOTF alGetAuxiliaryEffectSlotf = (void*) _seal_nop;
 const char*
 seal_get_version(void)
 {
-    return "0.2.0";
+    return "0.1.0";
 }
 
 static seal_err_t
@@ -135,7 +135,7 @@ seal_startup(const char* device_name)
     /* Reset OpenAL's error state. */
     alGetError();
 
-    alcGetIntegerv(device, ALC_MAX_AUXILIARY_SENDS, 1, &neffects_per_src);
+    alcGetIntegerv(device, ALC_MAX_AUXILIARY_SENDS, 1,&per_src_effect_limit);
 
     return SEAL_OK;
 
@@ -167,9 +167,9 @@ seal_cleanup(void)
 }
 
 int
-seal_get_neffects_per_src(void)
+seal_get_per_src_effect_limit(void)
 {
-    return neffects_per_src;
+    return per_src_effect_limit;
 }
 
 unsigned int

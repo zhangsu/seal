@@ -92,7 +92,7 @@ seal_err_t seal_pause_src(seal_src_t*);
 
 /*
  * Stops the playing of a source. Applying to a `SEAL_PLAYING' or
- * `SEAL_PAUSED' source will change its state to SEAL_STOPPED. Applying to a
+ * `SEAL_PAUSED' source will change its state to `SEAL_STOPPED'. Applying to a
  * `SEAL_INITIAL' or `SEAL_STOPPED' source has no effect. Resets the sampling
  * offset.
  *
@@ -283,7 +283,7 @@ seal_buf_t* seal_get_src_buf(seal_src_t*);
 seal_stream_t* seal_get_src_stream(seal_src_t*);
 
 /*
- * Gets the size, in byte, of an source's streaming queue. The default is 3.
+ * Gets the size, in byte, of a source's streaming queue. The default is 3.
  *
  * @see         seal_set_src_queue_size
  * @param src   the source to get the queue size of
@@ -292,7 +292,7 @@ seal_stream_t* seal_get_src_stream(seal_src_t*);
 seal_err_t seal_get_src_queue_size(seal_src_t*, size_t* /*psize*/);
 
 /*
- * Gets the size, in byte, of an source's streaming chunk. The default is
+ * Gets the size, in byte, of a source's streaming chunk. The default is
  * 36864.
  *
  * @see         seal_set_src_chunk_size
@@ -382,6 +382,7 @@ seal_err_t seal_get_src_type(seal_src_t*, seal_src_type_t* /*ptype*/);
 
 /*
  * Gets the state of a source.
+ *
  * @see             enum seal_src_state_t
  * @param src       the source to get the state of
  * @param pstate    the receiver of the source state

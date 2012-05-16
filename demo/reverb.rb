@@ -1,10 +1,10 @@
-require_relative 'seal'
+require 'seal'
 
 include Seal
 
 Seal.startup
 
-EFFECT = 'IcePalace::LARGEROOM'
+EFFECT = ARGV[0] || 'FOREST'
 
 def print_constants(mod, level = 0)
   mod.constants.each do |const_key|
