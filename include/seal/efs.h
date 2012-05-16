@@ -42,7 +42,7 @@ seal_err_t seal_destroy_efs(seal_efs_t*);
 seal_err_t seal_set_efs_effect(seal_efs_t*, void* /*effect*/);
 
 /*
- * Mixes an sound effect loaded into an effect slot with a source's output.
+ * Mixes a sound effect loaded into an effect slot with a source's output.
  * Later calls to this function with a different effect slot and the same
  * index will override the old effect slot association.
  *

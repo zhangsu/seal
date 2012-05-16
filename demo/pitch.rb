@@ -1,4 +1,4 @@
-require_relative 'seal'
+require 'seal'
 
 Seal.startup
 

@@ -3,9 +3,9 @@
  * under the terms of the GNU Lesser General Public License. See COPYING
  * attached with the library.
  *
- * err.h defines SEAL errors and provides subroutines for clearing and
- * retriving errors. SEAL functions will set a thread-local error flag when
- * error strikes, so if the last SEAL function call returns 0, the exact error
+ * err.h defines Seal errors and provides subroutines for clearing and
+ * retriving errors. Seal functions will set a thread-local error flag when
+ * error strikes, so if the last Seal function call returns 0, the exact error
  * and detailed error message can be retrieved using functions in this module.
  */
 
@@ -66,7 +66,7 @@ extern "C" {
 #endif
 
 /*
- * Gets a SEAL error message.
+ * Gets a Seal error message.
  *
  * @param err   the error to get the message associated with
  * @return      the error message if there is any or otherwise 0
@@ -84,7 +84,7 @@ const char* seal_get_err_msg(seal_err_t);
  */
 
 /*
- * @return  the OpenAL error as a SEAL error
+ * @return  the OpenAL error as a Seal error
  */
 seal_err_t _seal_get_openal_err(void);
 

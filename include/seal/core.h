@@ -3,7 +3,7 @@
  * under the terms of the GNU Lesser General Public License. See COPYING
  * attached with the library.
  *
- * core.h defines interfaces for low-level SEAL operations.
+ * core.h defines interfaces for low-level Seal operations.
  */
 
 #ifndef _SEAL_CORE_H_
@@ -17,8 +17,8 @@ extern "C" {
 #endif
 
 /*
- * Initializes SEAL by specifying the device name. This function is not
- * re-entrant nor thread-safe and should be called only once per SEAL session.
+ * Initializes Seal by specifying the device name. This function is not
+ * re-entrant nor thread-safe and should be called only once per Seal session.
  * Match a call to `seal_startup' with a call to `seal_cleanup' and never call
  * `seal_starup' twice in a row.
  *
@@ -26,16 +26,16 @@ extern "C" {
  */
 seal_err_t seal_startup(const char* /*device_name*/);
 
-/* Uninitializes SEAL and invalidate all SEAL objects. Thread-unsafe. */
+/* Uninitializes Seal and invalidate all Seal objects. Thread-unsafe. */
 void seal_cleanup(void);
 
 /*
- * @return  the maximum number of effects a source can mix concurrently.
+ * @return  the maximum number of effect slots a source can feed concurrently.
  */
-int seal_get_neffects_per_src(void);
+int seal_get_per_src_effect_limit(void);
 
 /*
- * Gets the SEAL version string.
+ * Gets the Seal version string.
  *
  * @return  the version string
  */

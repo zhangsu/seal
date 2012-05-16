@@ -1,5 +1,5 @@
 require 'scanf'
-require_relative 'seal'
+require 'seal'
 
 Seal.startup
 

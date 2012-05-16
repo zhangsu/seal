@@ -30,7 +30,7 @@ extern "C" {
 /*
  * Tries to recognize an audio file's format by peeking its header. Use of
  * this function is by no mean an accurate way to determine the exact encoding
- * of the audio file; it only considers the format directly supported by SEAL
+ * of the audio file; it only considers the format directly supported by Seal
  * as if there are only these types of format in the world. Assumes `audio' is
  * at the beginning.
  *

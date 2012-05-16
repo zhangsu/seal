@@ -46,7 +46,7 @@ seal_err_t seal_destroy_buf(seal_buf_t*);
  * @param buf       the buffer to receive the loaded data
  * @param filename  the filename of the audio
  * @param fmt       the format of the audio file; automatic recognition of the
- *                  audio format will be attempted if `format' is
+ *                  audio format will be attempted if `fmt' is
  *                  `SEAL_UNKNOWN_FMT'
  */
 seal_err_t seal_load2buf(seal_buf_t*, const char* /*filename*/, seal_fmt_t);
