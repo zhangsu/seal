@@ -183,5 +183,6 @@ module FileUtils
 end
 
 rule /^demo:/ do |r|
+  Rake::Task[:compile].invoke
   sh 'ruby -I lib -X demo %s.rb' % r.name[/(?<=:).+/]
 end
