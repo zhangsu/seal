@@ -177,19 +177,12 @@ use the solution and project files under /msvc.
 ### Ruby extension
 
 ```bash
-cd ruby
-ruby configure.rb
-make
+bundle install
+rake compile
 ```
 
-The default output is `seal.{so,dll,bundle}`, which is a dynamic library
+The default output is `lib/seal.{so,dll,bundle}`, which is a dynamic library
 that could be required by Ruby at runtime.
-
-If you want to install the library to the default `$:` search path, then:
-
-```bash
-make install
-```
 
 Note that Win32 binaries are shipped with the project for compiling Seal on
 Windows. You can of course compile your own copies of the dependency
@@ -197,32 +190,25 @@ libraries on Windows, but I feel like Win32 users do not usually do that.
 
 ## Demos
 
-To run the demos under `demo` in Ruby, first build Seal as a Ruby extension,
-then:
+Use `rake demo:<demo_name>` to run the demos under the `demo/` directory.
 
-```bash
-rake demo:prepare
-```
-
-Which copies all the dependency artifacts to the demo directory.
-
--   playback.rb
+-   playback
 
     Basic playback of audio.
 
--   control.rb
+-   control
 
     Various controls of audio like play, pause, stop.
 
--   pitch.rb
+-   pitch
 
     Audio pitch shifting.
 
--   walk.rb
+-   walk
 
     3D audio positioning (attenuation).
 
--   reverb.rb
+-   reverb
 
     Audio reverberation. There are lots of built-in reverb presets, but this
     demo only simulates a large room in ice palace.

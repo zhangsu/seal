@@ -9,6 +9,7 @@
 *.exp
 .yardoc
 doc
+tmp
 make/*/*/*
 !make/gcc/unix-like/Makefile
 !make/gcc/win32/Makefile

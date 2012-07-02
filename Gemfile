@@ -1,5 +1,10 @@
 source :rubygems
 
-gem 'rake'
-gem 'yard'
-gem 'redcarpet'
+group :development do
+  gem 'rake'
+  gem 'rake-compiler'
+  gem 'rspec'
+  gem 'guard-rspec'
+  gem 'yard'
+  gem 'redcarpet'
+end

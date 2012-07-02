@@ -1,5 +1,6 @@
 require 'erb'
 require 'rbconfig'
+require 'rake/extensiontask'
 
 include RbConfig
 
@@ -7,11 +8,13 @@ desc 'Run the default task'
 task :default => :all
 
 desc 'Run all tasks'
-task :all => :'mf:all'
+task :all => [:'mf:all', :compile]
 
 def report(task)
   puts "Running #{task.name}..."
 end
+
+Rake::ExtensionTask.new('seal')
 
 # Makefile generation tasks.
 # Requires GCC for dependency generation.
@@ -179,27 +182,7 @@ module FileUtils
   end
 end
 
-namespace :demo do |; extensions, seal_artifacts, win32_artifacts|
-  seal_artifacts = %w<seal.so seal.dll seal.bundle>
-  win32_artifacts = %w<OpenAL32.dll libmpg123.dll>
-
-  desc 'Prepare all the dependencies for demos'
-  task :prepare do |t|
-    report(t)
-    cp_s(seal_artifacts.map { |f| File.join('ext', f)}, 'demo')
-    if CONFIG['target_os'] =~ /mswin|mingw/
-      cp_s(win32_artifacts.map { |f| File.join('msvc', 'lib', f)}, 'demo')
-    end
-  end
-
-  desc 'Clean demo artifacts'
-  task :clean do |t|
-    report(t)
-    rm_s (seal_artifacts | win32_artifacts).map { |f| File.join('demo', f)}
-  end
-end
-
-task :rdoc do
-  sh 'rdoc --exclude "[A-Z]+|demo/|ext/|include/al/|mpg123|ogg|vorbis|'\
-     'win32|make|test"'
+rule /^demo:/ do |r|
+  Rake::Task[:compile].invoke
+  sh 'ruby -I lib -X demo %s.rb' % r.name[/(?<=:).+/]
 end
