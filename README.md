@@ -1,7 +1,7 @@
 # Scorched End Audio Library
 
 Seal is a C library with Ruby binding for audio rendering and manipulation,
-such as direction and distance attenuation, the simulation of the Dopplet
+such as direction and distance attenuation, the simulation of the Doppler
 effect and reverberation, in a 3D space. It is built on top of [OpenAL]
 (http://connect.creativelabs.com/openal/default.aspx), adding support for
 audio streaming and audio formats like Ogg Vorbis, MPEG Audio and WAVE.
