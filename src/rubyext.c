@@ -240,6 +240,8 @@ map_format(VALUE symbol)
         return SEAL_OV_FMT;
     else if (symbol == name2sym(MPG_SYM))
         return SEAL_MPG_FMT;
+    else
+        return SEAL_UNKNOWN_FMT;
 }
 
 static void
