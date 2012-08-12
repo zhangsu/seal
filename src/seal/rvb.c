@@ -196,6 +196,8 @@ seal_load_rvb(seal_rvb_t* rvb, seal_rvb_preset_t preset)
         CASE_LOAD(rvb, DUSTYROOM)
         CASE_LOAD(rvb, CHAPEL)
         CASE_LOAD(rvb, SMALLWATERROOM)
+        default:
+            return SEAL_BAD_PRESET;
     }
     return SEAL_OK;
 }
