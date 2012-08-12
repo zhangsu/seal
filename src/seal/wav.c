@@ -82,12 +82,13 @@ read_fmt_(seal_raw_attr_t* attr, uint32_t chunk_size, FILE* wav)
 static seal_err_t
 read_data(seal_raw_t* raw, uint32_t chunk_size, FILE* wav)
 {
+    size_t count;
     seal_err_t err;
 
     if ((err = seal_alloc_raw_data(raw, chunk_size)) != SEAL_OK)
         return err;
 
-    fread(raw->data, 1, chunk_size, wav);
+    count = fread(raw->data, 1, chunk_size, wav);
 
     return SEAL_OK;
 }

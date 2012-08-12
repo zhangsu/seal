@@ -59,9 +59,9 @@ _seal_fclose(FILE* file)
  */
 #define READ_UINT_LE(nbits, buf, size, file) do                             \
 {                                                                           \
-    size_t _i_;                                                             \
+    size_t _i_, count;                                                      \
                                                                             \
-    fread((buf), sizeof (uint##nbits##_t), (size), (file));                 \
+    count = fread((buf), sizeof (uint##nbits##_t), (size), (file));         \
     for (_i_ = 0; _i_ < (size); ++_i_) {                                    \
         *(buf) = raw2le##nbits((uint8_t*) (buf));                           \
         ++(buf);                                                            \
@@ -88,12 +88,13 @@ _seal_read_uint32le(uint32_t* buf, size_t size, void* file)
 void
 _seal_skip(uint32_t nbytes, void* file)
 {
+    size_t count;
     uint32_t i;
     static uint8_t junk[JUNK_BUF_SIZE];
 
     for (i = JUNK_BUF_SIZE; i <= nbytes; i += JUNK_BUF_SIZE)
-        fread(junk, 1, JUNK_BUF_SIZE, file);
+        count = fread(junk, 1, JUNK_BUF_SIZE, file);
     nbytes %= JUNK_BUF_SIZE;
     if (nbytes > 0)
-        fread(junk, 1, nbytes, file);
+        count = fread(junk, 1, nbytes, file);
 }
