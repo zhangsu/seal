@@ -87,6 +87,12 @@ alloc(VALUE klass, size_t size, void* free)
     return Data_Wrap_Struct(klass, 0, free, obj);
 }
 
+DEFINE_ALLOCATOR(src)
+DEFINE_ALLOCATOR(buf)
+DEFINE_ALLOCATOR(stream)
+DEFINE_ALLOCATOR(rvb)
+DEFINE_ALLOCATOR(efs)
+
 static void
 extract_3float(VALUE rarr, float* x, float* y, float* z)
 {
@@ -354,8 +360,6 @@ per_source_effect_limit()
     return INT2NUM(seal_get_per_src_effect_limit());
 }
 
-DEFINE_ALLOCATOR(buf)
-
 /*
  *  call-seq:
  *      Seal::Buffer.new(filename [, format])   -> buffer
@@ -446,8 +450,6 @@ get_buf_nchannels(VALUE rbuf)
     return get_obj_int(rbuf, seal_get_buf_nchannels);
 }
 
-DEFINE_ALLOCATOR(stream)
-
 /*
  *  call-seq:
  *      Seal::Stream.new(filename [, format])   -> stream
@@ -531,8 +533,6 @@ close_stream(VALUE rstream)
 
     return rstream;
 }
-
-DEFINE_ALLOCATOR(src)
 
 /*
  *  call-seq:
@@ -997,8 +997,6 @@ get_src_state(VALUE rsrc)
     }
 }
 
-DEFINE_ALLOCATOR(rvb)
-
 /*
  *  call-seq:
  *      reverb.load(preset) -> reverb
@@ -1440,8 +1438,6 @@ is_rvb_hfdecay_limited(VALUE rrvb)
 {
     return get_obj_char(rrvb, seal_is_rvb_hfdecay_limited);
 }
-
-DEFINE_ALLOCATOR(efs)
 
 /*
  *  call-seq:
