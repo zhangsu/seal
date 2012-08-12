@@ -4,9 +4,6 @@
 
 require 'win32api'
 
-class SealError < Exception
-end
-
 module Seal
   class << self
     GET_ERR_MSG = Win32API.new('seal', 'seal_get_err_msg', 'i', 'p')
@@ -25,5 +22,8 @@ module Seal
     def cleanup
       CLEANUP.call
     end
+  end
+
+  class SealError < Exception
   end
 end
