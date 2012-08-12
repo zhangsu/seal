@@ -1773,7 +1773,6 @@ bind_buf(void)
     rb_define_method(cBuffer, "frequency", get_buf_freq, 0);
     rb_define_method(cBuffer, "bit_depth", get_buf_bps, 0);
     rb_define_method(cBuffer, "channel_count", get_buf_nchannels, 0);
-    rb_define_alias(cBuffer, "load", "initialize");
 }
 
 /*
