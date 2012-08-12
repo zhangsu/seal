@@ -1738,8 +1738,9 @@ singletonify(VALUE klass)
 static void
 bind_core(void)
 {
-    VALUE mFormat;
     mSeal = rb_define_module("Seal");
+    VALUE mFormat = rb_define_module_under(mSeal, "Format");
+
     eSealError = rb_define_class_under(mSeal, "SealError", rb_eException);
     rb_define_singleton_method(mSeal, "startup", startup, -1);
     rb_define_singleton_method(mSeal, "cleanup", cleanup, 0);
@@ -1747,7 +1748,6 @@ bind_core(void)
                                per_source_effect_limit, 0);
     /* A string indicating the version of Seal. */
     rb_define_const(mSeal, "VERSION", rb_str_new2(seal_get_version()));
-    mFormat = rb_define_module_under(mSeal, "Format");
     /* WAVE format. */
     rb_define_const(mFormat, "WAV", name2sym(WAV_SYM));
     /* Ogg Vorbis format. */
@@ -1768,6 +1768,7 @@ static void
 bind_buf(void)
 {
     VALUE cBuffer = rb_define_class_under(mSeal, "Buffer", rb_cObject);
+
     rb_define_alloc_func(cBuffer, alloc_buf);
     rb_define_method(cBuffer, "initialize", init_buf, -1);
     rb_define_method(cBuffer, "load", load_buf, -1);
@@ -1787,6 +1788,7 @@ static void
 bind_stream(void)
 {
     VALUE cStream = rb_define_class_under(mSeal, "Stream", rb_cObject);
+
     rb_define_alloc_func(cStream, alloc_stream);
     rb_define_method(cStream, "initialize", init_stream, -1);
     rb_define_method(cStream, "frequency", get_stream_freq, 0);
@@ -1818,8 +1820,10 @@ bind_stream(void)
 static void
 bind_src(void)
 {
-    VALUE mType, mState;
     VALUE cSource = rb_define_class_under(mSeal, "Source", rb_cObject);
+    VALUE mState = rb_define_module_under(cSource, "State");
+    VALUE mType = rb_define_module_under(cSource, "Type");
+
     rb_define_alloc_func(cSource, alloc_src);
     rb_define_method(cSource, "initialize", init_src, 0);
     rb_define_method(cSource, "play", play_src, 0);
@@ -1856,7 +1860,6 @@ bind_src(void)
     rb_define_method(cSource, "type", get_src_type, 0);
     rb_define_method(cSource, "state", get_src_state, 0);
 
-    mState = rb_define_module_under(cSource, "State");
     /* Indicates a source is in initial state. */
     rb_define_const(mState, "INITIAL", name2sym(INITIAL_SYM));
     /* Indicates a source is playing. */
@@ -1866,7 +1869,6 @@ bind_src(void)
     /* Indicates a source is stopped from playing. */
     rb_define_const(mState, "STOPPED", name2sym(STOPPED_SYM));
 
-    mType = rb_define_module_under(cSource, "Type");
     /* Sources with no audio attached. */
     rb_define_const(mType, "UNDETERMINED", name2sym(UNDETERMINED_SYM));
     /* Sources with an audio buffer attached. */
@@ -1900,6 +1902,7 @@ bind_rvb(void)
     VALUE mDriving = rb_define_module_under(mPreset, "Driving");
     VALUE mCity = rb_define_module_under(mPreset, "City");
     VALUE mMisc = rb_define_module_under(mPreset, "Misc");
+
     rb_define_alloc_func(cReverb, alloc_rvb);
     rb_define_method(cReverb, "initialize", init_rvb, -1);
     rb_define_method(cReverb, "load", load_rvb, 2);
@@ -1967,6 +1970,7 @@ bind_rvb(void)
     define_enum(mPreset, "DRUGGED", SEAL_DRUGGED_REVERB);
     define_enum(mPreset, "DIZZY", SEAL_DIZZY_REVERB);
     define_enum(mPreset, "PSYCHOTIC", SEAL_PSYCHOTIC_REVERB);
+
     define_enum(mCastle, "SMALLROOM", SEAL_CASTLE_SMALLROOM_REVERB);
     define_enum(mCastle, "SHORTPASSAGE", SEAL_CASTLE_SHORTPASSAGE_REVERB);
     define_enum(mCastle, "MEDIUMROOM", SEAL_CASTLE_MEDIUMROOM_REVERB);
@@ -1976,6 +1980,7 @@ bind_rvb(void)
     define_enum(mCastle, "CUPBOARD", SEAL_CASTLE_CUPBOARD_REVERB);
     define_enum(mCastle, "COURTYARD", SEAL_CASTLE_COURTYARD_REVERB);
     define_enum(mCastle, "ALCOVE", SEAL_CASTLE_ALCOVE_REVERB);
+
     define_enum(mFactory, "SMALLROOM", SEAL_FACTORY_SMALLROOM_REVERB);
     define_enum(mFactory, "SHORTPASSAGE",
                     SEAL_FACTORY_SHORTPASSAGE_REVERB);
@@ -1986,6 +1991,7 @@ bind_rvb(void)
     define_enum(mFactory, "CUPBOARD", SEAL_FACTORY_CUPBOARD_REVERB);
     define_enum(mFactory, "COURTYARD", SEAL_FACTORY_COURTYARD_REVERB);
     define_enum(mFactory, "ALCOVE", SEAL_FACTORY_ALCOVE_REVERB);
+
     define_enum(mIcePalace, "SMALLROOM",
                     SEAL_ICEPALACE_SMALLROOM_REVERB);
     define_enum(mIcePalace, "SHORTPASSAGE",
@@ -1999,6 +2005,7 @@ bind_rvb(void)
     define_enum(mIcePalace, "CUPBOARD", SEAL_ICEPALACE_CUPBOARD_REVERB);
     define_enum(mIcePalace, "COURTYARD", SEAL_ICEPALACE_COURTYARD_REVERB);
     define_enum(mIcePalace, "ALCOVE", SEAL_ICEPALACE_ALCOVE_REVERB);
+
     define_enum(mSpaceStation, "SMALLROOM",
                     SEAL_SPACESTATION_SMALLROOM_REVERB);
     define_enum(mSpaceStation, "SHORTPASSAGE",
@@ -2028,6 +2035,7 @@ bind_rvb(void)
     define_enum(mWoodenGalleon, "COURTYARD",
                     SEAL_WOODEN_COURTYARD_REVERB);
     define_enum(mWoodenGalleon, "ALCOVE", SEAL_WOODEN_ALCOVE_REVERB);
+
     define_enum(mSports, "EMPTYSTADIUM", SEAL_SPORT_EMPTYSTADIUM_REVERB);
     define_enum(mSports, "SQUASHCOURT", SEAL_SPORT_SQUASHCOURT_REVERB);
     define_enum(mSports, "SMALLSWIMMINGPOOL",
@@ -2038,26 +2046,32 @@ bind_rvb(void)
     define_enum(mSports, "FULLSTADIUM", SEAL_SPORT_FULLSTADIUM_REVERB);
     define_enum(mSports, "STADIUMTANNOY",
                     SEAL_SPORT_STADIUMTANNOY_REVERB);
+
     define_enum(mPrefab, "WORKSHOP", SEAL_PREFAB_WORKSHOP_REVERB);
     define_enum(mPrefab, "SCHOOLROOM", SEAL_PREFAB_SCHOOLROOM_REVERB);
     define_enum(mPrefab, "PRACTISEROOM", SEAL_PREFAB_PRACTISEROOM_REVERB);
     define_enum(mPrefab, "OUTHOUSE", SEAL_PREFAB_OUTHOUSE_REVERB);
     define_enum(mPrefab, "CARAVAN", SEAL_PREFAB_CARAVAN_REVERB);
+
     define_enum(mDome, "TOMB", SEAL_DOME_TOMB_REVERB);
     define_enum(mDome, "SAINTPAULS", SEAL_DOME_SAINTPAULS_REVERB);
+
     define_enum(mPipe, "SMALL", SEAL_PIPE_SMALL_REVERB);
     define_enum(mPipe, "LONGTHIN", SEAL_PIPE_LONGTHIN_REVERB);
     define_enum(mPipe, "LARGE", SEAL_PIPE_LARGE_REVERB);
     define_enum(mPipe, "RESONANT", SEAL_PIPE_RESONANT_REVERB);
+
     define_enum(mOutdoors, "BACKYARD", SEAL_OUTDOORS_BACKYARD_REVERB);
     define_enum(mOutdoors, "ROLLINGPLAINS",
                     SEAL_OUTDOORS_ROLLINGPLAINS_REVERB);
     define_enum(mOutdoors, "DEEPCANYON", SEAL_OUTDOORS_DEEPCANYON_REVERB);
     define_enum(mOutdoors, "CREEK", SEAL_OUTDOORS_CREEK_REVERB);
     define_enum(mOutdoors, "VALLEY", SEAL_OUTDOORS_VALLEY_REVERB);
+
     define_enum(mMood, "HEAVEN", SEAL_MOOD_HEAVEN_REVERB);
     define_enum(mMood, "HELL", SEAL_MOOD_HELL_REVERB);
     define_enum(mMood, "MEMORY", SEAL_MOOD_MEMORY_REVERB);
+
     define_enum(mDriving, "COMMENTATOR", SEAL_DRIVING_COMMENTATOR_REVERB);
     define_enum(mDriving, "PITGARAGE", SEAL_DRIVING_PITGARAGE_REVERB);
     define_enum(mDriving, "INCAR_RACER", SEAL_DRIVING_INCAR_RACER_REVERB);
@@ -2070,12 +2084,14 @@ bind_rvb(void)
     define_enum(mDriving, "EMPTYGRANDSTAND",
                     SEAL_DRIVING_EMPTYGRANDSTAND_REVERB);
     define_enum(mDriving, "TUNNEL", SEAL_DRIVING_TUNNEL_REVERB);
+
     define_enum(mCity, "STREETS", SEAL_CITY_STREETS_REVERB);
     define_enum(mCity, "SUBWAY", SEAL_CITY_SUBWAY_REVERB);
     define_enum(mCity, "MUSEUM", SEAL_CITY_MUSEUM_REVERB);
     define_enum(mCity, "LIBRARY", SEAL_CITY_LIBRARY_REVERB);
     define_enum(mCity, "UNDERPASS", SEAL_CITY_UNDERPASS_REVERB);
     define_enum(mCity, "ABANDONED", SEAL_CITY_ABANDONED_REVERB);
+
     define_enum(mMisc, "DUSTYROOM", SEAL_DUSTYROOM_REVERB);
     define_enum(mMisc, "CHAPEL", SEAL_CHAPEL_REVERB);
     define_enum(mMisc, "SMALLWATERROOM", SEAL_SMALLWATERROOM_REVERB);
@@ -2091,6 +2107,7 @@ static void
 bind_efs(void)
 {
     VALUE cEffectSlot = rb_define_class_under(mSeal, "EffectSlot", rb_cObject);
+
     rb_define_alloc_func(cEffectSlot, alloc_efs);
     rb_define_method(cEffectSlot, "initialize", init_efs, -1);
     rb_define_method(cEffectSlot, "effect=", set_efs_effect, 1);
@@ -2114,6 +2131,7 @@ bind_listener(void)
 {
     VALUE cListener = rb_define_class_under(mSeal, "Listener", rb_cObject);
     VALUE listener = rb_data_object_alloc(cListener, 0, 0, 0);
+
     /* The singleton Listener instance. */
     rb_define_const(mSeal, "LISTENER", listener);
     rb_define_singleton_method(mSeal, "listener", get_listener, 0);
