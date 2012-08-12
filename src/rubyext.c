@@ -1811,9 +1811,13 @@ bind_src_state(VALUE cSource)
     VALUE mState;
 
     mState = rb_define_module_under(cSource, "State");
+    /* Indicates a source is in initial state. */
     rb_define_const(mState, "INITIAL", name2sym(INITIAL_SYM));
+    /* Indicates a source is playing. */
     rb_define_const(mState, "PLAYING", name2sym(PLAYING_SYM));
+    /* Indicates a source is paused from playing. */
     rb_define_const(mState, "PAUSED", name2sym(PAUSED_SYM));
+    /* Indicates a source is stopped from playing. */
     rb_define_const(mState, "STOPPED", name2sym(STOPPED_SYM));
 }
 
