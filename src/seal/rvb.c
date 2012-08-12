@@ -5,7 +5,8 @@
 #include <seal/core.h>
 #include <seal/err.h>
 
-static void
+static
+void
 load_properties(seal_rvb_t* rvb, EFXEAXREVERBPROPERTIES properties)
 {
     seal_set_rvb_density(rvb, properties.flDensity);

@@ -8,7 +8,8 @@
 #include <seal/listener.h>
 #include <seal/err.h>
 
-static seal_err_t
+static
+seal_err_t
 setf(int key, float val)
 {
     alListenerf(key, val);
@@ -16,7 +17,8 @@ setf(int key, float val)
     return _seal_get_openal_err();
 }
 
-static seal_err_t
+static
+seal_err_t
 set3f(int key, float x, float y, float z)
 {
     alListener3f(key, x, y, z);
@@ -24,7 +26,8 @@ set3f(int key, float x, float y, float z)
     return _seal_get_openal_err();
 }
 
-static seal_err_t
+static
+seal_err_t
 setfv(int key, float* vector)
 {
     alListenerfv(key, vector);
@@ -32,7 +35,8 @@ setfv(int key, float* vector)
     return _seal_get_openal_err();
 }
 
-static seal_err_t
+static
+seal_err_t
 getf(int key, float* pval)
 {
     alGetListenerf(key, pval);
@@ -40,7 +44,8 @@ getf(int key, float* pval)
     return _seal_get_openal_err();
 }
 
-static seal_err_t
+static
+seal_err_t
 get3f(int key, float* px, float* py, float* pz)
 {
     alGetListener3f(key, px, py, pz);
@@ -48,7 +53,8 @@ get3f(int key, float* px, float* py, float* pz)
     return _seal_get_openal_err();
 }
 
-static seal_err_t
+static
+seal_err_t
 getfv(int key, float* vector)
 {
     alGetListenerfv(key, vector);

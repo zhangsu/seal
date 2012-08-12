@@ -25,26 +25,30 @@ static VALUE mSeal;
 static VALUE eSealError;
 
 #define DEFINE_ALLOCATOR(obj)                                               \
-static VALUE                                                                \
+static                                                                      \
+VALUE                                                                       \
 alloc_##obj(VALUE klass)                                                    \
 {                                                                           \
     return alloc(klass, sizeof (seal_##obj##_t), free_##obj);               \
 }
 
 #define DEFINE_DEALLOCATOR(obj)                                             \
-static void                                                                 \
+static                                                                      \
+void                                                                        \
 free_##obj(void* obj)                                                       \
 {                                                                           \
     free_obj(obj, seal_destroy_##obj);                                      \
 }
 
-static VALUE
+static
+VALUE
 name2sym(const char* name)
 {
     return ID2SYM(rb_intern(name));
 }
 
-static void*
+static
+void*
 validate_memory(void* memory)
 {
     if (memory == 0)
@@ -52,14 +56,16 @@ validate_memory(void* memory)
     return memory;
 }
 
-static void
+static
+void
 check_seal_err(seal_err_t err)
 {
     if (err != SEAL_OK)
         rb_raise(eSealError, "%s", seal_get_err_msg(err));
 }
 
-static void
+static
+void
 free_obj(void* obj, void *destroy)
 {
     ((seal_err_t (*)(void*)) destroy)(obj);
@@ -71,13 +77,15 @@ DEFINE_DEALLOCATOR(buf)
 DEFINE_DEALLOCATOR(rvb)
 DEFINE_DEALLOCATOR(efs)
 
-static void
+static
+void
 free_stream(void* stream)
 {
     free_obj(stream, seal_close_stream);
 }
 
-static VALUE
+static
+VALUE
 alloc(VALUE klass, size_t size, void* free)
 {
     void* obj;
@@ -93,7 +101,8 @@ DEFINE_ALLOCATOR(stream)
 DEFINE_ALLOCATOR(rvb)
 DEFINE_ALLOCATOR(efs)
 
-static void
+static
+void
 extract_3float(VALUE rarr, float* x, float* y, float* z)
 {
     rarr = rb_convert_type(rarr, T_ARRAY, "Array", "to_a");
@@ -102,7 +111,8 @@ extract_3float(VALUE rarr, float* x, float* y, float* z)
     *z = NUM2DBL(rb_ary_entry(rarr, 2));
 }
 
-static void
+static
+void
 convert_bulk_float(VALUE* rtuple, float* tuple, int len)
 {
     int i;
@@ -110,7 +120,8 @@ convert_bulk_float(VALUE* rtuple, float* tuple, int len)
         rtuple[i] = rb_float_new(tuple[i]);
 }
 
-static VALUE
+static
+VALUE
 set_obj_float(VALUE robj, VALUE rflt, void* set)
 {
     check_seal_err(((seal_err_t (*)(void*, float)) set)(
@@ -120,7 +131,8 @@ set_obj_float(VALUE robj, VALUE rflt, void* set)
     return rflt;
 }
 
-static VALUE
+static
+VALUE
 set_obj_int(VALUE robj, VALUE rnum, void* set)
 {
     check_seal_err(((seal_err_t (*)(void*, int)) set)(
@@ -128,7 +140,8 @@ set_obj_int(VALUE robj, VALUE rnum, void* set)
     ));
 }
 
-static VALUE
+static
+VALUE
 set_obj_ulong(VALUE robj, VALUE rnum, void* set)
 {
     check_seal_err(((seal_err_t (*)(void*, int)) set)(
@@ -136,7 +149,8 @@ set_obj_ulong(VALUE robj, VALUE rnum, void* set)
     ));
 }
 
-static VALUE
+static
+VALUE
 set_obj_char(VALUE robj, VALUE rbool, void* set)
 {
     check_seal_err(((seal_err_t (*)(void*, char)) set)(
@@ -146,7 +160,8 @@ set_obj_char(VALUE robj, VALUE rbool, void* set)
     return rbool;
 }
 
-static VALUE
+static
+VALUE
 set_obj_3float(VALUE robj, VALUE rarr, void* set)
 {
     float x, y, z;
@@ -159,7 +174,8 @@ set_obj_3float(VALUE robj, VALUE rarr, void* set)
     return rarr;
 }
 
-static void
+static
+void
 get_obj_attr(VALUE robj, void* pvalue, void* get)
 {
     check_seal_err(((seal_err_t (*)(void*, void*)) get)(
@@ -167,7 +183,8 @@ get_obj_attr(VALUE robj, void* pvalue, void* get)
     ));
 }
 
-static VALUE
+static
+VALUE
 get_obj_float(VALUE robj, void* get)
 {
     float flt;
@@ -177,7 +194,8 @@ get_obj_float(VALUE robj, void* get)
     return rb_float_new(flt);
 }
 
-static VALUE
+static
+VALUE
 get_obj_int(VALUE robj, void* get)
 {
     int integer;
@@ -187,7 +205,8 @@ get_obj_int(VALUE robj, void* get)
     return INT2NUM(integer);
 }
 
-static VALUE
+static
+VALUE
 get_obj_ulong(VALUE robj, void* get)
 {
     unsigned long long_integer;
@@ -197,7 +216,8 @@ get_obj_ulong(VALUE robj, void* get)
     return ULONG2NUM(long_integer);
 }
 
-static VALUE
+static
+VALUE
 get_obj_char(VALUE robj, void* get)
 {
     char bool;
@@ -207,7 +227,8 @@ get_obj_char(VALUE robj, void* get)
     return bool ? Qtrue : Qfalse;
 }
 
-static VALUE
+static
+VALUE
 get_obj_3float(VALUE robj, void* get)
 {
     float tuple[3];
@@ -221,13 +242,15 @@ get_obj_3float(VALUE robj, void* get)
     return rb_ary_new4(3, rtuple);
 }
 
-static void
+static
+void
 define_enum(VALUE mModule, const char* name, int e)
 {
     rb_define_const(mModule, name, INT2NUM(e));
 }
 
-static seal_fmt_t
+static
+seal_fmt_t
 map_format(VALUE symbol)
 {
     if (NIL_P(symbol))
@@ -244,7 +267,8 @@ map_format(VALUE symbol)
         return SEAL_UNKNOWN_FMT;
 }
 
-static void
+static
+void
 input_audio(int argc, VALUE* argv, void* media, void* _input)
 {
     typedef seal_err_t inputter_t(void*, const char*, seal_fmt_t);
@@ -258,7 +282,8 @@ input_audio(int argc, VALUE* argv, void* media, void* _input)
                          map_format(format)));
 }
 
-static VALUE
+static
+VALUE
 set_listener_3float(VALUE rarr, seal_err_t (*set)(float, float, float))
 {
     float x, y, z;
@@ -269,7 +294,8 @@ set_listener_3float(VALUE rarr, seal_err_t (*set)(float, float, float))
     return rarr;
 }
 
-static VALUE
+static
+VALUE
 get_listener_3float(seal_err_t (*get)(float*, float*, float*))
 {
     float tuple[3];
@@ -281,7 +307,8 @@ get_listener_3float(seal_err_t (*get)(float*, float*, float*))
     return rb_ary_new4(3, rtuple);
 }
 
-static VALUE
+static
+VALUE
 set_listener_float(VALUE rflt, seal_err_t (*set)(float))
 {
     check_seal_err(set(NUM2DBL(rflt)));
@@ -289,7 +316,8 @@ set_listener_float(VALUE rflt, seal_err_t (*set)(float))
     return rflt;
 }
 
-static VALUE
+static
+VALUE
 get_listener_float(seal_err_t (*get)(float*))
 {
     float value;
@@ -299,7 +327,8 @@ get_listener_float(seal_err_t (*get)(float*))
     return rb_float_new(value);
 }
 
-static VALUE
+static
+VALUE
 src_op(VALUE rsrc, seal_err_t (*op)(seal_src_t*))
 {
     check_seal_err(op(DATA_PTR(rsrc)));
@@ -307,7 +336,8 @@ src_op(VALUE rsrc, seal_err_t (*op)(seal_src_t*))
     return rsrc;
 }
 
-static seal_stream_t*
+static
+seal_stream_t*
 extract_stream(VALUE rstream)
 {
     return DATA_PTR(rstream);
@@ -324,7 +354,8 @@ extract_stream(VALUE rstream)
  * <code>seal_cleanup</code> and never call <code>seal_starup</code> twice in
  * a row.
  */
-static VALUE
+static
+VALUE
 startup(int argc, VALUE* argv)
 {
     VALUE rstring;
@@ -342,7 +373,8 @@ startup(int argc, VALUE* argv)
  *
  * Uninitializes Seal and invalidate all Seal objects. Thread-unsafe.
  */
-static VALUE
+static
+VALUE
 cleanup()
 {
     seal_cleanup();
@@ -356,7 +388,8 @@ cleanup()
  *
  * Returns the maximum number of effect slots a source can feed concurrently.
  */
-static VALUE
+static
+VALUE
 per_source_effect_limit()
 {
     return INT2NUM(seal_get_per_src_effect_limit());
@@ -371,7 +404,8 @@ per_source_effect_limit()
  * format will be attempted if _format_ is not specified. See Seal::Format for
  * possible values. Sets all the attributes appropriately.
  */
-static VALUE
+static
+VALUE
 init_buf(int argc, VALUE* argv, VALUE rbuf)
 {
     seal_buf_t* buf;
@@ -393,7 +427,8 @@ init_buf(int argc, VALUE* argv, VALUE rbuf)
  * attempted if _format_ is not specified. See Seal::Format for possible
  * values.Sets all the attributes appropriately.
  */
-static VALUE
+static
+VALUE
 load_buf(int argc, VALUE* argv, VALUE rbuf)
 {
     input_audio(argc, argv, DATA_PTR(rbuf), seal_load2buf);
@@ -407,7 +442,8 @@ load_buf(int argc, VALUE* argv, VALUE rbuf)
  *
  * Gets the size, in bytes, of _buffer_. The default is 0.
  */
-static VALUE
+static
+VALUE
 get_buf_size(VALUE rbuf)
 {
     return get_obj_int(rbuf, seal_get_buf_size);
@@ -420,7 +456,8 @@ get_buf_size(VALUE rbuf)
  * Gets the frequency (sample rate) of the audio contained in _buffer_. The
  * default is 0 when the buffer is not loaded.
  */
-static VALUE
+static
+VALUE
 get_buf_freq(VALUE rbuf)
 {
     return get_obj_int(rbuf, seal_get_buf_freq);
@@ -433,7 +470,8 @@ get_buf_freq(VALUE rbuf)
  * Gets the bit depth (bits per sample) of the audio contained in _buffer_.
  * The default is 16.
  */
-static VALUE
+static
+VALUE
 get_buf_bps(VALUE rbuf)
 {
     return get_obj_int(rbuf, seal_get_buf_bps);
@@ -446,7 +484,8 @@ get_buf_bps(VALUE rbuf)
  * Gets the number of channels of the audio contained in _buffer_. The default
  * is 1.
  */
-static VALUE
+static
+VALUE
 get_buf_nchannels(VALUE rbuf)
 {
     return get_obj_int(rbuf, seal_get_buf_nchannels);
@@ -461,7 +500,8 @@ get_buf_nchannels(VALUE rbuf)
  * audio file; automatic recognition of the audio format will be attempted if
  * _format_ is nil. See Seal::Format for possible values.
  */
-static VALUE
+static
+VALUE
 init_stream(int argc, VALUE* argv, VALUE rstream)
 {
     input_audio(argc, argv, DATA_PTR(rstream), seal_open_stream);
@@ -476,7 +516,8 @@ init_stream(int argc, VALUE* argv, VALUE rstream)
  * Gets the frequency (sample rate) of the audio contained in _streamed_. The
  * default is 0 when the stream is not opened.
  */
-static VALUE
+static
+VALUE
 get_stream_freq(VALUE rstream)
 {
     return INT2NUM(extract_stream(rstream)->attr.freq);
@@ -489,7 +530,8 @@ get_stream_freq(VALUE rstream)
  * Gets the bit depth (bits per sample) of the audio contained in _stream_.
  * The default is 16.
  */
-static VALUE
+static
+VALUE
 get_stream_bps(VALUE rstream)
 {
     return INT2NUM(extract_stream(rstream)->attr.bit_depth);
@@ -502,7 +544,8 @@ get_stream_bps(VALUE rstream)
  * Gets the number of channels of the audio contained in _stream_. The default
  * is 1.
  */
-static VALUE
+static
+VALUE
 get_stream_nchannels(VALUE rstream)
 {
     return INT2NUM(extract_stream(rstream)->attr.nchannels);
@@ -514,7 +557,8 @@ get_stream_nchannels(VALUE rstream)
  *
  * Rewinds _stream_ to the beginning.
  */
-static VALUE
+static
+VALUE
 rewind_stream(VALUE rstream)
 {
     seal_rewind_stream(DATA_PTR(rstream));
@@ -528,7 +572,8 @@ rewind_stream(VALUE rstream)
  *
  * Closes _stream_ which must not be used by any source.
  */
-static VALUE
+static
+VALUE
 close_stream(VALUE rstream)
 {
     check_seal_err(seal_close_stream(DATA_PTR(rstream)));
@@ -542,7 +587,8 @@ close_stream(VALUE rstream)
  *
  * Initializes a new source.
  */
-static VALUE
+static
+VALUE
 init_src(VALUE rsrc)
 {
     check_seal_err(seal_init_src(DATA_PTR(rsrc)));
@@ -562,7 +608,8 @@ init_src(VALUE rsrc)
  * Applying to a paused source will resume playing and change its state to
  * State::PLAYING.
  */
-static VALUE
+static
+VALUE
 play_src(VALUE rsrc)
 {
     return src_op(rsrc, seal_play_src);
@@ -576,7 +623,8 @@ play_src(VALUE rsrc)
  * its state to State::PAUSED. Applying to an initial, paused or stopped
  * source has no effect.
  */
-static VALUE
+static
+VALUE
 pause_src(VALUE rsrc)
 {
     return src_op(rsrc, seal_pause_src);
@@ -590,7 +638,8 @@ pause_src(VALUE rsrc)
  * change its state to State::STOPPED. Applying to an initial or stopped
  * source has no effect. Resets the sampling offset.
  */
-static VALUE
+static
+VALUE
 stop_src(VALUE rsrc)
 {
     return src_op(rsrc, seal_stop_src);
@@ -605,7 +654,8 @@ stop_src(VALUE rsrc)
  * source has no effect. The sampling offset will be reset to the beginning.
  * Other attributes are preserved.
  */
-static VALUE
+static
+VALUE
 rewind_src(VALUE rsrc)
 {
     return src_op(rsrc, seal_rewind_src);
@@ -620,7 +670,8 @@ rewind_src(VALUE rsrc)
  * and the source state to State::STOPPED. Will not free the associated buffer
  * or stream.
  */
-static VALUE
+static
+VALUE
 detach_src_audio(VALUE rsrc)
 {
     return src_op(rsrc, seal_detach_src_audio);
@@ -635,7 +686,8 @@ detach_src_audio(VALUE rsrc)
  * or stopped states and that are not of streaming type. If successful, the
  * source will become or remain as Type::STATIC.
  */
-static VALUE
+static
+VALUE
 set_src_buf(VALUE rsrc, VALUE rbuf)
 {
     seal_buf_t* buf;
@@ -653,7 +705,8 @@ set_src_buf(VALUE rsrc, VALUE rbuf)
  *
  * Gets the buffer of _source_. The default is nil.
  */
-static VALUE
+static
+VALUE
 get_src_buf(VALUE rsrc)
 {
     return rb_iv_get(rsrc, "@buffer");
@@ -674,7 +727,8 @@ get_src_buf(VALUE rsrc)
  * call returns; after the queue starts to be played, #update should be called
  * to refill the queue.
  */
-static VALUE
+static
+VALUE
 set_src_stream(VALUE rsrc, VALUE rstream)
 {
     seal_stream_t* stream;
@@ -692,7 +746,8 @@ set_src_stream(VALUE rsrc, VALUE rstream)
  *
  * Gets the stream of _source_. The default is nil.
  */
-static VALUE
+static
+VALUE
 get_src_stream(VALUE rsrc)
 {
     return rb_iv_get(rsrc, "@stream");
@@ -706,7 +761,8 @@ get_src_stream(VALUE rsrc)
  * before the end of the stream is reached. Does nothing if _source_ is not a
  * streaming source. Also does nothing if auto update is on.
  */
-static VALUE update_src(VALUE rsrc)
+static
+VALUE update_src(VALUE rsrc)
 {
     return src_op(rsrc, seal_update_src);
 }
@@ -718,7 +774,8 @@ static VALUE update_src(VALUE rsrc)
  * Sets the position of _source_ in a right-handed Cartesian coordinate
  * system. Use of NaN and infinity is undefined. 
  */
-static VALUE
+static
+VALUE
 set_src_pos(VALUE rsrc, VALUE value)
 {
     return set_obj_3float(rsrc, value, seal_set_src_pos);
@@ -730,7 +787,8 @@ set_src_pos(VALUE rsrc, VALUE value)
  *
  * Gets the position of _source_. The default is ( 0.0, 0.0, 0.0 ).
  */
-static VALUE
+static
+VALUE
 get_src_pos(VALUE rsrc)
 {
     return get_obj_3float(rsrc, seal_get_src_pos);
@@ -745,7 +803,8 @@ get_src_pos(VALUE rsrc)
  * factor used during the Doppler effect emulation. Use of NaN is undefined.
  *
  */
-static VALUE
+static
+VALUE
 set_src_vel(VALUE rsrc, VALUE value)
 {
     return set_obj_3float(rsrc, value, seal_set_src_vel);
@@ -757,7 +816,8 @@ set_src_vel(VALUE rsrc, VALUE value)
  *
  * Gets the velocity of _source_. The default is ( 0.0, 0.0, 0.0 ).
  */
-static VALUE
+static
+VALUE
 get_src_vel(VALUE rsrc)
 {
     return get_obj_3float(rsrc, seal_get_src_vel);
@@ -771,7 +831,8 @@ get_src_vel(VALUE rsrc)
  * reduction by 1/2 means a pitch shift of -12 semitones; each doubling means
  * a pitch shift of 12 semitones. Use of 0.0 is undefined.
  */
-static VALUE
+static
+VALUE
 set_src_pitch(VALUE rsrc, VALUE value)
 {
     return set_obj_float(rsrc, value, seal_set_src_pitch);
@@ -783,7 +844,8 @@ set_src_pitch(VALUE rsrc, VALUE value)
  *
  * Gets the pitch of _source_. The default is 1.0.
  */
-static VALUE
+static
+VALUE
 get_src_pitch(VALUE rsrc)
 {
     return get_obj_float(rsrc, seal_get_src_pitch);
@@ -796,7 +858,8 @@ get_src_pitch(VALUE rsrc)
  * Sets the scalar amplitude multiplier of _source_. 1.0 means that the sound
  * is unattenuated; 0.5 means an attenuation of 6 dB; 0.0 means silence.
  */
-static VALUE
+static
+VALUE
 set_src_gain(VALUE rsrc, VALUE value)
 {
     return set_obj_float(rsrc, value, seal_set_src_gain);
@@ -808,7 +871,8 @@ set_src_gain(VALUE rsrc, VALUE value)
  *
  * Gets the gain of _source_. The default is 1.0.
  */
-static VALUE
+static
+VALUE
 get_src_gain(VALUE rsrc)
 {
     return get_obj_float(rsrc, seal_get_src_gain);
@@ -823,7 +887,8 @@ get_src_gain(VALUE rsrc)
  * nothing. If auto update is disabled after it is enabled, it will take
  * effect the next time the source gets played.
  */
-static VALUE
+static
+VALUE
 set_src_auto(VALUE rsrc, VALUE value)
 {
     return set_obj_char(rsrc, value, seal_set_src_auto);
@@ -835,7 +900,8 @@ set_src_auto(VALUE rsrc, VALUE value)
  *
  * Determines if _source_ is automatically updated. The default is true.
  */
-static VALUE
+static
+VALUE
 is_src_auto(VALUE rsrc)
 {
     return get_obj_char(rsrc, seal_is_src_auto);
@@ -848,7 +914,8 @@ is_src_auto(VALUE rsrc)
  * Sets whether _source_'s position, velocity, cone and direction are all
  * relative to the listener position.
  */
-static VALUE
+static
+VALUE
 set_src_relative(VALUE rsrc, VALUE value)
 {
     return set_obj_char(rsrc, value, seal_set_src_relative);
@@ -860,7 +927,8 @@ set_src_relative(VALUE rsrc, VALUE value)
  *
  * Determines if _source_ is relative. The default is false.
  */
-static VALUE
+static
+VALUE
 is_src_relative(VALUE rsrc)
 {
     return get_obj_char(rsrc, seal_is_src_relative);
@@ -874,7 +942,8 @@ is_src_relative(VALUE rsrc)
  * never enter State::STOPPED; it will immediate enter State::INITIAL and then
  * State::Playing after it reaches the end of the last buffer.
  */
-static VALUE
+static
+VALUE
 set_src_looping(VALUE rsrc, VALUE value)
 {
     return set_obj_char(rsrc, value, seal_set_src_looping);
@@ -886,7 +955,8 @@ set_src_looping(VALUE rsrc, VALUE value)
  *
  * Determines if _source_ is looping. The default is false (0).
  */
-static VALUE
+static
+VALUE
 is_src_looping(VALUE rsrc)
 {
     return get_obj_char(rsrc, seal_is_src_looping);
@@ -906,7 +976,8 @@ is_src_looping(VALUE rsrc)
  * interval [2, 127]; an out-of-bound value will be adjusted to the closest
  * bound automatically.
  */
-static VALUE
+static
+VALUE
 set_src_queue_size(VALUE rsrc, VALUE value)
 {
     return set_obj_float(rsrc, value, seal_set_src_queue_size);
@@ -918,7 +989,8 @@ set_src_queue_size(VALUE rsrc, VALUE value)
  *
  * Gets the size, in byte, of _source_'s streaming queue. The default is 3.
  */
-static VALUE
+static
+VALUE
 get_src_queue_size(VALUE rsrc)
 {
     return get_obj_float(rsrc, seal_get_src_queue_size);
@@ -935,7 +1007,8 @@ get_src_queue_size(VALUE rsrc)
  * \[9216, 16773120] and must be a multiple of 9216; non-multiple value will be
  * adjusted to the closest smaller multiple automatically.
  */
-static VALUE
+static
+VALUE
 set_src_chunk_size(VALUE rsrc, VALUE value)
 {
     return set_obj_int(rsrc, value, seal_set_src_chunk_size);
@@ -948,7 +1021,8 @@ set_src_chunk_size(VALUE rsrc, VALUE value)
  * Gets the size, in byte, of _source_'s streaming chunk. The default is
  * 36864.
  */
-static VALUE
+static
+VALUE
 get_src_chunk_size(VALUE rsrc)
 {
     return get_obj_int(rsrc, seal_get_src_chunk_size);
@@ -959,7 +1033,8 @@ get_src_chunk_size(VALUE rsrc)
  *
  * Gets the type of _source_.
  */
-static VALUE
+static
+VALUE
 get_src_type(VALUE rsrc)
 {
     seal_src_type_t type;
@@ -981,7 +1056,8 @@ get_src_type(VALUE rsrc)
  *
  * Gets the state of _source_.
  */
-static VALUE
+static
+VALUE
 get_src_state(VALUE rsrc)
 {
     seal_src_state_t state;
@@ -1005,7 +1081,8 @@ get_src_state(VALUE rsrc)
  *
  * Loads the specified reverb paramter preset into _reverb_. 
  */
-static VALUE
+static
+VALUE
 load_rvb(VALUE rrvb, VALUE rpreset)
 {
     seal_rvb_t* rvb;
@@ -1024,7 +1101,8 @@ load_rvb(VALUE rrvb, VALUE rpreset)
  * Initializes a new reverb effect. If a preset is specified, initializes
  * the reverb object to load the preset.
  */
-static VALUE
+static
+VALUE
 init_rvb(int argc, VALUE* argv, VALUE rrvb)
 {
     seal_rvb_t* rvb;
@@ -1048,7 +1126,8 @@ init_rvb(int argc, VALUE* argv, VALUE rrvb)
  * density controls the coloration of the late reverb. The Lower the value,
  * the more coloration.
  */
-static VALUE
+static
+VALUE
 set_src_density(VALUE rrvb, VALUE value)
 {
     return set_obj_float(rrvb, value, seal_set_rvb_density);
@@ -1060,7 +1139,8 @@ set_src_density(VALUE rrvb, VALUE value)
  *
  * Gets the density of _reverb_. The default is 1.0.
  */
-static VALUE
+static
+VALUE
 get_rvb_density(VALUE rrvb)
 {
     return get_obj_float(rrvb, seal_get_rvb_density);
@@ -1076,7 +1156,8 @@ get_rvb_density(VALUE rrvb)
  * noticeable with percussive sound sources. If you set a diffusion value of
  * 0.0, the later reverberation sounds like a succession of distinct echoes.
  */
-static VALUE
+static
+VALUE
 set_rvb_diffusion(VALUE rrvb, VALUE value)
 {
     return set_obj_float(rrvb, value, seal_set_rvb_diffusion);
@@ -1088,7 +1169,8 @@ set_rvb_diffusion(VALUE rrvb, VALUE value)
  *
  * Gets the diffusion of _reverb_. The default is 1.0.
  */
-static VALUE
+static
+VALUE
 get_rvb_diffusion(VALUE rrvb)
 {
     return get_obj_float(rrvb, seal_get_rvb_diffusion);
@@ -1105,7 +1187,8 @@ get_rvb_diffusion(VALUE rrvb)
  * maximum amount of reflections and reverberation added to the final sound
  * mix.
  */
-static VALUE
+static
+VALUE
 set_rvb_gain(VALUE rrvb, VALUE value)
 {
     return set_obj_float(rrvb, value, seal_set_rvb_gain);
@@ -1117,7 +1200,8 @@ set_rvb_gain(VALUE rrvb, VALUE value)
  *
  * Gets the gain of _reverb_. The default is 0.32f.
  */
-static VALUE
+static
+VALUE
 get_rvb_gain(VALUE rrvb)
 {
     return get_obj_float(rrvb, seal_get_rvb_gain);
@@ -1134,7 +1218,8 @@ get_rvb_gain(VALUE rrvb)
  * reflected sound of all sound sources feeding the particular instance of the
  * reverb effect.
  */
-static VALUE
+static
+VALUE
 set_rvb_hfgain(VALUE rrvb, VALUE value)
 {
     return set_obj_float(rrvb, value, seal_set_rvb_hfgain);
@@ -1146,7 +1231,8 @@ set_rvb_hfgain(VALUE rrvb, VALUE value)
  *
  * Gets the high-frequency gain of _reverb_. The default is 0.89f.
  */
-static VALUE
+static
+VALUE
 get_rvb_hfgain(VALUE rrvb)
 {
     return get_obj_float(rrvb, seal_get_rvb_hfgain);
@@ -1160,7 +1246,8 @@ get_rvb_hfgain(VALUE rrvb)
  * from a small room with very dead surfaces to a large room with very live
  * surfaces.
  */
-static VALUE
+static
+VALUE
 set_rvb_decay_time(VALUE rrvb, VALUE value)
 {
     return set_obj_float(rrvb, value, seal_set_rvb_decay_time);
@@ -1172,7 +1259,8 @@ set_rvb_decay_time(VALUE rrvb, VALUE value)
  *
  * Gets the decay time of _reverb_. The default is 1.49f.
  */
-static VALUE
+static
+VALUE
 get_rvb_decay_time(VALUE rrvb)
 {
     return get_obj_float(rrvb, seal_get_rvb_decay_time);
@@ -1193,7 +1281,8 @@ get_rvb_decay_time(VALUE rrvb)
  * shorter than the decay time of the low frequencies. You hear a more natural
  * reverberation.
  */
-static VALUE
+static
+VALUE
 set_rvb_hfdecay_ratio(VALUE rrvb, VALUE value)
 {
     return set_obj_float(rrvb, value, seal_set_rvb_hfdecay_ratio);
@@ -1205,7 +1294,8 @@ set_rvb_hfdecay_ratio(VALUE rrvb, VALUE value)
  *
  * Gets the high-frequency decay ratio of _reverb_. The default is 0.83f.
  */
-static VALUE
+static
+VALUE
 get_rvb_hfdecay_ratio(VALUE rrvb)
 {
     return get_obj_float(rrvb, seal_get_rvb_hfdecay_ratio);
@@ -1229,7 +1319,8 @@ get_rvb_hfdecay_ratio(VALUE rrvb)
  * while reducing the value of the late gain property, which controls later
  * reflections.
  */
-static VALUE
+static
+VALUE
 set_rvb_reflections_gain(VALUE rrvb, VALUE value)
 {
     return set_obj_float(rrvb, value, seal_set_rvb_reflections_gain);
@@ -1241,7 +1332,8 @@ set_rvb_reflections_gain(VALUE rrvb, VALUE value)
  *
  * Gets the reflections gain of _reverb_. The default is 0.05f.
  */
-static VALUE
+static
+VALUE
 get_rvb_reflections_gain(VALUE rrvb)
 {
     return get_obj_float(rrvb, seal_get_rvb_reflections_gain);
@@ -1257,7 +1349,8 @@ get_rvb_reflections_gain(VALUE rrvb)
  * reduce or increase this delay to simulate closer or more distant reflective
  * surfaces and therefore control the perceived size of the room.
  */
-static VALUE
+static
+VALUE
 set_rvb_reflections_delay(VALUE rrvb, VALUE value)
 {
     return set_obj_float(rrvb, value, seal_set_rvb_reflections_delay);
@@ -1269,7 +1362,8 @@ set_rvb_reflections_delay(VALUE rrvb, VALUE value)
  *
  * Gets the reflections delay of _reverb_. The default is 0.007f.
  */
-static VALUE
+static
+VALUE
 get_rvb_reflections_delay(VALUE rrvb)
 {
     return get_obj_float(rrvb, seal_get_rvb_reflections_delay);
@@ -1288,7 +1382,8 @@ get_rvb_reflections_delay(VALUE rrvb)
  * averaged square of the amplitude) of the late reverberation remains
  * constant.
  */
-static VALUE
+static
+VALUE
 set_rvb_late_gain(VALUE rrvb, VALUE value)
 {
     return set_obj_float(rrvb, value, seal_set_rvb_late_gain);
@@ -1300,7 +1395,8 @@ set_rvb_late_gain(VALUE rrvb, VALUE value)
  *
  * Gets the late gain of _reverb_. The default is 1.26f.
  */
-static VALUE
+static
+VALUE
 get_rvb_late_gain(VALUE rrvb)
 {
     return get_obj_float(rrvb, seal_get_rvb_late_gain);
@@ -1315,7 +1411,8 @@ get_rvb_late_gain(VALUE rrvb)
  * the initial reflection (the first of the early reflections). Reducing or
  * increasing late delay is useful for simulating a smaller or larger room.
  */
-static VALUE
+static
+VALUE
 set_rvb_late_delay(VALUE rrvb, VALUE value)
 {
     return set_obj_float(rrvb, value, seal_set_rvb_late_delay);
@@ -1327,7 +1424,8 @@ set_rvb_late_delay(VALUE rrvb, VALUE value)
  *
  * Gets the late delay of _reverb_. The default is 0.011f.
  */
-static VALUE
+static
+VALUE
 get_rvb_late_delay(VALUE rrvb)
 {
     return get_obj_float(rrvb, seal_get_rvb_late_delay);
@@ -1346,7 +1444,8 @@ get_rvb_late_delay(VALUE rrvb)
  * a more absorbent medium (more humidity in the air, for example); raising
  * the value simulates a less absorbent medium (dry desert air, for example).
  */
-static VALUE
+static
+VALUE
 set_rvb_air_absorbtion_hfgain(VALUE rrvb, VALUE value)
 {
     return set_obj_float(rrvb, value, seal_set_rvb_air_absorbtion_hfgain);
@@ -1358,7 +1457,8 @@ set_rvb_air_absorbtion_hfgain(VALUE rrvb, VALUE value)
  *
  * Gets the air absorbtion high-frequency gain of _reverb_. The default is
  */
-static VALUE
+static
+VALUE
 get_rvb_air_absorbtion_hfgain(VALUE rrvb)
 {
     return get_obj_float(rrvb, seal_get_rvb_air_absorbtion_hfgain);
@@ -1390,7 +1490,8 @@ get_rvb_air_absorbtion_hfgain(VALUE rrvb)
  * automatic control so you can exaggerate or replace the default
  * automatically-controlled rolloff.
  */
-static VALUE
+static
+VALUE
 set_rvb_room_rolloff_factor(VALUE rrvb, VALUE value)
 {
     return set_obj_float(rrvb, value, seal_set_rvb_room_rolloff_factor);
@@ -1402,7 +1503,8 @@ set_rvb_room_rolloff_factor(VALUE rrvb, VALUE value)
  *
  * Gets the room rolloff factor of _reverb_. The default is 0.0.
  */
-static VALUE
+static
+VALUE
 get_rvb_room_rolloff_factor(VALUE rrvb)
 {
     return get_obj_float(rrvb, seal_get_rvb_room_rolloff_factor);
@@ -1422,7 +1524,8 @@ get_rvb_room_rolloff_factor(VALUE rrvb)
  * frequencies. If this flag is set to false, high-frequency decay time isn't
  * automatically limited.
  */
-static VALUE
+static
+VALUE
 set_rvb_hfdecay_limited(VALUE rrvb, VALUE value)
 {
     return set_obj_char(rrvb, value, seal_set_rvb_hfdecay_limited);
@@ -1435,7 +1538,8 @@ set_rvb_hfdecay_limited(VALUE rrvb, VALUE value)
  * Determines if the high-frequency decay of _reverb_ is limited. The default
  * is true.
  */
-static VALUE
+static
+VALUE
 is_rvb_hfdecay_limited(VALUE rrvb)
 {
     return get_obj_char(rrvb, seal_is_rvb_hfdecay_limited);
@@ -1448,7 +1552,8 @@ is_rvb_hfdecay_limited(VALUE rrvb)
  * Fills _effect_slot_ with _effect_, then _effect_slot_ will become ready to
  * feed sources. Pass nil to unfill the slot.
  */
-static VALUE
+static
+VALUE
 set_efs_effect(VALUE rslot, VALUE reffect)
 {
     void* effect;
@@ -1474,7 +1579,8 @@ set_efs_effect(VALUE rslot, VALUE reffect)
  * Initializes a new effect slot. If an effect object is specified,
  * initializes the effect slot to have that effect object associated.
  */
-static VALUE
+static
+VALUE
 init_efs(int argc, VALUE* argv, VALUE rslot)
 {
     VALUE reffect;
@@ -1493,7 +1599,8 @@ init_efs(int argc, VALUE* argv, VALUE rslot)
  *
  * Gets the effect object in _effect_slot_. The default is nil.
  */
-static VALUE
+static
+VALUE
 get_efs_effect(VALUE rslot)
 {
     return rb_iv_get(rslot, "@effect");
@@ -1507,7 +1614,8 @@ get_efs_effect(VALUE rslot)
  * Later calls to this function with a different effect slot and the same
  * index will override the old effect slot association.
  */
-static VALUE
+static
+VALUE
 feed_efs(VALUE rslot, VALUE rindex, VALUE rsrc)
 {
     seal_src_t* src;
@@ -1525,7 +1633,8 @@ feed_efs(VALUE rslot, VALUE rindex, VALUE rsrc)
  * Sets the output level of _effect_slot_ in the interval [0.0, 1.0]. A
  * value of 0.0 mutes the output.
  */
-static VALUE
+static
+VALUE
 set_efs_gain(VALUE refs, VALUE value)
 {
     return set_obj_float(refs, value, seal_set_efs_gain);
@@ -1538,7 +1647,8 @@ set_efs_gain(VALUE refs, VALUE value)
  * Gets the output level of _effect_slot_ in the interval. The default is
  * 1.0.
  */
-static VALUE
+static
+VALUE
 get_efs_gain(VALUE refs)
 {
     return get_obj_float(refs, seal_get_efs_gain);
@@ -1551,7 +1661,8 @@ get_efs_gain(VALUE refs)
  * Sets whether the effect should have automatic adjustments based on the
  * physical positions of the sources and the listener.
  */
-static VALUE
+static
+VALUE
 set_efs_auto(VALUE refs, VALUE value)
 {
     return set_obj_char(refs, value, seal_set_efs_auto);
@@ -1564,7 +1675,8 @@ set_efs_auto(VALUE refs, VALUE value)
  * Determines if the effect is automatically adjusted. The default is true
  * (nonzero).
  */
-static VALUE
+static
+VALUE
 is_efs_auto(VALUE refs)
 {
     return get_obj_char(refs, seal_is_efs_auto);
@@ -1576,7 +1688,8 @@ is_efs_auto(VALUE refs)
  *
  * Gets the singleton Listener instance.
  */
-static VALUE
+static
+VALUE
 get_listener()
 {
     return rb_const_get(mSeal, rb_intern("LISTENER"));
@@ -1590,7 +1703,8 @@ get_listener()
  * to all the sources. 1.0 means that the sound is unattenuated; 0.5 means
  * an attenuation of 6 dB; 0.0 means silence.
  */
-static VALUE
+static
+VALUE
 set_listener_gain(VALUE rlistener, VALUE value)
 {
     return set_listener_float(value, seal_set_listener_gain);
@@ -1602,7 +1716,8 @@ set_listener_gain(VALUE rlistener, VALUE value)
  *
  * Gets the gain of the listener. The default is 1.0.
  */
-static VALUE
+static
+VALUE
 get_listener_gain(VALUE rlistener, VALUE value)
 {
     return get_listener_float(seal_get_listener_gain);
@@ -1615,7 +1730,8 @@ get_listener_gain(VALUE rlistener, VALUE value)
  * Sets the position of the listener in a right-handed Cartesian coordinate
  * system. Use of NaN and infinity is undefined.
  */
-static VALUE
+static
+VALUE
 set_listener_pos(VALUE rlistener, VALUE value)
 {
     return set_listener_3float(value, seal_set_listener_pos);
@@ -1627,7 +1743,8 @@ set_listener_pos(VALUE rlistener, VALUE value)
  *
  * Gets the position of the listener. The default is ( 0.0, 0.0, 0.0 ).
  */
-static VALUE
+static
+VALUE
 get_listener_pos(VALUE rlistener, VALUE value)
 {
     return get_listener_3float(seal_get_listener_pos);
@@ -1641,7 +1758,8 @@ get_listener_pos(VALUE rlistener, VALUE value)
  * system. The velocity of the listener does not affect its position but is a
  * factor used during the Doppler effect emulation.
  */
-static VALUE
+static
+VALUE
 set_listener_vel(VALUE rlistener, VALUE value)
 {
     return set_listener_3float(value, seal_set_listener_vel);
@@ -1654,7 +1772,8 @@ set_listener_vel(VALUE rlistener, VALUE value)
  *
  * Gets the velocity of the listener. The default is ( 0.0, 0.0, 0.0 ).
  */
-static VALUE
+static
+VALUE
 get_listener_vel(VALUE rlistener, VALUE value)
 {
     return get_listener_3float(seal_get_listener_vel);
@@ -1672,7 +1791,8 @@ get_listener_vel(VALUE rlistener, VALUE value)
  * must be linearly independent, must not be NaN and must not be normalized.
  * Otherwise, the operation is undefined.
  */
-static VALUE
+static
+VALUE
 set_listener_orien(VALUE rlistener, VALUE rarr)
 {
     float orien[6];
@@ -1701,7 +1821,8 @@ set_listener_orien(VALUE rlistener, VALUE rarr)
  *      # up_z references the z component of the `up' vector
  *      (at_x, at_y, ay_z), (up_x, up_y, up_z) = Seal.listener.orientation
  */
-static VALUE
+static
+VALUE
 get_listener_orien(VALUE rlistener)
 {
     float tuple[6];
@@ -1716,7 +1837,8 @@ get_listener_orien(VALUE rlistener)
     return rb_ary_new4(2, orien);
 }
 
-static void
+static
+void
 singletonify(VALUE klass)
 {
     rb_undef_alloc_func(klass);
@@ -1735,7 +1857,8 @@ singletonify(VALUE klass)
  * The Seal Exception class.
  */
 
-static void
+static
+void
 bind_core(void)
 {
     mSeal = rb_define_module("Seal");
@@ -1764,7 +1887,8 @@ bind_core(void)
  * effect which can be efficiently loaded to memory at once. Streams, on the
  * other hand, are more suitable for long audio such as background music.
  */
-static void
+static
+void
 bind_buf(void)
 {
     VALUE cBuffer = rb_define_class_under(mSeal, "Buffer", rb_cObject);
@@ -1784,7 +1908,8 @@ bind_buf(void)
  * Streams are used by streaming sources to avoid loading big audio into
  * memory. It is the front end for various decoders.
  */
-static void
+static
+void
 bind_stream(void)
 {
     VALUE cStream = rb_define_class_under(mSeal, "Stream", rb_cObject);
@@ -1817,7 +1942,8 @@ bind_stream(void)
  *
  * A collection of Source types.
  */
-static void
+static
+void
 bind_src(void)
 {
     VALUE cSource = rb_define_class_under(mSeal, "Source", rb_cObject);
@@ -1883,7 +2009,8 @@ bind_src(void)
  * A Reverb object is a set of parameters that define a reverberation effect.
  * Effect objects can be put into an effect slot for sources to use.
  */
-static void
+static
+void
 bind_rvb(void)
 {
     VALUE cReverb = rb_define_class_under(mSeal, "Reverb", rb_cObject);
@@ -2103,7 +2230,8 @@ bind_rvb(void)
  * EffectSlot is the container type for effects. A source can mix an effect in
  * an effect slot to filter the output sound.
  */
-static void
+static
+void
 bind_efs(void)
 {
     VALUE cEffectSlot = rb_define_class_under(mSeal, "EffectSlot", rb_cObject);
@@ -2126,7 +2254,8 @@ bind_efs(void)
  * Listener has a singleton instance representing the sole listener who hears
  * the sound.
  */
-static void
+static
+void
 bind_listener(void)
 {
     VALUE cListener = rb_define_class_under(mSeal, "Listener", rb_cObject);

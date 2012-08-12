@@ -19,13 +19,15 @@ enum
 };
 
 /* Helpers that convert raw bytes to little-endian 16- and 32-bit integers. */
-static uint16_t
+static
+uint16_t
 raw2le16(uint8_t* bytes)
 {
     return bytes[1] << 8 | bytes[0];
 }
 
-static uint32_t
+static
+uint32_t
 raw2le32(uint8_t* bytes)
 {
     return bytes[3] << 24 | bytes[2] << 16 | raw2le16(bytes);
