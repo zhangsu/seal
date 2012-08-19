@@ -980,7 +980,7 @@ static
 VALUE
 set_src_queue_size(VALUE rsrc, VALUE value)
 {
-    return set_obj_float(rsrc, value, seal_set_src_queue_size);
+    return set_obj_int(rsrc, value, seal_set_src_queue_size);
 }
 
 /*
@@ -993,7 +993,7 @@ static
 VALUE
 get_src_queue_size(VALUE rsrc)
 {
-    return get_obj_float(rsrc, seal_get_src_queue_size);
+    return get_obj_int(rsrc, seal_get_src_queue_size);
 }
 
 /*
