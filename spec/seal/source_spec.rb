@@ -23,7 +23,7 @@ describe Source do
     end
 
     it 'has a gain of 1.0' do
-      source.gain.should be_within(0.01).of(1.0)
+      source.gain.should be_within(TOLERANCE).of(1.0)
     end
 
     it 'is not looping' do
@@ -31,7 +31,7 @@ describe Source do
     end
 
     it 'has a pitch of 1.0' do
-      source.pitch.should be_within(0.01).of(1.0)
+      source.pitch.should be_within(TOLERANCE).of(1.0)
     end
 
     it 'has a position of (0,0,0)' do
