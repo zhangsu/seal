@@ -1964,8 +1964,8 @@ bind_src(void)
     rb_define_method(cSource, "update", update_src, 0);
     rb_define_method(cSource, "position=", set_src_pos, 1);
     rb_define_method(cSource, "position", get_src_pos, 0);
-    rb_define_method(cSource, "velocity=", set_src_pos, 1);
-    rb_define_method(cSource, "velocity", get_src_pos, 0);
+    rb_define_method(cSource, "velocity=", set_src_vel, 1);
+    rb_define_method(cSource, "velocity", get_src_vel, 0);
     rb_define_method(cSource, "pitch=", set_src_pitch, 1);
     rb_define_method(cSource, "pitch", get_src_pitch, 0);
     rb_define_method(cSource, "gain=", set_src_gain, 1);
