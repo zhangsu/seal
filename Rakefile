@@ -183,7 +183,7 @@ module FileUtils
 end
 
 task :yard do
-  sh 'yardoc src/*.c src/seal'
+  sh 'yardoc src/rubyext.c'
 end
 
 rule /^demo:/ do |r|
