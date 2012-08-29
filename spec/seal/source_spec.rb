@@ -1,12 +1,6 @@
 require 'spec_helper'
 
 describe Source do
-  around :each do |example|
-    Seal.startup
-    example.run
-    Seal.cleanup
-  end
-
   describe 'default attributes' do
     let(:source) { Source.new }
 

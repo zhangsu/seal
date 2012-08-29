@@ -14,10 +14,26 @@ module CustomMatchers
   end
 end
 
+module Helpers
+  def fresh_start
+    before :all do
+      Seal.startup
+    end
+
+    after :all do
+      Seal.cleanup
+    end
+  end
+end
+
 require 'seal'
 include Seal
 TOLERANCE = 0.00001
 
 RSpec.configure do |config|
+  include Helpers
   config.include CustomMatchers
+  config.include Helpers
+
+  config.instance_eval &:fresh_start
 end
