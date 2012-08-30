@@ -973,7 +973,7 @@ is_src_looping(VALUE rsrc)
  * (double buffering) may still be inefficient in CPU-, and I/O-bound
  * situations while triple, or even quad buffering generally produces better
  * sound quality in non-memory-bound situations. _fixnum_ must be in the
- * interval [2, 127]; an out-of-bound value will be adjusted to the closest
+ * interval [2, 63]; an out-of-bound value will be adjusted to the closest
  * bound automatically.
  */
 static

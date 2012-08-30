@@ -165,13 +165,13 @@ seal_err_t seal_detach_src_audio(seal_src_t*);
  * maintains a multiple buffering mechanism when streaming the audio data.
  * Multiple bufferring allows buffers in the queue to be processed while the
  * one at the front of the queue is still being played. A queue of size 2
- * (double buffering) may still be inefficient in CPU-, and I/O-bound
+ * (double buffering) may still be inefficient in CPU- and I/O-bound
  * situations while triple, or even quad buffering generally produces better
  * sound quality in non-memory-bound situations.
  *
  * @param src   the source to set the queue size of
- * @param size  the queue size in the interval [2, 127]; an out-of-bound
- *              value will be adjusted to the closest bound automatically
+ * @param size  the queue size in the interval [2, 63]; an out-of-bound value
+ *              will be adjusted to the closest bound automatically
  */
 seal_err_t seal_set_src_queue_size(seal_src_t*, size_t);
 
