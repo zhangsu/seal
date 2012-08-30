@@ -9,7 +9,7 @@ describe Listener do
     end
 
     it 'has a default velocity of (0,0,0)' do
-      LISTENER.position.should eq [0, 0, 0]
+      LISTENER.velocity.should eq [0, 0, 0]
     end
 
     it 'has a default orientation of ((0,0,-1),(0,1,0))' do
