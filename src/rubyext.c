@@ -855,8 +855,9 @@ get_src_pitch(VALUE rsrc)
  *  call-seq:
  *      source.gain = flt   -> [flt, flt, flt]
  *
- * Sets the scalar amplitude multiplier of _source_. 1.0 means that the sound
- * is unattenuated; 0.5 means an attenuation of 6 dB; 0.0 means silence.
+ * Sets the scalar amplitude multiplier of _source_ in the interval
+ * [0.0, +inf.). 1.0 means that the sound is unattenuated; 0.5 means an
+ * attenuation of 6 dB; 0.0 means silence.
  */
 static
 VALUE
@@ -1700,7 +1701,7 @@ get_listener()
  *
  * Sets the master scalar amplitude multiplier of the listener which applies
  * to all the sources. 1.0 means that the sound is unattenuated; 0.5 means
- * an attenuation of 6 dB; 0.0 means silence.
+ * an attenuation of 6 dB; 0.0 means silence. The valid range is [0.0, +inf.).
  */
 static
 VALUE
