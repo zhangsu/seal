@@ -99,5 +99,17 @@ describe Source do
       expect { @source.chunk_size = 16773121 }.to raise_error SealError
       expect { @source.chunk_size = 234923428 }.to raise_error SealError
     end
+
+    it 'can change its position' do
+      position = [0.2, 45.3, -4.5]
+      @source.position = position
+      @source.position.should be_each_within(TOLERANCE).of position
+    end
+
+    it 'can change its velocity' do
+      velocity = [-3.2, 13.445, 0]
+      @source.velocity = velocity
+      @source.velocity.should be_each_within(TOLERANCE).of velocity
+    end
   end
 end
