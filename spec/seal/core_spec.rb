@@ -11,7 +11,7 @@ describe Seal do
   end
 
   it 'has only one instance of Listener' do
-    Seal.listener.should == Seal.listener
+    Seal.listener.should be Seal.listener
     Seal.listener.is_a?(Listener).should be_true
     expect { Seal::Listener.new }.to raise_error NoMethodError
     expect { Seal::Listener.allocate }.to raise_error TypeError

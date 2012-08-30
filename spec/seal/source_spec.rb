@@ -15,7 +15,7 @@ describe Source do
     end
 
     it 'has a chunk size of 36864' do
-      @source.chunk_size.should == 36864
+      @source.chunk_size.should eq 36864
     end
 
     it 'has a gain of 1.0' do
@@ -31,11 +31,11 @@ describe Source do
     end
 
     it 'has a position of (0,0,0)' do
-      @source.position.should == [0, 0, 0]
+      @source.position.should eq [0, 0, 0]
     end
 
     it 'has a queue size of 3' do
-      @source.queue_size.should == 3
+      @source.queue_size.should eq 3
     end
 
     it 'is not relative' do
@@ -43,7 +43,7 @@ describe Source do
     end
 
     it 'is in the initial state' do
-      @source.state.should == Source::State::INITIAL
+      @source.state.should eq Source::State::INITIAL
     end
 
     it 'has no stream' do
@@ -51,11 +51,11 @@ describe Source do
     end
 
     it 'has un undertermined type' do
-      @source.type.should == Source::Type::UNDETERMINED
+      @source.type.should eq Source::Type::UNDETERMINED
     end
 
     it 'has a velocity of (0,0,0)' do
-      @source.velocity.should == [0, 0, 0]
+      @source.velocity.should eq [0, 0, 0]
     end
   end
 
@@ -69,14 +69,14 @@ describe Source do
       expect { @source.queue_size = 0 }.to raise_error SealError
       expect { @source.queue_size = 1 }.to raise_error SealError
       @source.queue_size = 2
-      @source.queue_size.should == 2
+      @source.queue_size.should eq 2
       @source.queue_size = 32
-      @source.queue_size.should == 32
+      @source.queue_size.should eq 32
       @source.queue_size = 63
-      @source.queue_size.should == 63
+      @source.queue_size.should eq 63
       expect { @source.queue_size = 64 }.to raise_error SealError
       expect { @source.queue_size = 1203 }.to raise_error SealError
-      @source.queue_size.should == 63
+      @source.queue_size.should eq 63
     end
 
     it 'can have a auto-adjusting chunk size in [9216, 16773120]' do
@@ -84,18 +84,18 @@ describe Source do
       expect { @source.chunk_size = 432 }.to raise_error SealError
       expect { @source.chunk_size = 9215 }.to raise_error SealError
       @source.chunk_size = 9216
-      @source.chunk_size.should == 9216
+      @source.chunk_size.should eq 9216
       # It should be automatically adjusted to a smaller multiple of 9216.
       @source.chunk_size = 9217
-      @source.chunk_size.should == 9216
+      @source.chunk_size.should eq 9216
       @source.chunk_size = 32768
-      @source.chunk_size.should == 27648
+      @source.chunk_size.should eq 27648
       @source.chunk_size = 294912
-      @source.chunk_size.should == 294912
+      @source.chunk_size.should eq 294912
       @source.chunk_size = 16773119
-      @source.chunk_size.should == 16763904
+      @source.chunk_size.should eq 16763904
       @source.chunk_size = 16773120
-      @source.chunk_size.should == 16773120
+      @source.chunk_size.should eq 16773120
       expect { @source.chunk_size = 16773121 }.to raise_error SealError
       expect { @source.chunk_size = 234923428 }.to raise_error SealError
     end

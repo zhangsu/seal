@@ -5,19 +5,19 @@ describe Listener do
     fresh_start
 
     it 'has a default position of (0,0,0)' do
-      LISTENER.position.should == [0, 0, 0]
+      LISTENER.position.should eq [0, 0, 0]
     end
 
     it 'has a default velocity of (0,0,0)' do
-      LISTENER.position.should == [0, 0, 0]
+      LISTENER.position.should eq [0, 0, 0]
     end
 
     it 'has a default orientation of ((0,0,-1),(0,1,0))' do
-      LISTENER.orientation.should == [[0, 0, -1], [0, 1, 0]]
+      LISTENER.orientation.should eq [[0, 0, -1], [0, 1, 0]]
     end
 
     it 'has a default gain of 1.0' do
-      LISTENER.gain.should == 1.0
+      LISTENER.gain.should eq 1.0
     end
   end
 
@@ -33,8 +33,8 @@ describe Listener do
 
   it 'sets and gets orientation' do
     LISTENER.orientation = [0, 1, 0], [3, 0, 0]
-    LISTENER.orientation[0].should == [0, 1, 0]
-    LISTENER.orientation[1].should == [3, 0, 0]
+    LISTENER.orientation[0].should eq [0, 1, 0]
+    LISTENER.orientation[1].should eq [3, 0, 0]
   end
 
   it 'can have a gain in [0, +inf.)' do
@@ -44,6 +44,6 @@ describe Listener do
     expect { LISTENER.gain = -0.1 }.to raise_error SealError
     expect { LISTENER.gain = -1.3 }.to raise_error SealError
     expect { LISTENER.gain = -3203 }.to raise_error SealError
-    LISTENER.gain.should == 10
+    LISTENER.gain.should eq 10
   end
 end
