@@ -829,7 +829,8 @@ get_src_vel(VALUE rsrc)
  *
  * Sets the pitch shift multiplier of _source_. 1.0 means identity; each
  * reduction by 1/2 means a pitch shift of -12 semitones; each doubling means
- * a pitch shift of 12 semitones. Use of 0.0 is undefined.
+ * a pitch shift of 12 semitones. Use of 0.0 is undefined. The valid range is
+ * (0.0, +inf.).
  */
 static
 VALUE
