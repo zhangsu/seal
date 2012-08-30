@@ -101,15 +101,49 @@ describe Source do
     end
 
     it 'can change its position' do
-      position = [0.2, 45.3, -4.5]
-      @source.position = position
-      @source.position.should be_each_within(TOLERANCE).of position
+      @source.position = [0.2, 45.3, -4.5]
+      @source.position.should be_each_within(TOLERANCE).of [0.2, 45.3, -4.5]
     end
 
     it 'can change its velocity' do
-      velocity = [-3.2, 13.445, 0]
-      @source.velocity = velocity
-      @source.velocity.should be_each_within(TOLERANCE).of velocity
+      @source.velocity = [-3.2, 13.445, 0]
+      @source.velocity.should be_each_within(TOLERANCE).of [-3.2, 13.445, 0]
+    end
+
+    it 'can have a pitch in (0, +inf.)' do
+      @source.pitch = 2.1903
+      expect { @source.pitch = -3.1 }.to raise_error SealError
+      @source.pitch.should be_within(TOLERANCE).of 2.1903
+    end
+
+    it 'can have a gain in [0, +inf.)' do
+      @source.gain = 3.103
+      @source.gain.should be_within(TOLERANCE).of 3.103
+      @source.gain = 0
+      expect { @source.gain = -0.4 }.to raise_error SealError
+      @source.gain.should eq 0
+    end
+
+    it 'can be relative or not relative' do
+      @source.relative = true
+      @source.relative.should be_true
+      @source.relative = false
+      @source.relative.should be_false
+      @source.relative = Object.new
+      @source.relative.should be_true
+      @source.relative = nil
+      @source.relative.should be_false
+    end
+
+    it 'can be automatic or not automatic' do
+      @source.auto = true
+      @source.auto.should be_true
+      @source.auto = false
+      @source.auto.should be_false
+      @source.auto = Object.new
+      @source.auto.should be_true
+      @source.auto = nil
+      @source.auto.should be_false
     end
   end
 end
