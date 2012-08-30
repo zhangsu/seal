@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Listener do
-  context 'initial' do
+  describe 'default attributes' do
     fresh_start
 
     it 'has a default position of (0,0,0)' do
