@@ -55,7 +55,49 @@ describe Source do
     end
 
     it 'has a velocity of (0,0,0)' do
-      source.velocity.should == [0, 0, 0]
+      @source.velocity.should == [0, 0, 0]
+    end
+  end
+
+  describe 'attributes setting and validity' do
+    before :all do
+      @source = Source.new
+    end
+
+    it 'can have a queue size in [2, 63]' do
+      expect { @source.queue_size = -130 }.to raise_error SealError
+      expect { @source.queue_size = 0 }.to raise_error SealError
+      expect { @source.queue_size = 1 }.to raise_error SealError
+      @source.queue_size = 2
+      @source.queue_size.should == 2
+      @source.queue_size = 32
+      @source.queue_size.should == 32
+      @source.queue_size = 63
+      @source.queue_size.should == 63
+      expect { @source.queue_size = 64 }.to raise_error SealError
+      expect { @source.queue_size = 1203 }.to raise_error SealError
+      @source.queue_size.should == 63
+    end
+
+    it 'can have a auto-adjusting chunk size in [9216, 16773120]' do
+      expect { @source.chunk_size = 0 }.to raise_error SealError
+      expect { @source.chunk_size = 432 }.to raise_error SealError
+      expect { @source.chunk_size = 9215 }.to raise_error SealError
+      @source.chunk_size = 9216
+      @source.chunk_size.should == 9216
+      # It should be automatically adjusted to a smaller multiple of 9216.
+      @source.chunk_size = 9217
+      @source.chunk_size.should == 9216
+      @source.chunk_size = 32768
+      @source.chunk_size.should == 27648
+      @source.chunk_size = 294912
+      @source.chunk_size.should == 294912
+      @source.chunk_size = 16773119
+      @source.chunk_size.should == 16763904
+      @source.chunk_size = 16773120
+      @source.chunk_size.should == 16773120
+      expect { @source.chunk_size = 16773121 }.to raise_error SealError
+      expect { @source.chunk_size = 234923428 }.to raise_error SealError
     end
   end
 end

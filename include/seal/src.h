@@ -170,8 +170,7 @@ seal_err_t seal_detach_src_audio(seal_src_t*);
  * sound quality in non-memory-bound situations.
  *
  * @param src   the source to set the queue size of
- * @param size  the queue size in the interval [2, 63]; an out-of-bound value
- *              will be adjusted to the closest bound automatically
+ * @param size  the queue size in the interval [2, 63]
  */
 seal_err_t seal_set_src_queue_size(seal_src_t*, size_t);
 

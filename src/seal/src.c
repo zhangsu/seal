@@ -34,15 +34,15 @@ static const size_t MAX_CHUNK_SIZE     = CHUNK_STORAGE_CAP -
                                          CHUNK_STORAGE_CAP % MIN_CHUNK_SIZE;
 
 static
-int
-limit_val(int val, int lower_bound, int upper_bound)
+seal_err_t
+check_val_limit(int val, int lower_bound, int upper_bound)
 {
     if (val < lower_bound)
-        return lower_bound;
+        return SEAL_BAD_VAL;
     else if (val > upper_bound)
-        return upper_bound;
+        return SEAL_BAD_VAL;
     else
-        return val;
+        return SEAL_OK;
 }
 
 static
@@ -451,18 +451,25 @@ start_streaming:
 seal_err_t
 seal_set_src_queue_size(seal_src_t* src, size_t size)
 {
-    src->queue_size = limit_val(size, MIN_QUEUE_SIZE, MAX_QUEUE_SIZE);
+    seal_err_t err;
 
-    return SEAL_OK;
+    err = check_val_limit(size, MIN_QUEUE_SIZE, MAX_QUEUE_SIZE);
+    if (err == SEAL_OK)
+        src->queue_size = size;
+
+    return err;
 }
 
 seal_err_t
 seal_set_src_chunk_size(seal_src_t* src, size_t size)
 {
-    src->chunk_size = limit_val(size, MIN_CHUNK_SIZE, MAX_CHUNK_SIZE)
-                      / MIN_CHUNK_SIZE * MIN_CHUNK_SIZE;
+    seal_err_t err;
 
-    return SEAL_OK;
+    err = check_val_limit(size, MIN_CHUNK_SIZE, MAX_CHUNK_SIZE);
+    if (err == SEAL_OK)
+        src->chunk_size = size / MIN_CHUNK_SIZE * MIN_CHUNK_SIZE;
+
+    return err;
 }
 
 seal_err_t

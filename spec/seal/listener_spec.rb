@@ -37,7 +37,7 @@ describe Listener do
     LISTENER.orientation[1].should == [3, 0, 0]
   end
 
-  it 'can set valid gain and get gain' do
+  it 'can have a gain in [0, +inf.)' do
     LISTENER.gain = 0.34767
     LISTENER.gain.should be_within(TOLERANCE).of 0.34767
     LISTENER.gain = 10
