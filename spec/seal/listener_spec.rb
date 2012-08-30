@@ -37,8 +37,13 @@ describe Listener do
     LISTENER.orientation[1].should == [3, 0, 0]
   end
 
-  it 'sets and gets gain' do
+  it 'can set valid gain and get gain' do
     LISTENER.gain = 0.34767
     LISTENER.gain.should be_within(TOLERANCE).of 0.34767
+    LISTENER.gain = 10
+    expect { LISTENER.gain = -0.1 }.to raise_error SealError
+    expect { LISTENER.gain = -1.3 }.to raise_error SealError
+    expect { LISTENER.gain = -3203 }.to raise_error SealError
+    LISTENER.gain.should == 10
   end
 end
