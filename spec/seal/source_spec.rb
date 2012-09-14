@@ -43,7 +43,7 @@ describe Source do
     end
 
     it 'is in the initial state' do
-      @source.state.should eq Source::State::INITIAL
+      @source.state.should be Source::State::INITIAL
     end
 
     it 'has no stream' do
@@ -51,7 +51,7 @@ describe Source do
     end
 
     it 'has un undertermined type' do
-      @source.type.should eq Source::Type::UNDETERMINED
+      @source.type.should be Source::Type::UNDETERMINED
     end
 
     it 'has a velocity of (0,0,0)' do
