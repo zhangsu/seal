@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+TEST_FILE_PATH = File.join File.dirname(__FILE__), '..', 'fixtures', 'test.wav'
+
 describe Source do
   describe 'default attributes' do
     before :all do
@@ -144,6 +146,40 @@ describe Source do
       @source.auto.should be_true
       @source.auto = nil
       @source.auto.should be_false
+    end
+  end
+
+  describe 'source state' do
+    let :source do
+      Source.new.tap { |source| source.stream = Stream.new(TEST_FILE_PATH) }
+    end
+
+    example 'transition from initial state' do
+      source.state.should be Source::State::INITIAL
+      source.stop
+      source.state.should be Source::State::INITIAL
+      source.pause
+      source.state.should be Source::State::INITIAL
+      source.rewind
+      source.state.should be Source::State::INITIAL
+      source.play
+      source.state.should be Source::State::PLAYING
+    end
+
+    example 'transition from playing state' do
+      source.play
+      source.state.should be Source::State::PLAYING
+      source.rewind
+      source.state.should be Source::State::INITIAL
+      source.play
+      source.stop
+      source.state.should be Source::State::STOPPED
+      source.play
+      source.pause
+      source.state.should be Source::State::PAUSED
+      source.play
+      source.play
+      source.state.should be Source::State::PLAYING
     end
   end
 end
