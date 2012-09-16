@@ -51,6 +51,9 @@ seal_get_err_msg(seal_err_t err)
 
     case SEAL_BAD_AUDIO:
         return "The specified audio file format is unsupported";
+    case SEAL_BAD_PRESET:
+        return "The specified preset is invalid";
+
     case SEAL_BAD_WAV_SUBTYPE:
         return "The specified WAVE file has an unsupported subtype";
     case SEAL_BAD_WAV_CHUNK:

@@ -5,7 +5,8 @@
 #include <seal/core.h>
 #include <seal/err.h>
 
-static void
+static
+void
 load_properties(seal_rvb_t* rvb, EFXEAXREVERBPROPERTIES properties)
 {
     seal_set_rvb_density(rvb, properties.flDensity);
@@ -196,6 +197,8 @@ seal_load_rvb(seal_rvb_t* rvb, seal_rvb_preset_t preset)
         CASE_LOAD(rvb, DUSTYROOM)
         CASE_LOAD(rvb, CHAPEL)
         CASE_LOAD(rvb, SMALLWATERROOM)
+        default:
+            return SEAL_BAD_PRESET;
     }
     return SEAL_OK;
 }

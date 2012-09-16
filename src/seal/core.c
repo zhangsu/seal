@@ -39,7 +39,8 @@ seal_get_version(void)
     return "0.1.0";
 }
 
-static seal_err_t
+static
+seal_err_t
 init_ext_proc(void)
 {
     alGenEffects = alGetProcAddress("alGenEffects");
@@ -67,7 +68,8 @@ init_ext_proc(void)
         return SEAL_NO_EXT_FUNC;
 }
 
-static void
+static
+void
 reset_ext_proc(void)
 {
     alGenEffects = (void*) _seal_nop;
