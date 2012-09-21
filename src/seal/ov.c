@@ -17,7 +17,8 @@
 /* Initial buffer size for loading. */
 static const int INITIAL_BUF_SIZE = 4096;
 
-static seal_err_t
+static
+seal_err_t
 setup(seal_raw_attr_t* attr, OggVorbis_File* ovf, const char* filename)
 {
     vorbis_info* vi;
@@ -39,7 +40,8 @@ setup(seal_raw_attr_t* attr, OggVorbis_File* ovf, const char* filename)
 }
 
 /* Caller passes `nbytes_loaded' to be able to accumulate the value. */
-static long
+static
+long
 read(seal_raw_t* raw, unsigned long* nbytes_loaded, OggVorbis_File* ovf)
 {
     long nbytes_read;
@@ -52,7 +54,8 @@ read(seal_raw_t* raw, unsigned long* nbytes_loaded, OggVorbis_File* ovf)
     return nbytes_read;
 }
 
-static seal_err_t
+static
+seal_err_t
 load(seal_raw_t* raw, OggVorbis_File* ovf)
 {
     long nbytes_read;

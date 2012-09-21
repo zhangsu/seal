@@ -49,7 +49,8 @@ typedef struct wav_stream_t wav_stream_t;
 static const uint16_t PCM_CODE       = 1;
 static const uint32_t CHUNK_MIN_SIZE = 4;
 
-static seal_err_t
+static
+seal_err_t
 read_fmt_(seal_raw_attr_t* attr, uint32_t chunk_size, FILE* wav)
 {
     uint16_t compression_code = 0;
@@ -79,20 +80,23 @@ read_fmt_(seal_raw_attr_t* attr, uint32_t chunk_size, FILE* wav)
     return SEAL_OK;
 }
 
-static seal_err_t
+static
+seal_err_t
 read_data(seal_raw_t* raw, uint32_t chunk_size, FILE* wav)
 {
+    size_t count;
     seal_err_t err;
 
     if ((err = seal_alloc_raw_data(raw, chunk_size)) != SEAL_OK)
         return err;
 
-    fread(raw->data, 1, chunk_size, wav);
+    count = fread(raw->data, 1, chunk_size, wav);
 
     return SEAL_OK;
 }
 
-static void
+static
+void
 prepare_data(wav_stream_t* wav_stream, uint32_t chunk_size)
 {
     wav_stream->offset = wav_stream->base_offset = ftell(wav_stream->file);
@@ -100,7 +104,8 @@ prepare_data(wav_stream_t* wav_stream, uint32_t chunk_size)
     _seal_skip(chunk_size, wav_stream->file);
 }
 
-static seal_err_t
+static
+seal_err_t
 read_chunk(seal_raw_t* raw, wav_stream_t* wav_stream, FILE* wav,
            io_state_t* pstate)
 {
@@ -150,7 +155,8 @@ read_chunk(seal_raw_t* raw, wav_stream_t* wav_stream, FILE* wav,
     return err;
 }
 
-static seal_err_t
+static
+seal_err_t
 read_chunks(seal_raw_t* raw, wav_stream_t* wav_stream, FILE* wav)
 {
     io_state_t state;

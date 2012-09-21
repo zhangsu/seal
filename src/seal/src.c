@@ -33,18 +33,20 @@ static const size_t DEFAULT_CHUNK_SIZE = MIN_CHUNK_SIZE << 2;
 static const size_t MAX_CHUNK_SIZE     = CHUNK_STORAGE_CAP -
                                          CHUNK_STORAGE_CAP % MIN_CHUNK_SIZE;
 
-static int
-limit_val(int val, int lower_bound, int upper_bound)
+static
+seal_err_t
+check_val_limit(int val, int lower_bound, int upper_bound)
 {
     if (val < lower_bound)
-        return lower_bound;
+        return SEAL_BAD_VAL;
     else if (val > upper_bound)
-        return upper_bound;
+        return SEAL_BAD_VAL;
     else
-        return val;
+        return SEAL_OK;
 }
 
-static seal_err_t
+static
+seal_err_t
 operate(seal_src_t* src, void (*op)(unsigned int))
 {
     op(src->id);
@@ -52,7 +54,8 @@ operate(seal_src_t* src, void (*op)(unsigned int))
     return _seal_get_openal_err();
 }
 
-static seal_err_t
+static
+seal_err_t
 set3f(seal_src_t* src, int key, float x, float y, float z)
 {
     alSource3f(src->id, key, x, y, z);
@@ -60,7 +63,8 @@ set3f(seal_src_t* src, int key, float x, float y, float z)
     return _seal_get_openal_err();
 }
 
-static seal_err_t
+static
+seal_err_t
 get3f(seal_src_t* src, int key, float* px, float* py, float* pz)
 {
     alGetSource3f(src->id, key, px, py, pz);
@@ -68,7 +72,8 @@ get3f(seal_src_t* src, int key, float* px, float* py, float* pz)
     return _seal_get_openal_err();
 }
 
-static void
+static
+void
 wait4updater(seal_src_t* src)
 {
     if (src->updater != 0) {
@@ -77,7 +82,8 @@ wait4updater(seal_src_t* src)
     }
 }
 
-static void*
+static
+void*
 update(void* args)
 {
     seal_src_t* src = args;
@@ -96,7 +102,8 @@ update(void* args)
     return (void*) err;
 }
 
-static seal_err_t
+static
+seal_err_t
 queue_op(seal_src_t* src, int nbufs, unsigned int* bufs, queue_op_t* op)
 {
     op(src->id, nbufs, bufs);
@@ -104,19 +111,22 @@ queue_op(seal_src_t* src, int nbufs, unsigned int* bufs, queue_op_t* op)
     return _seal_get_openal_err();
 }
 
-static seal_err_t
+static
+seal_err_t
 queue_bufs(seal_src_t* src, int nbufs, unsigned int* bufs)
 {
     return queue_op(src, nbufs, bufs, (queue_op_t*) alSourceQueueBuffers);
 }
 
-static seal_err_t
+static
+seal_err_t
 unqueue_bufs(seal_src_t* src, int nbufs, unsigned int* bufs)
 {
     return queue_op(src, nbufs, bufs, alSourceUnqueueBuffers);
 }
 
-static seal_err_t
+static
+seal_err_t
 clean_queue(seal_src_t* src)
 {
     int nbufs_processed;
@@ -146,7 +156,8 @@ clean_queue(seal_src_t* src)
  * Stopping a source will mark all the buffers in its queue processed so that
  * they can be unqueued.
  */
-static seal_err_t
+static
+seal_err_t
 stop_then_clean_queue(seal_src_t* src)
 {
     seal_err_t err;
@@ -157,7 +168,8 @@ stop_then_clean_queue(seal_src_t* src)
     return clean_queue(src);
 }
 
-static seal_err_t
+static
+seal_err_t
 restart_queuing(seal_src_t* src)
 {
     seal_err_t err;
@@ -168,7 +180,8 @@ restart_queuing(seal_src_t* src)
     return seal_rewind_stream(src->stream);
 }
 
-static seal_err_t
+static
+seal_err_t
 empty_queue(seal_src_t* src)
 {
     seal_err_t err;
@@ -180,7 +193,8 @@ empty_queue(seal_src_t* src)
     return stop_then_clean_queue(src);
 }
 
-static seal_err_t
+static
+seal_err_t
 ensure_queue_empty(seal_src_t* src)
 {
     if (src->stream != 0)
@@ -437,18 +451,25 @@ start_streaming:
 seal_err_t
 seal_set_src_queue_size(seal_src_t* src, size_t size)
 {
-    src->queue_size = limit_val(size, MIN_QUEUE_SIZE, MAX_QUEUE_SIZE);
+    seal_err_t err;
 
-    return SEAL_OK;
+    err = check_val_limit(size, MIN_QUEUE_SIZE, MAX_QUEUE_SIZE);
+    if (err == SEAL_OK)
+        src->queue_size = size;
+
+    return err;
 }
 
 seal_err_t
 seal_set_src_chunk_size(seal_src_t* src, size_t size)
 {
-    src->chunk_size = limit_val(size, MIN_CHUNK_SIZE, MAX_CHUNK_SIZE)
-                      / MIN_CHUNK_SIZE * MIN_CHUNK_SIZE;
+    seal_err_t err;
 
-    return SEAL_OK;
+    err = check_val_limit(size, MIN_CHUNK_SIZE, MAX_CHUNK_SIZE);
+    if (err == SEAL_OK)
+        src->chunk_size = size / MIN_CHUNK_SIZE * MIN_CHUNK_SIZE;
+
+    return err;
 }
 
 seal_err_t
