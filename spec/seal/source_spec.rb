@@ -195,18 +195,29 @@ describe Source do
     end
   end
 
-  it 'should initially have undetermined type' do
-    source.type.should be UNDETERMINED
-  end
+  describe 'type' do
+    it 'should initially be undetermined' do
+      source.type.should be UNDETERMINED
+    end
 
-  it 'should be streaming type if it has a stream' do
-    source.stream = stream
-    source.type.should be STREAMING
-  end
+    it 'should be streaming if it has a stream' do
+      source.stream = stream
+      source.type.should be STREAMING
+    end
 
-  it 'should be static type if it has a buffer' do
-    source.buffer = Buffer.new(TEST_FILE_PATH)
-    source.type.should be STATIC
+    it 'should be static if it has a buffer' do
+      source.buffer = Buffer.new(TEST_FILE_PATH)
+      source.type.should be STATIC
+    end
+
+    it 'should be undetermined after detaching' do
+      source.stream = stream
+      source.detach
+      source.type.should be UNDETERMINED
+      source.buffer = buffer
+      source.detach
+      source.type.should be UNDETERMINED
+    end
   end
 
   describe 'state transition' do
@@ -270,7 +281,7 @@ describe Source do
       source.state.should be INITIAL
     end
 
-    describe 'detaching' do
+    context 'when detaching' do
       example 'from initial state' do
         source.state.should be INITIAL
         source.detach
