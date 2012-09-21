@@ -10,7 +10,8 @@
 #include <seal/err.h>
 
 /* Reallocates `raw->data' to size `size'. */
-static seal_err_t
+static
+seal_err_t
 realloc_raw_data(seal_raw_t* raw, size_t size)
 {
     void* buf;

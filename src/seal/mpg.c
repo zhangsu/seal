@@ -16,7 +16,8 @@
 static const int INITIAL_BUF_SIZE = 32768;
 
 
-static mpg123_handle*
+static
+mpg123_handle*
 setup(seal_raw_attr_t* attr, const char* filename)
 {
     mpg123_handle* mh;
@@ -49,7 +50,8 @@ cleanup:
     return 0;
 }
 
-static int
+static
+int
 read(seal_raw_t* raw, size_t* nbytes_loaded, mpg123_handle* mh)
 {
     int err;
@@ -62,7 +64,8 @@ read(seal_raw_t* raw, size_t* nbytes_loaded, mpg123_handle* mh)
     return err;
 }
 
-static seal_err_t
+static
+seal_err_t
 load(seal_raw_t* raw, mpg123_handle* mh)
 {
     size_t nbytes_loaded = 0;

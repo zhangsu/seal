@@ -182,6 +182,10 @@ module FileUtils
   end
 end
 
+task :yard do
+  sh 'yardoc src/rubyext.c'
+end
+
 rule /^demo:/ do |r|
   Rake::Task[:compile].invoke
   sh 'ruby -I lib -X demo %s.rb' % r.name[/(?<=:).+/]
