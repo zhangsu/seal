@@ -1,5 +1,8 @@
 require 'spec_helper'
 
+include Source::State
+include Source::Type
+
 TEST_FILE_PATH = File.join File.dirname(__FILE__), '..', 'fixtures', 'test.wav'
 
 describe Source do
@@ -45,7 +48,7 @@ describe Source do
     end
 
     it 'is in the initial state' do
-      @source.state.should be Source::State::INITIAL
+      @source.state.should be INITIAL
     end
 
     it 'has no stream' do
@@ -53,7 +56,7 @@ describe Source do
     end
 
     it 'has un undertermined type' do
-      @source.type.should be Source::Type::UNDETERMINED
+      @source.type.should be UNDETERMINED
     end
 
     it 'has a velocity of (0,0,0)' do
@@ -155,31 +158,92 @@ describe Source do
     end
 
     example 'transition from initial state' do
-      source.state.should be Source::State::INITIAL
+      source.state.should be INITIAL
       source.stop
-      source.state.should be Source::State::INITIAL
+      source.state.should be INITIAL
       source.pause
-      source.state.should be Source::State::INITIAL
+      source.state.should be INITIAL
       source.rewind
-      source.state.should be Source::State::INITIAL
+      source.state.should be INITIAL
       source.play
-      source.state.should be Source::State::PLAYING
+      source.state.should be PLAYING
     end
 
     example 'transition from playing state' do
       source.play
-      source.state.should be Source::State::PLAYING
+      source.state.should be PLAYING
       source.rewind
-      source.state.should be Source::State::INITIAL
+      source.state.should be INITIAL
       source.play
       source.stop
-      source.state.should be Source::State::STOPPED
+      source.state.should be STOPPED
       source.play
       source.pause
-      source.state.should be Source::State::PAUSED
+      source.state.should be PAUSED
       source.play
       source.play
-      source.state.should be Source::State::PLAYING
+      source.state.should be PLAYING
+    end
+
+    example 'transition from paused state' do
+      source.play
+      source.pause
+      source.state.should be PAUSED
+      source.play
+      source.state.should be PLAYING
+      source.pause
+      source.rewind
+      source.state.should be INITIAL
+      source.play
+      source.pause
+      source.stop
+      source.state.should be STOPPED
+    end
+
+    example 'transition from stopped state' do
+      source.play
+      source.stop
+      source.state.should be STOPPED
+      source.pause
+      source.state.should be STOPPED
+      source.play
+      source.state.should be PLAYING
+      source.stop
+      source.rewind
+      source.state.should be INITIAL
+    end
+
+    describe 'state change after detaching' do
+      example 'detaching from initial state' do
+        source.state.should be INITIAL
+        source.detach
+        source.state.should be INITIAL
+        source.detach
+        source.state.should be INITIAL
+      end
+
+      example 'detaching from playing state' do
+        source.play
+        source.state.should be PLAYING
+        source.detach
+        source.state.should be INITIAL
+      end
+
+      example 'detaching from paused state' do
+        source.play
+        source.pause
+        source.state.should be PAUSED
+        source.detach
+        source.state.should be INITIAL
+      end
+
+      example 'detaching from stopped state' do
+        source.play
+        source.stop
+        source.state.should be STOPPED
+        source.detach
+        source.state.should be INITIAL
+      end
     end
   end
 end
