@@ -156,6 +156,39 @@ describe Source do
     end
   end
 
+  context 'with buffer' do
+    before(:each) { source.buffer = buffer }
+
+    it 'cannot also have a stream unless detached' do
+      expect { source.stream = stream }.to raise_error SealError
+      source.play
+      expect { source.stream = stream }.to raise_error SealError
+      source.pause
+      expect { source.stream = stream }.to raise_error SealError
+      source.stop
+      expect { source.stream = stream }.to raise_error SealError
+      source.detach
+      expect { source.stream = stream }.to_not raise_error
+    end
+
+    it 'cannot change its buffer while playing' do
+      source.play
+      expect { source.buffer = buffer }.to raise_error SealError
+    end
+
+    it 'cannot change its buffer while paused' do
+      source.play
+      source.pause
+      expect { source.buffer = buffer }.to raise_error SealError
+    end
+
+    it 'can change its buffer while stopped' do
+      source.play
+      source.stop
+      expect { source.buffer = buffer }.to_not raise_error
+    end
+  end
+
   describe 'looping' do
     example 'as undetermined type' do
       source.looping?.should be_false
