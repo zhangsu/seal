@@ -6,6 +6,10 @@ include Source::Type
 TEST_FILE_PATH = File.join File.dirname(__FILE__), '..', 'fixtures', 'test.wav'
 
 describe Source do
+  let(:source) { Source.new }
+  let(:stream) { Stream.new(TEST_FILE_PATH) }
+  let(:buffer) { Buffer.new(TEST_FILE_PATH) }
+
   describe 'default attributes' do
     before :all do
       @source = Source.new
@@ -157,7 +161,7 @@ describe Source do
       Source.new.tap { |source| source.stream = Stream.new(TEST_FILE_PATH) }
     end
 
-    example 'transition from initial state' do
+    example 'from initial state' do
       source.state.should be INITIAL
       source.stop
       source.state.should be INITIAL
@@ -169,7 +173,7 @@ describe Source do
       source.state.should be PLAYING
     end
 
-    example 'transition from playing state' do
+    example 'from playing state' do
       source.play
       source.state.should be PLAYING
       source.rewind
@@ -185,7 +189,7 @@ describe Source do
       source.state.should be PLAYING
     end
 
-    example 'transition from paused state' do
+    example 'from paused state' do
       source.play
       source.pause
       source.state.should be PAUSED
@@ -200,7 +204,7 @@ describe Source do
       source.state.should be STOPPED
     end
 
-    example 'transition from stopped state' do
+    example 'from stopped state' do
       source.play
       source.stop
       source.state.should be STOPPED
@@ -213,8 +217,8 @@ describe Source do
       source.state.should be INITIAL
     end
 
-    describe 'state change after detaching' do
-      example 'detaching from initial state' do
+    describe 'detaching' do
+      example 'from initial state' do
         source.state.should be INITIAL
         source.detach
         source.state.should be INITIAL
@@ -222,14 +226,14 @@ describe Source do
         source.state.should be INITIAL
       end
 
-      example 'detaching from playing state' do
+      example 'from playing state' do
         source.play
         source.state.should be PLAYING
         source.detach
         source.state.should be INITIAL
       end
 
-      example 'detaching from paused state' do
+      example 'from paused state' do
         source.play
         source.pause
         source.state.should be PAUSED
@@ -237,7 +241,7 @@ describe Source do
         source.state.should be INITIAL
       end
 
-      example 'detaching from stopped state' do
+      example 'from stopped state' do
         source.play
         source.stop
         source.state.should be STOPPED
