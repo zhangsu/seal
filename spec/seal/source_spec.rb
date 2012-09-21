@@ -156,9 +156,62 @@ describe Source do
     end
   end
 
-  describe 'source state' do
-    let :source do
-      Source.new.tap { |source| source.stream = Stream.new(TEST_FILE_PATH) }
+  describe 'looping' do
+    example 'as undetermined type' do
+      source.looping?.should be_false
+      source.looping = true
+      source.looping.should be_true
+      source.looping = false
+      source.looping?.should be_false
+    end
+
+    example 'as streaming type' do
+      source.looping = true
+      source.stream = stream
+      source.looping?.should be_true
+      source.looping = false
+      source.looping?.should be_false
+      source.looping = true
+      source.looping?.should be_true
+    end
+
+    example 'as static type' do
+      source.looping = true
+      source.buffer = buffer
+      source.looping?.should be_true
+      source.looping = false
+      source.looping?.should be_false
+      source.looping = true
+      source.looping?.should be_true
+    end
+
+    it 'should make source repeat' do
+      source.stream = stream
+      source.looping = true
+      source.pitch = 1.5
+      source.play
+      sleep(0.2)
+      source.state.should be PLAYING
+    end
+  end
+
+  it 'should initially have undetermined type' do
+    source.type.should be UNDETERMINED
+  end
+
+  it 'should be streaming type if it has a stream' do
+    source.stream = stream
+    source.type.should be STREAMING
+  end
+
+  it 'should be static type if it has a buffer' do
+    source.buffer = Buffer.new(TEST_FILE_PATH)
+    source.type.should be STATIC
+  end
+
+  describe 'state transition' do
+    before :each do
+      source.tap { |source| source.stream = stream }
     end
 
     example 'from initial state' do
