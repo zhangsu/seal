@@ -8,7 +8,7 @@ describe Source do
   let(:stream) { Stream.new(WAV_PATH) }
   let(:buffer) { Buffer.new(WAV_PATH) }
 
-  describe 'default attributes' do
+  describe 'by default' do
     before :all do
       @source = Source.new
     end
@@ -66,12 +66,12 @@ describe Source do
     end
   end
 
-  describe 'attributes setting and validity' do
+  describe 'with valid attributes' do
     before :all do
       @source = Source.new
     end
 
-    it 'can have a queue size in [2, 63]' do
+    it 'has a queue size in [2, 63]' do
       expect { @source.queue_size = -130 }.to raise_error SealError
       expect { @source.queue_size = 0 }.to raise_error SealError
       expect { @source.queue_size = 1 }.to raise_error SealError
@@ -86,7 +86,7 @@ describe Source do
       @source.queue_size.should eq 63
     end
 
-    it 'can have a auto-adjusting chunk size in [9216, 16773120]' do
+    it 'has a auto-adjusting chunk size in [9216, 16773120]' do
       expect { @source.chunk_size = 0 }.to raise_error SealError
       expect { @source.chunk_size = 432 }.to raise_error SealError
       expect { @source.chunk_size = 9215 }.to raise_error SealError
@@ -117,13 +117,13 @@ describe Source do
       @source.velocity.should be_each_within(TOLERANCE).of [-3.2, 13.445, 0]
     end
 
-    it 'can have a pitch in (0, +inf.)' do
+    it 'has a pitch in (0, +inf.)' do
       @source.pitch = 2.1903
       expect { @source.pitch = -3.1 }.to raise_error SealError
       @source.pitch.should be_within(TOLERANCE).of 2.1903
     end
 
-    it 'can have a gain in [0, +inf.)' do
+    it 'has a gain in [0, +inf.)' do
       @source.gain = 3.103
       @source.gain.should be_within(TOLERANCE).of 3.103
       @source.gain = 0
