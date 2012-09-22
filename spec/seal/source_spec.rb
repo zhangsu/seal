@@ -3,12 +3,10 @@ require 'spec_helper'
 include Source::State
 include Source::Type
 
-TEST_FILE_PATH = File.join File.dirname(__FILE__), '..', 'fixtures', 'test.wav'
-
 describe Source do
   let(:source) { Source.new }
-  let(:stream) { Stream.new(TEST_FILE_PATH) }
-  let(:buffer) { Buffer.new(TEST_FILE_PATH) }
+  let(:stream) { Stream.new(WAV_PATH) }
+  let(:buffer) { Buffer.new(WAV_PATH) }
 
   describe 'default attributes' do
     before :all do
@@ -239,7 +237,7 @@ describe Source do
     end
 
     it 'should be static if it has a buffer' do
-      source.buffer = Buffer.new(TEST_FILE_PATH)
+      source.buffer = Buffer.new(WAV_PATH)
       source.type.should be STATIC
     end
 

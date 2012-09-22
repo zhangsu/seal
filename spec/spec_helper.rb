@@ -28,7 +28,11 @@ end
 
 require 'seal'
 include Seal
+
 TOLERANCE = 0.00001
+FIXTURE_DIR = File.join File.dirname(__FILE__), 'fixtures'
+WAV_PATH = File.join FIXTURE_DIR, 'tone_up.wav'
+OV_PATH = File.join FIXTURE_DIR, 'heal.ogg'
 
 RSpec.configure do |config|
   include Helpers
