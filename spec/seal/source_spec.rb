@@ -295,12 +295,16 @@ describe Source do
       source.looping?.should be_true
     end
 
-    it 'should make source repeat' do
+    # This example depends on the length of the test audio file.
+    it 'is true if and only if source repeats' do
       source.stream = stream
-      source.looping = true
-      source.pitch = 1.5
+      source.pitch = 2
       source.play
-      sleep(0.2)
+      sleep(0.3)
+      source.state.should be STOPPED
+      source.looping = true
+      source.play
+      sleep(0.3)
       source.state.should be PLAYING
     end
   end
