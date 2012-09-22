@@ -69,27 +69,28 @@ describe Source do
   describe 'with valid attributes' do
     before :all do
       @source = Source.new
+      @error_pattern = /Invalid parameter value/
     end
 
     it 'has a queue size in [2, 63]' do
-      expect { @source.queue_size = -130 }.to raise_error SealError
-      expect { @source.queue_size = 0 }.to raise_error SealError
-      expect { @source.queue_size = 1 }.to raise_error SealError
+      expect { @source.queue_size = -130 }.to raise_error @error_pattern
+      expect { @source.queue_size = 0 }.to raise_error @error_pattern
+      expect { @source.queue_size = 1 }.to raise_error @error_pattern
       @source.queue_size = 2
       @source.queue_size.should eq 2
       @source.queue_size = 32
       @source.queue_size.should eq 32
       @source.queue_size = 63
       @source.queue_size.should eq 63
-      expect { @source.queue_size = 64 }.to raise_error SealError
-      expect { @source.queue_size = 1203 }.to raise_error SealError
+      expect { @source.queue_size = 64 }.to raise_error @error_pattern
+      expect { @source.queue_size = 1203 }.to raise_error @error_pattern
       @source.queue_size.should eq 63
     end
 
     it 'has a auto-adjusting chunk size in [9216, 16773120]' do
-      expect { @source.chunk_size = 0 }.to raise_error SealError
-      expect { @source.chunk_size = 432 }.to raise_error SealError
-      expect { @source.chunk_size = 9215 }.to raise_error SealError
+      expect { @source.chunk_size = 0 }.to raise_error @error_pattern
+      expect { @source.chunk_size = 432 }.to raise_error @error_pattern
+      expect { @source.chunk_size = 9215 }.to raise_error @error_pattern
       @source.chunk_size = 9216
       @source.chunk_size.should eq 9216
       # It should be automatically adjusted to a smaller multiple of 9216.
@@ -103,8 +104,8 @@ describe Source do
       @source.chunk_size.should eq 16763904
       @source.chunk_size = 16773120
       @source.chunk_size.should eq 16773120
-      expect { @source.chunk_size = 16773121 }.to raise_error SealError
-      expect { @source.chunk_size = 234923428 }.to raise_error SealError
+      expect { @source.chunk_size = 16773121 }.to raise_error @error_pattern
+      expect { @source.chunk_size = 234923428 }.to raise_error @error_pattern
     end
 
     it 'can change its position' do
@@ -119,7 +120,7 @@ describe Source do
 
     it 'has a pitch in (0, +inf.)' do
       @source.pitch = 2.1903
-      expect { @source.pitch = -3.1 }.to raise_error SealError
+      expect { @source.pitch = -3.1 }.to raise_error @error_pattern
       @source.pitch.should be_within(TOLERANCE).of 2.1903
     end
 
@@ -127,7 +128,7 @@ describe Source do
       @source.gain = 3.103
       @source.gain.should be_within(TOLERANCE).of 3.103
       @source.gain = 0
-      expect { @source.gain = -0.4 }.to raise_error SealError
+      expect { @source.gain = -0.4 }.to raise_error @error_pattern
       @source.gain.should eq 0
     end
 
@@ -158,26 +159,27 @@ describe Source do
     before(:each) { source.buffer = buffer }
 
     it 'cannot also have a stream unless detached' do
-      expect { source.stream = stream }.to raise_error SealError
+      error_pattern = /attach a stream to a static source/
+      expect { source.stream = stream }.to raise_error error_pattern
       source.play
-      expect { source.stream = stream }.to raise_error SealError
+      expect { source.stream = stream }.to raise_error error_pattern
       source.pause
-      expect { source.stream = stream }.to raise_error SealError
+      expect { source.stream = stream }.to raise_error error_pattern
       source.stop
-      expect { source.stream = stream }.to raise_error SealError
+      expect { source.stream = stream }.to raise_error error_pattern
       source.detach
       expect { source.stream = stream }.to_not raise_error
     end
 
     it 'cannot change its buffer while playing' do
       source.play
-      expect { source.buffer = buffer }.to raise_error SealError
+      expect { source.buffer = buffer }.to raise_error /Invalid operation/
     end
 
     it 'cannot change its buffer while paused' do
       source.play
       source.pause
-      expect { source.buffer = buffer }.to raise_error SealError
+      expect { source.buffer = buffer }.to raise_error /Invalid operation/
     end
 
     it 'can change its buffer while stopped' do
@@ -210,7 +212,7 @@ describe Source do
     end
 
     it 'cannot also have a buffer unless detached' do
-      error_pattern = /attach a stream to a static source/
+      error_pattern = /attach a buffer to a streaming source/
       expect { source.buffer = buffer }.to raise_error error_pattern
       source.play
       expect { source.buffer = buffer }.to raise_error error_pattern
