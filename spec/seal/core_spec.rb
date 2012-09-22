@@ -6,7 +6,7 @@ describe Seal do
     Seal.cleanup
   end
 
-  it 'should fail when trying to initialze non-existing device' do
+  it 'should fail when trying to initialize non-existing device' do
     expect { Seal.startup 'foo42' }.to raise_error SealError
   end
 
