@@ -14,18 +14,6 @@ module CustomMatchers
   end
 end
 
-module Helpers
-  def fresh_start
-    before :all do
-      Seal.startup
-    end
-
-    after :all do
-      Seal.cleanup
-    end
-  end
-end
-
 require 'seal'
 include Seal
 
@@ -35,9 +23,15 @@ WAV_PATH = File.join FIXTURE_DIR, 'tone_up.wav'
 OV_PATH = File.join FIXTURE_DIR, 'heal.ogg'
 
 RSpec.configure do |config|
-  include Helpers
   config.include CustomMatchers
-  config.include Helpers
 
-  config.instance_eval &:fresh_start
+  config.instance_eval do
+    before :all do
+      Seal.startup
+    end
+
+    after :all do
+      Seal.cleanup
+    end
+  end
 end
