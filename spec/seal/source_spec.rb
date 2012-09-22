@@ -185,6 +185,85 @@ describe Source do
       source.stop
       expect { source.buffer = buffer }.to_not raise_error
     end
+
+    it 'can change its buffer while in initial state' do
+      expect { source.buffer = buffer }.to_not raise_error
+    end
+
+    it 'can share its buffer' do
+      expect do
+        another_source = Source.new
+        another_source.buffer = source.buffer
+        another_source.play
+        source.play
+      end.to_not raise_error
+    end
+  end
+
+  context 'with stream' do
+    let(:another_stream) { Stream.new(WAV_PATH) }
+
+    before(:each) { source.stream = stream }
+
+    it 'can set the same stream to itself' do
+      expect { source.stream = stream }.to_not raise_error
+    end
+
+    it 'cannot also have a buffer unless detached' do
+      error_pattern = /attach a stream to a static source/
+      expect { source.buffer = buffer }.to raise_error error_pattern
+      source.play
+      expect { source.buffer = buffer }.to raise_error error_pattern
+      source.pause
+      expect { source.buffer = buffer }.to raise_error error_pattern
+      source.stop
+      expect { source.buffer = buffer }.to raise_error error_pattern
+      source.detach
+      expect { source.buffer = buffer }.to_not raise_error
+    end
+
+    it 'cannot have a closed stream' do
+      another_stream.close
+      expect { source.stream = another_stream }.to raise_error \
+        /uninitialized stream/
+    end
+
+    it 'can only change its stream to one with compatible format' do
+      expect { source.stream = another_stream }.to_not raise_error
+      expect { source.stream = Stream.new(OV_PATH) }.to raise_error \
+        /different audio format/
+    end
+
+    it 'can change to another stream in any state' do
+      expect do
+        source.stream = another_stream
+        source.play
+        source.stream = another_stream
+        source.pause
+        source.stream = another_stream
+        source.stop
+        source.stream = another_stream
+      end.to_not raise_error
+    end
+
+    it 'can share its stream' do
+      expect do
+        another_source = Source.new
+        another_source.stream = stream
+        another_source.play
+        source.play
+        source.stream = another_stream
+        another_source.stream = another_stream
+      end.to_not raise_error
+    end
+
+    it 'fails to perform if stream is closed' do
+      error_pattern = /uninitialized stream/
+      stream.close
+      expect { source.update }.to raise_error error_pattern
+      expect { source.stop }.to raise_error error_pattern
+      expect { source.play }.to raise_error error_pattern
+    end
   end
 
   describe 'looping' do
