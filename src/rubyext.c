@@ -525,7 +525,7 @@ get_stream_freq(VALUE rstream)
  *      stream.bit_depth    -> fixnum
  *
  * Gets the bit depth (bits per sample) of the audio contained in _stream_.
- * The default is 16.
+ * The default is 16 when the stream is not opened.
  */
 static
 VALUE
@@ -539,7 +539,7 @@ get_stream_bps(VALUE rstream)
  *      stream.channel_count    -> fixnum
  *
  * Gets the number of channels of the audio contained in _stream_. The default
- * is 1.
+ * is 1 when the stream is not opened.
  */
 static
 VALUE
