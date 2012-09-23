@@ -440,7 +440,7 @@ load_buf(int argc, VALUE* argv, VALUE rbuf)
  *  call-seq:
  *      buffer.size ->  fixnum
  *
- * Gets the size, in bytes, of _buffer_. The default is 0.
+ * Gets the size, in bytes, of _buffer_.
  */
 static
 VALUE
@@ -453,8 +453,7 @@ get_buf_size(VALUE rbuf)
  *  call-seq:
  *      buffer.frequency    -> fixnum
  *
- * Gets the frequency (sample rate) of the audio contained in _buffer_. The
- * default is 0 when the buffer is not loaded.
+ * Gets the frequency (sample rate) of the audio contained in _buffer_.
  */
 static
 VALUE
@@ -468,7 +467,6 @@ get_buf_freq(VALUE rbuf)
  *      buffer.bit_depth    -> fixnum
  *
  * Gets the bit depth (bits per sample) of the audio contained in _buffer_.
- * The default is 16.
  */
 static
 VALUE
@@ -481,8 +479,7 @@ get_buf_bps(VALUE rbuf)
  *  call-seq:
  *      buffer.channel_count    -> fixnum
  *
- * Gets the number of channels of the audio contained in _buffer_. The default
- * is 1.
+ * Gets the number of channels of the audio contained in _buffer_.
  */
 static
 VALUE
