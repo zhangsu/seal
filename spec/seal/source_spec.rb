@@ -268,6 +268,33 @@ describe Source do
     end
   end
 
+  describe 'automatic streaming' do
+    let(:source) do
+      Source.new.tap do |source|
+        source.stream = Stream.new(OV_PATH)
+        source.looping = true
+        source.pitch = 3
+      end
+    end
+
+    it 'continues in the background' do
+      source.play
+      sleep(0.5)
+      source.state.should be PLAYING
+    end
+
+    it 'can be disabled (taking effect upon the next play call)' do
+      source.play
+      source.auto = false
+      sleep(0.5)
+      # Not stopping streaming until the next play call.
+      source.state.should be PLAYING
+      source.play
+      sleep(0.5)
+      source.state.should be STOPPED
+    end
+  end
+
   describe 'looping' do
     example 'as undetermined type' do
       source.looping?.should be_false
