@@ -47,9 +47,10 @@ describe Listener do
       LISTENER.gain = 0.34767
       LISTENER.gain.should be_within(TOLERANCE).of 0.34767
       LISTENER.gain = 10
-      expect { LISTENER.gain = -0.1 }.to raise_error SealError
-      expect { LISTENER.gain = -1.3 }.to raise_error SealError
-      expect { LISTENER.gain = -3203 }.to raise_error SealError
+      error_pattern = /Invalid parameter value/
+      expect { LISTENER.gain = -0.1 }.to raise_error error_pattern
+      expect { LISTENER.gain = -1.3 }.to raise_error error_pattern
+      expect { LISTENER.gain = -3203 }.to raise_error error_pattern
       LISTENER.gain.should eq 10
       LISTENER.gain = old_gain
     end
