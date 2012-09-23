@@ -155,7 +155,7 @@ describe Source do
     end
   end
 
-  context 'with buffer' do
+  context 'with a buffer' do
     before(:each) { source.buffer = buffer }
 
     it 'cannot also have a stream unless detached' do
@@ -202,7 +202,7 @@ describe Source do
     end
   end
 
-  context 'with stream' do
+  context 'with a stream' do
     let(:another_stream) { Stream.new(WAV_PATH) }
 
     before(:each) { source.stream = stream }
