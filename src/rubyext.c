@@ -660,28 +660,17 @@ rewind_src(VALUE rsrc)
 
 /*
  *  call-seq:
- *      source.detach -> source
- *
- * Releases the current buffer or stream from _source_ (hence empties the
- * queue for streaming sources). Will reset the source to Type::UNDETERMINED
- * and the source state to State::STOPPED. Will not free the associated buffer
- * or stream.
- */
-static
-VALUE
-detach_src_audio(VALUE rsrc)
-{
-    return src_op(rsrc, seal_detach_src_audio);
-}
-
-/*
- *  call-seq:
  *      source.buffer = buffer  -> buffer
+ *      source.buffer = nil     -> nil
  *
  * Associates _buffer_ with _source_ so that the source is ready to play the
  * audio contained in _buffer_. Can be applied only to sources in the initial
  * or stopped states and that are not of streaming type. If successful, the
  * source will become or remain as Type::STATIC.
+ *
+ * If nil is specified, the source will give up the buffer it has and will
+ * reset the source to Type::UNDETERMINED and the source state to
+ * State::STOPPED. It will not free the buffer.
  */
 static
 VALUE
@@ -689,8 +678,12 @@ set_src_buf(VALUE rsrc, VALUE rbuf)
 {
     seal_buf_t* buf;
 
-    Data_Get_Struct(rbuf, seal_buf_t, buf);
-    check_seal_err(seal_set_src_buf(DATA_PTR(rsrc), buf));
+    if (NIL_P(rbuf)) {
+        src_op(rsrc, seal_detach_src_audio);
+    } else {
+        Data_Get_Struct(rbuf, seal_buf_t, buf);
+        check_seal_err(seal_set_src_buf(DATA_PTR(rsrc), buf));
+    }
     rb_iv_set(rsrc, "@buffer", rbuf);
 
     return rbuf;
@@ -712,6 +705,7 @@ get_src_buf(VALUE rsrc)
 /*
  *  call-seq:
  *      source.stream = stream  -> stream
+ *      source.stream = nil
  *
  * Associates (opened) _stream_ with _source_ so that audio data can be
  * continuously fetched from a file rather than loading everything to memory
@@ -723,6 +717,10 @@ get_src_buf(VALUE rsrc)
  * or remain as Type::STREAMING. The streaming queue will be filled after this
  * call returns; after the queue starts to be played, #update should be called
  * to refill the queue.
+ *
+ * If nil is specified, the source will give up the stream it has and will
+ * reset the source to Type::UNDETERMINED and the source state to
+ * State::STOPPED. It will not free the stream.
  */
 static
 VALUE
@@ -730,8 +728,12 @@ set_src_stream(VALUE rsrc, VALUE rstream)
 {
     seal_stream_t* stream;
 
-    Data_Get_Struct(rstream, seal_stream_t, stream);
-    check_seal_err(seal_set_src_stream(DATA_PTR(rsrc), stream));
+    if (NIL_P(rstream)) {
+        src_op(rsrc, seal_detach_src_audio);
+    } else {
+        Data_Get_Struct(rstream, seal_stream_t, stream);
+        check_seal_err(seal_set_src_stream(DATA_PTR(rsrc), stream));
+    }
     rb_iv_set(rsrc, "@stream", rstream);
 
     return rstream;
@@ -1954,7 +1956,6 @@ bind_src(void)
     rb_define_method(cSource, "pause", pause_src, 0);
     rb_define_method(cSource, "stop", stop_src, 0);
     rb_define_method(cSource, "rewind", rewind_src, 0);
-    rb_define_method(cSource, "detach", detach_src_audio, 0);
     rb_define_method(cSource, "buffer=", set_src_buf, 1);
     rb_define_method(cSource, "buffer", get_src_buf, 0);
     rb_define_method(cSource, "stream=", set_src_stream, 1);

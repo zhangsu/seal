@@ -11,10 +11,10 @@ describe Buffer do
       another_source.buffer = buffer
       # Two sources are using buffer.
       expect { buffer.load(OV_PATH) }.to raise_error error_pattern
-      source.detach
+      source.buffer = nil
       # One more source is still using buffer.
       expect { buffer.load(OV_PATH) }.to raise_error error_pattern
-      another_source.detach
+      another_source.buffer = nil
       expect { buffer.load(OV_PATH) }.to_not raise_error
     end
   end

@@ -156,7 +156,7 @@ describe Source do
   context 'with a buffer' do
     before(:each) { source.buffer = buffer }
 
-    it 'cannot also have a stream unless detached' do
+    it 'cannot also have a stream unless buffer is detached' do
       error_pattern = /attach a stream to a static source/
       expect { source.stream = stream }.to raise_error error_pattern
       source.play
@@ -165,7 +165,7 @@ describe Source do
       expect { source.stream = stream }.to raise_error error_pattern
       source.stop
       expect { source.stream = stream }.to raise_error error_pattern
-      source.detach
+      source.buffer = nil
       expect { source.stream = stream }.to_not raise_error
     end
 
@@ -209,7 +209,7 @@ describe Source do
       expect { source.stream = stream }.to_not raise_error
     end
 
-    it 'cannot also have a buffer unless detached' do
+    it 'cannot also have a buffer unless stream is detached' do
       error_pattern = /attach a buffer to a streaming source/
       expect { source.buffer = buffer }.to raise_error error_pattern
       source.play
@@ -218,7 +218,7 @@ describe Source do
       expect { source.buffer = buffer }.to raise_error error_pattern
       source.stop
       expect { source.buffer = buffer }.to raise_error error_pattern
-      source.detach
+      source.stream = nil
       expect { source.buffer = buffer }.to_not raise_error
     end
 
@@ -347,16 +347,16 @@ describe Source do
     end
 
     it 'should be static if it has a buffer' do
-      source.buffer = Buffer.new(WAV_PATH)
+      source.buffer = buffer
       source.type.should be STATIC
     end
 
     it 'should be undetermined after detaching' do
       source.stream = stream
-      source.detach
+      source.stream = nil
       source.type.should be UNDETERMINED
       source.buffer = buffer
-      source.detach
+      source.buffer = nil
       source.type.should be UNDETERMINED
     end
   end
@@ -425,16 +425,14 @@ describe Source do
     context 'when detaching' do
       example 'from initial state' do
         source.state.should be INITIAL
-        source.detach
-        source.state.should be INITIAL
-        source.detach
+        source.stream = nil
         source.state.should be INITIAL
       end
 
       example 'from playing state' do
         source.play
         source.state.should be PLAYING
-        source.detach
+        source.stream = nil
         source.state.should be INITIAL
       end
 
@@ -442,7 +440,7 @@ describe Source do
         source.play
         source.pause
         source.state.should be PAUSED
-        source.detach
+        source.stream = nil
         source.state.should be INITIAL
       end
 
@@ -450,7 +448,7 @@ describe Source do
         source.play
         source.stop
         source.state.should be STOPPED
-        source.detach
+        source.stream = nil
         source.state.should be INITIAL
       end
     end
