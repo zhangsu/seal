@@ -9,9 +9,7 @@ describe Source do
   let(:buffer) { Buffer.new(WAV_PATH) }
 
   describe 'by default' do
-    before :all do
-      @source = Source.new
-    end
+    before(:all) { @source = Source.new }
 
     it 'is automatic' do
       @source.auto?.should be_true
