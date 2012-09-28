@@ -567,7 +567,7 @@ rewind_stream(VALUE rstream)
  *  call-seq:
  *      stream.close    -> stream
  *
- * Closes _stream_ which must not be used by any source.
+ * Closes _stream_.
  */
 static
 VALUE

@@ -59,8 +59,7 @@ seal_err_t seal_stream(seal_stream_t*, seal_raw_t*, size_t* /*psize*/);
 seal_err_t seal_rewind_stream(seal_stream_t*);
 
 /*
- * Closes a stream opened by `seal_open_stream' that is not used by any
- * source.
+ * Closes a stream opened by `seal_open_stream'.
  *
  * @param stream    the stream to close;  will be left untouched if an error
  *                  occurs
