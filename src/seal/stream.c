@@ -97,8 +97,10 @@ seal_close_stream(seal_stream_t* stream)
     default:
         return SEAL_BAD_AUDIO;
     }
-    if (err == SEAL_OK)
+    if (err == SEAL_OK) {
         stream->id = 0;
-
-    return SEAL_OK;
+        stream->attr.freq = 0;
+        stream->attr.nchannels = 1;
+        stream->attr.bit_depth = 16;
+    }
 }
