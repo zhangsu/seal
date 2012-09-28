@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'audio_object_with_format'
 
 describe Buffer do
   it 'cannot be changed if it is being used by a source' do

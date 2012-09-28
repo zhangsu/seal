@@ -14,6 +14,7 @@ module CustomMatchers
   end
 end
 
+Dir["./spec/support/**/*.rb"].each { |f| require f}
 require 'seal'
 include Seal
 
