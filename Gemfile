@@ -6,5 +6,5 @@ group :development do
   gem 'rspec'
   gem 'guard-rspec'
   gem 'yard'
-  gem 'redcarpet'
+  gem 'rb-inotify'
 end
