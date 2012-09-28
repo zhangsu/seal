@@ -2,8 +2,10 @@ require 'spec_helper'
 
 describe Seal do
   it 'should initialize and finalize correctly on default device' do
-    Seal.startup
-    Seal.cleanup
+    expect do
+      Seal.startup
+      Seal.cleanup
+    end.to_not raise_error
   end
 
   it 'should fail when trying to initialize non-existing device' do
