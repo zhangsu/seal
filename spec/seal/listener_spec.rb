@@ -1,18 +1,13 @@
 require 'spec_helper'
 
 describe Listener do
-  it_behaves_like 'a movable object' do
-    subject { LISTENER }
-  end
+  subject { LISTENER }
+
+  it_behaves_like 'a movable object'
 
   describe 'by default' do
-    it 'has a default gain of 1.0' do
-      LISTENER.gain.should eq 1.0
-    end
-
-    it 'has a default orientation of ((0,0,-1),(0,1,0))' do
-      LISTENER.orientation.should eq [[0, 0, -1], [0, 1, 0]]
-    end
+    its(:gain) { should eq 1.0 }
+    its(:orientation) { should eq [[0, 0, -1], [0, 1, 0]] }
   end
 
   it 'can change its orientation' do
