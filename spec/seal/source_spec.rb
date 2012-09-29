@@ -8,6 +8,10 @@ describe Source do
   let(:stream) { Stream.new(WAV_PATH) }
   let(:buffer) { Buffer.new(WAV_PATH) }
 
+  it_behaves_like 'a movable object' do
+    subject { source }
+  end
+
   describe 'by default' do
     before(:all) { @source = Source.new }
 
@@ -35,10 +39,6 @@ describe Source do
       @source.pitch.should be_within(TOLERANCE).of(1.0)
     end
 
-    it 'has a position of (0,0,0)' do
-      @source.position.should eq [0, 0, 0]
-    end
-
     it 'has a queue size of 3' do
       @source.queue_size.should eq 3
     end
@@ -57,10 +57,6 @@ describe Source do
 
     it 'has un undertermined type' do
       @source.type.should be UNDETERMINED
-    end
-
-    it 'has a velocity of (0,0,0)' do
-      @source.velocity.should eq [0, 0, 0]
     end
   end
 
@@ -104,16 +100,6 @@ describe Source do
       @source.chunk_size.should eq 16773120
       expect { @source.chunk_size = 16773121 }.to raise_error @error_pattern
       expect { @source.chunk_size = 234923428 }.to raise_error @error_pattern
-    end
-
-    it 'can change its position' do
-      @source.position = [0.2, 45.3, -4.5]
-      @source.position.should be_each_within(TOLERANCE).of [0.2, 45.3, -4.5]
-    end
-
-    it 'can change its velocity' do
-      @source.velocity = [-3.2, 13.445, 0]
-      @source.velocity.should be_each_within(TOLERANCE).of [-3.2, 13.445, 0]
     end
 
     it 'has a pitch in (0, +inf.)' do
