@@ -14,16 +14,16 @@ describe Seal do
 
   it 'has only one instance of Listener' do
     Seal.listener.should be Seal.listener
-    Seal.listener.is_a?(Listener).should be_true
+    Seal.listener.should be_a Listener
     expect { Seal::Listener.new }.to raise_error NoMethodError
     expect { Seal::Listener.allocate }.to raise_error TypeError
   end
 
   it 'defines a limit on the number of effect slots per source' do
-    Seal.per_source_effect_limit.is_a?(Integer).should be_true
+    Seal.per_source_effect_limit.should be_an Integer
   end
 
   it 'defines a version string' do
-    Seal::VERSION.is_a?(String).should be_true
+    Seal::VERSION.should match /\d\.\d\.\d/
   end
 end
