@@ -8,8 +8,6 @@ describe Source do
   let(:stream) { Stream.new(WAV_PATH) }
   let(:buffer) { Buffer.new(WAV_PATH) }
 
-  subject { source }
-
   it_behaves_like 'a movable object'
 
   describe 'by default' do
