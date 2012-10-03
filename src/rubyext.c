@@ -1128,7 +1128,7 @@ init_rvb(int argc, VALUE* argv, VALUE rrvb)
  */
 static
 VALUE
-set_src_density(VALUE rrvb, VALUE value)
+set_rvb_density(VALUE rrvb, VALUE value)
 {
     return set_obj_float(rrvb, value, seal_set_rvb_density);
 }
@@ -1456,6 +1456,7 @@ set_rvb_air_absorbtion_hfgain(VALUE rrvb, VALUE value)
  *      reverb.air_absorbtion_hfgain  -> flt
  *
  * Gets the air absorbtion high-frequency gain of _reverb_. The default is
+ * 0.994.
  */
 static
 VALUE
@@ -2032,8 +2033,8 @@ bind_rvb(void)
     rb_define_alloc_func(cReverb, alloc_rvb);
     rb_define_method(cReverb, "initialize", init_rvb, -1);
     rb_define_method(cReverb, "load", load_rvb, 2);
-    rb_define_method(cReverb, "density=", set_rvb_diffusion, 1);
-    rb_define_method(cReverb, "density", get_rvb_diffusion, 0);
+    rb_define_method(cReverb, "density=", set_rvb_density, 1);
+    rb_define_method(cReverb, "density", get_rvb_density, 0);
     rb_define_method(cReverb, "diffusion=", set_rvb_diffusion, 1);
     rb_define_method(cReverb, "diffusion", get_rvb_diffusion, 0);
     rb_define_method(cReverb, "gain=", set_rvb_gain, 1);
