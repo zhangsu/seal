@@ -24,80 +24,47 @@ describe Source do
     its (:type) { should be UNDETERMINED }
   end
 
-  describe 'with valid attributes' do
-    let(:error_pattern) { /Invalid parameter value/ }
+  it_validates 'the boolean attribute', :relative
+  it_validates 'the boolean attribute', :auto
+  it_validates 'the float attribute', :pitch, [0, Float::INFINITY]
+  it_validates 'the float attribute', :gain, [0, Float::INFINITY]
 
-    it 'has a queue size in [2, 63]' do
-      expect { source.queue_size = -130 }.to raise_error error_pattern
-      expect { source.queue_size = 0 }.to raise_error error_pattern
-      expect { source.queue_size = 1 }.to raise_error error_pattern
-      source.queue_size = 2
-      source.queue_size.should eq 2
-      source.queue_size = 32
-      source.queue_size.should eq 32
-      source.queue_size = 63
-      source.queue_size.should eq 63
-      expect { source.queue_size = 64 }.to raise_error error_pattern
-      expect { source.queue_size = 1203 }.to raise_error error_pattern
-      source.queue_size.should eq 63
-    end
+  it 'validates its queue size is in [2, 63]' do
+    error_pattern = /Invalid parameter value/
+    expect { source.queue_size = -130 }.to raise_error error_pattern
+    expect { source.queue_size = 0 }.to raise_error error_pattern
+    expect { source.queue_size = 1 }.to raise_error error_pattern
+    source.queue_size = 2
+    source.queue_size.should eq 2
+    source.queue_size = 32
+    source.queue_size.should eq 32
+    source.queue_size = 63
+    source.queue_size.should eq 63
+    expect { source.queue_size = 64 }.to raise_error error_pattern
+    expect { source.queue_size = 1203 }.to raise_error error_pattern
+    source.queue_size.should eq 63
+  end
 
-    it 'has a auto-adjusting chunk size in [9216, 16773120]' do
-      expect { source.chunk_size = 0 }.to raise_error error_pattern
-      expect { source.chunk_size = 432 }.to raise_error error_pattern
-      expect { source.chunk_size = 9215 }.to raise_error error_pattern
-      source.chunk_size = 9216
-      source.chunk_size.should eq 9216
-      # It should be automatically adjusted to a smaller multiple of 9216.
-      source.chunk_size = 9217
-      source.chunk_size.should eq 9216
-      source.chunk_size = 32768
-      source.chunk_size.should eq 27648
-      source.chunk_size = 294912
-      source.chunk_size.should eq 294912
-      source.chunk_size = 16773119
-      source.chunk_size.should eq 16763904
-      source.chunk_size = 16773120
-      source.chunk_size.should eq 16773120
-      expect { source.chunk_size = 16773121 }.to raise_error error_pattern
-      expect { source.chunk_size = 234923428 }.to raise_error error_pattern
-    end
-
-    it 'has a pitch in (0, +inf.)' do
-      source.pitch = 2.1903
-      expect { source.pitch = -3.1 }.to raise_error error_pattern
-      source.pitch.should be_within(TOLERANCE).of 2.1903
-    end
-
-    it 'has a gain in [0, +inf.)' do
-      source.gain = 3.103
-      source.gain.should be_within(TOLERANCE).of 3.103
-      source.gain = 0
-      expect { source.gain = -0.4 }.to raise_error error_pattern
-      source.gain.should eq 0
-    end
-
-    it 'can be relative or not relative' do
-      source.relative = true
-      source.relative.should be_true
-      source.relative = false
-      source.relative.should be_false
-      source.relative = Object.new
-      source.relative.should be_true
-      source.relative = nil
-      source.relative.should be_false
-    end
-
-    it 'can be automatic or not automatic' do
-      source.auto = true
-      source.auto.should be_true
-      source.auto = false
-      source.auto.should be_false
-      source.auto = Object.new
-      source.auto.should be_true
-      source.auto = nil
-      source.auto.should be_false
-    end
+  it 'validates it has an auto-adjusting chunk size in [9216, 16773120]' do
+    error_pattern = /Invalid parameter value/
+    expect { source.chunk_size = 0 }.to raise_error error_pattern
+    expect { source.chunk_size = 432 }.to raise_error error_pattern
+    expect { source.chunk_size = 9215 }.to raise_error error_pattern
+    source.chunk_size = 9216
+    source.chunk_size.should eq 9216
+    # It should be automatically adjusted to a smaller multiple of 9216.
+    source.chunk_size = 9217
+    source.chunk_size.should eq 9216
+    source.chunk_size = 32768
+    source.chunk_size.should eq 27648
+    source.chunk_size = 294912
+    source.chunk_size.should eq 294912
+    source.chunk_size = 16773119
+    source.chunk_size.should eq 16763904
+    source.chunk_size = 16773120
+    source.chunk_size.should eq 16773120
+    expect { source.chunk_size = 16773121 }.to raise_error error_pattern
+    expect { source.chunk_size = 234923428 }.to raise_error error_pattern
   end
 
   context 'with a buffer' do

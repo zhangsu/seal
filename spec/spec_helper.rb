@@ -14,6 +14,12 @@ module CustomMatchers
   end
 end
 
+class Symbol
+  def to_writer
+    "#{self}=".intern
+  end
+end
+
 Dir["./spec/support/**/*.rb"].each { |f| require f}
 require 'seal'
 include Seal
@@ -25,6 +31,7 @@ OV_PATH = File.join FIXTURE_DIR, 'heal.ogg'
 
 RSpec.configure do |config|
   config.include CustomMatchers
+  config.alias_it_should_behave_like_to :it_validates, 'validates'
 
   config.instance_eval do
     before :all do

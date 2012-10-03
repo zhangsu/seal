@@ -9,26 +9,20 @@ describe EffectSlot do
     its(:gain) { should eq 1.0 }
   end
 
+  it_validates 'the boolean attribute', :auto
+  it_validates 'the float attribute', :gain, [0, 1]
+
   it 'can initialize with an effect' do
     reverb = Reverb.new
     effect_slot = EffectSlot.new(reverb)
     effect_slot.effect.should be reverb
   end
 
-  context 'with valid attributes' do
-    it 'has a gain in [0, 1.0]' do
-      error_pattern = /Invalid parameter value/
-      effect_slot = subject
-      effect_slot.gain = 0.7667
-      effect_slot.gain.should be_within(TOLERANCE).of 0.7667
-      effect_slot.gain = 1
-      effect_slot.gain.should eq 1
-      effect_slot.gain = 0
-      expect { effect_slot.gain = -3.2 }.to raise_error error_pattern
-      expect { effect_slot.gain = 1.01 }.to raise_error error_pattern
-      expect { effect_slot.gain = 3.9 }.to raise_error error_pattern
-      effect_slot.gain.should eq 0
-    end
+  it 'can set an effect' do
+    effect_slot = subject
+    reverb = Reverb.new
+    effect_slot.effect = reverb
+    effect_slot.effect.should be reverb
   end
 
   it 'has a limited number of sources it can feed concurrently' do
