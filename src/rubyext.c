@@ -1088,7 +1088,7 @@ load_rvb(VALUE rrvb, VALUE rpreset)
     seal_rvb_t* rvb;
 
     Data_Get_Struct(rrvb, seal_rvb_t, rvb);
-    check_seal_err(seal_load_rvb(DATA_PTR(rrvb), rpreset));
+    check_seal_err(seal_load_rvb(DATA_PTR(rrvb), NUM2INT(rpreset)));
 
     return rrvb;
 }
@@ -2032,7 +2032,7 @@ bind_rvb(void)
 
     rb_define_alloc_func(cReverb, alloc_rvb);
     rb_define_method(cReverb, "initialize", init_rvb, -1);
-    rb_define_method(cReverb, "load", load_rvb, 2);
+    rb_define_method(cReverb, "load", load_rvb, 1);
     rb_define_method(cReverb, "density=", set_rvb_density, 1);
     rb_define_method(cReverb, "density", get_rvb_density, 0);
     rb_define_method(cReverb, "diffusion=", set_rvb_diffusion, 1);
