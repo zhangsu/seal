@@ -17,13 +17,14 @@ end
 
 shared_examples 'the float attribute' do |reader_sym, interval|
   writer_sym = reader_sym.to_writer
-  lower, upper = interval
+  interval =~ /(\[|\()\s*(.+?)\s*,\s*(.+?)\s*(\]|\))/
+  lopen = $1 == '('
+  lower = $2 == '-inf.' ? -Float::INFINITY : $2.to_f
+  upper = $3 == '+inf.' ? +Float::INFINITY : $3.to_f
+  uopen = $4 == ')'
   # Whether the boundaries are open.
-  lopen, uopen = interval.map { |n| n.is_a? Float }
   error_pattern = /Invalid parameter value/
-
-  specify "'#{reader_sym}' is in " + (lopen ? '(' : '[') +
-     "#{lower},#{upper}" + (uopen ? ')' : ']') do
+  specify "'#{reader_sym}' is in #$1#$2,#$3#$4" do
 
     if lower != -Float::INFINITY
       # Validates values smaller than the lower bound.

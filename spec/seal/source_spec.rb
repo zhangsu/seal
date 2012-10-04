@@ -26,8 +26,8 @@ describe Source do
 
   it_validates 'the boolean attribute', :relative
   it_validates 'the boolean attribute', :auto
-  it_validates 'the float attribute', :pitch, [0, Float::INFINITY]
-  it_validates 'the float attribute', :gain, [0, Float::INFINITY]
+  it_validates 'the float attribute', :pitch, "[0, +inf.)"
+  it_validates 'the float attribute', :gain, "[0, +inf.)"
 
   it 'validates its queue size is in [2, 63]' do
     error_pattern = /Invalid parameter value/
