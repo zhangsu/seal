@@ -31,7 +31,7 @@ OV_PATH = File.join FIXTURE_DIR, 'heal.ogg'
 
 RSpec.configure do |config|
   config.include CustomMatchers
-  config.alias_it_should_behave_like_to :it_validates, 'validates'
+  config.alias_it_should_behave_like_to :it_validates, 'validates that'
 
   config.instance_eval do
     before :all do
