@@ -1198,7 +1198,7 @@ set_rvb_gain(VALUE rrvb, VALUE value)
  *  call-seq:
  *      reverb.gain  -> flt
  *
- * Gets the gain of _reverb_. The default is 0.32f.
+ * Gets the gain of _reverb_. The default is 0.32.
  */
 static
 VALUE
@@ -1229,7 +1229,7 @@ set_rvb_hfgain(VALUE rrvb, VALUE value)
  *  call-seq:
  *      reverb.hfgain  -> flt
  *
- * Gets the high-frequency gain of _reverb_. The default is 0.89f.
+ * Gets the high-frequency gain of _reverb_. The default is 0.89.
  */
 static
 VALUE
@@ -1257,7 +1257,7 @@ set_rvb_decay_time(VALUE rrvb, VALUE value)
  *  call-seq:
  *      reverb.decay_time  -> flt
  *
- * Gets the decay time of _reverb_. The default is 1.49f.
+ * Gets the decay time of _reverb_. The default is 1.49.
  */
 static
 VALUE
@@ -1292,7 +1292,7 @@ set_rvb_hfdecay_ratio(VALUE rrvb, VALUE value)
  *  call-seq:
  *      reverb.hfdecay_ratio  -> flt
  *
- * Gets the high-frequency decay ratio of _reverb_. The default is 0.83f.
+ * Gets the high-frequency decay ratio of _reverb_. The default is 0.83.
  */
 static
 VALUE
@@ -1306,7 +1306,7 @@ get_rvb_hfdecay_ratio(VALUE rrvb)
  *      reverb.reflections_gain = flt  -> flt
  *
  * Sets the reflections gain, or the overall amount of initial reflections
- * relative to the gain of _reverb_ in the interval [0.0, 3.16f], or from
+ * relative to the gain of _reverb_ in the interval [0.0, 3.16], or from
  * -100 dB (no initial reflections at all) to 10 dB. The reflections gain is
  * corrected by the value of the gain property and does not affect the
  * subsequent reverberation decay.
@@ -1330,7 +1330,7 @@ set_rvb_reflections_gain(VALUE rrvb, VALUE value)
  *  call-seq:
  *      reverb.reflections_gain  -> flt
  *
- * Gets the reflections gain of _reverb_. The default is 0.05f.
+ * Gets the reflections gain of _reverb_. The default is 0.05.
  */
 static
 VALUE
@@ -1360,7 +1360,7 @@ set_rvb_reflections_delay(VALUE rrvb, VALUE value)
  *  call-seq:
  *      reverb.reflections_delay  -> flt
  *
- * Gets the reflections delay of _reverb_. The default is 0.007f.
+ * Gets the reflections delay of _reverb_. The default is 0.007.
  */
 static
 VALUE
@@ -1393,7 +1393,7 @@ set_rvb_late_gain(VALUE rrvb, VALUE value)
  *  call-seq:
  *      reverb.late_gain  -> flt
  *
- * Gets the late gain of _reverb_. The default is 1.26f.
+ * Gets the late gain of _reverb_. The default is 1.26.
  */
 static
 VALUE
@@ -1422,7 +1422,7 @@ set_rvb_late_delay(VALUE rrvb, VALUE value)
  *  call-seq:
  *      reverb.late_delay  -> flt
  *
- * Gets the late delay of _reverb_. The default is 0.011f.
+ * Gets the late delay of _reverb_. The default is 0.011.
  */
 static
 VALUE
