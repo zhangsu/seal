@@ -1271,8 +1271,8 @@ get_rvb_decay_time(VALUE rrvb)
  *      reverb.hfdecay_ratio = flt  -> flt
  *
  * Sets the high-frequency decay ratio, or the spectral quality of the decay
- * time of _reverb_ in the interval [0.1, 20.0]. It is the ratio of high-
- * frequency decay time relative to the time set by decay Time. 1.0 means
+ * time of _reverb_ in the interval [0.1, 2.0]. It is the ratio of
+ * high-frequency decay time relative to the time set by decay Time. 1.0 means
  * neutral: the decay time is equal for all frequencies. As this value
  * increases above 1.0, the high-frequency decay time increases so it's longer
  * than the decay time at low frequencies. You hear a more brilliant
