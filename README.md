@@ -56,8 +56,13 @@ source.buffer = ...
 
 # ...
 
-source.detach
+source.buffer = nil
 source.stream = ...
+
+# ...
+
+source.stream = nil
+source.buffer = ...
 ```
 
 Apply a reverberation effect to the sound source:
@@ -67,6 +72,12 @@ Apply a reverberation effect to the sound source:
 slot = EffectSlot.new(Reverb.new(Reverb::Preset::FOREST))
 # Start feeding the slot.
 slot.feed(0, source)
+```
+
+Uninitialize Seal:
+
+```ruby
+seal.cleanup
 ```
 
 You can find detailed documentations in the header files under `include/seal`
