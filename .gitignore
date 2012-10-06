@@ -1,6 +1,11 @@
 *.o
+*.a
 *.so
 *.bundle
+*.lo
+*.la
+*.pc
+*.status
 *.log
 *.obj
 *.swp
@@ -11,6 +16,7 @@
 doc
 tmp
 Gemfile.lock
+Makefile
 make/*/*/*
 !make/gcc/unix-like/Makefile
 !make/gcc/win32/Makefile
@@ -27,3 +33,12 @@ ext/*.dll
 ext/*.def
 ext/Makefile
 demo/*.dll
+mpg123/libtool
+mpg123/src/.deps/
+mpg123/src/config.h
+mpg123/src/libmpg123/.deps/
+mpg123/src/libmpg123/.libs/
+mpg123/src/libmpg123/mpg123.h
+mpg123/src/mpg123
+mpg123/src/output/.deps/
+mpg123/src/stamp-h1
