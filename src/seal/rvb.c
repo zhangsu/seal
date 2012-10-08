@@ -349,14 +349,14 @@ seal_get_rvb_late_delay(seal_rvb_t* rvb, float* pdelay)
 seal_err_t
 seal_get_rvb_air_absorbtion_hfgain(seal_rvb_t* rvb, float* phfgain)
 {
-    return _seal_getf(rvb,  AL_REVERB_ROOM_ROLLOFF_FACTOR, phfgain,
+    return _seal_getf(rvb, AL_REVERB_AIR_ABSORPTION_GAINHF, phfgain,
                       alGetEffectf);
 }
 
 seal_err_t
 seal_get_rvb_room_rolloff_factor(seal_rvb_t* rvb, float* pfactor)
 {
-    return _seal_getf(rvb,  AL_REVERB_AIR_ABSORPTION_GAINHF, pfactor,
+    return _seal_getf(rvb, AL_REVERB_ROOM_ROLLOFF_FACTOR, pfactor,
                       alGetEffectf);
 }
 

@@ -243,13 +243,6 @@ get_obj_3float(VALUE robj, void* get)
 }
 
 static
-void
-define_enum(VALUE mModule, const char* name, int e)
-{
-    rb_define_const(mModule, name, INT2NUM(e));
-}
-
-static
 seal_fmt_t
 map_format(VALUE symbol)
 {
@@ -440,7 +433,7 @@ load_buf(int argc, VALUE* argv, VALUE rbuf)
  *  call-seq:
  *      buffer.size ->  fixnum
  *
- * Gets the size, in bytes, of _buffer_. The default is 0.
+ * Gets the size, in bytes, of _buffer_.
  */
 static
 VALUE
@@ -453,8 +446,7 @@ get_buf_size(VALUE rbuf)
  *  call-seq:
  *      buffer.frequency    -> fixnum
  *
- * Gets the frequency (sample rate) of the audio contained in _buffer_. The
- * default is 0 when the buffer is not loaded.
+ * Gets the frequency (sample rate) of the audio contained in _buffer_.
  */
 static
 VALUE
@@ -468,7 +460,6 @@ get_buf_freq(VALUE rbuf)
  *      buffer.bit_depth    -> fixnum
  *
  * Gets the bit depth (bits per sample) of the audio contained in _buffer_.
- * The default is 16.
  */
 static
 VALUE
@@ -481,8 +472,7 @@ get_buf_bps(VALUE rbuf)
  *  call-seq:
  *      buffer.channel_count    -> fixnum
  *
- * Gets the number of channels of the audio contained in _buffer_. The default
- * is 1.
+ * Gets the number of channels of the audio contained in _buffer_.
  */
 static
 VALUE
@@ -528,7 +518,7 @@ get_stream_freq(VALUE rstream)
  *      stream.bit_depth    -> fixnum
  *
  * Gets the bit depth (bits per sample) of the audio contained in _stream_.
- * The default is 16.
+ * The default is 16 when the stream is not opened.
  */
 static
 VALUE
@@ -542,7 +532,7 @@ get_stream_bps(VALUE rstream)
  *      stream.channel_count    -> fixnum
  *
  * Gets the number of channels of the audio contained in _stream_. The default
- * is 1.
+ * is 1 when the stream is not opened.
  */
 static
 VALUE
@@ -570,7 +560,7 @@ rewind_stream(VALUE rstream)
  *  call-seq:
  *      stream.close    -> stream
  *
- * Closes _stream_ which must not be used by any source.
+ * Closes _stream_.
  */
 static
 VALUE
@@ -663,28 +653,17 @@ rewind_src(VALUE rsrc)
 
 /*
  *  call-seq:
- *      source.detach -> source
- *
- * Releases the current buffer or stream from _source_ (hence empties the
- * queue for streaming sources). Will reset the source to Type::UNDETERMINED
- * and the source state to State::STOPPED. Will not free the associated buffer
- * or stream.
- */
-static
-VALUE
-detach_src_audio(VALUE rsrc)
-{
-    return src_op(rsrc, seal_detach_src_audio);
-}
-
-/*
- *  call-seq:
  *      source.buffer = buffer  -> buffer
+ *      source.buffer = nil     -> nil
  *
  * Associates _buffer_ with _source_ so that the source is ready to play the
  * audio contained in _buffer_. Can be applied only to sources in the initial
  * or stopped states and that are not of streaming type. If successful, the
  * source will become or remain as Type::STATIC.
+ *
+ * If nil is specified, the source will give up the buffer it has and will
+ * reset the source to Type::UNDETERMINED and the source state to
+ * State::STOPPED. It will not free the buffer.
  */
 static
 VALUE
@@ -692,8 +671,12 @@ set_src_buf(VALUE rsrc, VALUE rbuf)
 {
     seal_buf_t* buf;
 
-    Data_Get_Struct(rbuf, seal_buf_t, buf);
-    check_seal_err(seal_set_src_buf(DATA_PTR(rsrc), buf));
+    if (NIL_P(rbuf)) {
+        src_op(rsrc, seal_detach_src_audio);
+    } else {
+        Data_Get_Struct(rbuf, seal_buf_t, buf);
+        check_seal_err(seal_set_src_buf(DATA_PTR(rsrc), buf));
+    }
     rb_iv_set(rsrc, "@buffer", rbuf);
 
     return rbuf;
@@ -715,6 +698,7 @@ get_src_buf(VALUE rsrc)
 /*
  *  call-seq:
  *      source.stream = stream  -> stream
+ *      source.stream = nil
  *
  * Associates (opened) _stream_ with _source_ so that audio data can be
  * continuously fetched from a file rather than loading everything to memory
@@ -726,6 +710,10 @@ get_src_buf(VALUE rsrc)
  * or remain as Type::STREAMING. The streaming queue will be filled after this
  * call returns; after the queue starts to be played, #update should be called
  * to refill the queue.
+ *
+ * If nil is specified, the source will give up the stream it has and will
+ * reset the source to Type::UNDETERMINED and the source state to
+ * State::STOPPED. It will not free the stream.
  */
 static
 VALUE
@@ -733,8 +721,12 @@ set_src_stream(VALUE rsrc, VALUE rstream)
 {
     seal_stream_t* stream;
 
-    Data_Get_Struct(rstream, seal_stream_t, stream);
-    check_seal_err(seal_set_src_stream(DATA_PTR(rsrc), stream));
+    if (NIL_P(rstream)) {
+        src_op(rsrc, seal_detach_src_audio);
+    } else {
+        Data_Get_Struct(rstream, seal_stream_t, stream);
+        check_seal_err(seal_set_src_stream(DATA_PTR(rsrc), stream));
+    }
     rb_iv_set(rsrc, "@stream", rstream);
 
     return rstream;
@@ -1089,7 +1081,7 @@ load_rvb(VALUE rrvb, VALUE rpreset)
     seal_rvb_t* rvb;
 
     Data_Get_Struct(rrvb, seal_rvb_t, rvb);
-    check_seal_err(seal_load_rvb(DATA_PTR(rrvb), rpreset));
+    check_seal_err(seal_load_rvb(DATA_PTR(rrvb), NUM2INT(rpreset)));
 
     return rrvb;
 }
@@ -1129,7 +1121,7 @@ init_rvb(int argc, VALUE* argv, VALUE rrvb)
  */
 static
 VALUE
-set_src_density(VALUE rrvb, VALUE value)
+set_rvb_density(VALUE rrvb, VALUE value)
 {
     return set_obj_float(rrvb, value, seal_set_rvb_density);
 }
@@ -1199,7 +1191,7 @@ set_rvb_gain(VALUE rrvb, VALUE value)
  *  call-seq:
  *      reverb.gain  -> flt
  *
- * Gets the gain of _reverb_. The default is 0.32f.
+ * Gets the gain of _reverb_. The default is 0.32.
  */
 static
 VALUE
@@ -1230,7 +1222,7 @@ set_rvb_hfgain(VALUE rrvb, VALUE value)
  *  call-seq:
  *      reverb.hfgain  -> flt
  *
- * Gets the high-frequency gain of _reverb_. The default is 0.89f.
+ * Gets the high-frequency gain of _reverb_. The default is 0.89.
  */
 static
 VALUE
@@ -1258,7 +1250,7 @@ set_rvb_decay_time(VALUE rrvb, VALUE value)
  *  call-seq:
  *      reverb.decay_time  -> flt
  *
- * Gets the decay time of _reverb_. The default is 1.49f.
+ * Gets the decay time of _reverb_. The default is 1.49.
  */
 static
 VALUE
@@ -1272,8 +1264,8 @@ get_rvb_decay_time(VALUE rrvb)
  *      reverb.hfdecay_ratio = flt  -> flt
  *
  * Sets the high-frequency decay ratio, or the spectral quality of the decay
- * time of _reverb_ in the interval [0.1, 20.0]. It is the ratio of high-
- * frequency decay time relative to the time set by decay Time. 1.0 means
+ * time of _reverb_ in the interval [0.1, 2.0]. It is the ratio of
+ * high-frequency decay time relative to the time set by decay Time. 1.0 means
  * neutral: the decay time is equal for all frequencies. As this value
  * increases above 1.0, the high-frequency decay time increases so it's longer
  * than the decay time at low frequencies. You hear a more brilliant
@@ -1293,7 +1285,7 @@ set_rvb_hfdecay_ratio(VALUE rrvb, VALUE value)
  *  call-seq:
  *      reverb.hfdecay_ratio  -> flt
  *
- * Gets the high-frequency decay ratio of _reverb_. The default is 0.83f.
+ * Gets the high-frequency decay ratio of _reverb_. The default is 0.83.
  */
 static
 VALUE
@@ -1307,7 +1299,7 @@ get_rvb_hfdecay_ratio(VALUE rrvb)
  *      reverb.reflections_gain = flt  -> flt
  *
  * Sets the reflections gain, or the overall amount of initial reflections
- * relative to the gain of _reverb_ in the interval [0.0, 3.16f], or from
+ * relative to the gain of _reverb_ in the interval [0.0, 3.16], or from
  * -100 dB (no initial reflections at all) to 10 dB. The reflections gain is
  * corrected by the value of the gain property and does not affect the
  * subsequent reverberation decay.
@@ -1331,7 +1323,7 @@ set_rvb_reflections_gain(VALUE rrvb, VALUE value)
  *  call-seq:
  *      reverb.reflections_gain  -> flt
  *
- * Gets the reflections gain of _reverb_. The default is 0.05f.
+ * Gets the reflections gain of _reverb_. The default is 0.05.
  */
 static
 VALUE
@@ -1361,7 +1353,7 @@ set_rvb_reflections_delay(VALUE rrvb, VALUE value)
  *  call-seq:
  *      reverb.reflections_delay  -> flt
  *
- * Gets the reflections delay of _reverb_. The default is 0.007f.
+ * Gets the reflections delay of _reverb_. The default is 0.007.
  */
 static
 VALUE
@@ -1394,7 +1386,7 @@ set_rvb_late_gain(VALUE rrvb, VALUE value)
  *  call-seq:
  *      reverb.late_gain  -> flt
  *
- * Gets the late gain of _reverb_. The default is 1.26f.
+ * Gets the late gain of _reverb_. The default is 1.26.
  */
 static
 VALUE
@@ -1423,7 +1415,7 @@ set_rvb_late_delay(VALUE rrvb, VALUE value)
  *  call-seq:
  *      reverb.late_delay  -> flt
  *
- * Gets the late delay of _reverb_. The default is 0.011f.
+ * Gets the late delay of _reverb_. The default is 0.011.
  */
 static
 VALUE
@@ -1457,6 +1449,7 @@ set_rvb_air_absorbtion_hfgain(VALUE rrvb, VALUE value)
  *      reverb.air_absorbtion_hfgain  -> flt
  *
  * Gets the air absorbtion high-frequency gain of _reverb_. The default is
+ * 0.994.
  */
 static
 VALUE
@@ -1957,7 +1950,6 @@ bind_src(void)
     rb_define_method(cSource, "pause", pause_src, 0);
     rb_define_method(cSource, "stop", stop_src, 0);
     rb_define_method(cSource, "rewind", rewind_src, 0);
-    rb_define_method(cSource, "detach", detach_src_audio, 0);
     rb_define_method(cSource, "buffer=", set_src_buf, 1);
     rb_define_method(cSource, "buffer", get_src_buf, 0);
     rb_define_method(cSource, "stream=", set_src_stream, 1);
@@ -2033,9 +2025,9 @@ bind_rvb(void)
 
     rb_define_alloc_func(cReverb, alloc_rvb);
     rb_define_method(cReverb, "initialize", init_rvb, -1);
-    rb_define_method(cReverb, "load", load_rvb, 2);
-    rb_define_method(cReverb, "density=", set_rvb_diffusion, 1);
-    rb_define_method(cReverb, "density", get_rvb_diffusion, 0);
+    rb_define_method(cReverb, "load", load_rvb, 1);
+    rb_define_method(cReverb, "density=", set_rvb_density, 1);
+    rb_define_method(cReverb, "density", get_rvb_density, 0);
     rb_define_method(cReverb, "diffusion=", set_rvb_diffusion, 1);
     rb_define_method(cReverb, "diffusion", get_rvb_diffusion, 0);
     rb_define_method(cReverb, "gain=", set_rvb_gain, 1);
@@ -2072,157 +2064,198 @@ bind_rvb(void)
                      is_rvb_hfdecay_limited, 0);
     rb_define_alias(cReverb, "hfdecay_limited?", "hfdecay_limited");
 
-    define_enum(mPreset, "GENERIC", SEAL_GENERIC_REVERB);
-    define_enum(mPreset, "PADDEDCELL", SEAL_PADDEDCELL_REVERB);
-    define_enum(mPreset, "ROOM", SEAL_ROOM_REVERB);
-    define_enum(mPreset, "BATHROOM", SEAL_BATHROOM_REVERB);
-    define_enum(mPreset, "LIVINGROOM", SEAL_LIVINGROOM_REVERB);
-    define_enum(mPreset, "STONEROOM", SEAL_STONEROOM_REVERB);
-    define_enum(mPreset, "AUDITORIUM", SEAL_AUDITORIUM_REVERB);
-    define_enum(mPreset, "CONCERTHALL", SEAL_CONCERTHALL_REVERB);
-    define_enum(mPreset, "CAVE", SEAL_CAVE_REVERB);
-    define_enum(mPreset, "ARENA", SEAL_ARENA_REVERB);
-    define_enum(mPreset, "HANGAR", SEAL_HANGAR_REVERB);
-    define_enum(mPreset, "CARPETEDHALLWAY", SEAL_CARPETEDHALLWAY_REVERB);
-    define_enum(mPreset, "HALLWAY", SEAL_HALLWAY_REVERB);
-    define_enum(mPreset, "STONECORRIDOR", SEAL_STONECORRIDOR_REVERB);
-    define_enum(mPreset, "ALLEY", SEAL_ALLEY_REVERB);
-    define_enum(mPreset, "FOREST", SEAL_FOREST_REVERB);
-    define_enum(mPreset, "CITY", SEAL_CITY_REVERB);
-    define_enum(mPreset, "MOUNTAINS", SEAL_MOUNTAINS_REVERB);
-    define_enum(mPreset, "QUARRY", SEAL_QUARRY_REVERB);
-    define_enum(mPreset, "PLAIN", SEAL_PLAIN_REVERB);
-    define_enum(mPreset, "PARKINGLOT", SEAL_PARKINGLOT_REVERB);
-    define_enum(mPreset, "SEWERPIPE", SEAL_SEWERPIPE_REVERB);
-    define_enum(mPreset, "UNDERWATER", SEAL_UNDERWATER_REVERB);
-    define_enum(mPreset, "DRUGGED", SEAL_DRUGGED_REVERB);
-    define_enum(mPreset, "DIZZY", SEAL_DIZZY_REVERB);
-    define_enum(mPreset, "PSYCHOTIC", SEAL_PSYCHOTIC_REVERB);
+    rb_define_const(mPreset, "GENERIC", INT2NUM(SEAL_GENERIC_REVERB));
+    rb_define_const(mPreset, "PADDEDCELL", INT2NUM(SEAL_PADDEDCELL_REVERB));
+    rb_define_const(mPreset, "ROOM", INT2NUM(SEAL_ROOM_REVERB));
+    rb_define_const(mPreset, "BATHROOM", INT2NUM(SEAL_BATHROOM_REVERB));
+    rb_define_const(mPreset, "LIVINGROOM", INT2NUM(SEAL_LIVINGROOM_REVERB));
+    rb_define_const(mPreset, "STONEROOM", INT2NUM(SEAL_STONEROOM_REVERB));
+    rb_define_const(mPreset, "AUDITORIUM", INT2NUM(SEAL_AUDITORIUM_REVERB));
+    rb_define_const(mPreset, "CONCERTHALL", INT2NUM(SEAL_CONCERTHALL_REVERB));
+    rb_define_const(mPreset, "CAVE", INT2NUM(SEAL_CAVE_REVERB));
+    rb_define_const(mPreset, "ARENA", INT2NUM(SEAL_ARENA_REVERB));
+    rb_define_const(mPreset, "HANGAR", INT2NUM(SEAL_HANGAR_REVERB));
+    rb_define_const(mPreset, "CARPETEDHALLWAY",
+                    INT2NUM(SEAL_CARPETEDHALLWAY_REVERB));
+    rb_define_const(mPreset, "HALLWAY", INT2NUM(SEAL_HALLWAY_REVERB));
+    rb_define_const(mPreset, "STONECORRIDOR",
+                    INT2NUM(SEAL_STONECORRIDOR_REVERB));
+    rb_define_const(mPreset, "ALLEY", INT2NUM(SEAL_ALLEY_REVERB));
+    rb_define_const(mPreset, "FOREST", INT2NUM(SEAL_FOREST_REVERB));
+    rb_define_const(mPreset, "CITY", INT2NUM(SEAL_CITY_REVERB));
+    rb_define_const(mPreset, "MOUNTAINS", INT2NUM(SEAL_MOUNTAINS_REVERB));
+    rb_define_const(mPreset, "QUARRY", INT2NUM(SEAL_QUARRY_REVERB));
+    rb_define_const(mPreset, "PLAIN", INT2NUM(SEAL_PLAIN_REVERB));
+    rb_define_const(mPreset, "PARKINGLOT", INT2NUM(SEAL_PARKINGLOT_REVERB));
+    rb_define_const(mPreset, "SEWERPIPE", INT2NUM(SEAL_SEWERPIPE_REVERB));
+    rb_define_const(mPreset, "UNDERWATER", INT2NUM(SEAL_UNDERWATER_REVERB));
+    rb_define_const(mPreset, "DRUGGED", INT2NUM(SEAL_DRUGGED_REVERB));
+    rb_define_const(mPreset, "DIZZY", INT2NUM(SEAL_DIZZY_REVERB));
+    rb_define_const(mPreset, "PSYCHOTIC", INT2NUM(SEAL_PSYCHOTIC_REVERB));
 
-    define_enum(mCastle, "SMALLROOM", SEAL_CASTLE_SMALLROOM_REVERB);
-    define_enum(mCastle, "SHORTPASSAGE", SEAL_CASTLE_SHORTPASSAGE_REVERB);
-    define_enum(mCastle, "MEDIUMROOM", SEAL_CASTLE_MEDIUMROOM_REVERB);
-    define_enum(mCastle, "LARGEROOM", SEAL_CASTLE_LARGEROOM_REVERB);
-    define_enum(mCastle, "LONGPASSAGE", SEAL_CASTLE_LONGPASSAGE_REVERB);
-    define_enum(mCastle, "HALL", SEAL_CASTLE_HALL_REVERB);
-    define_enum(mCastle, "CUPBOARD", SEAL_CASTLE_CUPBOARD_REVERB);
-    define_enum(mCastle, "COURTYARD", SEAL_CASTLE_COURTYARD_REVERB);
-    define_enum(mCastle, "ALCOVE", SEAL_CASTLE_ALCOVE_REVERB);
+    rb_define_const(mCastle, "SMALLROOM",
+                    INT2NUM(SEAL_CASTLE_SMALLROOM_REVERB));
+    rb_define_const(mCastle, "SHORTPASSAGE",
+                    INT2NUM(SEAL_CASTLE_SHORTPASSAGE_REVERB));
+    rb_define_const(mCastle, "MEDIUMROOM",
+                    INT2NUM(SEAL_CASTLE_MEDIUMROOM_REVERB));
+    rb_define_const(mCastle, "LARGEROOM",
+                    INT2NUM(SEAL_CASTLE_LARGEROOM_REVERB));
+    rb_define_const(mCastle, "LONGPASSAGE",
+                    INT2NUM(SEAL_CASTLE_LONGPASSAGE_REVERB));
+    rb_define_const(mCastle, "HALL", INT2NUM(SEAL_CASTLE_HALL_REVERB));
+    rb_define_const(mCastle, "CUPBOARD", INT2NUM(SEAL_CASTLE_CUPBOARD_REVERB));
+    rb_define_const(mCastle, "COURTYARD",
+                    INT2NUM(SEAL_CASTLE_COURTYARD_REVERB));
+    rb_define_const(mCastle, "ALCOVE", INT2NUM(SEAL_CASTLE_ALCOVE_REVERB));
 
-    define_enum(mFactory, "SMALLROOM", SEAL_FACTORY_SMALLROOM_REVERB);
-    define_enum(mFactory, "SHORTPASSAGE",
-                    SEAL_FACTORY_SHORTPASSAGE_REVERB);
-    define_enum(mFactory, "MEDIUMROOM", SEAL_FACTORY_MEDIUMROOM_REVERB);
-    define_enum(mFactory, "LARGEROOM", SEAL_FACTORY_LARGEROOM_REVERB);
-    define_enum(mFactory, "LONGPASSAGE", SEAL_FACTORY_LONGPASSAGE_REVERB);
-    define_enum(mFactory, "HALL", SEAL_FACTORY_HALL_REVERB);
-    define_enum(mFactory, "CUPBOARD", SEAL_FACTORY_CUPBOARD_REVERB);
-    define_enum(mFactory, "COURTYARD", SEAL_FACTORY_COURTYARD_REVERB);
-    define_enum(mFactory, "ALCOVE", SEAL_FACTORY_ALCOVE_REVERB);
+    rb_define_const(mFactory, "SMALLROOM",
+                    INT2NUM(SEAL_FACTORY_SMALLROOM_REVERB));
+    rb_define_const(mFactory, "SHORTPASSAGE",
+                    INT2NUM(SEAL_FACTORY_SHORTPASSAGE_REVERB));
+    rb_define_const(mFactory, "MEDIUMROOM",
+                    INT2NUM(SEAL_FACTORY_MEDIUMROOM_REVERB));
+    rb_define_const(mFactory, "LARGEROOM",
+                    INT2NUM(SEAL_FACTORY_LARGEROOM_REVERB));
+    rb_define_const(mFactory, "LONGPASSAGE",
+                    INT2NUM(SEAL_FACTORY_LONGPASSAGE_REVERB));
+    rb_define_const(mFactory, "HALL", INT2NUM(SEAL_FACTORY_HALL_REVERB));
+    rb_define_const(mFactory, "CUPBOARD",
+                    INT2NUM(SEAL_FACTORY_CUPBOARD_REVERB));
+    rb_define_const(mFactory, "COURTYARD",
+                    INT2NUM(SEAL_FACTORY_COURTYARD_REVERB));
+    rb_define_const(mFactory, "ALCOVE",
+                    INT2NUM(SEAL_FACTORY_ALCOVE_REVERB));
 
-    define_enum(mIcePalace, "SMALLROOM",
-                    SEAL_ICEPALACE_SMALLROOM_REVERB);
-    define_enum(mIcePalace, "SHORTPASSAGE",
-                    SEAL_ICEPALACE_SHORTPASSAGE_REVERB);
-    define_enum(mIcePalace, "MEDIUMROOM",
-                    SEAL_ICEPALACE_MEDIUMROOM_REVERB);
-    define_enum(mIcePalace, "LARGEROOM", SEAL_ICEPALACE_LARGEROOM_REVERB);
-    define_enum(mIcePalace, "LONGPASSAGE",
-                    SEAL_ICEPALACE_LONGPASSAGE_REVERB);
-    define_enum(mIcePalace, "HALL", SEAL_ICEPALACE_HALL_REVERB);
-    define_enum(mIcePalace, "CUPBOARD", SEAL_ICEPALACE_CUPBOARD_REVERB);
-    define_enum(mIcePalace, "COURTYARD", SEAL_ICEPALACE_COURTYARD_REVERB);
-    define_enum(mIcePalace, "ALCOVE", SEAL_ICEPALACE_ALCOVE_REVERB);
+    rb_define_const(mIcePalace, "SMALLROOM",
+                    INT2NUM(SEAL_ICEPALACE_SMALLROOM_REVERB));
+    rb_define_const(mIcePalace, "SHORTPASSAGE",
+                    INT2NUM(SEAL_ICEPALACE_SHORTPASSAGE_REVERB));
+    rb_define_const(mIcePalace, "MEDIUMROOM",
+                    INT2NUM(SEAL_ICEPALACE_MEDIUMROOM_REVERB));
+    rb_define_const(mIcePalace, "LARGEROOM",
+                    INT2NUM(SEAL_ICEPALACE_LARGEROOM_REVERB));
+    rb_define_const(mIcePalace, "LONGPASSAGE",
+                    INT2NUM(SEAL_ICEPALACE_LONGPASSAGE_REVERB));
+    rb_define_const(mIcePalace, "HALL",
+                    INT2NUM(SEAL_ICEPALACE_HALL_REVERB));
+    rb_define_const(mIcePalace, "CUPBOARD",
+                    INT2NUM(SEAL_ICEPALACE_CUPBOARD_REVERB));
+    rb_define_const(mIcePalace, "COURTYARD",
+                    INT2NUM(SEAL_ICEPALACE_COURTYARD_REVERB));
+    rb_define_const(mIcePalace, "ALCOVE",
+                    INT2NUM(SEAL_ICEPALACE_ALCOVE_REVERB));
 
-    define_enum(mSpaceStation, "SMALLROOM",
-                    SEAL_SPACESTATION_SMALLROOM_REVERB);
-    define_enum(mSpaceStation, "SHORTPASSAGE",
-                    SEAL_SPACESTATION_SHORTPASSAGE_REVERB);
-    define_enum(mSpaceStation, "MEDIUMROOM",
-                    SEAL_SPACESTATION_MEDIUMROOM_REVERB);
-    define_enum(mSpaceStation, "LARGEROOM",
-                    SEAL_SPACESTATION_LARGEROOM_REVERB);
-    define_enum(mSpaceStation, "LONGPASSAGE",
-                    SEAL_SPACESTATION_LONGPASSAGE_REVERB);
-    define_enum(mSpaceStation, "HALL", SEAL_SPACESTATION_HALL_REVERB);
-    define_enum(mSpaceStation, "CUPBOARD",
-                    SEAL_SPACESTATION_CUPBOARD_REVERB);
-    define_enum(mSpaceStation, "ALCOVE", SEAL_SPACESTATION_ALCOVE_REVERB);
-    define_enum(mWoodenGalleon, "SMALLROOM",
-                    SEAL_WOODEN_SMALLROOM_REVERB);
-    define_enum(mWoodenGalleon, "SHORTPASSAGE",
-                    SEAL_WOODEN_SHORTPASSAGE_REVERB);
-    define_enum(mWoodenGalleon, "MEDIUMROOM",
-                    SEAL_WOODEN_MEDIUMROOM_REVERB);
-    define_enum(mWoodenGalleon, "LARGEROOM",
-                    SEAL_WOODEN_LARGEROOM_REVERB);
-    define_enum(mWoodenGalleon, "LONGPASSAGE",
-                    SEAL_WOODEN_LONGPASSAGE_REVERB);
-    define_enum(mWoodenGalleon, "HALL", SEAL_WOODEN_HALL_REVERB);
-    define_enum(mWoodenGalleon, "CUPBOARD", SEAL_WOODEN_CUPBOARD_REVERB);
-    define_enum(mWoodenGalleon, "COURTYARD",
-                    SEAL_WOODEN_COURTYARD_REVERB);
-    define_enum(mWoodenGalleon, "ALCOVE", SEAL_WOODEN_ALCOVE_REVERB);
+    rb_define_const(mSpaceStation, "SMALLROOM",
+                    INT2NUM(SEAL_SPACESTATION_SMALLROOM_REVERB));
+    rb_define_const(mSpaceStation, "SHORTPASSAGE",
+                    INT2NUM(SEAL_SPACESTATION_SHORTPASSAGE_REVERB));
+    rb_define_const(mSpaceStation, "MEDIUMROOM",
+                    INT2NUM(SEAL_SPACESTATION_MEDIUMROOM_REVERB));
+    rb_define_const(mSpaceStation, "LARGEROOM",
+                    INT2NUM(SEAL_SPACESTATION_LARGEROOM_REVERB));
+    rb_define_const(mSpaceStation, "LONGPASSAGE",
+                    INT2NUM(SEAL_SPACESTATION_LONGPASSAGE_REVERB));
+    rb_define_const(mSpaceStation, "HALL",
+                    INT2NUM(SEAL_SPACESTATION_HALL_REVERB));
+    rb_define_const(mSpaceStation, "CUPBOARD",
+                    INT2NUM(SEAL_SPACESTATION_CUPBOARD_REVERB));
+    rb_define_const(mSpaceStation, "ALCOVE",
+                    INT2NUM(SEAL_SPACESTATION_ALCOVE_REVERB));
+    rb_define_const(mWoodenGalleon, "SMALLROOM",
+                    INT2NUM(SEAL_WOODEN_SMALLROOM_REVERB));
+    rb_define_const(mWoodenGalleon, "SHORTPASSAGE",
+                    INT2NUM(SEAL_WOODEN_SHORTPASSAGE_REVERB));
+    rb_define_const(mWoodenGalleon, "MEDIUMROOM",
+                    INT2NUM(SEAL_WOODEN_MEDIUMROOM_REVERB));
+    rb_define_const(mWoodenGalleon, "LARGEROOM",
+                    INT2NUM(SEAL_WOODEN_LARGEROOM_REVERB));
+    rb_define_const(mWoodenGalleon, "LONGPASSAGE",
+                    INT2NUM(SEAL_WOODEN_LONGPASSAGE_REVERB));
+    rb_define_const(mWoodenGalleon, "HALL", INT2NUM(SEAL_WOODEN_HALL_REVERB));
+    rb_define_const(mWoodenGalleon, "CUPBOARD",
+                    INT2NUM(SEAL_WOODEN_CUPBOARD_REVERB));
+    rb_define_const(mWoodenGalleon, "COURTYARD",
+                    INT2NUM(SEAL_WOODEN_COURTYARD_REVERB));
+    rb_define_const(mWoodenGalleon, "ALCOVE",
+                    INT2NUM(SEAL_WOODEN_ALCOVE_REVERB));
 
-    define_enum(mSports, "EMPTYSTADIUM", SEAL_SPORT_EMPTYSTADIUM_REVERB);
-    define_enum(mSports, "SQUASHCOURT", SEAL_SPORT_SQUASHCOURT_REVERB);
-    define_enum(mSports, "SMALLSWIMMINGPOOL",
-                    SEAL_SPORT_SMALLSWIMMINGPOOL_REVERB);
-    define_enum(mSports, "LARGESWIMMINGPOOL",
-                    SEAL_SPORT_LARGESWIMMINGPOOL_REVERB);
-    define_enum(mSports, "GYMNASIUM", SEAL_SPORT_GYMNASIUM_REVERB);
-    define_enum(mSports, "FULLSTADIUM", SEAL_SPORT_FULLSTADIUM_REVERB);
-    define_enum(mSports, "STADIUMTANNOY",
-                    SEAL_SPORT_STADIUMTANNOY_REVERB);
+    rb_define_const(mSports, "EMPTYSTADIUM",
+                    INT2NUM(SEAL_SPORT_EMPTYSTADIUM_REVERB));
+    rb_define_const(mSports, "SQUASHCOURT",
+                    INT2NUM(SEAL_SPORT_SQUASHCOURT_REVERB));
+    rb_define_const(mSports, "SMALLSWIMMINGPOOL",
+                    INT2NUM(SEAL_SPORT_SMALLSWIMMINGPOOL_REVERB));
+    rb_define_const(mSports, "LARGESWIMMINGPOOL",
+                    INT2NUM(SEAL_SPORT_LARGESWIMMINGPOOL_REVERB));
+    rb_define_const(mSports, "GYMNASIUM",
+                    INT2NUM(SEAL_SPORT_GYMNASIUM_REVERB));
+    rb_define_const(mSports, "FULLSTADIUM",
+                    INT2NUM(SEAL_SPORT_FULLSTADIUM_REVERB));
+    rb_define_const(mSports, "STADIUMTANNOY",
+                    INT2NUM(SEAL_SPORT_STADIUMTANNOY_REVERB));
 
-    define_enum(mPrefab, "WORKSHOP", SEAL_PREFAB_WORKSHOP_REVERB);
-    define_enum(mPrefab, "SCHOOLROOM", SEAL_PREFAB_SCHOOLROOM_REVERB);
-    define_enum(mPrefab, "PRACTISEROOM", SEAL_PREFAB_PRACTISEROOM_REVERB);
-    define_enum(mPrefab, "OUTHOUSE", SEAL_PREFAB_OUTHOUSE_REVERB);
-    define_enum(mPrefab, "CARAVAN", SEAL_PREFAB_CARAVAN_REVERB);
+    rb_define_const(mPrefab, "WORKSHOP", INT2NUM(SEAL_PREFAB_WORKSHOP_REVERB));
+    rb_define_const(mPrefab, "SCHOOLROOM",
+                    INT2NUM(SEAL_PREFAB_SCHOOLROOM_REVERB));
+    rb_define_const(mPrefab, "PRACTISEROOM",
+                    INT2NUM(SEAL_PREFAB_PRACTISEROOM_REVERB));
+    rb_define_const(mPrefab, "OUTHOUSE", INT2NUM(SEAL_PREFAB_OUTHOUSE_REVERB));
+    rb_define_const(mPrefab, "CARAVAN", INT2NUM(SEAL_PREFAB_CARAVAN_REVERB));
 
-    define_enum(mDome, "TOMB", SEAL_DOME_TOMB_REVERB);
-    define_enum(mDome, "SAINTPAULS", SEAL_DOME_SAINTPAULS_REVERB);
+    rb_define_const(mDome, "TOMB", INT2NUM(SEAL_DOME_TOMB_REVERB));
+    rb_define_const(mDome, "SAINTPAULS", INT2NUM(SEAL_DOME_SAINTPAULS_REVERB));
 
-    define_enum(mPipe, "SMALL", SEAL_PIPE_SMALL_REVERB);
-    define_enum(mPipe, "LONGTHIN", SEAL_PIPE_LONGTHIN_REVERB);
-    define_enum(mPipe, "LARGE", SEAL_PIPE_LARGE_REVERB);
-    define_enum(mPipe, "RESONANT", SEAL_PIPE_RESONANT_REVERB);
+    rb_define_const(mPipe, "SMALL", INT2NUM(SEAL_PIPE_SMALL_REVERB));
+    rb_define_const(mPipe, "LONGTHIN", INT2NUM(SEAL_PIPE_LONGTHIN_REVERB));
+    rb_define_const(mPipe, "LARGE", INT2NUM(SEAL_PIPE_LARGE_REVERB));
+    rb_define_const(mPipe, "RESONANT", INT2NUM(SEAL_PIPE_RESONANT_REVERB));
 
-    define_enum(mOutdoors, "BACKYARD", SEAL_OUTDOORS_BACKYARD_REVERB);
-    define_enum(mOutdoors, "ROLLINGPLAINS",
-                    SEAL_OUTDOORS_ROLLINGPLAINS_REVERB);
-    define_enum(mOutdoors, "DEEPCANYON", SEAL_OUTDOORS_DEEPCANYON_REVERB);
-    define_enum(mOutdoors, "CREEK", SEAL_OUTDOORS_CREEK_REVERB);
-    define_enum(mOutdoors, "VALLEY", SEAL_OUTDOORS_VALLEY_REVERB);
+    rb_define_const(mOutdoors, "BACKYARD",
+                    INT2NUM(SEAL_OUTDOORS_BACKYARD_REVERB));
+    rb_define_const(mOutdoors, "ROLLINGPLAINS",
+                    INT2NUM(SEAL_OUTDOORS_ROLLINGPLAINS_REVERB));
+    rb_define_const(mOutdoors, "DEEPCANYON",
+                    INT2NUM(SEAL_OUTDOORS_DEEPCANYON_REVERB));
+    rb_define_const(mOutdoors, "CREEK",
+                    INT2NUM(SEAL_OUTDOORS_CREEK_REVERB));
+    rb_define_const(mOutdoors, "VALLEY",
+                    INT2NUM(SEAL_OUTDOORS_VALLEY_REVERB));
 
-    define_enum(mMood, "HEAVEN", SEAL_MOOD_HEAVEN_REVERB);
-    define_enum(mMood, "HELL", SEAL_MOOD_HELL_REVERB);
-    define_enum(mMood, "MEMORY", SEAL_MOOD_MEMORY_REVERB);
+    rb_define_const(mMood, "HEAVEN",
+                    INT2NUM(SEAL_MOOD_HEAVEN_REVERB));
+    rb_define_const(mMood, "HELL",
+                    INT2NUM(SEAL_MOOD_HELL_REVERB));
+    rb_define_const(mMood, "MEMORY",
+                    INT2NUM(SEAL_MOOD_MEMORY_REVERB));
 
-    define_enum(mDriving, "COMMENTATOR", SEAL_DRIVING_COMMENTATOR_REVERB);
-    define_enum(mDriving, "PITGARAGE", SEAL_DRIVING_PITGARAGE_REVERB);
-    define_enum(mDriving, "INCAR_RACER", SEAL_DRIVING_INCAR_RACER_REVERB);
-    define_enum(mDriving, "INCAR_SPORTS",
-                    SEAL_DRIVING_INCAR_SPORTS_REVERB);
-    define_enum(mDriving, "INCAR_LUXURY",
-                    SEAL_DRIVING_INCAR_LUXURY_REVERB);
-    define_enum(mDriving, "FULLGRANDSTAND",
-                    SEAL_DRIVING_FULLGRANDSTAND_REVERB);
-    define_enum(mDriving, "EMPTYGRANDSTAND",
-                    SEAL_DRIVING_EMPTYGRANDSTAND_REVERB);
-    define_enum(mDriving, "TUNNEL", SEAL_DRIVING_TUNNEL_REVERB);
+    rb_define_const(mDriving, "COMMENTATOR",
+                    INT2NUM(SEAL_DRIVING_COMMENTATOR_REVERB));
+    rb_define_const(mDriving, "PITGARAGE",
+                    INT2NUM(SEAL_DRIVING_PITGARAGE_REVERB));
+    rb_define_const(mDriving, "INCAR_RACER",
+                    INT2NUM(SEAL_DRIVING_INCAR_RACER_REVERB));
+    rb_define_const(mDriving, "INCAR_SPORTS",
+                    INT2NUM(SEAL_DRIVING_INCAR_SPORTS_REVERB));
+    rb_define_const(mDriving, "INCAR_LUXURY",
+                    INT2NUM(SEAL_DRIVING_INCAR_LUXURY_REVERB));
+    rb_define_const(mDriving, "FULLGRANDSTAND",
+                    INT2NUM(SEAL_DRIVING_FULLGRANDSTAND_REVERB));
+    rb_define_const(mDriving, "EMPTYGRANDSTAND",
+                    INT2NUM(SEAL_DRIVING_EMPTYGRANDSTAND_REVERB));
+    rb_define_const(mDriving, "TUNNEL", INT2NUM(SEAL_DRIVING_TUNNEL_REVERB));
 
-    define_enum(mCity, "STREETS", SEAL_CITY_STREETS_REVERB);
-    define_enum(mCity, "SUBWAY", SEAL_CITY_SUBWAY_REVERB);
-    define_enum(mCity, "MUSEUM", SEAL_CITY_MUSEUM_REVERB);
-    define_enum(mCity, "LIBRARY", SEAL_CITY_LIBRARY_REVERB);
-    define_enum(mCity, "UNDERPASS", SEAL_CITY_UNDERPASS_REVERB);
-    define_enum(mCity, "ABANDONED", SEAL_CITY_ABANDONED_REVERB);
+    rb_define_const(mCity, "STREETS", INT2NUM(SEAL_CITY_STREETS_REVERB));
+    rb_define_const(mCity, "SUBWAY", INT2NUM(SEAL_CITY_SUBWAY_REVERB));
+    rb_define_const(mCity, "MUSEUM", INT2NUM(SEAL_CITY_MUSEUM_REVERB));
+    rb_define_const(mCity, "LIBRARY", INT2NUM(SEAL_CITY_LIBRARY_REVERB));
+    rb_define_const(mCity, "UNDERPASS", INT2NUM(SEAL_CITY_UNDERPASS_REVERB));
+    rb_define_const(mCity, "ABANDONED", INT2NUM(SEAL_CITY_ABANDONED_REVERB));
 
-    define_enum(mMisc, "DUSTYROOM", SEAL_DUSTYROOM_REVERB);
-    define_enum(mMisc, "CHAPEL", SEAL_CHAPEL_REVERB);
-    define_enum(mMisc, "SMALLWATERROOM", SEAL_SMALLWATERROOM_REVERB);
+    rb_define_const(mMisc, "DUSTYROOM", INT2NUM(SEAL_DUSTYROOM_REVERB));
+    rb_define_const(mMisc, "CHAPEL", INT2NUM(SEAL_CHAPEL_REVERB));
+    rb_define_const(mMisc, "SMALLWATERROOM",
+                    INT2NUM(SEAL_SMALLWATERROOM_REVERB));
 }
 
 /*
