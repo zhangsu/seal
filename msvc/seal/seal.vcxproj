@@ -51,7 +51,7 @@
     <GenerateManifest>false</GenerateManifest>
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>..\..\include;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include;</IncludePath>
-    <LibraryPath>..\..\lib;$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSdkDir)lib;$(FrameworkSDKDir)\lib</LibraryPath>
+    <LibraryPath>..\lib;$(VCInstallDir)lib;$(VCInstallDir)atlmfc\lib;$(WindowsSdkDir)lib;$(FrameworkSDKDir)\lib</LibraryPath>
     <SourcePath>..\..\src\seal;$(VCInstallDir)atlmfc\src\mfc;$(VCInstallDir)atlmfc\src\mfcm;$(VCInstallDir)atlmfc\src\atl;$(VCInstallDir)crt\src;</SourcePath>
     <OutDir>$(SolutionDir)Release\</OutDir>
     <EmbedManifest>true</EmbedManifest>
@@ -82,7 +82,7 @@
       <EnableCOMDATFolding>
       </EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>OpenAL32.lib;libmpg123.lib</AdditionalDependencies>
+      <AdditionalDependencies>OpenAL32.lib</AdditionalDependencies>
       <ModuleDefinitionFile>exports.def</ModuleDefinitionFile>
       <TurnOffAssemblyGeneration>true</TurnOffAssemblyGeneration>
       <ImportLibrary>
@@ -91,6 +91,8 @@
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
       <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
+      <SubSystem>
+      </SubSystem>
     </Link>
     <BuildLog>
       <Path>
@@ -128,7 +130,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>OpenAL32.lib;libmpg123.lib</AdditionalDependencies>
+      <AdditionalDependencies>OpenAL32.lib</AdditionalDependencies>
       <ModuleDefinitionFile>exports.def</ModuleDefinitionFile>
       <TurnOffAssemblyGeneration>true</TurnOffAssemblyGeneration>
       <ImportLibrary>
@@ -142,7 +144,7 @@
       </Path>
     </BuildLog>
     <PostBuildEvent>
-      <Command>copy ..\..\lib\*.dll ..\Release /Y</Command>
+      <Command>copy ..\lib\*.dll ..\Release /Y</Command>
       <Message>Copy required DLLs</Message>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -182,6 +184,14 @@
     <ClInclude Include="..\..\src\seal\wav.h" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\mpg123\ports\MSVC++\2010\libmpg123\libmpg123.vcxproj">
+      <Project>{67caa87b-7cf1-4f93-bb67-21c513f40803}</Project>
+      <Private>false</Private>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+    </ProjectReference>
     <ProjectReference Include="..\libvorbis\libvorbis.vcxproj">
       <Project>{204af737-0171-4026-a116-4341cbe473de}</Project>
       <Private>false</Private>
