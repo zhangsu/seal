@@ -33,6 +33,7 @@ ext/*.dll
 ext/*.def
 ext/Makefile
 demo/*.dll
+mpg123/unix2dos.c
 mpg123/libtool
 mpg123/src/.deps/
 mpg123/src/config.h
