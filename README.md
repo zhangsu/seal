@@ -139,27 +139,16 @@ make
 make install
 ```
 
-Then download [libmpg123](http://sourceforge.net/projects/mpg123/files)
-and:
+Note: There has been issues compiling OpenAL on some versions of OS X
+because LLVM is the default compiler. I haven't had luck compiling
+OpenAL with LLVM, so I explicitly specified GCC instead:
 
-```bash
-cd <libmpg123_directory>
-./configure
-cd src/libmpg123
-make
-make install
-```
-
-Finally from Seal directory:
+Then from Seal directory:
 
 ```bash
 cd make/gcc/unix-like
 make
 ```
-
-Note: There has been issues compiling OpenAL on some versions of OS X
-because LLVM is the default compiler. I haven't had luck compiling
-OpenAL with LLVM, so I explicitly specified GCC instead:
 
 ```bash
 ...
@@ -195,9 +184,9 @@ rake compile
 The default output is `lib/seal.{so,dll,bundle}`, which is a dynamic library
 that could be required by Ruby at runtime.
 
-Note that Win32 binaries are shipped with the project for compiling Seal on
-Windows. You can of course compile your own copies of the dependency
-libraries on Windows, but I feel like Win32 users do not usually do that.
+Note that Win32 binaries for OpenAL are shipped with the project for compiling
+Seal on Windows. You can of course compile your own copies of OpenAL on
+Windows.
 
 ## Demos
 
