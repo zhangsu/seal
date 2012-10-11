@@ -43,5 +43,6 @@ mpg123/src/libmpg123/mpg123.h
 mpg123/src/mpg123
 mpg123/src/output/.deps/
 mpg123/src/stamp-h1
+!mpg123/ports/MSVC++/2010/libmpg123/yasm.exe
 mpg123/ports/MSVC++/2010/libmpg123/Debug/
 mpg123/ports/MSVC++/2010/libmpg123/Release/
