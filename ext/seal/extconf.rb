@@ -16,7 +16,7 @@ $defs << '-DNDEBUG'
 
 unless File.exists?(File.join(mpg123_src_dir, 'config.h'))
   puts 'Building libmpg123...'
-  cd(mpg123_dir) { `./configure --with-pic --disable-shared` }
+  cd(mpg123_dir) { `sh ./configure --with-pic --disable-shared` }
   cd(mpg123_src_dir) { `make` }
 end
 find_library 'mpg123', 'mpg123_init', mpg123_lib_dir
@@ -28,7 +28,6 @@ end
 if target_os =~ /mswin|mingw/
   include_dir = "#{root_dir}/include"
   lib_dir = File.join root_dir, 'msvc', 'lib'
-  cp File.join(lib_dir, 'libmpg123.dll'), '.'
   cp File.join(lib_dir, 'OpenAL32.dll'), '.'
   check_library('OpenAL32', 'alcOpenDevice')
 else
