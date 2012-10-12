@@ -17,10 +17,9 @@ doc
 tmp
 Gemfile.lock
 Makefile
-make/*/*/*
-!make/gcc/unix-like/Makefile
-!make/gcc/win32/Makefile
-!make/msvc/win32/Makefile
+make/*/*
+!make/unix-like/Makefile
+!make/win32/Makefile
 msvc/Release
 msvc/Debug
 msvc/*/*Debug/
