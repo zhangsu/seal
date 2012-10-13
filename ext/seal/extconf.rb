@@ -29,6 +29,10 @@ if target_os =~ /mswin|mingw/
   include_dir = "#{root_dir}/include"
   lib_dir = File.join root_dir, 'msvc', 'lib'
   cp File.join(lib_dir, 'OpenAL32.dll'), '.'
+  # Prepare binary for demo.
+  cp File.join(lib_dir, 'OpenAL32.dll'), File.join(root_dir, 'demo')
+  # Prepare binary for tests.
+  cp File.join(lib_dir, 'OpenAL32.dll'), root_dir
   check_library('OpenAL32', 'alcOpenDevice')
 else
   include_dir = "#{root_dir}"
