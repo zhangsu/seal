@@ -124,11 +124,13 @@ generated specifically for MSVC and GCC (MinGW or native Unix-like systems).
 
 ## Build
 
-Seal has native dependencies.
+### Prerequisite
 
-### GCC + GNU Make + Unix-like operating systems + UN*X shell
+Seal has native dependencies. You need to have OpenAL installed unless you are
+under Windows, for which the binary is provided (Of course, you can compile
+your own copy of OpenAL on Windows).
 
-First, you need [CMake](http://www.cmake.org/) 2.4 or later to install
+You need [CMake](http://www.cmake.org/) 2.4 or later to install
 [libopenal](http://kcat.strangesoft.net/openal.html) as follows:
 
 ```bash
@@ -143,31 +145,28 @@ Note: There has been issues compiling OpenAL on some versions of OS X
 because LLVM is the default compiler. I haven't had luck compiling
 OpenAL with LLVM, so I explicitly specified GCC instead:
 
-Then from Seal directory:
-
-```bash
-cd make/gcc/unix-like
-make
-```
-
 ```bash
 ...
 CC=/usr/bin/gcc-4.2 cmake -DCMAKE_BUILD_TYPE=Release ..
 ...
 ```
 
-### GCC + GNU Make + MinGW + UN*X shell
+After OpenAL is installed, you can start building Seal.
+
+### GCC + GNU Make + Unix-like operating systems + UN*X shell
+
+From Seal directory:
 
 ```bash
-cd make/gcc/win32
+cd make/unix-like
 make
 ```
 
-### MSVC + nmake + Command Prompt
+### GCC + GNU Make + MinGW + UN*X shell
 
 ```bash
-cd make/msvc/win32
-nmake
+cd make/win32
+make
 ```
 
 ### MSVC + Microsoft Visual Studio 2010
@@ -183,10 +182,6 @@ rake compile
 
 The default output is `lib/seal.{so,dll,bundle}`, which is a dynamic library
 that could be required by Ruby at runtime.
-
-Note that Win32 binaries for OpenAL are shipped with the project for compiling
-Seal on Windows. You can of course compile your own copies of OpenAL on
-Windows.
 
 ## Demos
 
@@ -213,6 +208,18 @@ Use `rake demo:<demo_name>` to run the demos under the `demo/` directory.
     Audio reverberation. There are lots of built-in reverb presets, but this
     demo only simulates a large room in ice palace.
 
+## Running Tests
+
+Tests are written on top of the Ruby binding, using [RSpec]
+(https://github.com/rspec/rspec). You need to build Seal as a Ruby extension
+to run the tests:
+
+```Bash
+bundle install
+rake compile
+rspec
+```
+
 ## Thread Safety
 
 Seal can be safely used in a multi-threaded environment so long as no Seal
@@ -229,14 +236,6 @@ details.
 UTF-8 should be used to encode the source code or at least the path strings so
 that Seal can properly input audio files using paths that contain multi-byte
 (Chinese, Japanese, etc.) characters.
-
-## Redistribution
-
-See COPYING.
-
-## Authors
-
-See AUTHOR.
 
 ## Etymology
 
