@@ -21,8 +21,8 @@ describe Stream do
 
   example 'rewinding prevents source from stopping' do
     source.play
-    3.times do
-      sleep(0.2)
+    6.times do
+      sleep(0.1)
       source.stream.rewind
     end
     source.state.should be PLAYING
