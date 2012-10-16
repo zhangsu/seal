@@ -33,6 +33,7 @@ ext/*.dll
 ext/*.def
 ext/Makefile
 demo/*.dll
+mpg123/autom4te.cache
 mpg123/confdefs.h
 mpg123/conftest.*
 mpg123/unix2dos.c
