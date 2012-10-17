@@ -17,14 +17,10 @@ LIBS          = -lOpenAL32 -lmpg123
 OUTPUT        = seal.dll
 
 OBJECTS       = bitwise.o framing.o bitrate.o block.o codebook.o envelope.o floor0.o floor1.o info.o lookup.o lpc.o lsp.o mapping0.o mdct.o psy.o registry.o res0.o sharedbook.o smallft.o synthesis.o vorbisfile.o window.o buf.o core.o efs.o err.o fmt.o listener.o mpg.o ov.o raw.o reader.o rvb.o src.o stream.o threading.o wav.o
-DLLS          = OpenAL32.dll
 
 VPATH         = $(SRCDIR)/libogg $(SRCDIR)/libvorbis $(SRCDIR)/seal
 
-all: $(OUTPUT) $(DLLS)
-
-OpenAL32.dll: $(MSVCDIR)/lib/OpenAL32.dll
-	cp $< .
+all: $(OUTPUT)
 
 $(OUTPUT): $(OBJECTS) $(MPGLIBDIR)/libmpg123.a
 	$(LINKER) $(LFLAGS) $(LIBPATH) -o $@ $(OBJECTS) $(LIBS)
@@ -39,4 +35,4 @@ $(MPGSRCDIR)/config.h:
 	$(CC) -c $(CFLAGS) -o $@ $<
 
 clean:
-	rm -f *.{o,dll} $(OUTPUT)
+	rm -f *.o $(OUTPUT)

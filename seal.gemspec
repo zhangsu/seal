@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.files = `git ls-files`.split.select do |filename|
     filename =~ /^(ext|include|mpg123|spec|src)[\/\\]/
-  end
+  end + ['LICENSE', 'README.md', 'msvc/lib/OpenAL32.lib']
   s.test_files  = Dir.glob('spec/**/*.rb')
   s.extensions  = ['ext/seal/extconf.rb']
 

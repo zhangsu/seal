@@ -122,13 +122,11 @@ run on all Unix-like operating systems where OpenAL, libogg, libvorbis and
 libmpg123 can run, but those platforms are never tested. The Makefiles are
 generated specifically for MSVC and GCC (MinGW or native Unix-like systems).
 
-## Build
+## Installation
 
 ### Prerequisite
 
-Seal has native dependencies. You need to have OpenAL installed unless you are
-under Windows, for which the binary is provided (Of course, you can compile
-your own copy of OpenAL on Windows).
+Seal has native dependencies; you need to have OpenAL installed on your system.
 
 You need [CMake](http://www.cmake.org/) 2.4 or later to install
 [libopenal](http://kcat.strangesoft.net/openal.html) as follows:
@@ -151,7 +149,8 @@ CC=/usr/bin/gcc-4.2 cmake -DCMAKE_BUILD_TYPE=Release ..
 ...
 ```
 
-After OpenAL is installed, you can start building Seal.
+After OpenAL is installed, you can start building Seal. Seal will dynamically
+link OpenAL.
 
 ### GCC + GNU Make + Unix-like operating systems + UN*X shell
 
