@@ -9,12 +9,12 @@ Gem::Specification.new do |s|
 
   s.files = `git ls-files`.split.select do |filename|
     filename =~ /^(ext|include|mpg123|spec|src)[\/\\]/
-  end + ['LICENSE', 'README.md', 'msvc/lib/OpenAL32.lib']
+  end + ['LICENSE', 'README.md', '.yardopts', 'msvc/lib/OpenAL32.lib']
   s.test_files  = Dir.glob('spec/**/*.rb')
   s.extensions  = ['ext/seal/extconf.rb']
 
-  s.rdoc_options  = ['src/rubyext.c']
-  s.extra_rdoc_files = ['src/rubyext.c']
+  s.has_rdoc          = 'yard'
+  s.extra_rdoc_files  = ['src/rubyext.c']
 
   s.required_ruby_version = '~> 1.9'
   s.requirements = ['libopenal', 'a sound card']
