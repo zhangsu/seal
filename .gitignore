@@ -30,7 +30,7 @@ msvc/*.suo
 msvc/*.sdf
 msvc/*.opensdf
 ext/*.dll
-ext/*.def
+ext/*/*.def
 ext/Makefile
 demo/*.dll
 mpg123/autom4te.cache
