@@ -56,8 +56,13 @@ source.buffer = ...
 
 # ...
 
-source.detach
+source.buffer = nil
 source.stream = ...
+
+# ...
+
+source.stream = nil
+source.buffer = ...
 ```
 
 Apply a reverberation effect to the sound source:
@@ -67,6 +72,12 @@ Apply a reverberation effect to the sound source:
 slot = EffectSlot.new(Reverb.new(Reverb::Preset::FOREST))
 # Start feeding the slot.
 slot.feed(0, source)
+```
+
+Uninitialize Seal:
+
+```ruby
+seal.cleanup
 ```
 
 You can find detailed documentations in the header files under `include/seal`
@@ -111,13 +122,13 @@ run on all Unix-like operating systems where OpenAL, libogg, libvorbis and
 libmpg123 can run, but those platforms are never tested. The Makefiles are
 generated specifically for MSVC and GCC (MinGW or native Unix-like systems).
 
-## Build
+## Installation
 
-Seal has native dependencies.
+### Prerequisite
 
-### GCC + GNU Make + Unix-like operating systems + UN*X shell
+Seal has native dependencies; you need to have OpenAL installed on your system.
 
-First, you need [CMake](http://www.cmake.org/) 2.4 or later to install
+You need [CMake](http://www.cmake.org/) 2.4 or later to install
 [libopenal](http://kcat.strangesoft.net/openal.html) as follows:
 
 ```bash
@@ -126,24 +137,6 @@ cd openal-soft/build
 cmake -DCMAKE_BUILD_TYPE=Release ..
 make
 make install
-```
-
-Then download [libmpg123](http://sourceforge.net/projects/mpg123/files)
-and:
-
-```bash
-cd <libmpg123_directory>
-./configure
-cd src/libmpg123
-make
-make install
-```
-
-Finally from Seal directory:
-
-```bash
-cd make/gcc/unix-like
-make
 ```
 
 Note: There has been issues compiling OpenAL on some versions of OS X
@@ -156,18 +149,29 @@ CC=/usr/bin/gcc-4.2 cmake -DCMAKE_BUILD_TYPE=Release ..
 ...
 ```
 
-### GCC + GNU Make + MinGW + UN*X shell
+After OpenAL is installed, you can start building Seal. Seal will dynamically
+link OpenAL.
+
+### Install as a Gem (in a sane environment)
+
+```Bash
+gem install seal
+```
+
+### GCC + GNU Make + Unix-like operating systems + UN*X shell
+
+From Seal directory:
 
 ```bash
-cd make/gcc/win32
+cd make/unix-like
 make
 ```
 
-### MSVC + nmake + Command Prompt
+### GCC + GNU Make + MinGW + UN*X shell
 
 ```bash
-cd make/msvc/win32
-nmake
+cd make/win32
+make
 ```
 
 ### MSVC + Microsoft Visual Studio 2010
@@ -183,10 +187,6 @@ rake compile
 
 The default output is `lib/seal.{so,dll,bundle}`, which is a dynamic library
 that could be required by Ruby at runtime.
-
-Note that Win32 binaries are shipped with the project for compiling Seal on
-Windows. You can of course compile your own copies of the dependency
-libraries on Windows, but I feel like Win32 users do not usually do that.
 
 ## Demos
 
@@ -213,6 +213,18 @@ Use `rake demo:<demo_name>` to run the demos under the `demo/` directory.
     Audio reverberation. There are lots of built-in reverb presets, but this
     demo only simulates a large room in ice palace.
 
+## Running Tests
+
+Tests are written on top of the Ruby binding, using [RSpec]
+(https://github.com/rspec/rspec). You need to build Seal as a Ruby extension
+to run the tests:
+
+```Bash
+bundle install
+rake compile
+rspec
+```
+
 ## Thread Safety
 
 Seal can be safely used in a multi-threaded environment so long as no Seal
@@ -229,14 +241,6 @@ details.
 UTF-8 should be used to encode the source code or at least the path strings so
 that Seal can properly input audio files using paths that contain multi-byte
 (Chinese, Japanese, etc.) characters.
-
-## Redistribution
-
-See COPYING.
-
-## Authors
-
-See AUTHOR.
 
 ## Etymology
 
