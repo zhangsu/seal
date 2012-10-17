@@ -152,6 +152,12 @@ CC=/usr/bin/gcc-4.2 cmake -DCMAKE_BUILD_TYPE=Release ..
 After OpenAL is installed, you can start building Seal. Seal will dynamically
 link OpenAL.
 
+### Install as a Gem (in a sane environment)
+
+```Bash
+gem install seal
+```
+
 ### GCC + GNU Make + Unix-like operating systems + UN*X shell
 
 From Seal directory:
