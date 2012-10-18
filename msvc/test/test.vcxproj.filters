@@ -1,28 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="src">
+    <Filter Include="Source Files">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="include">
-      <UniqueIdentifier>{606c3319-261a-4e03-bb2a-57dbaba6ff9f}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\test\test.h">
-      <Filter>include</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\test\test.c">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\test\test_src.c">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\test\test_listener.c">
-      <Filter>src</Filter>
+    <ClCompile Include="playback.c">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

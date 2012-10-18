@@ -1855,8 +1855,10 @@ static
 void
 bind_core(void)
 {
+    VALUE mFormat;
+
     mSeal = rb_define_module("Seal");
-    VALUE mFormat = rb_define_module_under(mSeal, "Format");
+    mFormat = rb_define_module_under(mSeal, "Format");
 
     eSealError = rb_define_class_under(mSeal, "SealError", rb_eException);
     rb_define_singleton_method(mSeal, "startup", startup, -1);
