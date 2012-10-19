@@ -37,7 +37,7 @@ loop do
   when 4
     pipa.rewind
   when 5
-    pipa.detach
+    pipa.stream = nil
   when 6
     pipa.stream = pipa_stream
   when 7
