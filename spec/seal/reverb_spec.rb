@@ -37,7 +37,7 @@ describe Reverb do
         constant = a_module.const_get const_sym
         case constant
         when Module
-          test_load_presets.call(constant)
+          test_load_presets.(constant)
         else
           expect do
             reverb = Reverb.new(constant)
@@ -46,6 +46,6 @@ describe Reverb do
         end
       end
     end
-    test_load_presets.call(Reverb::Preset)
+    test_load_presets.(Reverb::Preset)
   end
 end
