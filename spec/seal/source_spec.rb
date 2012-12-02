@@ -21,7 +21,7 @@ describe Source do
     its(:relative) { should be_false }
     its(:state) { should be INITIAL }
     its(:stream) { should be_nil }
-    its (:type) { should be UNDETERMINED }
+    its(:type) { should be UNDETERMINED }
   end
 
   it_validates 'the boolean attribute', :relative
