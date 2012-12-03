@@ -11,9 +11,9 @@ module Seal
     end
 
     def position
-      pos = Array.new(3) { ' ' * 4 }
-      CHECK_ERROR[GET_POSITION[*pos]]
-      return pos.join.unpack('f*')
+      position_buffers = Array.new(3) { '    ' }
+      CHECK_ERROR[GET_POSITION[*position_buffers]]
+      return position_buffers.join.unpack('f*')
     end
   end
 end
