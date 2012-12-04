@@ -39,6 +39,17 @@ module Seal
       get_3float(GET_VEL)
     end
 
+    def orientation=(orientation)
+      CHECK_ERROR[SET_ORIEN[orientation.flatten.pack('f*')]]
+    end
+
+    def orientation
+      orientation_buffer = '    ' * 6
+      CHECK_ERROR[GET_ORIEN[orientation_buffer]]
+      orientation = orientation_buffer.unpack('f*')
+      [orientation[0..2], orientation[3..5]]
+    end
+
   private
     def set_3float(float_tuple, setter)
       CHECK_ERROR[setter[*float_tuple.pack('f*').unpack('i*')]]
