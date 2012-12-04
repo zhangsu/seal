@@ -19,14 +19,23 @@ module Seal
     end
 
     def position=(position)
-      CHECK_ERROR[SET_POSITION[*position.pack('f*').unpack('i*')]]
-      position
+      set_3float(position, SET_POSITION)
     end
 
     def position
-      position_buffers = Array.new(3) { '    ' }
-      CHECK_ERROR[GET_POSITION[*position_buffers]]
-      return position_buffers.join.unpack('f*')
+      get_3float(GET_POSITION)
+    end
+
+  private
+    def set_3float(float_tuple, setter)
+      CHECK_ERROR[setter[*float_tuple.pack('f*').unpack('i*')]]
+      return float_tuple
+    end
+
+    def get_3float(getter)
+      float_tuple_buffers = Array.new(3) { '    ' }
+      CHECK_ERROR[getter[*float_tuple_buffers]]
+      return float_tuple_buffers.join.unpack('f*')
     end
   end
 end
