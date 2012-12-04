@@ -10,8 +10,8 @@ module Seal
       message = get_err_msg[error_code]
       if message.is_a? Integer
         # String pointer is returned to Ruby as an integer even though we
-        # specified 'p' as the return value - possibly a bug in Win32API. Work
-        # around it.
+        # specified 'p' as the return value - possibly a bug in Ruby 1.9.3's
+        # Win32API implementation. Work around it.
         message_buffer = ' ' * 128
         strcpy_s.call(message_buffer, message_buffer.size, message)
         message = message_buffer.strip
