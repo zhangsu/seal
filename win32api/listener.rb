@@ -6,6 +6,8 @@ module Seal
     GET_GAIN = SealAPI.new('get_listener_gain', 'p', 'i')
     SET_POSITION = SealAPI.new('set_listener_pos', 'iii', 'i')
     GET_POSITION = SealAPI.new('get_listener_pos', 'ppp', 'i')
+    SET_VELOCITY = SealAPI.new('set_listener_vel', 'iii', 'i')
+    GET_VELOCITY = SealAPI.new('get_listener_vel', 'ppp', 'i')
 
     def gain=(gain)
       CHECK_ERROR[SET_GAIN[[gain].pack('f').unpack('i')[0]]]
@@ -24,6 +26,14 @@ module Seal
 
     def position
       get_3float(GET_POSITION)
+    end
+
+    def velocity=(velocity)
+      set_3float(velocity, SET_VELOCITY)
+    end
+
+    def velocity
+      get_3float(GET_VELOCITY)
     end
 
   private
