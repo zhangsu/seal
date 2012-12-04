@@ -4,10 +4,13 @@ module Seal
   class Listener
     SET_GAIN = SealAPI.new('set_listener_gain', 'i', 'i')
     GET_GAIN = SealAPI.new('get_listener_gain', 'p', 'i')
-    SET_POSITION = SealAPI.new('set_listener_pos', 'iii', 'i')
-    GET_POSITION = SealAPI.new('get_listener_pos', 'ppp', 'i')
-    SET_VELOCITY = SealAPI.new('set_listener_vel', 'iii', 'i')
-    GET_VELOCITY = SealAPI.new('get_listener_vel', 'ppp', 'i')
+    SET_POS = SealAPI.new('set_listener_pos', 'iii', 'i')
+    GET_POS = SealAPI.new('get_listener_pos', 'ppp', 'i')
+    SET_VEL = SealAPI.new('set_listener_vel', 'iii', 'i')
+    GET_VEL = SealAPI.new('get_listener_vel', 'ppp', 'i')
+    SET_ORIEN = SealAPI.new('set_listener_orien', 'p', 'i')
+    GET_ORIEN = SealAPI.new('get_listener_orien', 'p', 'i')
+
 
     def gain=(gain)
       CHECK_ERROR[SET_GAIN[[gain].pack('f').unpack('i')[0]]]
@@ -21,19 +24,19 @@ module Seal
     end
 
     def position=(position)
-      set_3float(position, SET_POSITION)
+      set_3float(position, SET_POS)
     end
 
     def position
-      get_3float(GET_POSITION)
+      get_3float(GET_POS)
     end
 
     def velocity=(velocity)
-      set_3float(velocity, SET_VELOCITY)
+      set_3float(velocity, SET_VEL)
     end
 
     def velocity
-      get_3float(GET_VELOCITY)
+      get_3float(GET_VEL)
     end
 
   private
