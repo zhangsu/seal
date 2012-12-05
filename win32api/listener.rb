@@ -11,7 +11,6 @@ module Seal
     SET_ORIEN = SealAPI.new('set_listener_orien', 'p', 'i')
     GET_ORIEN = SealAPI.new('get_listener_orien', 'p', 'i')
 
-
     def gain=(gain)
       CHECK_ERROR[SET_GAIN[[gain].pack('f').unpack('i')[0]]]
       gain
@@ -61,5 +60,16 @@ module Seal
       CHECK_ERROR[getter[*float_tuple_buffers]]
       return float_tuple_buffers.join.unpack('f*')
     end
+  end
+
+  LISTENER = Listener.new
+
+  def self.listener
+    LISTENER
+  end
+
+  class << Listener
+    undef allocate
+    undef new
   end
 end
