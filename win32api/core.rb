@@ -40,6 +40,12 @@ module Seal
     end
   end
 
+  module Format
+    WAV = :wav
+    OV = :ov
+    MPG = :mpg
+  end
+
   class SealError < Exception
   end
 end
