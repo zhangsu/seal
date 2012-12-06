@@ -1,10 +1,10 @@
 require 'win32api' unless defined? Win32API
 
-LIB_DIR = ARGV[0] || '.'
+LIB_DIR = '.' unless defined? LIB_DIR
 
 class SealAPI < Win32API
   def initialize(func, *args)
-    super("#{LIB_DIR}\\seal", "seal_#{func}", *args)
+    super(File.join(LIB_DIR, 'seal'), "seal_#{func}", *args)
   end
 
   def [](*args)
