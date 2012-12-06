@@ -1,4 +1,4 @@
-require './sealapi'
+require File.join(File.dirname(__FILE__), 'sealapi')
 
 module Seal
   VERSION = SealAPI.new('get_version', 'v', 'p')[]

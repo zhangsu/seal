@@ -3,5 +3,5 @@
 # This is a fallback solution just in case Ruby API and DL are unavailable.
 # Performance-wise, Win32API < DL < Ruby API.
 
-require './core'
-require './listener'
+require File.join(File.dirname(__FILE__), 'core')
+require File.join(File.dirname(__FILE__), 'listener')
