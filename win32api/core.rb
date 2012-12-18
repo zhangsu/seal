@@ -4,20 +4,8 @@ module Seal
   VERSION = SealAPI.new('get_version', 'v', 'p')[]
 
   get_err_msg = SealAPI.new('get_err_msg', 'i', 'p')
-  strcpy_s = Win32API.new('msvcrt', 'strcpy_s', 'pll', 'i')
   CHECK_ERROR = lambda do |error_code|
-    if error_code != 0
-      message = get_err_msg[error_code]
-      if message.is_a? Integer
-        # String pointer is returned to Ruby as an integer even though we
-        # specified 'p' as the return value - possibly a bug in Ruby 1.9.3's
-        # Win32API implementation. Work around it.
-        message_buffer = ' ' * 128
-        strcpy_s.call(message_buffer, message_buffer.size, message)
-        message = message_buffer.strip
-      end
-      raise SealError, message
-    end
+    raise SealError, get_err_msg[error_code] if error_code != 0
     nil
   end
 
