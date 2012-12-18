@@ -10,7 +10,7 @@ Rake::ExtensionTask.new('seal')
 
 desc 'Run RSpec using Win32API binding'
 task :win32spec do
-  sh 'rspec -I win32api -r ./win32api/rspec_config.rb -f h > win32spec.html'
+  sh 'rspec -I win32api -r ./win32api/rspec_config.rb'
 end
 
 rule /^demo:/ do |r|
