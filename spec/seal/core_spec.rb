@@ -16,7 +16,7 @@ describe Seal do
     Seal.listener.should be Seal.listener
     Seal.listener.should be_a Listener
     expect { Seal::Listener.new }.to raise_error NoMethodError
-    expect { Seal::Listener.allocate }.to raise_error TypeError
+    expect { Seal::Listener.allocate }.to raise_error
   end
 
   it 'defines a limit on the number of effect slots per source' do
