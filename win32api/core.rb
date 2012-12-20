@@ -1,38 +1,42 @@
 require File.join(File.dirname(__FILE__), 'sealapi')
 
 module Seal
-  # Define helpers used by Win32API binding code.
-  get_err_msg = SealAPI.new('get_err_msg', 'i', 'p')
-  CHECK_ERROR = lambda do |error_code|
-    raise SealError, get_err_msg[error_code] if error_code != 0
-    nil
-  end
+  module Helper
+    GET_ERR_MSG = SealAPI.new('get_err_msg', 'i', 'p')
 
-  INPUT_AUDIO = lambda do |media, input, filename, format|
-    CHECK_ERROR[input[media, filename, format]]
-  end
+  private
+    def check_error(error_code)
+      raise SealError, GET_ERR_MSG[error_code] if error_code != 0
+      nil
+    end
 
-  get_obj_attr = lambda do |obj, get, type|
-    buffer = '    '
-    CHECK_ERROR[get[obj, buffer]]
-    buffer.unpack(type)[0]
-  end
+    def input_audio(media, inputter, filename, format)
+      check_error(inputter[media, filename, format])
+    end
 
-  GET_OBJ_INT = lambda do |obj, get|
-    get_obj_attr[obj, get, 'i']
-  end
+    def get_obj_attr(obj, getter, type)
+      buffer = '    '
+      check_error(getter[obj, buffer])
+      buffer.unpack(type)[0]
+    end
 
+    def get_obj_int(obj, getter)
+      get_obj_attr(obj, getter, 'i')
+    end
+  end
 
   VERSION = SealAPI.new('get_version', 'v', 'p')[]
 
   class << self
+    include Helper
+
     STARTUP = SealAPI.new('startup', 'p', 'i')
     CLEANUP = SealAPI.new('cleanup', 'v', 'v')
     GET_PER_SRC_EFFECT_LIMIT =
       SealAPI.new('get_per_src_effect_limit', 'v', 'i')
 
     def startup(device = nil)
-      CHECK_ERROR[STARTUP[device]]
+      check_error(STARTUP[device])
     end
 
     def cleanup

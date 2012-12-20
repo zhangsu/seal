@@ -2,6 +2,8 @@ require File.join(File.dirname(__FILE__), 'core')
 
 module Seal
   class Listener
+    include Helper
+
     SET_GAIN = SealAPI.new('set_listener_gain', 'i', 'i')
     GET_GAIN = SealAPI.new('get_listener_gain', 'p', 'i')
     SET_POS = SealAPI.new('set_listener_pos', 'iii', 'i')
@@ -12,13 +14,13 @@ module Seal
     GET_ORIEN = SealAPI.new('get_listener_orien', 'p', 'i')
 
     def gain=(gain)
-      CHECK_ERROR[SET_GAIN[[gain].pack('f').unpack('i')[0]]]
+      check_error(SET_GAIN[[gain].pack('f').unpack('i')[0]])
       gain
     end
 
     def gain
       gain_buffer = '    '
-      CHECK_ERROR[GET_GAIN[gain_buffer]]
+      check_error(GET_GAIN[gain_buffer])
       return gain_buffer.unpack('f')[0]
     end
 
@@ -39,25 +41,25 @@ module Seal
     end
 
     def orientation=(orientation)
-      CHECK_ERROR[SET_ORIEN[orientation.flatten.pack('f*')]]
+      check_error(SET_ORIEN[orientation.flatten.pack('f*')])
     end
 
     def orientation
       orientation_buffer = '    ' * 6
-      CHECK_ERROR[GET_ORIEN[orientation_buffer]]
+      check_error(GET_ORIEN[orientation_buffer])
       orientation = orientation_buffer.unpack('f*')
       [orientation[0..2], orientation[3..5]]
     end
 
   private
     def set_3float(float_tuple, setter)
-      CHECK_ERROR[setter[*float_tuple.pack('f*').unpack('i*')]]
+      check_error(setter[*float_tuple.pack('f*').unpack('i*')])
       return float_tuple
     end
 
     def get_3float(getter)
       float_tuple_buffers = Array.new(3) { '    ' }
-      CHECK_ERROR[getter[*float_tuple_buffers]]
+      check_error(getter[*float_tuple_buffers])
       return float_tuple_buffers.join.unpack('f*')
     end
   end
