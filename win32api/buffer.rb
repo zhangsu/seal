@@ -5,6 +5,7 @@ module Seal
     include Helper
 
     INIT_BUF = SealAPI.new('init_buf', 'p', 'i')
+    DESTROY_BUF = SealAPI.new('destroy_buf', 'p', 'i')
     LOAD2BUF = SealAPI.new('load2buf', 'ppi', 'i')
     GET_BUF_SIZE = SealAPI.new('get_buf_size', 'pp', 'i')
     GET_BUF_FREQ = SealAPI.new('get_buf_freq', 'pp', 'i')
@@ -15,6 +16,7 @@ module Seal
       @buffer = '    '
       check_error(INIT_BUF[@buffer])
       input_audio(@buffer, LOAD2BUF, filename, format)
+      ObjectSpace.define_finalizer(self, Helper.free(@buffer, DESTROY_BUF))
       self
     end
 

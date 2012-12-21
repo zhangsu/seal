@@ -4,6 +4,10 @@ module Seal
   module Helper
     GET_ERR_MSG = SealAPI.new('get_err_msg', 'i', 'p')
 
+    def self.free(obj, destroyer)
+      lambda { |object_id| destroyer[obj] }
+    end
+
   private
     def check_error(error_code)
       raise SealError, GET_ERR_MSG[error_code] if error_code != 0
