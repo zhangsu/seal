@@ -4,41 +4,41 @@ module Seal
   class Buffer
     include Helper
 
-    INIT_BUF = SealAPI.new('init_buf', 'p', 'i')
-    DESTROY_BUF = SealAPI.new('destroy_buf', 'p', 'i')
-    LOAD2BUF = SealAPI.new('load2buf', 'ppi', 'i')
-    GET_BUF_SIZE = SealAPI.new('get_buf_size', 'pp', 'i')
-    GET_BUF_FREQ = SealAPI.new('get_buf_freq', 'pp', 'i')
-    GET_BUF_BPS = SealAPI.new('get_buf_bps', 'pp', 'i')
-    GET_BUF_NCHANNELS = SealAPI.new('get_buf_nchannels', 'pp', 'i')
+    INIT = SealAPI.new('init_buf', 'p', 'i')
+    DESTROY = SealAPI.new('destroy_buf', 'p', 'i')
+    LOAD = SealAPI.new('load2buf', 'ppi', 'i')
+    GET_SIZE = SealAPI.new('get_buf_size', 'pp', 'i')
+    GET_FREQ = SealAPI.new('get_buf_freq', 'pp', 'i')
+    GET_BPS = SealAPI.new('get_buf_bps', 'pp', 'i')
+    GET_NCHANNELS = SealAPI.new('get_buf_nchannels', 'pp', 'i')
 
     def initialize(filename, format = Format::UNKNOWN)
       @buffer = '    '
-      check_error(INIT_BUF[@buffer])
-      input_audio(@buffer, LOAD2BUF, filename, format)
-      ObjectSpace.define_finalizer(self, Helper.free(@buffer, DESTROY_BUF))
+      check_error(INIT[@buffer])
+      input_audio(@buffer, LOAD, filename, format)
+      ObjectSpace.define_finalizer(self, Helper.free(@buffer, DESTROY))
       self
     end
 
     def load(filename, format = Format::UNKNOWN)
-      input_audio(@buffer, LOAD2BUF, filename, format)
+      input_audio(@buffer, LOAD, filename, format)
       self
     end
 
     def size
-      get_obj_int(@buffer, GET_BUF_SIZE)
+      get_obj_int(@buffer, GET_SIZE)
     end
 
     def frequency
-      get_obj_int(@buffer, GET_BUF_FREQ)
+      get_obj_int(@buffer, GET_FREQ)
     end
 
     def bit_depth
-      get_obj_int(@buffer, GET_BUF_BPS)
+      get_obj_int(@buffer, GET_BPS)
     end
 
     def channel_count
-      get_obj_int(@buffer, GET_BUF_NCHANNELS)
+      get_obj_int(@buffer, GET_NCHANNELS)
     end
   end
 end
