@@ -13,7 +13,7 @@ describe Stream do
     klass = described_class
     class << klass; alias unit_test_open new; end
     klass.method(:open).should eq klass.method(:unit_test_open)
-    class << klass; undef unit_test_open; end
+    class << klass; remove_method :unit_test_open; end
   end
 
   context 'that are closed' do
