@@ -9,6 +9,13 @@ describe Stream do
 
   it_behaves_like 'an audio object with format'
 
+  specify 'open is equivalent to new' do
+    klass = described_class
+    class << klass; alias unit_test_open new; end
+    klass.method(:open).should eq klass.method(:unit_test_open)
+    class << klass; undef unit_test_open; end
+  end
+
   context 'that are closed' do
     subject do
       Stream.new(WAV_PATH).tap { |stream| stream.close }
