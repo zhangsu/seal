@@ -11,6 +11,7 @@ describe EffectSlot do
 
   it_validates 'the boolean attribute', :auto
   it_validates 'the float attribute', :gain, "[0, 1]"
+  it_defines 'boolean reader aliases', [:auto]
 
   it 'can initialize with an effect' do
     reverb = Reverb.new
