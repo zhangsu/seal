@@ -11,7 +11,7 @@ describe Source do
   it_behaves_like 'a movable object'
 
   describe 'by default' do
-    its(:auto?) { should be_true }
+    its(:auto) { should be_true }
     its(:buffer) { should be_nil }
     its(:chunk_size) { should eq 36864 }
     its(:gain) { should be_within(TOLERANCE).of(1.0) }
@@ -22,6 +22,14 @@ describe Source do
     its(:state) { should be INITIAL }
     its(:stream) { should be_nil }
     its(:type) { should be UNDETERMINED }
+  end
+
+  describe 'instance method aliases' do
+    [:auto, :relative, :looping].each do |name|
+      specify "#{name}? is an alias of #{name}" do
+        subject.method(name).should eq subject.method("#{name}?")
+      end
+    end
   end
 
   it_validates 'the boolean attribute', :relative
@@ -209,31 +217,31 @@ describe Source do
 
   describe 'looping' do
     example 'as undetermined type' do
-      source.looping?.should be_false
+      source.looping.should be_false
       source.looping = true
       source.looping.should be_true
       source.looping = false
-      source.looping?.should be_false
+      source.looping.should be_false
     end
 
     example 'as streaming type' do
       source.looping = true
       source.stream = stream
-      source.looping?.should be_true
+      source.looping.should be_true
       source.looping = false
-      source.looping?.should be_false
+      source.looping.should be_false
       source.looping = true
-      source.looping?.should be_true
+      source.looping.should be_true
     end
 
     example 'as static type' do
       source.looping = true
       source.buffer = buffer
-      source.looping?.should be_true
+      source.looping.should be_true
       source.looping = false
-      source.looping?.should be_false
+      source.looping.should be_false
       source.looping = true
-      source.looping?.should be_true
+      source.looping.should be_true
     end
 
     # This example depends on the length of the test audio file.
