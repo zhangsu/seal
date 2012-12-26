@@ -37,119 +37,119 @@ module Seal
     IS_HFDECAY_LIMITED = SealAPI.new('is_rvb_hfdecay_limited', 'pp')
 
     def initialize(preset = nil)
-      @reverb = '    '
-      check_error(INIT[@reverb])
+      @effect = '    '
+      check_error(INIT[@effect])
       load(preset) if preset
-      ObjectSpace.define_finalizer(self, Helper.free(@reverb, DESTROY))
+      ObjectSpace.define_finalizer(self, Helper.free(@effect, DESTROY))
       self
     end
 
     def load(preset)
-      check_error(LOAD[@reverb, preset])
+      check_error(LOAD[@effect, preset])
     end
 
     def density=(density)
-      set_obj_float(@reverb, density, SET_DENSITY)
+      set_obj_float(@effect, density, SET_DENSITY)
     end
 
     def diffusion=(diffusion)
-      set_obj_float(@reverb, diffusion, SET_DIFFUSION)
+      set_obj_float(@effect, diffusion, SET_DIFFUSION)
     end
 
     def gain=(gain)
-      set_obj_float(@reverb, gain, SET_GAIN)
+      set_obj_float(@effect, gain, SET_GAIN)
     end
 
     def hfgain=(hfgain)
-      set_obj_float(@reverb, hfgain, SET_HFGAIN)
+      set_obj_float(@effect, hfgain, SET_HFGAIN)
     end
 
     def decay_time=(decay_time)
-      set_obj_float(@reverb, decay_time, SET_DECAY_TIME)
+      set_obj_float(@effect, decay_time, SET_DECAY_TIME)
     end
 
     def hfdecay_ratio=(hfdecay_ratio)
-      set_obj_float(@reverb, hfdecay_ratio, SET_HFDECAY_RATIO)
+      set_obj_float(@effect, hfdecay_ratio, SET_HFDECAY_RATIO)
     end
 
     def reflections_gain=(reflections_gain)
-      set_obj_float(@reverb, reflections_gain, SET_REFLECTIONS_GAIN)
+      set_obj_float(@effect, reflections_gain, SET_REFLECTIONS_GAIN)
     end
 
     def reflections_delay=(reflections_delay)
-      set_obj_float(@reverb, reflections_delay, SET_REFLECTIONS_DELAY)
+      set_obj_float(@effect, reflections_delay, SET_REFLECTIONS_DELAY)
     end
 
     def late_gain=(late_gain)
-      set_obj_float(@reverb, late_gain, SET_LATE_GAIN)
+      set_obj_float(@effect, late_gain, SET_LATE_GAIN)
     end
 
     def late_delay=(late_delay)
-      set_obj_float(@reverb, late_delay, SET_LATE_DELAY)
+      set_obj_float(@effect, late_delay, SET_LATE_DELAY)
     end
 
     def air_absorbtion_hfgain=(air_absorbtion_hfgain)
-      set_obj_float(@reverb, air_absorbtion_hfgain, SET_AIR_ABSORBTION_HFGAIN)
+      set_obj_float(@effect, air_absorbtion_hfgain, SET_AIR_ABSORBTION_HFGAIN)
     end
 
     def room_rolloff_factor=(room_rolloff_factor)
-      set_obj_float(@reverb, room_rolloff_factor, SET_ROOM_ROLLOFF_FACTOR)
+      set_obj_float(@effect, room_rolloff_factor, SET_ROOM_ROLLOFF_FACTOR)
     end
 
     def hfdecay_limited=(hfdecay_limited)
-      set_obj_char(@reverb, hfdecay_limited, SET_HFDECAY_LIMITED)
+      set_obj_char(@effect, hfdecay_limited, SET_HFDECAY_LIMITED)
     end
 
     def density
-      get_obj_float(@reverb, GET_DENSITY)
+      get_obj_float(@effect, GET_DENSITY)
     end
 
     def diffusion
-      get_obj_float(@reverb, GET_DIFFUSION)
+      get_obj_float(@effect, GET_DIFFUSION)
     end
 
     def gain
-      get_obj_float(@reverb, GET_GAIN)
+      get_obj_float(@effect, GET_GAIN)
     end
 
     def hfgain
-      get_obj_float(@reverb, GET_HFGAIN)
+      get_obj_float(@effect, GET_HFGAIN)
     end
 
     def decay_time
-      get_obj_float(@reverb, GET_DECAY_TIME)
+      get_obj_float(@effect, GET_DECAY_TIME)
     end
 
     def hfdecay_ratio
-      get_obj_float(@reverb, GET_HFDECAY_RATIO)
+      get_obj_float(@effect, GET_HFDECAY_RATIO)
     end
 
     def reflections_gain
-      get_obj_float(@reverb, GET_REFLECTIONS_GAIN)
+      get_obj_float(@effect, GET_REFLECTIONS_GAIN)
     end
 
     def reflections_delay
-      get_obj_float(@reverb, GET_REFLECTIONS_DELAY)
+      get_obj_float(@effect, GET_REFLECTIONS_DELAY)
     end
 
     def late_gain
-      get_obj_float(@reverb, GET_LATE_GAIN)
+      get_obj_float(@effect, GET_LATE_GAIN)
     end
 
     def late_delay
-      get_obj_float(@reverb, GET_LATE_DELAY)
+      get_obj_float(@effect, GET_LATE_DELAY)
     end
 
     def air_absorbtion_hfgain
-      get_obj_float(@reverb, GET_AIR_ABSORBTION_HFGAIN)
+      get_obj_float(@effect, GET_AIR_ABSORBTION_HFGAIN)
     end
 
     def room_rolloff_factor
-      get_obj_float(@reverb, GET_ROOM_ROLLOFF_FACTOR)
+      get_obj_float(@effect, GET_ROOM_ROLLOFF_FACTOR)
     end
 
     def hfdecay_limited
-      get_obj_char(@reverb, IS_HFDECAY_LIMITED)
+      get_obj_char(@effect, IS_HFDECAY_LIMITED)
     end
 
     alias hfdecay_limited? hfdecay_limited
