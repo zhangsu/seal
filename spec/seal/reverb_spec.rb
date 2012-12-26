@@ -31,14 +31,14 @@ describe Reverb do
   it_validates 'the float attribute', :reflections_gain, '[0, 3.16]'
   it_validates 'the float attribute', :room_rolloff_factor, '[0, 10]'
 
-  it 'can load different reverb presets' do
-    test_load_presets = -> a_module do
-      a_module.constants.each do |const_sym|
-        constant = a_module.const_get const_sym
-        case constant
-        when Module
-          test_load_presets.(constant)
-        else
+  specify_preset_loading = -> mod do
+    mod.constants.each do |const_sym|
+      constant = mod.const_get(const_sym)
+      case constant
+      when Module
+        specify_preset_loading.(constant)
+      else
+        it "can load preset #{mod}::#{const_sym}" do
           expect do
             reverb = Reverb.new(constant)
             reverb.load(constant)
@@ -46,6 +46,6 @@ describe Reverb do
         end
       end
     end
-    test_load_presets.(Reverb::Preset)
   end
+  specify_preset_loading.(Reverb::Preset)
 end
