@@ -4,8 +4,21 @@ module Seal
   module Helper
     GET_ERR_MSG = SealAPI.new('get_err_msg', 'i', 'p')
 
-    def self.free(obj, destroyer)
-      lambda { |object_id| destroyer[obj] }
+    class << self
+      def define_enum(mod, constants, start_value = 0)
+        constants.each_with_index do |constant, index|
+          mod.const_set(constant, start_value + index)
+        end
+      end
+
+      # Returns a destructor for a native Seal object. This is most likely
+      # called in the initializer method, but we cannot define the proc handler
+      # there because that will capture the binding of the implicit `self` (due
+      # to the nature of closure), which makes the object that `self` refers to
+      # unrecyclable.
+      def free(obj, destroyer)
+        lambda { |object_id| destroyer[obj] }
+      end
     end
 
   private
@@ -75,10 +88,12 @@ module Seal
   end
 
   module Format
-    UNKNOWN = 0
-    WAV = 1
-    OV = 2
-    MPG = 3
+    Helper.define_enum(self, [
+      :UNKNOWN,
+      :WAV,
+      :OV,
+      :MPG
+    ])
   end
 
   class SealError < Exception

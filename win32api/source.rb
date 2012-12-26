@@ -205,16 +205,20 @@ module Seal
     end
 
     module State
-      INITIAL = 0
-      PLAYING = 1
-      PAUSED = 2
-      STOPPED = 3
+      Helper.define_enum(self, [
+        :INITIAL,
+        :PLAYING,
+        :PAUSED,
+        :STOPPED
+      ])
     end
 
     module Type
-      UNDETERMINED = 0
-      STATIC = 1
-      STREAMING = 2
+      Helper.define_enum(self, [
+        :UNDETERMINED,
+        :STATIC,
+        :STREAMING
+      ])
     end
   end
 end
