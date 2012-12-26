@@ -18,14 +18,37 @@ module Seal
       check_error(inputter[media, filename, format])
     end
 
-    def get_obj_attr(obj, getter, type)
-      buffer = '    '
-      check_error(getter[obj, buffer])
-      buffer.unpack(type)[0]
+    def set_obj_int(obj, int, setter)
+      check_error(setter[obj, int])
+      int
     end
 
     def get_obj_int(obj, getter)
-      get_obj_attr(obj, getter, 'i')
+      buffer = '    '
+      check_error(getter[obj, buffer])
+      buffer.unpack('i')[0]
+    end
+
+    def set_obj_char(obj, bool, setter)
+      set_obj_int(obj, bool ? 1 : 0, setter)
+    end
+
+    def get_obj_char(obj, getter)
+      buffer = ' '
+      check_error(getter[obj, buffer])
+      buffer.unpack('c')[0] != 0
+    end
+
+    # Win32API does not support float argument type, need to pass as integer.
+    def set_obj_float(obj, float, setter)
+      check_error(setter[obj, [float].pack('f').unpack('i')[0]])
+      float
+    end
+
+    def get_obj_float(obj, getter)
+      float_buffer = '    '
+      check_error(getter[obj, float_buffer])
+      float_buffer.unpack('f')[0]
     end
   end
 
