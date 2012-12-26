@@ -1,8 +1,4 @@
 /*
- * err.h is part of the Scorched End Audio Library (SEAL) and is licensed
- * under the terms of the GNU Lesser General Public License. See COPYING
- * attached with the library.
- *
  * err.h defines Seal errors and provides subroutines for clearing and
  * retriving errors. Seal functions will set a thread-local error flag when
  * error strikes, so if the last Seal function call returns 0, the exact error

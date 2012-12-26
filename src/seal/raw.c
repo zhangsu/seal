@@ -1,9 +1,3 @@
-/*
- * raw.c is part of the Scorched End Audio Library (SEAL) and is licensed
- * under the terms of the GNU Lesser General Public License. See COPYING
- * attached with the library.
- */
-
 #include <stdlib.h>
 #include <stddef.h>
 #include <seal/raw.h>

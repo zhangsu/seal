@@ -1,8 +1,4 @@
 /*
- * ov.h is part of the Scorched End Audio Library (SEAL) and is licensed under
- * the terms of the GNU Lesser General Public License. See COPYING attached
- * with the library.
- *
  * ov.h provides subroutines to decode ogg vorbis files.
  */
 

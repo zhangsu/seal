@@ -1,8 +1,4 @@
 /*
- * efs.h is part of the Scorched End Audio Library (SEAL) and is
- * licensed under the terms of the GNU Lesser General Public License. See
- * COPYING attached with the library.
- *
  * efs.h defines the effect slot type, which is the container type for
  * effects. A source can mix an effect in an effect slot to filter the output
  * sound.

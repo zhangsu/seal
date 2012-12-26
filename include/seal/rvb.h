@@ -1,8 +1,4 @@
 /*
- * rvb.h is part of the Scorched End Audio Library (SEAL) and is licensed
- * under the terms of the GNU Lesser General Public License. See COPYING
- * attached with the library.
- *
  * rvb.h defines the reverberation effect type and its parameters. Effect
  * objects can be put into an effect slot for sources to use.
  */

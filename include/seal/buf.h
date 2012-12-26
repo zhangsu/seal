@@ -1,8 +1,4 @@
 /*
- * buf.h is part of the Scorched End Audio Library (SEAL) and is licensed
- * under the terms of the GNU Lesser General Public License. See COPYING
- * attached with the library.
- *
  * buf.h wraps up the abstract data type `seal_buf_t'. Buffers are essentially
  * abstract representations of the (raw) audio data and are used by sources.
  * Buffers are most suitable for small-sized sound effect which can be

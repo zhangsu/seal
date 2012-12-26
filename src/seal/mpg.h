@@ -1,8 +1,4 @@
 /*
- * mpg.h is part of the Scorched End Audio Library (SEAL) and is licensed
- * under the terms of the GNU Lesser General Public License. See COPYING
- * attached with the library.
- *
  * mpg.h provides subroutines to decode MPEG 1.0, 2.0 and 2.5 audio for layers
  * 1, 2 and 3.
  */

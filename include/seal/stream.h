@@ -1,8 +1,4 @@
 /*
- * stream.h is part of the Scorched End Audio Library (SEAL) and is licensed
- * under the terms of the GNU Lesser General Public License. See COPYING
- * attached with the library.
- *
  * stream.h wraps up the `seal_stream_t' data type used by streaming sources.
  * It is the front end for various decoders.
  */

@@ -1,8 +1,4 @@
 /*
- * src.h is part of the Scorched End Audio Library (SEAL) and is licensed
- * under the terms of the GNU Lesser General Public License. See COPYING
- * attached with the library.
- *
  * src.h wraps up the abstract data type `seal_src_t'. Sources are abstract
  * representations of sound sources which emit sound in Euclidean space.
  */

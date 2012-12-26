@@ -1,8 +1,4 @@
 /*
- * raw.h is part of the Scorched End Audio Library (SEAL) and is licensed
- * under the terms of the GNU Lesser General Public License. See COPYING
- * attached with the library.
- *
  * raw.h defines the the data structure `seal_raw_t' that represents raw PCM
  * data as well as a series of operations on them.
  */

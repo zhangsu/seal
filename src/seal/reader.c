@@ -1,9 +1,3 @@
-/*
- * reader.c is part of the Scorched End Audio Library (SEAL) and is licensed
- * under the terms of the GNU Lesser General Public License. See COPYING
- * attached with the library.
- */
-
 #ifdef _WIN32
 # include <Windows.h>
 #endif

@@ -1,8 +1,4 @@
 /*
- * fmt.h is part of the Scorched End Audio Library (SEAL) and is licensed
- * under the terms of the GNU Lesser General Public License. See COPYING
- * attached with the library.
- *
  * fmt.h defines all the supported audio file format and provides utilities
  * to deal with them.
  */

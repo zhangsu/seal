@@ -1,8 +1,4 @@
 /*
- * listener.h is part of the Scorched End Audio Library (SEAL) and is licensed
- * under the terms of the GNU Lesser General Public License. See COPYING
- * attached with the library.
- *
  * listener.h wraps up the listener singleton object, which is the abstract
  * representation of the sole listener who hears the sound.
  */
