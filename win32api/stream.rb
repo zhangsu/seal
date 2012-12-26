@@ -4,9 +4,9 @@ module Seal
   class Stream
     include Helper
 
-    OPEN = SealAPI.new('open_stream', 'ppi', 'i')
-    CLOSE = SealAPI.new('close_stream', 'p', 'i')
-    REWIND = SealAPI.new('rewind_stream', 'p', 'i')
+    OPEN = SealAPI.new('open_stream', 'ppi')
+    CLOSE = SealAPI.new('close_stream', 'p')
+    REWIND = SealAPI.new('rewind_stream', 'p')
 
     class << self
       alias open new

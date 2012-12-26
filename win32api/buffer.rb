@@ -4,13 +4,13 @@ module Seal
   class Buffer
     include Helper
 
-    INIT = SealAPI.new('init_buf', 'p', 'i')
-    DESTROY = SealAPI.new('destroy_buf', 'p', 'i')
-    LOAD = SealAPI.new('load2buf', 'ppi', 'i')
-    GET_SIZE = SealAPI.new('get_buf_size', 'pp', 'i')
-    GET_FREQ = SealAPI.new('get_buf_freq', 'pp', 'i')
-    GET_BPS = SealAPI.new('get_buf_bps', 'pp', 'i')
-    GET_NCHANNELS = SealAPI.new('get_buf_nchannels', 'pp', 'i')
+    INIT = SealAPI.new('init_buf', 'p')
+    DESTROY = SealAPI.new('destroy_buf', 'p')
+    LOAD = SealAPI.new('load2buf', 'ppi')
+    GET_SIZE = SealAPI.new('get_buf_size', 'pp')
+    GET_FREQ = SealAPI.new('get_buf_freq', 'pp')
+    GET_BPS = SealAPI.new('get_buf_bps', 'pp')
+    GET_NCHANNELS = SealAPI.new('get_buf_nchannels', 'pp')
 
     def initialize(filename, format = Format::UNKNOWN)
       @buffer = '    '

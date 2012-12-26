@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), 'sealapi')
+require File.join(File.dirname(__FILE__), 'seal_api')
 
 module Seal
   module Helper
@@ -34,10 +34,9 @@ module Seal
   class << self
     include Helper
 
-    STARTUP = SealAPI.new('startup', 'p', 'i')
+    STARTUP = SealAPI.new('startup', 'p')
     CLEANUP = SealAPI.new('cleanup', 'v', 'v')
-    GET_PER_SRC_EFFECT_LIMIT =
-      SealAPI.new('get_per_src_effect_limit', 'v', 'i')
+    GET_PER_SRC_EFFECT_LIMIT = SealAPI.new('get_per_src_effect_limit', 'v')
 
     def startup(device = nil)
       check_error(STARTUP[device])

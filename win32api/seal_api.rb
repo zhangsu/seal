@@ -5,9 +5,10 @@ LIB_DIR = '.' unless defined? LIB_DIR
 class SealAPI < Win32API
   STRCPY_S = Win32API.new('msvcrt', 'strcpy_s', 'pll', 'i')
 
-  def initialize(func, *args)
-    @return_string = args[-1] == 'p'
-    super(File.join(LIB_DIR, 'seal'), "seal_#{func}", *args)
+  def initialize(func, arg_types, return_type = 'i', *args)
+    @return_string = return_type == 'p'
+    library = File.join(LIB_DIR, 'seal')
+    super(library, "seal_#{func}", arg_types, return_type, *args)
   end
 
   def [](*args)

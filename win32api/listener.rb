@@ -4,14 +4,14 @@ module Seal
   class Listener
     include Helper
 
-    SET_GAIN = SealAPI.new('set_listener_gain', 'i', 'i')
-    GET_GAIN = SealAPI.new('get_listener_gain', 'p', 'i')
-    SET_POS = SealAPI.new('set_listener_pos', 'iii', 'i')
-    GET_POS = SealAPI.new('get_listener_pos', 'ppp', 'i')
-    SET_VEL = SealAPI.new('set_listener_vel', 'iii', 'i')
-    GET_VEL = SealAPI.new('get_listener_vel', 'ppp', 'i')
-    SET_ORIEN = SealAPI.new('set_listener_orien', 'p', 'i')
-    GET_ORIEN = SealAPI.new('get_listener_orien', 'p', 'i')
+    SET_GAIN = SealAPI.new('set_listener_gain', 'i')
+    GET_GAIN = SealAPI.new('get_listener_gain', 'p')
+    SET_POS = SealAPI.new('set_listener_pos', 'iii')
+    GET_POS = SealAPI.new('get_listener_pos', 'ppp')
+    SET_VEL = SealAPI.new('set_listener_vel', 'iii')
+    GET_VEL = SealAPI.new('get_listener_vel', 'ppp')
+    SET_ORIEN = SealAPI.new('set_listener_orien', 'p')
+    GET_ORIEN = SealAPI.new('get_listener_orien', 'p')
 
     def gain=(gain)
       check_error(SET_GAIN[[gain].pack('f').unpack('i')[0]])
