@@ -4,7 +4,7 @@ desc 'Run the default task'
 task :default => :all
 
 desc 'Run all tasks'
-task :all => [:compile, :yard]
+task :all => :compile
 
 Rake::ExtensionTask.new('seal')
 
