@@ -14,7 +14,7 @@ module Seal
 
     def initialize(filename, format = Format::UNKNOWN)
       @stream = '    ' * 5
-      input_audio(@stream, OPEN, filename, format)
+      input_audio(@stream, filename, format, OPEN)
       ObjectSpace.define_finalizer(self, Helper.free(@stream, CLOSE))
       self
     end

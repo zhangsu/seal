@@ -14,7 +14,7 @@ module Seal
       nil
     end
 
-    def input_audio(media, inputter, filename, format)
+    def input_audio(media, filename, format, inputter)
       check_error(inputter[media, filename, format])
     end
 

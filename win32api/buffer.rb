@@ -15,13 +15,13 @@ module Seal
     def initialize(filename, format = Format::UNKNOWN)
       @buffer = '    '
       check_error(INIT[@buffer])
-      input_audio(@buffer, LOAD, filename, format)
+      input_audio(@buffer, filename, format, LOAD)
       ObjectSpace.define_finalizer(self, Helper.free(@buffer, DESTROY))
       self
     end
 
     def load(filename, format = Format::UNKNOWN)
-      input_audio(@buffer, LOAD, filename, format)
+      input_audio(@buffer, filename, format, LOAD)
       self
     end
 
