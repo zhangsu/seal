@@ -24,18 +24,11 @@ describe Source do
     its(:type) { should be UNDETERMINED }
   end
 
-  describe 'instance method aliases' do
-    [:auto, :relative, :looping].each do |name|
-      specify "#{name}? is an alias of #{name}" do
-        subject.method(name).should eq subject.method("#{name}?")
-      end
-    end
-  end
-
   it_validates 'the boolean attribute', :relative
   it_validates 'the boolean attribute', :auto
   it_validates 'the float attribute', :pitch, "[0, +inf.)"
   it_validates 'the float attribute', :gain, "[0, +inf.)"
+  it_defines 'boolean reader aliases', [:auto, :relative, :looping]
 
   it 'validates its queue size is in [2, 63]' do
     error_pattern = /Invalid parameter value/
