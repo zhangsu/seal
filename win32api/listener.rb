@@ -53,7 +53,8 @@ module Seal
 
   private
     def set_3float(float_tuple, setter)
-      check_error(setter[*float_tuple.pack('f*').unpack('i*')])
+      integer_tuple = float_tuple.pack('f*').unpack('i*')
+      check_error(setter[*integer_tuple])
       return float_tuple
     end
 
