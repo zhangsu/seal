@@ -17,7 +17,8 @@ module Seal
     SET_REFLECTIONS_DELAY = SealAPI.new('set_rvb_reflections_delay', 'pi')
     SET_LATE_GAIN = SealAPI.new('set_rvb_late_gain', 'pi')
     SET_LATE_DELAY = SealAPI.new('set_rvb_late_delay', 'pi')
-    SET_AIR_ABSORBTION_HFGAIN = SealAPI.new('set_rvb_air_absorbtion_hfgain', 'pi')
+    SET_AIR_ABSORBTION_HFGAIN =
+      SealAPI.new('set_rvb_air_absorbtion_hfgain', 'pi')
     SET_ROOM_ROLLOFF_FACTOR = SealAPI.new('set_rvb_room_rolloff_factor', 'pi')
     SET_HFDECAY_LIMITED = SealAPI.new('set_rvb_hfdecay_limited', 'pi')
     GET_DENSITY = SealAPI.new('get_rvb_density', 'pp')
@@ -30,7 +31,8 @@ module Seal
     GET_REFLECTIONS_DELAY = SealAPI.new('get_rvb_reflections_delay', 'pp')
     GET_LATE_GAIN = SealAPI.new('get_rvb_late_gain', 'pp')
     GET_LATE_DELAY = SealAPI.new('get_rvb_late_delay', 'pp')
-    GET_AIR_ABSORBTION_HFGAIN = SealAPI.new('get_rvb_air_absorbtion_hfgain', 'pp')
+    GET_AIR_ABSORBTION_HFGAIN =
+      SealAPI.new('get_rvb_air_absorbtion_hfgain', 'pp')
     GET_ROOM_ROLLOFF_FACTOR = SealAPI.new('get_rvb_room_rolloff_factor', 'pp')
     IS_HFDECAY_LIMITED = SealAPI.new('is_rvb_hfdecay_limited', 'pp')
 
