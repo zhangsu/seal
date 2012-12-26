@@ -42,7 +42,7 @@ module Seal
 
     def initialize
       @source = '    ' * 5
-      INIT[@source]
+      check_error(INIT[@source])
       ObjectSpace.define_finalizer(self, Helper.free(@source, DESTROY))
     end
 
