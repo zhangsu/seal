@@ -41,6 +41,7 @@ module Seal
       check_error(INIT[@reverb])
       load(preset) if preset
       ObjectSpace.define_finalizer(self, Helper.free(@reverb, DESTROY))
+      self
     end
 
     def load(preset)

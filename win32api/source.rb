@@ -44,6 +44,7 @@ module Seal
       @source = '    ' * 5
       check_error(INIT[@source])
       ObjectSpace.define_finalizer(self, Helper.free(@source, DESTROY))
+      self
     end
 
     def play
