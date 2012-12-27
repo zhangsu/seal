@@ -131,7 +131,7 @@ seal_startup(const char* device_name)
     /* Reset OpenAL's error state. */
     alGetError();
 
-    alcGetIntegerv(device, ALC_MAX_AUXILIARY_SENDS, 1,&per_src_effect_limit);
+    alcGetIntegerv(device, ALC_MAX_AUXILIARY_SENDS, 1, &per_src_effect_limit);
 
     return SEAL_OK;
 
