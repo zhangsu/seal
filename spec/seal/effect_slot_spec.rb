@@ -25,4 +25,11 @@ describe EffectSlot do
     effect_slot.effect = reverb
     effect_slot.effect.should be reverb
   end
+
+  it 'can be fed by multiple sources' do
+    23.times do
+      source = Source.new
+      source.feed(subject, 0)
+    end
+  end
 end
