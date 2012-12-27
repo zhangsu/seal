@@ -1,9 +1,4 @@
-current_dir = File.dirname(__FILE__)
-[
-  'core',
-  'buffer',
-  'stream'
-].each { |mod| require File.join(current_dir, mod) }
+require File.join(File.dirname(__FILE__), 'core')
 
 module Seal
   class Source
