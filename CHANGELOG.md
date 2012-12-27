@@ -2,8 +2,8 @@
 
 ## 0.1.1 (December 26, 2012)
 
-- The original `EffectSlot#feed` method is now changed to `Source#feed` to more
-consistent with OpenAL API
+- The original `EffectSlot#feed` method is now changed to `Source#feed` to be
+more consistent with OpenAL API
 - Added Win32API binding
 - Enhanced documentation
 - More test coverage
