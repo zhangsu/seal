@@ -13,7 +13,6 @@
 *.manifest
 *.exp
 .yardoc
-/doc/
 /*.dll
 tmp
 Gemfile.lock
