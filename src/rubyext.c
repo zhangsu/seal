@@ -132,15 +132,8 @@ set_obj_int(VALUE robj, VALUE rnum, void* set)
     check_seal_err(((seal_err_t (*)(void*, int)) set)(
         DATA_PTR(robj), NUM2INT(rnum)
     ));
-}
 
-static
-VALUE
-set_obj_ulong(VALUE robj, VALUE rnum, void* set)
-{
-    check_seal_err(((seal_err_t (*)(void*, int)) set)(
-        DATA_PTR(robj), NUM2ULONG(rnum)
-    ));
+    return rnum;
 }
 
 static
@@ -197,17 +190,6 @@ get_obj_int(VALUE robj, void* get)
     get_obj_attr(robj, &integer, get);
 
     return INT2NUM(integer);
-}
-
-static
-VALUE
-get_obj_ulong(VALUE robj, void* get)
-{
-    unsigned long long_integer;
-
-    get_obj_attr(robj, &long_integer, get);
-
-    return ULONG2NUM(long_integer);
 }
 
 static
@@ -1081,7 +1063,7 @@ load_rvb(VALUE rrvb, VALUE rpreset)
     seal_rvb_t* rvb;
 
     Data_Get_Struct(rrvb, seal_rvb_t, rvb);
-    check_seal_err(seal_load_rvb(DATA_PTR(rrvb), NUM2INT(rpreset)));
+    check_seal_err(seal_load_rvb(rvb, NUM2INT(rpreset)));
 
     return rrvb;
 }
