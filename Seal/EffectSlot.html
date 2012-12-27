@@ -1,0 +1,786 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>
+  Class: Seal::EffectSlot
+  
+    &mdash; Documentation by YARD 0.8.3
+  
+</title>
+
+  <link rel="stylesheet" href="../css/style.css" type="text/css" media="screen" charset="utf-8" />
+
+  <link rel="stylesheet" href="../css/common.css" type="text/css" media="screen" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  hasFrames = window.top.frames.main ? true : false;
+  relpath = '../';
+  framesUrl = "../frames.html#!" + escape(window.location.href);
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div id="header">
+      <div id="menu">
+  
+    <a href="../_index.html">Index (E)</a> &raquo;
+    <span class='title'><span class='object_link'><a href="../Seal.html" title="Seal (module)">Seal</a></span></span>
+     &raquo; 
+    <span class="title">EffectSlot</span>
+  
+
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="../class_list.html">
+      Class List
+    </a>
+  
+    <a class="full_list_link" id="method_list_link"
+        href="../method_list.html">
+      Method List
+    </a>
+  
+    <a class="full_list_link" id="file_list_link"
+        href="../file_list.html">
+      File List
+    </a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+
+    <iframe id="search_frame"></iframe>
+
+    <div id="content"><h1>Class: Seal::EffectSlot
+  
+  
+  
+</h1>
+
+<dl class="box">
+  
+    <dt class="r1">Inherits:</dt>
+    <dd class="r1">
+      <span class="inheritName">Object</span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next">Seal::EffectSlot</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+      </dd>
+    
+  
+  
+    
+  
+    
+  
+  
+  
+    <dt class="r2 last">Defined in:</dt>
+    <dd class="r2 last">src/rubyext.c<span class="defines">,<br />
+  src/rubyext.c</span>
+</dd>
+  
+</dl>
+<div class="clear"></div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>Interfaces for manipulating effect slots, which are containers for effect
+objects. Effect slots can attach effect objects (such as reverb objects)
+and then be fed with a mix of audio from different sources, essentially
+filtering the rendering of the sound sources and output to the mixer based
+on the attached effect object. For example, if a reverb object is attached
+to an effect slot and one source is feeding the slot, the sound of that
+source will have the reverberation effect defined by the reverb object.</p>
+
+<p>Multiple sources can feed the same effect slot, but conversely there is a
+limit on the number of effect slots a source can feed concurrently. See the
+documentation for EffectSlot#feed for more details.</p>
+
+<p>For more infomation about effect slots, check out the OpenAL effect
+extension guide at: <a
+href="http://zhang.su/seal/EffectsExtensionGuide.pdf">zhang.su/seal/EffectsExtensionGuide.pdf</a></p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+
+
+
+
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small>(<a href="#" class="summary_toggle">collapse</a>)</small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#auto-instance_method" title="#auto (instance method)">- (Boolean) <strong>auto</strong> </a>
+    
+
+    
+      (also: #auto?)
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Determines if the effect is automatically adjusted.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#auto%3D-instance_method" title="#auto= (instance method)">- (Boolean) <strong>auto=</strong>(true) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Sets whether the effect should have automatic adjustments based on the
+physical positions of the sources and the listener.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#effect-instance_method" title="#effect (instance method)">- (Object) <strong>effect</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Gets the effect object in <em>effect_slot</em>.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#effect%3D-instance_method" title="#effect= (instance method)">- (Object) <strong>effect=</strong>(effect) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Fills <em>effect_slot</em> with <em>effect</em>, then <em>effect_slot</em>
+will become ready to be fed by sources.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#gain-instance_method" title="#gain (instance method)">- (Object) <strong>gain</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Gets the output level of <em>effect_slot</em>.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#gain%3D-instance_method" title="#gain= (instance method)">- (Object) <strong>gain=</strong>(flt) </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Sets the output level of <em>effect_slot</em> in the interval [0.0, 1.0].</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">- (Object) <strong>initialize</strong> </a>
+    
+
+    
+  </span>
+  
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Initializes a new effect slot.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+<div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <div class="method_details first">
+  <h3 class="signature first" id="initialize-instance_method">
+  
+    
+      <span class="overload">- (<tt>Object</tt>) <strong>new</strong> </span>
+    
+      <span class="overload">- (<tt>Object</tt>) <strong>new</strong>(effect) </span>
+    
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Initializes a new effect slot. If an effect object is specified,
+initializes the effect slot to have that effect object associated.</p>
+
+<p>There is a limit on the number of allocated effect slots. This method
+raises an error if it is exceeding the limit.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+1591
+1592
+1593
+1594
+1595
+1596
+1597
+1598
+1599
+1600
+1601
+1602
+1603</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1591</span>
+
+static
+VALUE
+init_efs(int argc, VALUE* argv, VALUE rslot)
+{
+    VALUE reffect;
+
+    rb_scan_args(argc, argv, &quot;01&quot;, &amp;reffect);
+    check_seal_err(seal_init_efs(DATA_PTR(rslot)));
+    if (!NIL_P(reffect))
+        set_efs_effect(rslot, reffect);
+
+    return rslot;
+}</pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="auto-instance_method">
+  
+    - (<tt>Boolean</tt>) <strong>auto</strong> 
+  
+
+  
+    <span class="aliases">Also known as:
+    <span class="names"><span id='auto?-instance_method'>auto?</span></span>
+    </span>
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Determines if the effect is automatically adjusted. The default is true
+(nonzero).</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div>
+
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+1666
+1667
+1668
+1669
+1670
+1671</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1666</span>
+
+static
+VALUE
+is_efs_auto(VALUE refs)
+{
+    return get_obj_char(refs, seal_is_efs_auto);
+}</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="auto=-instance_method">
+  
+    - (<tt>Boolean</tt>) <strong>auto=</strong>(true) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Sets whether the effect should have automatic adjustments based on the
+physical positions of the sources and the listener.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div>
+
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+1652
+1653
+1654
+1655
+1656
+1657</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1652</span>
+
+static
+VALUE
+set_efs_auto(VALUE refs, VALUE value)
+{
+    return set_obj_char(refs, value, seal_set_efs_auto);
+}</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="effect-instance_method">
+  
+    - (<tt>Object</tt>) <strong>effect</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Gets the effect object in <em>effect_slot</em>. The default is nil.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  
+
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+1611
+1612
+1613
+1614
+1615
+1616</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1611</span>
+
+static
+VALUE
+get_efs_effect(VALUE rslot)
+{
+    return rb_iv_get(rslot, &quot;@effect&quot;);
+}</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="effect=-instance_method">
+  
+    - (<tt>Object</tt>) <strong>effect=</strong>(effect) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Fills <em>effect_slot</em> with <em>effect</em>, then <em>effect_slot</em>
+will become ready to be fed by sources. Pass nil to unfill the slot.</p>
+
+<p>Changing the parameters of <em>effect</em> after it is attached to
+<em>effect_slot</em> will not change the sound effect provided by
+<em>effect_slot</em>. To update the sound effect, the updated
+<em>effect</em> must be re-attached to <em>effect_slot</em>.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  
+
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+1561
+1562
+1563
+1564
+1565
+1566
+1567
+1568
+1569
+1570
+1571
+1572
+1573
+1574
+1575
+1576
+1577
+1578</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1561</span>
+
+static
+VALUE
+set_efs_effect(VALUE rslot, VALUE reffect)
+{
+    void* effect;
+    seal_err_t err;
+
+    if (NIL_P(reffect)) {
+        err = seal_set_efs_effect(DATA_PTR(rslot), 0);
+    } else {
+        Data_Get_Struct(reffect, void*, effect);
+        err = seal_set_efs_effect(DATA_PTR(rslot), effect);
+    }
+    check_seal_err(err);
+    rb_iv_set(rslot, &quot;@effect&quot;, reffect);
+
+    return reffect;
+}</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="gain-instance_method">
+  
+    - (<tt>Object</tt>) <strong>gain</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Gets the output level of <em>effect_slot</em>. The default is 1.0.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  
+
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+1638
+1639
+1640
+1641
+1642
+1643</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1638</span>
+
+static
+VALUE
+get_efs_gain(VALUE refs)
+{
+    return get_obj_float(refs, seal_get_efs_gain);
+}</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="gain=-instance_method">
+  
+    - (<tt>Object</tt>) <strong>gain=</strong>(flt) 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Sets the output level of <em>effect_slot</em> in the interval [0.0, 1.0]. A
+value of 0.0 mutes the output.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  
+
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+1625
+1626
+1627
+1628
+1629
+1630</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1625</span>
+
+static
+VALUE
+set_efs_gain(VALUE refs, VALUE value)
+{
+    return set_obj_float(refs, value, seal_set_efs_gain);
+}</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+    <div id="footer">
+  Generated on Wed Dec 26 21:20:54 2012 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.8.3 (ruby-1.9.3).
+</div>
+
+  </body>
+</html>
