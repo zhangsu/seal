@@ -32,15 +32,6 @@ seal_set_efs_effect(seal_efs_t* slot, void* effect)
 }
 
 seal_err_t
-seal_feed_efs(seal_efs_t* slot, int index, seal_src_t* src)
-{
-    alSource3i(src->id, AL_AUXILIARY_SEND_FILTER, slot->id, index,
-               AL_FILTER_NULL);
-
-    return _seal_get_openal_err();
-}
-
-seal_err_t
 seal_set_efs_gain(seal_efs_t* slot, float gain)
 {
     return _seal_setf(slot, AL_EFFECTSLOT_GAIN, gain, alAuxiliaryEffectSlotf);

@@ -729,6 +729,29 @@ get_src_stream(VALUE rsrc)
 
 /*
  *  call-seq:
+ *      source.feed(effect_slot, index)  -> source
+ *
+ * Feeds an _effect_slot_ with the output of _source_ so the output is filtered
+ * based on the effect attached to _effect_slot_. Later calls to this method
+ * with a different effect slot and the same source and index will override the
+ * old association. _index_ is the zero-based index for the effect. Each
+ * different effect slot that _source_ is feeding must have a unique
+ * corresponding index. The max is <em>Seal.per_src_effect_limit - 1</em>.
+ */
+static
+VALUE
+feed_efs(VALUE rsrc, VALUE rslot, VALUE rindex)
+{
+    seal_src_t* src;
+
+    Data_Get_Struct(rsrc, seal_src_t, src);
+    check_seal_err(seal_feed_efs(src, DATA_PTR(rslot), NUM2INT(rindex)));
+
+    return rsrc;
+}
+
+/*
+ *  call-seq:
  *      source.update   -> source
  *
  * Updates _source_. If _source_ is not up-to-date, the playback will end
@@ -1594,29 +1617,6 @@ get_efs_effect(VALUE rslot)
 
 /*
  *  call-seq:
- *      effect_slot.feed(index, source)    -> effect_slot
- *
- * Feeds an _effect_slot_ with the output of _source_ so the output is filtered
- * by the effect attached to _effect_slot_. Later calls to this method with a
- * different effect slot and the same source and index will override the old
- * association. _index_ is the zero-based index for the effect. Each different
- * effect slot that _source_ is feeding must have a unique corresponding index.
- * The max is <em>Seal.per_src_effect_limit - 1</em>.
- */
-static
-VALUE
-feed_efs(VALUE rslot, VALUE rindex, VALUE rsrc)
-{
-    seal_src_t* src;
-
-    Data_Get_Struct(rsrc, seal_src_t, src);
-    check_seal_err(seal_feed_efs(DATA_PTR(rslot), NUM2INT(rindex), src));
-
-    return rslot;
-}
-
-/*
- *  call-seq:
  *      effect_slot.gain = flt  -> flt
  *
  * Sets the output level of _effect_slot_ in the interval [0.0, 1.0]. A
@@ -1979,6 +1979,7 @@ bind_src(void)
     rb_define_method(cSource, "buffer", get_src_buf, 0);
     rb_define_method(cSource, "stream=", set_src_stream, 1);
     rb_define_method(cSource, "stream", get_src_stream, 0);
+    rb_define_method(cSource, "feed", feed_efs, 2);
     rb_define_method(cSource, "update", update_src, 0);
     rb_define_method(cSource, "position=", set_src_pos, 1);
     rb_define_method(cSource, "position", get_src_pos, 0);
@@ -2318,7 +2319,6 @@ bind_efs(void)
     rb_define_method(cEffectSlot, "initialize", init_efs, -1);
     rb_define_method(cEffectSlot, "effect=", set_efs_effect, 1);
     rb_define_method(cEffectSlot, "effect", get_efs_effect, 0);
-    rb_define_method(cEffectSlot, "feed", feed_efs, 2);
     rb_define_method(cEffectSlot, "gain=", set_efs_gain, 1);
     rb_define_method(cEffectSlot, "gain", get_efs_gain, 0);
     rb_define_method(cEffectSlot, "auto=", set_efs_auto, 1);

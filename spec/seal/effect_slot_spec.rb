@@ -25,15 +25,4 @@ describe EffectSlot do
     effect_slot.effect = reverb
     effect_slot.effect.should be reverb
   end
-
-  it 'has a limited number of sources it can feed concurrently' do
-    effect_slot = subject
-    sources = []
-    Seal.per_source_effect_limit.times do |i|
-      sources << Source.new
-      effect_slot.feed(i, sources[-1])
-    end
-    expect { effect_slot.feed(sources.size, Source.new) }.to raise_error \
-      /Invalid parameter value/
-  end
 end

@@ -11,6 +11,7 @@
 #include <stddef.h>
 #include "buf.h"
 #include "stream.h"
+#include "efs.h"
 #include "err.h"
 
 /*
@@ -139,6 +140,22 @@ seal_err_t seal_set_src_buf(seal_src_t*, seal_buf_t*);
  * @param stream    the stream to associate the source `src' with
  */
 seal_err_t seal_set_src_stream(seal_src_t*, seal_stream_t*);
+
+/*
+ * Feeds an effect slot with the output of a source so the output is filtered
+ * based on the effect attached to the slot. Later calls to this function with
+ * a different effect slot and the same source and index will override the old
+ * association.
+ *
+ * @see             seal_get_per_src_effect_limit
+ * @param src       the source that feeds the effect slot
+ * @param efs       the effect slot to feed
+ * @param index     the zero-based index for the effect; each different effect
+ *                  slot that the source is feeding must have a unique
+ *                  corresponding index; the max is the return value of
+ *                  seal_get_per_src_effect_limit - 1.
+ */
+seal_err_t seal_feed_efs(seal_src_t*, seal_efs_t*, int /*index*/);
 
 /*
  * Updates a streaming source. If the source is not up-to-date, the playback

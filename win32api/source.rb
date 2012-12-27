@@ -13,6 +13,7 @@ module Seal
     DETACH = SealAPI.new('detach_src_audio', 'p')
     SET_BUF = SealAPI.new('set_src_buf', 'pp')
     SET_STREAM = SealAPI.new('set_src_stream', 'pp')
+    FEED_EFS = SealAPI.new('feed_efs', 'ppi')
     UPDATE = SealAPI.new('update_src', 'p')
     SET_POS = SealAPI.new('set_src_pos', 'piii')
     SET_VEL = SealAPI.new('set_src_vel', 'piii')
@@ -67,6 +68,12 @@ module Seal
     end
 
     attr_reader :buffer, :stream
+
+    def feed(effect_slot, index)
+      native_efs_obj = effect_slot.instance_variable_get(:@effect_slot)
+      check_error(FEED_EFS[@source, native_efs_obj, index])
+      self
+    end
 
     def update
       operate(UPDATE)

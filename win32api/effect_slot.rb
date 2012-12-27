@@ -7,7 +7,6 @@ module Seal
     INIT = SealAPI.new('init_efs', 'p')
     DESTROY = SealAPI.new('destroy_efs', 'p')
     SET_EFFECT = SealAPI.new('set_efs_effect', 'pp')
-    FEED = SealAPI.new('feed_efs', 'pip')
     SET_GAIN = SealAPI.new('set_efs_gain', 'pi')
     SET_AUTO = SealAPI.new('set_efs_auto', 'pi')
     GET_GAIN = SealAPI.new('get_efs_gain', 'pp')
@@ -29,12 +28,6 @@ module Seal
     end
 
     attr_reader :effect
-
-    def feed(index, source)
-      native_source_obj = source.instance_variable_get(:@source)
-      check_error(FEED[@effect_slot, index, native_source_obj])
-      self
-    end
 
     def gain=(gain)
       set_obj_float(@effect_slot, gain, SET_GAIN)

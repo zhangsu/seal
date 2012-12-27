@@ -181,6 +181,18 @@ describe Source do
     end
   end
 
+  describe 'feeding effect slots' do
+    it 'can only feed a limited number concurrently' do
+      effect_slot = nil
+      Seal.per_source_effect_limit.times do |i|
+        effect_slot = EffectSlot.new
+        source.feed(effect_slot, i)
+      end
+      expect { source.feed(effect_slot, Seal.per_source_effect_limit) }.to \
+        raise_error /Invalid parameter value/
+    end
+  end
+
   describe 'automatic streaming' do
     let(:source) do
       Source.new.tap do |source|

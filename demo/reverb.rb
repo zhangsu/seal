@@ -31,7 +31,7 @@ reverb = Reverb.new(Reverb::Preset.module_eval(EFFECT))
 slot = EffectSlot.new(reverb)
 
 [wolf, crow].each do |source|
-  slot.feed(0, source)
+  source.feed(slot, 0)
   Thread.new do
     loop do
       source.play if source.state != Source::State::PLAYING

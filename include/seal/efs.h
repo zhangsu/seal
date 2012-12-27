@@ -18,7 +18,6 @@
 #ifndef _SEAL_EFS_H_
 #define _SEAL_EFS_H_
 
-#include "src.h"
 #include "err.h"
 
 typedef struct seal_efs_t seal_efs_t;
@@ -53,22 +52,6 @@ seal_err_t seal_destroy_efs(seal_efs_t*);
  * @param effect    the effect to fill the effect slot with
  */
 seal_err_t seal_set_efs_effect(seal_efs_t*, void* /*effect*/);
-
-/*
- * Feeds an effect slot with the output of a source so the output is filtered
- * by the effect attached to the slot. Later calls to this function with a
- * different effect slot and the same source and index will override the old
- * association.
- *
- * @see             seal_get_per_src_effect_limit
- * @param efs       the slot to feed
- * @param index     the zero-based index for the effect; each different effect
- *                  slot that the source is feeding must have a unique
- *                  corresponding index; the max is the return value of
- *                  seal_get_per_src_effect_limit - 1.
- * @param src       the source that feeds the effect slot
- */
-seal_err_t seal_feed_efs(seal_efs_t*, int /*index*/, seal_src_t*);
 
 /*
  * Sets the output level of an effect Slot in the interval [0.0f, 1.0f]. A
