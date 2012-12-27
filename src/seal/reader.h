@@ -1,5 +1,5 @@
 /*
- * reader.h provides utilities related to file input.
+ * Utilities related to file input.
  */
 
 #ifndef _SEAL_READER_H_

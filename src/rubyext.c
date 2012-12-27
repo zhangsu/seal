@@ -390,6 +390,9 @@ per_source_effect_limit()
  * specifies the format of the audio file; automatic recognition of the audio
  * format will be attempted if _format_ is not specified. See Seal::Format for
  * possible values. Sets all the attributes appropriately.
+ *
+ * There is a limit on the number of allocated buffers. This method raises an
+ * error if it is exceeding the limit.
  */
 static
 VALUE
@@ -570,6 +573,9 @@ close_stream(VALUE rstream)
  *      Seal::Source.new  -> source
  *
  * Initializes a new source.
+ *
+ * There is a limit on the number of allocated sources. This method raises an
+ * error if it is exceeding the limit.
  */
 static
 VALUE
@@ -1087,6 +1093,9 @@ load_rvb(VALUE rrvb, VALUE rpreset)
  *
  * Initializes a new reverb effect. If a preset is specified, initializes
  * the reverb object to load the preset.
+ *
+ * There is a limit on the number of allocated reverbs. This method raises an
+ * error if it is exceeding the limit.
  */
 static
 VALUE
@@ -1538,7 +1547,11 @@ is_rvb_hfdecay_limited(VALUE rrvb)
  *      effect_slot.effect = effect -> effect
  *
  * Fills _effect_slot_ with _effect_, then _effect_slot_ will become ready to
- * feed sources. Pass nil to unfill the slot.
+ * be fed by sources. Pass nil to unfill the slot.
+ *
+ * Changing the parameters of _effect_ after it is attached to _effect_slot_
+ * will not change the sound effect provided by _effect_slot_. To update the
+ * sound effect, the updated _effect_ must be re-attached to _effect_slot_.
  */
 static
 VALUE
@@ -1564,8 +1577,11 @@ set_efs_effect(VALUE rslot, VALUE reffect)
  *      EffectSlot.new          -> effect_slot
  *      EffectSlot.new(effect)  -> effect_slot
  *
- * Initializes a new effect slot. If an effect object is specified,
- * initializes the effect slot to have that effect object associated.
+ * Initializes a new effect slot. If an effect object is specified, initializes
+ * the effect slot to have that effect object associated.
+ *
+ * There is a limit on the number of allocated effect slots. This method raises
+ * an error if it is exceeding the limit.
  */
 static
 VALUE
@@ -1596,11 +1612,14 @@ get_efs_effect(VALUE rslot)
 
 /*
  *  call-seq:
- *      slot.feed(index, source)    -> slot
+ *      effect_slot.feed(index, source)    -> effect_slot
  *
- * Mixes a sound effect loaded into _effect_slot_ with _source_'s output.
- * Later calls to this function with a different effect slot and the same
- * index will override the old effect slot association.
+ * Feeds an _effect_slot_ with the output of _source_ so the output is filtered
+ * by the effect attached to _effect_slot_. Later calls to this method with a
+ * different effect slot and the same source and index will override the old
+ * association. _index_ is the zero-based index for the effect. Each different
+ * effect slot that _source_ is feeding must have a unique corresponding index.
+ * The max is <em>Seal.per_src_effect_limit - 1</em>.
  */
 static
 VALUE
@@ -1632,8 +1651,7 @@ set_efs_gain(VALUE refs, VALUE value)
  *  call-seq:
  *      effect_slot.gain    -> flt
  *
- * Gets the output level of _effect_slot_ in the interval. The default is
- * 1.0.
+ * Gets the output level of _effect_slot_. The default is 1.0.
  */
 static
 VALUE
@@ -1872,10 +1890,17 @@ bind_core(void)
 /*
  * Document-class:  Seal::Buffer
  *
- * Buffers are essentially abstract representations of the (raw) audio data
- * and are used by sources. Buffers are most suitable for small-sized sound
- * effect which can be efficiently loaded to memory at once. Streams, on the
- * other hand, are more suitable for long audio such as background music.
+ * Interfaces for manipulating buffers. Buffers are essentially abstract
+ * representations of (raw) audio data and are used by sources. Buffers are
+ * most suitable for small-sized sound effect which can be efficiently loaded
+ * to memory at once. Streams, on the other hand, are more suitable for massive
+ * audio such as background music.
+ *
+ * In order to have 3D sound effect on the buffer, the audio file needs to have
+ * mono-channel. If the audio file has multi-channel, the sound will not be
+ * positioned in a 3D space. Multi-channel audio (a.k.a. stereo) is already
+ * designed to have illusion of directionality and audible perspective. Most
+ * sound effect should be monophonic.
  */
 static
 void
@@ -1895,8 +1920,19 @@ bind_buf(void)
 /*
  * Document-class:  Seal::Stream
  *
- * Streams are used by streaming sources to avoid loading big audio into
- * memory. It is the front end for various decoders.
+ * Interfaces for manipulating streams used by streaming sources. Streams are
+ * usually necessary when the audio data is too massive to fit into main
+ * memory as a whole (such as a background music, which can eat up to dozens of
+ * megabytes of memory after decoding), in which case buffers are not suitable.
+ *
+ * Streams often contain multi-channel audio (since most of the time they are
+ * used to play background music, and background music files are often
+ * multi-channel already), which means that they often contain sound that are
+ * not positioned, i.e., not processed by the 3D sound rendering pipeline. That
+ * fact is totally fine for background music since they are usually not
+ * associated to any object in the application. If positioned streams are
+ * needed and the audio file has multi-channel, the audio file need to be
+ * converted to mono-channel.
  */
 static
 void
@@ -1917,20 +1953,31 @@ bind_stream(void)
 /*
  * Document-class:  Seal::Source
  *
- * Sources are abstract representations of sound sources which emit sound in
- * Euclidean space.
+ * Interfaces for manipulating sources. Sources are abstract representations of
+ * sound sources which emit sound in a Euclidean space. The sound comes from
+ * its attached buffer or stream. Its properties combined with those of the
+ * listener singleton object determine how the sound should be rendered.
  */
 
 /*
  * Document-module: Seal::Source::State
  *
  * A collection of Source states.
+ *
+ * A just-initialized source is in the _INITIAL_ state. After a call to
+ * _play_, the source will enter the _PLAYING_ state. After a call to _pause_,
+ * the source will enter the _PAUSED_ state. After a call to _stop_, the source
+ * will enter the _STOPPED_ state.
  */
 
 /*
  * Document-module: Seal::Source::Type
  *
  * A collection of Source types.
+ *
+ * A source not attached to anything is of the _UNDETERMINED_ type. A source
+ * that is attached to a buffer will become the _STATIC_ type. A source that is
+ * attached to a stream will become the _STREAMING_ type.
  */
 static
 void
@@ -1995,8 +2042,15 @@ bind_src(void)
 /*
  * Document-class:  Seal::Reverb
  *
- * A Reverb object is a set of parameters that define a reverberation effect.
- * Effect objects can be put into an effect slot for sources to use.
+ * Interfaces for manipulating reverberation effect objects which can be loaded
+ * into effect slots. The reverberation parameters can be customized to
+ * emulate reverberations in different environment or can be loaded from
+ * presets. The preset constants suggest the reverberation environment, for
+ * example, <em>Reverb::Preset::IcePalace::LONGPASSAGE</em> emulates the
+ * reverberation in a long passage of an ice palace.
+ *
+ * For more infomation about reverberations, check out the OpenAL effect
+ * extension guide at: http://zhang.su/seal/EffectsExtensionGuide.pdf
  */
 static
 void
@@ -2257,8 +2311,20 @@ bind_rvb(void)
 /*
  * Document-class:  Seal::EffectSlot
  *
- * EffectSlot is the container type for effects. A source can mix an effect in
- * an effect slot to filter the output sound.
+ * Interfaces for manipulating effect slots, which are containers for effect
+ * objects. Effect slots can attach effect objects (such as reverb objects) and
+ * then be fed with a mix of audio from different sources, essentially
+ * filtering the rendering of the sound sources and output to the mixer based
+ * on the attached effect object. For example, if a reverb object is attached
+ * to an effect slot and one source is feeding the slot, the sound of that
+ * source will have the reverberation effect defined by the reverb object.
+
+ * Multiple sources can feed the same effect slot, but conversely there is a
+ * limit on the number of effect slots a source can feed concurrently. See the
+ * documentation for EffectSlot#feed for more details.
+ *
+ * For more infomation about effect slots, check out the OpenAL effect
+ * extension guide at: http://zhang.su/seal/EffectsExtensionGuide.pdf
  */
 static
 void
@@ -2281,8 +2347,13 @@ bind_efs(void)
 /*
  * Document-class:  Seal::Listener
  *
- * Listener has a singleton instance representing the sole listener who hears
- * the sound.
+ * Interfaces for manipulating the listener singleton object. The listener
+ * object abstractly represents the main object in a sound application which
+ * "hears" all the sound. For example, the listener object can be used to
+ * represent the main character moving around on the map in a role-playing
+ * game. The properties of the listener (position, velocity, etc.) combined
+ * with those of the existing sources determine how the sound should be
+ * rendered.
  */
 static
 void
@@ -2308,7 +2379,8 @@ bind_listener(void)
 /*
  * Document-module: Seal
  *
- * The top-level namespace of Seal.
+ * The top-level namespace of Seal. This module contains interfaces for global
+ * Seal operations.
  */
 void
 Init_seal(void)

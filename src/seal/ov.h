@@ -1,5 +1,5 @@
 /*
- * ov.h provides subroutines to decode ogg vorbis files.
+ * Interfaces to decode ogg vorbis files.
  */
 
 #ifndef _SEAL_OV_H_

@@ -1,5 +1,5 @@
 /*
- * core.h defines interfaces for low-level Seal operations.
+ * Interfaces for global Seal operations.
  */
 
 #ifndef _SEAL_CORE_H_

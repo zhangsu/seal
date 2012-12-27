@@ -1,6 +1,17 @@
 /*
- * stream.h wraps up the `seal_stream_t' data type used by streaming sources.
- * It is the front end for various decoders.
+ * Interfaces for manipulating streams used by streaming sources. Streams are
+ * usually necessary when the audio data is too massive to fit into main
+ * memory as a whole (such as a background music, which can eat up to dozens of
+ * megabytes of memory after decoding), in which case buffers are not suitable.
+ *
+ * Streams often contain multi-channel audio (since most of the time they are
+ * used to play background music, and background music files are often
+ * multi-channel already), which means that they often contain sound that are
+ * not positioned, i.e., not processed by the 3D sound rendering pipeline. That
+ * fact is totally fine for background music since they are usually not
+ * associated to any object in the application. If positioned streams are
+ * needed and the audio file has multi-channel, the audio file need to be
+ * converted to mono-channel.
  */
 
 #ifndef _SEAL_STREAM_H_

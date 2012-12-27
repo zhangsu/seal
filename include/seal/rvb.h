@@ -1,6 +1,13 @@
 /*
- * rvb.h defines the reverberation effect type and its parameters. Effect
- * objects can be put into an effect slot for sources to use.
+ * Interfaces for manipulating reverberation effect objects which can be loaded
+ * into effect slots. The reverberation parameters can be customized to
+ * emulate reverberations in different environment or can be loaded from
+ * presets. The preset constants suggest the reverberation environment, for
+ * example, `SEAL_ICEPALACE_LONGPASSAGE_REVERB` emulates the reverberation in
+ * a long passage of an ice palace.
+ *
+ * For more infomation about reverberations, check out the OpenAL effect
+ * extension guide at: http://zhang.su/seal/EffectsExtensionGuide.pdf
  */
 
 #ifndef _SEAL_RVB_H_
@@ -164,6 +171,9 @@ extern "C" {
 /*
  * Initializes a new reverb effect. If the reverb is no longer needed, call
  * `seal_destroy_rvb' to release the resources used by the reverb.
+ *
+ * There is a limit on the number of allocated reverbs. This function returns
+ * an error if it is exceeding the limit.
  *
  * @param reverb    the reverb object to initialize
  */

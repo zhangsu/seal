@@ -1,8 +1,7 @@
 /*
- * err.h defines Seal errors and provides subroutines for clearing and
- * retriving errors. Seal functions will set a thread-local error flag when
- * error strikes, so if the last Seal function call returns 0, the exact error
- * and detailed error message can be retrieved using functions in this module.
+ * Seal errors and interfaces for retriving error messages. Most Seal functions
+ * return an error code which can be used to retrieve the corresponding error
+ * message.
  */
 
 #ifndef _SEAL_ERR_H_

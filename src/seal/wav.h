@@ -1,6 +1,6 @@
 /*
- * wav.h provides subroutines to decode WAVE audio files. Currently only
- * uncompressed waveform data with no more than 16-bit depth are supported.
+ * Interfaces to decode WAVE audio files. Currently only uncompressed waveform
+ * data with no more than 16-bit depth are supported.
  */
 
 #ifndef _SEAL_WAV_H_

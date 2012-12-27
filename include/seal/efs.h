@@ -1,7 +1,18 @@
 /*
- * efs.h defines the effect slot type, which is the container type for
- * effects. A source can mix an effect in an effect slot to filter the output
- * sound.
+ * Interfaces for manipulating effect slots, which are containers for effect
+ * objects. Effect slots can attach effect objects (such as reverb objects) and
+ * then be fed with a mix of audio from different sources, essentially
+ * filtering the rendering of the sound sources and output to the mixer based
+ * on the attached effect object. For example, if a reverb object is attached
+ * to an effect slot and one source is feeding the slot, the sound of that
+ * source will have the reverberation effect defined by the reverb object.
+
+ * Multiple sources can feed the same effect slot, but conversely there is a
+ * limit on the number of effect slots a source can feed concurrently. See the
+ * documentation for EffectSlot#feed for more details.
+ *
+ * For more infomation about effect slots, check out the OpenAL effect
+ * extension guide at: http://zhang.su/seal/EffectsExtensionGuide.pdf
  */
 
 #ifndef _SEAL_EFS_H_
@@ -14,8 +25,10 @@ typedef struct seal_efs_t seal_efs_t;
 
 /*
  * Initializes a new effect slot. If the effect slot is no longer needed, call
- * `seal_destroy_efs' to release the resources used by the effect
- * slot.
+ * `seal_destroy_efs' to release the resources used by the effect slot.
+ *
+ * There is a limit on the number of allocated effect slots. This function
+ * returns an error if it is exceeding the limit.
  *
  * @param efs   the effect slot to initialize
  */
@@ -30,7 +43,11 @@ seal_err_t seal_destroy_efs(seal_efs_t*);
 
 /*
  * Fills an effect slot with an effect object, then the effect Slot will
- * become ready to be mixed with sources. Pass 0 to unfill the slot.
+ * become ready to be fed by sources. Pass 0 to unfill the slot.
+ *
+ * Changing the parameters of the effect object after it is attached to the
+ * slot will not change the sound effect provided by the slot. To update the
+ * sound effect, the effect object must be re-attached to the slot.
  *
  * @param efs       the effect slot to fill
  * @param effect    the effect to fill the effect slot with
@@ -38,13 +55,17 @@ seal_err_t seal_destroy_efs(seal_efs_t*);
 seal_err_t seal_set_efs_effect(seal_efs_t*, void* /*effect*/);
 
 /*
- * Mixes a sound effect loaded into an effect slot with a source's output.
- * Later calls to this function with a different effect slot and the same
- * index will override the old effect slot association.
+ * Feeds an effect slot with the output of a source so the output is filtered
+ * by the effect attached to the slot. Later calls to this function with a
+ * different effect slot and the same source and index will override the old
+ * association.
  *
- * @see             seal_get_neffects_per_src
- * @param efs       the slot that contains the effect to mix
- * @param index     the zero-based index of the effect
+ * @see             seal_get_per_src_effect_limit
+ * @param efs       the slot to feed
+ * @param index     the zero-based index for the effect; each different effect
+ *                  slot that the source is feeding must have a unique
+ *                  corresponding index; the max is the return value of
+ *                  seal_get_per_src_effect_limit - 1.
  * @param src       the source that feeds the effect slot
  */
 seal_err_t seal_feed_efs(seal_efs_t*, int /*index*/, seal_src_t*);

@@ -1,6 +1,6 @@
 /*
- * raw.h defines the the data structure `seal_raw_t' that represents raw PCM
- * data as well as a series of operations on them.
+ * Interfaces for manipulating the data structure `seal_raw_t' which contains
+ * raw PCM data.
  */
 
 #ifndef _SEAL_RAW_H_

@@ -1,6 +1,8 @@
 /*
- * src.h wraps up the abstract data type `seal_src_t'. Sources are abstract
- * representations of sound sources which emit sound in Euclidean space.
+ * Interfaces for manipulating sources. Sources are abstract representations of
+ * sound sources which emit sound in a Euclidean space. The sound comes from
+ * its attached buffer or stream. Its properties combined with those of the
+ * listener singleton object determine how the sound should be rendered.
  */
 
 #ifndef _SEAL_SRC_H_
@@ -12,10 +14,9 @@
 #include "err.h"
 
 /*
- * A just-initialized source is of the `SEAL_UNDETERMINED' type. A source that
- * attaches a buffer through `seal_set_src_buf' will become the `SEAL_STATIC'
- * type. A source that streams audio from file through `seal_set_src_stream'
- * will become the `SEAL_STREAMING' type.
+ * A source not attached to anything is of the `SEAL_UNDETERMINED` type. A
+ * source that is attached to a buffer will become the `SEAL_STATIC` type.
+ * A source that is attached to a stream will become the `SEAL_STREAMING` type.
  */
 enum seal_src_type_t
 {
@@ -50,6 +51,9 @@ extern "C" {
 /*
  * Initializes a new source. If the source is no longer needed, call
  * `seal_destroy_source' to release any resource used by the source.
+ *
+ * There is a limit on the number of allocated sources. This function returns
+ * an error if it is exceeding the limit.
  *
  * @param src   the source to initialize
  */

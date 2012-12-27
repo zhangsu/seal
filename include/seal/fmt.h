@@ -1,6 +1,5 @@
 /*
- * fmt.h defines all the supported audio file format and provides utilities
- * to deal with them.
+ * Supported audio file formats and utilities to deal with them.
  */
 
 #ifndef _SEAL_FMT_H_

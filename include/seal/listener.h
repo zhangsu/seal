@@ -1,6 +1,11 @@
 /*
- * listener.h wraps up the listener singleton object, which is the abstract
- * representation of the sole listener who hears the sound.
+ * Interfaces for manipulating the listener singleton object. The listener
+ * object abstractly represents the main object in a sound application which
+ * "hears" all the sound. For example, the listener object can be used to
+ * represent the main character moving around on the map in a role-playing
+ * game. The properties of the listener (position, velocity, etc.) combined
+ * with those of the existing sources determine how the sound should be
+ * rendered.
  */
 
 #ifndef _SEAL_LISTENER_H_

@@ -1,6 +1,5 @@
 /*
- * threading.h is an abstraction layer for thread-related operations, which
- * ensures Seal's thread-safety.
+ * An abstraction layer for thread-related operations.
  */
 
 #ifndef _SEAL_THREADING_H_

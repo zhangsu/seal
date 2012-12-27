@@ -1,9 +1,15 @@
 /*
- * buf.h wraps up the abstract data type `seal_buf_t'. Buffers are essentially
- * abstract representations of the (raw) audio data and are used by sources.
- * Buffers are most suitable for small-sized sound effect which can be
- * efficiently loaded to memory at once. Streams, on the other hand, are more
- * suitable for long audio such as background music.
+ * Interfaces for manipulating buffers. Buffers are essentially abstract
+ * representations of (raw) audio data and are used by sources. Buffers are
+ * most suitable for small-sized sound effect which can be efficiently loaded
+ * to memory at once. Streams, on the other hand, are more suitable for massive
+ * audio such as background music.
+ *
+ * In order to have 3D sound effect on the buffer, the audio file needs to have
+ * mono-channel. If the audio file has multi-channel, the sound will not be
+ * positioned in a 3D space. Multi-channel audio (a.k.a. stereo) is already
+ * designed to have illusion of directionality and audible perspective. Most
+ * sound effect should be monophonic.
  */
 
 #ifndef _SEAL_BUF_H_
@@ -23,6 +29,9 @@ extern "C" {
 /*
  * Initializes a new buffer. If the buffer is no longer needed, call
  * `seal_destroy_buf' to release the resources used by the buffer.
+ *
+ * There is a limit on the number of allocated buffer. This function returns an
+ * error if it is exceeding the limit.
  *
  * @param buf   the buffer to initialize
  */
