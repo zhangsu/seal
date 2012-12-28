@@ -75,7 +75,7 @@ module Seal
     GET_PER_SRC_EFFECT_LIMIT = SealAPI.new('get_per_src_effect_limit', 'v')
 
     def startup(device = nil)
-      check_error(STARTUP[device])
+      check_error(STARTUP[device ? device : 0])
     end
 
     def cleanup
