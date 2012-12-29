@@ -23,7 +23,7 @@ module Seal
 
   private
     def check_error(error_code)
-      raise SealError, GET_ERR_MSG[error_code] if error_code != 0
+      raise SealError, GET_ERR_MSG[error_code], caller.shift if error_code != 0
       nil
     end
 
