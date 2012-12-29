@@ -208,6 +208,10 @@ Use `rake demo:<demo_name>` to run the demos under the `demo/` directory.
 
     3D audio positioning (attenuation).
 
+-   doppler
+
+    Doppler Effect demonstration.
+
 -   reverb
 
     Audio reverberation. There are lots of built-in reverb presets, but this
