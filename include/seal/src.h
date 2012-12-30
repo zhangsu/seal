@@ -58,7 +58,7 @@ extern "C" {
  *
  * @param src   the source to initialize
  */
-seal_err_t seal_init_src(seal_src_t*);
+seal_err_t SEAL_API seal_init_src(seal_src_t*);
 
 /*
  * Destroys a source. Will not free the associated buffer or stream. Can
@@ -67,7 +67,7 @@ seal_err_t seal_init_src(seal_src_t*);
  *
  * @param src   the source to destroy
  */
-seal_err_t seal_destroy_src(seal_src_t*);
+seal_err_t SEAL_API seal_destroy_src(seal_src_t*);
 
 /*
  * Starts to play a source. Applying to a `SEAL_PLAYING' source will restart
@@ -80,7 +80,7 @@ seal_err_t seal_destroy_src(seal_src_t*);
  *
  * @param src   the source to play
  */
-seal_err_t seal_play_src(seal_src_t*);
+seal_err_t SEAL_API seal_play_src(seal_src_t*);
 
 /*
  * Pauses the playing of a source. Applying to a `SEAL_PLAYING' source will
@@ -89,7 +89,7 @@ seal_err_t seal_play_src(seal_src_t*);
  *
  * @param src   the source to pause
  */
-seal_err_t seal_pause_src(seal_src_t*);
+seal_err_t SEAL_API seal_pause_src(seal_src_t*);
 
 /*
  * Stops the playing of a source. Applying to a `SEAL_PLAYING' or
@@ -99,7 +99,7 @@ seal_err_t seal_pause_src(seal_src_t*);
  *
  * @param src   the source to stop
  */
-seal_err_t seal_stop_src(seal_src_t*);
+seal_err_t SEAL_API seal_stop_src(seal_src_t*);
 
 /*
  * Rewinds a source to the beginning. Applying to a `SEAL_PLAYING',
@@ -110,7 +110,7 @@ seal_err_t seal_stop_src(seal_src_t*);
  *
  * @param src   the source to rewind
  */
-seal_err_t seal_rewind_src(seal_src_t*);
+seal_err_t SEAL_API seal_rewind_src(seal_src_t*);
 
 /*
  * Associates a buffer with a source so that the source is ready to play the
@@ -122,7 +122,7 @@ seal_err_t seal_rewind_src(seal_src_t*);
  * @param src   the source to associate the buffer `buf' with
  * @param buf   the buffer to associate the source `src' with
  */
-seal_err_t seal_set_src_buf(seal_src_t*, seal_buf_t*);
+seal_err_t SEAL_API seal_set_src_buf(seal_src_t*, seal_buf_t*);
 
 /*
  * Associates an opened stream with a source so that audio data can be
@@ -139,7 +139,7 @@ seal_err_t seal_set_src_buf(seal_src_t*, seal_buf_t*);
  * @param src       the source to associate the stream `stream' with
  * @param stream    the stream to associate the source `src' with
  */
-seal_err_t seal_set_src_stream(seal_src_t*, seal_stream_t*);
+seal_err_t SEAL_API seal_set_src_stream(seal_src_t*, seal_stream_t*);
 
 /*
  * Feeds an effect slot with the output of a source so the output is filtered
@@ -155,7 +155,7 @@ seal_err_t seal_set_src_stream(seal_src_t*, seal_stream_t*);
  *                  corresponding index; the max is the return value of
  *                  seal_get_per_src_effect_limit - 1.
  */
-seal_err_t seal_feed_efs(seal_src_t*, seal_efs_t*, int /*index*/);
+seal_err_t SEAL_API seal_feed_efs(seal_src_t*, seal_efs_t*, int /*index*/);
 
 /*
  * Updates a streaming source. If the source is not up-to-date, the playback
@@ -165,7 +165,7 @@ seal_err_t seal_feed_efs(seal_src_t*, seal_efs_t*, int /*index*/);
  *
  * @param src       the source to update
  */
-seal_err_t seal_update_src(seal_src_t*);
+seal_err_t SEAL_API seal_update_src(seal_src_t*);
 
 /*
  * Releases the current buffer or stream from a source (hence empties the
@@ -175,7 +175,7 @@ seal_err_t seal_update_src(seal_src_t*);
  *
  * @param src       the source to detach the audio of
  */
-seal_err_t seal_detach_src_audio(seal_src_t*);
+seal_err_t SEAL_API seal_detach_src_audio(seal_src_t*);
 
 /*
  * Sets the size of the streaming queue internally used by a source. The queue
@@ -189,7 +189,7 @@ seal_err_t seal_detach_src_audio(seal_src_t*);
  * @param src   the source to set the queue size of
  * @param size  the queue size in the interval [2, 63]
  */
-seal_err_t seal_set_src_queue_size(seal_src_t*, size_t);
+seal_err_t SEAL_API seal_set_src_queue_size(seal_src_t*, size_t);
 
 /*
  * Sets the maximum size, in byte, of the audio chunk which buffers the audio
@@ -202,7 +202,7 @@ seal_err_t seal_set_src_queue_size(seal_src_t*, size_t);
  *              multiple of 9216; non-multiple value will be adjusted to the
  *              closest smaller multiple automatically
  */
-seal_err_t seal_set_src_chunk_size(seal_src_t*, size_t);
+seal_err_t SEAL_API seal_set_src_chunk_size(seal_src_t*, size_t);
 
 /*
  * Sets the position of a source in a right-handed Cartesian coordinate
@@ -213,8 +213,11 @@ seal_err_t seal_set_src_chunk_size(seal_src_t*, size_t);
  * @param y     the y position to set
  * @param z     the z position to set
  */
-seal_err_t seal_set_src_pos(seal_src_t*, float /*x*/, float /*y*/,
-                            float /*z*/);
+seal_err_t SEAL_API seal_set_src_pos(
+    seal_src_t*, float /*x*/,
+    float /*y*/,
+    float /*z*/
+);
 
 /*
  * Sets the velocity of a source in a right-handed Cartesian coordinate
@@ -226,8 +229,11 @@ seal_err_t seal_set_src_pos(seal_src_t*, float /*x*/, float /*y*/,
  * @param y     the y velocity to set
  * @param z     the z velocity to set
  */
-seal_err_t seal_set_src_vel(seal_src_t*, float /*x*/, float /*y*/,
-                            float /*z*/);
+seal_err_t SEAL_API seal_set_src_vel(
+    seal_src_t*, float /*x*/,
+    float /*y*/,
+    float /*z*/
+);
 
 /*
  * Sets the pitch shift multiplier of a source. 1.0f means identity; each
@@ -237,7 +243,7 @@ seal_err_t seal_set_src_vel(seal_src_t*, float /*x*/, float /*y*/,
  * @param src   the source to set the pitch of
  * @param pitch the pitch multiplier in the interval (0.0f, +inf.)
  */
-seal_err_t seal_set_src_pitch(seal_src_t*, float /*pitch*/);
+seal_err_t SEAL_API seal_set_src_pitch(seal_src_t*, float /*pitch*/);
 
 /*
  * Sets the scalar amplitude multiplier of a source. 1.0f means that the sound
@@ -246,7 +252,7 @@ seal_err_t seal_set_src_pitch(seal_src_t*, float /*pitch*/);
  * @param src   the source to set the gain of
  * @param gain  the scalar amplitude multiplier in the interval [0.0f, +inf.)
  */
-seal_err_t seal_set_src_gain(seal_src_t*, float /*gain*/);
+seal_err_t SEAL_API seal_set_src_gain(seal_src_t*, float /*gain*/);
 
 /*
  * Sets whether a source should be automatically updated asynchronously by a
@@ -257,7 +263,7 @@ seal_err_t seal_set_src_gain(seal_src_t*, float /*gain*/);
  * @param src           the source to set the auto update flag of
  * @param automatic     1 to set it auto update or otherwise 0
  */
-seal_err_t seal_set_src_auto(seal_src_t*, char /*automatic*/);
+seal_err_t SEAL_API seal_set_src_auto(seal_src_t*, char /*automatic*/);
 
 /*
  * Sets whether a source's position, velocity, cone and direction are all
@@ -267,7 +273,7 @@ seal_err_t seal_set_src_auto(seal_src_t*, char /*automatic*/);
  * @param relative  1 to set it relative to the listener or otherwise 0
  * @return          nonzero if successful or otherwise 0
  */
-seal_err_t seal_set_src_relative(seal_src_t*, char /*relative*/);
+seal_err_t SEAL_API seal_set_src_relative(seal_src_t*, char /*relative*/);
 
 /*
  * Sets whether the playback of a source is looping. A looping source will
@@ -278,7 +284,7 @@ seal_err_t seal_set_src_relative(seal_src_t*, char /*relative*/);
  * @param src       the source to set the looping flag of
  * @param looping   1 to set it looping or otherwise 0
  */
-seal_err_t seal_set_src_looping(seal_src_t*, char /*looping*/);
+seal_err_t SEAL_API seal_set_src_looping(seal_src_t*, char /*looping*/);
 
 /*
  * Gets the buffer of a source. The default is 0 (null pointer).
@@ -287,7 +293,7 @@ seal_err_t seal_set_src_looping(seal_src_t*, char /*looping*/);
  * @param src   the source to get the buffer of
  * @return      the buffer
  */
-seal_buf_t* seal_get_src_buf(seal_src_t*);
+seal_buf_t* SEAL_API seal_get_src_buf(seal_src_t*);
 
 /*
  * Gets the stream of a source. The default is 0 (null pointer).
@@ -296,7 +302,7 @@ seal_buf_t* seal_get_src_buf(seal_src_t*);
  * @param src   the source to get the stream of
  * @return      the receiver of the stream
  */
-seal_stream_t* seal_get_src_stream(seal_src_t*);
+seal_stream_t* SEAL_API seal_get_src_stream(seal_src_t*);
 
 /*
  * Gets the size, in byte, of a source's streaming queue. The default is 3.
@@ -305,7 +311,7 @@ seal_stream_t* seal_get_src_stream(seal_src_t*);
  * @param src   the source to get the queue size of
  * @param psize the receiver of the the queue size
  */
-seal_err_t seal_get_src_queue_size(seal_src_t*, size_t* /*psize*/);
+seal_err_t SEAL_API seal_get_src_queue_size(seal_src_t*, size_t* /*psize*/);
 
 /*
  * Gets the size, in byte, of a source's streaming chunk. The default is
@@ -315,7 +321,7 @@ seal_err_t seal_get_src_queue_size(seal_src_t*, size_t* /*psize*/);
  * @param src   the source to get the chunk size of
  * @param psize the receiver of the chunk size
  */
-seal_err_t seal_get_src_chunk_size(seal_src_t*, size_t* /*psize*/);
+seal_err_t SEAL_API seal_get_src_chunk_size(seal_src_t*, size_t* /*psize*/);
 
 /*
  * Gets the position of a source. The default is ( 0.0f, 0.0f, 0.0f ).
@@ -326,8 +332,12 @@ seal_err_t seal_get_src_chunk_size(seal_src_t*, size_t* /*psize*/);
  * @param py    the receiver of the y position
  * @param pz    the receiver of the z position
  */
-seal_err_t seal_get_src_pos(seal_src_t*, float* /*px*/, float* /*py*/,
-                            float* /*pz*/);
+seal_err_t SEAL_API seal_get_src_pos(
+    seal_src_t*,
+    float* /*px*/,
+    float* /*py*/,
+    float* /*pz*/
+);
 
 /*
  * Gets the velocity of a source. The default is ( 0.0f, 0.0f, 0.0f ).
@@ -338,8 +348,12 @@ seal_err_t seal_get_src_pos(seal_src_t*, float* /*px*/, float* /*py*/,
  * @param py    the receiver of the y velocity
  * @param pz    the receiver of the z velocity
  */
-seal_err_t seal_get_src_vel(seal_src_t*, float* /*px*/, float* /*py*/,
-                            float* /*pz*/);
+seal_err_t SEAL_API seal_get_src_vel(
+    seal_src_t*,
+    float* /*px*/,
+    float* /*py*/,
+    float* /*pz*/
+);
 
 /*
  * Gets the pitch of a source. The default is 1.0f.
@@ -348,7 +362,7 @@ seal_err_t seal_get_src_vel(seal_src_t*, float* /*px*/, float* /*py*/,
  * @param src       the source to get the pitch of
  * @param ppitch    the receiver of the pitch
  */
-seal_err_t seal_get_src_pitch(seal_src_t*, float* /*ppitch*/);
+seal_err_t SEAL_API seal_get_src_pitch(seal_src_t*, float* /*ppitch*/);
 
 /*
  * Gets the gain of a source. The default is 1.0f.
@@ -357,7 +371,7 @@ seal_err_t seal_get_src_pitch(seal_src_t*, float* /*ppitch*/);
  * @param src   the source to get the gain of
  * @param pgain the receiver of the gain
  */
-seal_err_t seal_get_src_gain(seal_src_t*, float* /*pgain*/);
+seal_err_t SEAL_API seal_get_src_gain(seal_src_t*, float* /*pgain*/);
 
 /*
  * Determines if a source is automatically updated. The default is true
@@ -367,7 +381,7 @@ seal_err_t seal_get_src_gain(seal_src_t*, float* /*pgain*/);
  * @param src   the source to determine
  * @param pauto the receiver of the auto update flag
  */
-seal_err_t seal_is_src_auto(seal_src_t*, char* /*pauto*/);
+seal_err_t SEAL_API seal_is_src_auto(seal_src_t*, char* /*pauto*/);
 
 /*
  * Determines if a source is relative. The default is false (0).
@@ -376,7 +390,7 @@ seal_err_t seal_is_src_auto(seal_src_t*, char* /*pauto*/);
  * @param src       the source to determine
  * @param prelative the receiver of the relative flag
  */
-seal_err_t seal_is_src_relative(seal_src_t*, char* /*prelative*/);
+seal_err_t SEAL_API seal_is_src_relative(seal_src_t*, char* /*prelative*/);
 
 /*
  * Determines if a source is looping. The default is false (0).
@@ -385,7 +399,7 @@ seal_err_t seal_is_src_relative(seal_src_t*, char* /*prelative*/);
  * @param src       the source to determine
  * @param plooping  the receiver of the looping flag
  */
-seal_err_t seal_is_src_looping(seal_src_t*, char* /*plooping*/);
+seal_err_t SEAL_API seal_is_src_looping(seal_src_t*, char* /*plooping*/);
 
 /*
  * Gets the type of a source.
@@ -394,7 +408,10 @@ seal_err_t seal_is_src_looping(seal_src_t*, char* /*plooping*/);
  * @param src       the source to get the source type of
  * @param ptype     the receiver of the source type
  */
-seal_err_t seal_get_src_type(seal_src_t*, seal_src_type_t* /*ptype*/);
+seal_err_t SEAL_API seal_get_src_type(
+    seal_src_t*,
+    seal_src_type_t* /*ptype*/
+);
 
 /*
  * Gets the state of a source.
@@ -403,7 +420,10 @@ seal_err_t seal_get_src_type(seal_src_t*, seal_src_type_t* /*ptype*/);
  * @param src       the source to get the state of
  * @param pstate    the receiver of the source state
  */
-seal_err_t seal_get_src_state(seal_src_t*, seal_src_state_t* /*pstate*/);
+seal_err_t SEAL_API seal_get_src_state(
+    seal_src_t*,
+    seal_src_state_t* /*pstate*/
+);
 
 #ifdef __cplusplus
 }

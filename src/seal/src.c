@@ -129,8 +129,12 @@ clean_queue(seal_src_t* src)
 
     /* Do not let the updater touch anything when cleaning the queue. */
     wait4updater(src);
-    err = _seal_geti(src, AL_BUFFERS_PROCESSED, &nbufs_processed,
-                     alGetSourcei);
+    err = _seal_geti(
+        src,
+        AL_BUFFERS_PROCESSED,
+        &nbufs_processed,
+        alGetSourcei
+    );
     if (err != SEAL_OK)
         return err;
 
@@ -198,6 +202,7 @@ ensure_queue_empty(seal_src_t* src)
 }
 
 seal_err_t
+SEAL_API
 seal_init_src(seal_src_t* src)
 {
     seal_err_t err = _seal_init_obj(src, alGenSources);
@@ -216,6 +221,7 @@ seal_init_src(seal_src_t* src)
 }
 
 seal_err_t
+SEAL_API
 seal_destroy_src(seal_src_t* src)
 {
     seal_err_t err;
@@ -232,6 +238,7 @@ seal_destroy_src(seal_src_t* src)
 }
 
 seal_err_t
+SEAL_API
 seal_play_src(seal_src_t* src)
 {
     if (src->stream != 0) {
@@ -258,12 +265,14 @@ seal_play_src(seal_src_t* src)
 }
 
 seal_err_t
+SEAL_API
 seal_pause_src(seal_src_t* src)
 {
     return operate(src, alSourcePause);
 }
 
 seal_err_t
+SEAL_API
 seal_stop_src(seal_src_t* src)
 {
     seal_err_t err;
@@ -277,6 +286,7 @@ seal_stop_src(seal_src_t* src)
 }
 
 seal_err_t
+SEAL_API
 seal_rewind_src(seal_src_t* src)
 {
     if (src->stream != 0) {
@@ -293,6 +303,7 @@ seal_rewind_src(seal_src_t* src)
 }
 
 seal_err_t
+SEAL_API
 seal_detach_src_audio(seal_src_t* src)
 {
     seal_err_t err;
@@ -313,6 +324,7 @@ seal_detach_src_audio(seal_src_t* src)
 }
 
 seal_err_t
+SEAL_API
 seal_set_src_buf(seal_src_t* src, seal_buf_t* buf)
 {
     seal_err_t err;
@@ -333,6 +345,7 @@ seal_set_src_buf(seal_src_t* src, seal_buf_t* buf)
 }
 
 seal_err_t
+SEAL_API
 seal_set_src_stream(seal_src_t* src, seal_stream_t* stream)
 {
     seal_err_t err;
@@ -361,15 +374,22 @@ seal_set_src_stream(seal_src_t* src, seal_stream_t* stream)
 }
 
 seal_err_t
+SEAL_API
 seal_feed_efs(seal_src_t* src, seal_efs_t* slot, int index)
 {
-    alSource3i(src->id, AL_AUXILIARY_SEND_FILTER, slot->id, index,
-               AL_FILTER_NULL);
+    alSource3i(
+        src->id,
+        AL_AUXILIARY_SEND_FILTER,
+        slot->id,
+        index,
+        AL_FILTER_NULL
+    );
 
     return _seal_get_openal_err();
 }
 
 seal_err_t
+SEAL_API
 seal_update_src(seal_src_t* src)
 {
     unsigned int buf;
@@ -395,8 +415,12 @@ seal_update_src(seal_src_t* src)
         err = _seal_geti(src, AL_BUFFERS_QUEUED, &nqueued, alGetSourcei);
         if (err != SEAL_OK)
             return err;
-        err = _seal_geti(src, AL_BUFFERS_PROCESSED, &nprocessed,
-                         alGetSourcei);
+        err = _seal_geti(
+            src,
+            AL_BUFFERS_PROCESSED,
+            &nprocessed,
+            alGetSourcei
+        );
         if (err != SEAL_OK)
             return err;
 
@@ -452,6 +476,7 @@ start_streaming:
 }
 
 seal_err_t
+SEAL_API
 seal_set_src_queue_size(seal_src_t* src, size_t size)
 {
     seal_err_t err;
@@ -464,6 +489,7 @@ seal_set_src_queue_size(seal_src_t* src, size_t size)
 }
 
 seal_err_t
+SEAL_API
 seal_set_src_chunk_size(seal_src_t* src, size_t size)
 {
     seal_err_t err;
@@ -476,30 +502,35 @@ seal_set_src_chunk_size(seal_src_t* src, size_t size)
 }
 
 seal_err_t
+SEAL_API
 seal_set_src_pos(seal_src_t* src, float x, float y, float z)
 {
     return set3f(src, AL_POSITION, x, y, z);
 }
 
 seal_err_t
+SEAL_API
 seal_set_src_vel(seal_src_t* src, float x, float y, float z)
 {
     return set3f(src, AL_VELOCITY, x, y, z);
 }
 
 seal_err_t
+SEAL_API
 seal_set_src_pitch(seal_src_t* src, float pitch)
 {
     return _seal_setf(src, AL_PITCH, pitch, alSourcef);
 }
 
 seal_err_t
+SEAL_API
 seal_set_src_gain(seal_src_t* src, float gain)
 {
     return _seal_setf(src, AL_GAIN, gain, alSourcef);
 }
 
 seal_err_t
+SEAL_API
 seal_set_src_auto(seal_src_t* src, char automatic)
 {
     src->automatic = automatic != 0;
@@ -508,12 +539,14 @@ seal_set_src_auto(seal_src_t* src, char automatic)
 }
 
 seal_err_t
+SEAL_API
 seal_set_src_relative(seal_src_t* src, char relative)
 {
     return _seal_seti(src, AL_SOURCE_RELATIVE, relative != 0, alSourcei);
 }
 
 seal_err_t
+SEAL_API
 seal_set_src_looping(seal_src_t* src, char looping)
 {
     looping = looping != 0;
@@ -534,18 +567,21 @@ seal_set_src_looping(seal_src_t* src, char looping)
 }
 
 seal_buf_t*
+SEAL_API
 seal_get_src_buf(seal_src_t* src)
 {
     return src->buf;
 }
 
 seal_stream_t*
+SEAL_API
 seal_get_src_stream(seal_src_t* src)
 {
     return src->stream;
 }
 
 seal_err_t
+SEAL_API
 seal_get_src_queue_size(seal_src_t* src, size_t* psize)
 {
     *psize = src->queue_size;
@@ -554,6 +590,7 @@ seal_get_src_queue_size(seal_src_t* src, size_t* psize)
 }
 
 seal_err_t
+SEAL_API
 seal_get_src_chunk_size(seal_src_t* src, size_t* psize)
 {
     *psize = src->chunk_size;
@@ -562,30 +599,35 @@ seal_get_src_chunk_size(seal_src_t* src, size_t* psize)
 }
 
 seal_err_t
+SEAL_API
 seal_get_src_pos(seal_src_t* src, float* px, float* py, float* pz)
 {
     return get3f(src, AL_POSITION, px, py, pz);
 }
 
 seal_err_t
+SEAL_API
 seal_get_src_vel(seal_src_t* src, float* px, float* py, float* pz)
 {
     return get3f(src, AL_VELOCITY, px, py, pz);
 }
 
 seal_err_t
+SEAL_API
 seal_get_src_pitch(seal_src_t* src, float* ppitch)
 {
     return _seal_getf(src, AL_PITCH, ppitch, alGetSourcef);
 }
 
 seal_err_t
+SEAL_API
 seal_get_src_gain(seal_src_t* src, float* pgain)
 {
     return _seal_getf(src, AL_GAIN, pgain, alGetSourcef);
 }
 
 seal_err_t
+SEAL_API
 seal_is_src_auto(seal_src_t* src, char* pauto)
 {
     *pauto = src->automatic;
@@ -594,12 +636,14 @@ seal_is_src_auto(seal_src_t* src, char* pauto)
 }
 
 seal_err_t
+SEAL_API
 seal_is_src_relative(seal_src_t* src, char* prelative)
 {
     return _seal_getb(src, AL_SOURCE_RELATIVE, prelative, alGetSourcei);
 }
 
 seal_err_t
+SEAL_API
 seal_is_src_looping(seal_src_t* src, char* plooping)
 {
     *plooping = src->looping;
@@ -608,6 +652,7 @@ seal_is_src_looping(seal_src_t* src, char* plooping)
 }
 
 seal_err_t
+SEAL_API
 seal_get_src_type(seal_src_t* src, seal_src_type_t* ptype)
 {
     int type;
@@ -631,6 +676,7 @@ seal_get_src_type(seal_src_t* src, seal_src_type_t* ptype)
 }
 
 seal_err_t
+SEAL_API
 seal_get_src_state(seal_src_t* src, seal_src_state_t* pstate)
 {
     int state;

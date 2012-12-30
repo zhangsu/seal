@@ -28,6 +28,7 @@ LPALGETAUXILIARYEFFECTSLOTI alGetAuxiliaryEffectSloti = (void*) _seal_nop;
 LPALGETAUXILIARYEFFECTSLOTF alGetAuxiliaryEffectSlotf = (void*) _seal_nop;
 
 const char*
+SEAL_API
 seal_get_version(void)
 {
     return "0.1.0";
@@ -87,6 +88,7 @@ reset_ext_proc(void)
  * currently does not make use of multiple contexts.
  */
 seal_err_t
+SEAL_API
 seal_startup(const char* device_name)
 {
     ALCdevice* device;
@@ -146,6 +148,7 @@ clean_device:
 
 /* Finalizes the current device and context. */
 void
+SEAL_API
 seal_cleanup(void)
 {
     ALCdevice* device;
@@ -163,6 +166,7 @@ seal_cleanup(void)
 }
 
 int
+SEAL_API
 seal_get_per_src_effect_limit(void)
 {
     return per_src_effect_limit;
@@ -176,8 +180,7 @@ _seal_openal_id(void* obj)
 }
 
 seal_err_t
-_seal_gen_objs(int n, unsigned int* objs,
-                          _seal_openal_initializer_t* generate)
+_seal_gen_objs(int n, unsigned int* objs, _seal_openal_initializer_t* generate)
 {
     generate(n, objs);
 
@@ -185,8 +188,11 @@ _seal_gen_objs(int n, unsigned int* objs,
 }
 
 seal_err_t
-_seal_delete_objs(int n, const unsigned int* objs,
-                  _seal_openal_destroyer_t* destroy)
+_seal_delete_objs(
+    int n,
+    const unsigned int* objs,
+    _seal_openal_destroyer_t* destroy
+)
 {
     destroy(n, objs);
 
@@ -200,8 +206,11 @@ _seal_init_obj(void* obj, _seal_openal_initializer_t* allocate)
 }
 
 seal_err_t
-_seal_destroy_obj(void* obj, _seal_openal_destroyer_t* destroy,
-                  _seal_openal_validator_t* valid)
+_seal_destroy_obj(
+    void* obj,
+    _seal_openal_destroyer_t* destroy,
+    _seal_openal_validator_t* valid
+)
 {
     if (valid(_seal_openal_id(obj)))
         return _seal_delete_objs(1, obj, destroy);

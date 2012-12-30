@@ -24,7 +24,7 @@ extern "C" {
  *
  * @param gain  the scalar amplitude multiplier in the interval [0.0f, +inf.)
  */
-seal_err_t seal_set_listener_gain(float /*gain*/);
+seal_err_t SEAL_API seal_set_listener_gain(float /*gain*/);
 
 /*
  * Sets the position of the listener in a right-handed Cartesian coordinate
@@ -34,7 +34,11 @@ seal_err_t seal_set_listener_gain(float /*gain*/);
  * @param y     the y position to set
  * @param z     the z position to set
  */
-seal_err_t seal_set_listener_pos(float /*x*/, float /*y*/, float /*z*/);
+seal_err_t SEAL_API seal_set_listener_pos(
+    float /*x*/,
+    float /*y*/,
+    float /*z*/
+);
 
 /*
  * Sets the velocity of the listener in a right-handed Cartesian coordinate
@@ -45,7 +49,11 @@ seal_err_t seal_set_listener_pos(float /*x*/, float /*y*/, float /*z*/);
  * @param y     the y velocity to set
  * @param z     the z velocity to set
  */
-seal_err_t seal_set_listener_vel(float /*x*/, float /*y*/, float /*z*/);
+seal_err_t SEAL_API seal_set_listener_vel(
+    float /*x*/,
+    float /*y*/,
+    float /*z*/
+);
 
 /*
  * Sets the orientation of the listener.
@@ -57,7 +65,7 @@ seal_err_t seal_set_listener_vel(float /*x*/, float /*y*/, float /*z*/);
  *              linearly independent, must not be NaN and must not be
  *              normalized. Otherwise, the operation is undefined
  */
-seal_err_t seal_set_listener_orien(float* /*orien*/);
+seal_err_t SEAL_API seal_set_listener_orien(float* /*orien*/);
 
 /*
  * Gets the gain of the listener. The default is 1.0f.
@@ -65,7 +73,7 @@ seal_err_t seal_set_listener_orien(float* /*orien*/);
  * @see         seal_set_listener_gain
  * @param pgain the receiver of the gain
  */
-seal_err_t seal_get_listener_gain(float* /*pgain*/);
+seal_err_t SEAL_API seal_get_listener_gain(float* /*pgain*/);
 
 /*
  * Gets the position of the listener. The default is ( 0.0f, 0.0f, 0.0f ).
@@ -75,7 +83,11 @@ seal_err_t seal_get_listener_gain(float* /*pgain*/);
  * @param py    the receiver of the y position
  * @param pz    the receiver of the z position
  */
-seal_err_t seal_get_listener_pos(float* /*px*/, float* /*py*/, float* /*pz*/);
+seal_err_t SEAL_API seal_get_listener_pos(
+    float* /*px*/,
+    float* /*py*/,
+    float* /*pz*/
+);
 
 /*
  * Gets the velocity of the listener. The default is ( 0.0f, 0.0f, 0.0f ).
@@ -85,7 +97,11 @@ seal_err_t seal_get_listener_pos(float* /*px*/, float* /*py*/, float* /*pz*/);
  * @param py    the receiver of the y velocity
  * @param pz    the receiver of the z velocity
  */
-seal_err_t seal_get_listener_vel(float* /*px*/, float* /*py*/, float* /*pz*/);
+seal_err_t SEAL_API seal_get_listener_vel(
+    float* /*px*/,
+    float* /*py*/,
+    float* /*pz*/
+);
 
 /*
  * Gets the orientation of the listener. The default is
@@ -95,7 +111,7 @@ seal_err_t seal_get_listener_vel(float* /*px*/, float* /*py*/, float* /*pz*/);
  * @param orien the array of a pair of 3-tuple that receives the 'at' vector
  *              and the 'up' vector
  */
-seal_err_t seal_get_listener_orien(float* /*orien*/);
+seal_err_t SEAL_API seal_get_listener_orien(float* /*orien*/);
 
 #ifdef __cplusplus
 }

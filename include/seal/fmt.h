@@ -43,8 +43,10 @@ seal_err_t seal_recognize_fmt(const char* /*filename*/, seal_fmt_t* /*pfmt*/);
  *                  otherwise the file format is checked and `pfmt' receives
  *                  the known format
  */
-seal_err_t seal_ensure_fmt_known(const char* /*filename*/,
-                                 seal_fmt_t* /*pfmt*/);
+seal_err_t seal_ensure_fmt_known(
+    const char* /*filename*/,
+    seal_fmt_t* /*pfmt*/
+);
 
 #ifdef __cplusplus
 }

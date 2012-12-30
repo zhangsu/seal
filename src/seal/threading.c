@@ -37,8 +37,14 @@ _seal_create_thread(_seal_routine_t* routine, void* args)
 {
     DWORD thread;
 
-    CloseHandle(CreateThread(0, 0, (LPTHREAD_START_ROUTINE) routine,
-                             args, 0, &thread));
+    CloseHandle(CreateThread(
+        0,
+        0,
+        (LPTHREAD_START_ROUTINE) routine,
+        args,
+        0,
+        &thread
+    ));
 
     return (void*) thread;
 }

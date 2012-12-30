@@ -7,6 +7,8 @@
 #ifndef _SEAL_ERR_H_
 #define _SEAL_ERR_H_
 
+#define SEAL_API
+
 enum seal_err_t
 {
     SEAL_OK,
@@ -68,7 +70,7 @@ extern "C" {
  * @param err   the error to get the message associated with
  * @return      the error message if there is any or otherwise 0
  */
-const char* seal_get_err_msg(seal_err_t);
+const char* SEAL_API seal_get_err_msg(seal_err_t);
 
 #ifdef __cplusplus
 }

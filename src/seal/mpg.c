@@ -51,8 +51,12 @@ read(seal_raw_t* raw, size_t* nbytes_loaded, mpg123_handle* mh)
     int err;
     size_t nbytes_read = 0;
 
-    err = mpg123_read(mh, (unsigned char*) raw->data + *nbytes_loaded,
-                      raw->size - *nbytes_loaded, &nbytes_read);
+    err = mpg123_read(
+        mh,
+        (unsigned char*) raw->data + *nbytes_loaded,
+        raw->size - *nbytes_loaded,
+        &nbytes_read
+    );
     *nbytes_loaded += nbytes_read;
 
     return err;

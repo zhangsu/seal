@@ -8,6 +8,7 @@
 #include "wav.h"
 
 seal_err_t
+SEAL_API
 seal_open_stream(seal_stream_t* stream, const char* filename, seal_fmt_t fmt)
 {
     seal_err_t err;
@@ -33,6 +34,7 @@ seal_open_stream(seal_stream_t* stream, const char* filename, seal_fmt_t fmt)
 }
 
 seal_err_t
+SEAL_API
 seal_stream(seal_stream_t* stream, seal_raw_t* raw, size_t* psize)
 {
     if (stream->id == 0)
@@ -51,6 +53,7 @@ seal_stream(seal_stream_t* stream, seal_raw_t* raw, size_t* psize)
 }
 
 seal_err_t
+SEAL_API
 seal_rewind_stream(seal_stream_t* stream)
 {
     if (stream->id == 0)
@@ -71,6 +74,7 @@ seal_rewind_stream(seal_stream_t* stream)
 }
 
 seal_err_t
+SEAL_API
 seal_close_stream(seal_stream_t* stream)
 {
     seal_err_t err;

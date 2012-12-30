@@ -20,22 +20,22 @@ extern "C" {
  *
  * @param device_name   the name of a device; 0 to use the default one
  */
-seal_err_t seal_startup(const char* /*device_name*/);
+seal_err_t SEAL_API seal_startup(const char* /*device_name*/);
 
 /* Uninitializes Seal and invalidate all Seal objects. Thread-unsafe. */
-void seal_cleanup(void);
+void SEAL_API seal_cleanup(void);
 
 /*
  * @return  the maximum number of effect slots a source can feed concurrently.
  */
-int seal_get_per_src_effect_limit(void);
+int SEAL_API seal_get_per_src_effect_limit(void);
 
 /*
  * Gets the Seal version string.
  *
  * @return  the version string
  */
-const char* seal_get_version(void);
+const char* SEAL_API seal_get_version(void);
 
 #ifdef __cplusplus
 }
@@ -61,11 +61,17 @@ typedef void _seal_openal_getteri(unsigned int, int, int*);
 /* Common helpers. */
 unsigned int _seal_openal_id(void*);
 seal_err_t _seal_gen_objs(int, unsigned int*, _seal_openal_initializer_t*);
-seal_err_t _seal_delete_objs(int, const unsigned int*,
-                             _seal_openal_destroyer_t*);
+seal_err_t _seal_delete_objs(
+    int,
+    const unsigned int*,
+    _seal_openal_destroyer_t*
+);
 seal_err_t _seal_init_obj(void*, _seal_openal_initializer_t*);
-seal_err_t _seal_destroy_obj(void*, _seal_openal_destroyer_t*,
-                             _seal_openal_validator_t*);
+seal_err_t _seal_destroy_obj(
+    void*,
+    _seal_openal_destroyer_t*,
+    _seal_openal_validator_t*
+);
 seal_err_t _seal_setf(void*, int, float, _seal_openal_setterf*);
 seal_err_t _seal_getf(void*, int, float*, _seal_openal_getterf*);
 seal_err_t _seal_seti(void*, int, int, _seal_openal_setteri*);

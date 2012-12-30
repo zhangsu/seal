@@ -99,8 +99,12 @@ prepare_data(wav_stream_t* wav_stream, uint32_t chunk_size)
 
 static
 seal_err_t
-read_chunk(seal_raw_t* raw, wav_stream_t* wav_stream, FILE* wav,
-           io_state_t* pstate)
+read_chunk(
+    seal_raw_t* raw,
+    wav_stream_t* wav_stream,
+    FILE* wav,
+    io_state_t* pstate
+)
 {
     uint32_t chunk_id, chunk_size = 0;
     seal_err_t err = SEAL_OK;

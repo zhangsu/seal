@@ -35,14 +35,14 @@ extern "C" {
  *
  * @param buf   the buffer to initialize
  */
-seal_err_t seal_init_buf(seal_buf_t*);
+seal_err_t SEAL_API seal_init_buf(seal_buf_t*);
 
 /*
  * Destroys a buffer that is not currently used by any source.
  *
  * @param buf   the buffer to destroy
  */
-seal_err_t seal_destroy_buf(seal_buf_t*);
+seal_err_t SEAL_API seal_destroy_buf(seal_buf_t*);
 
 /*
  * Loads audio from a file to a buffer that is not currently used by any
@@ -54,7 +54,11 @@ seal_err_t seal_destroy_buf(seal_buf_t*);
  *                  audio format will be attempted if `fmt' is
  *                  `SEAL_UNKNOWN_FMT'
  */
-seal_err_t seal_load2buf(seal_buf_t*, const char* /*filename*/, seal_fmt_t);
+seal_err_t SEAL_API seal_load2buf(
+    seal_buf_t*,
+    const char* /*filename*/,
+    seal_fmt_t
+);
 
 /*
  * Copies raw PCM data to a buffer that is not currently used by any source.
@@ -63,7 +67,7 @@ seal_err_t seal_load2buf(seal_buf_t*, const char* /*filename*/, seal_fmt_t);
  * @param buf   the destination buffer to receive the copied data
  * @param raw   the source raw data to copy
  */
-seal_err_t seal_raw2buf(seal_buf_t*, seal_raw_t*);
+seal_err_t SEAL_API seal_raw2buf(seal_buf_t*, seal_raw_t*);
 
 /*
  * Gets the size, in bytes, of a buffer. The default is 0.
@@ -71,7 +75,7 @@ seal_err_t seal_raw2buf(seal_buf_t*, seal_raw_t*);
  * @param buf   the buffer to retrive the size of
  * @param psize the receiver of the size
  */
-seal_err_t seal_get_buf_size(seal_buf_t*, int* /*psize*/);
+seal_err_t SEAL_API seal_get_buf_size(seal_buf_t*, int* /*psize*/);
 
 /*
  * Gets the frequency (sample rate) of the audio contained in a buffer. The
@@ -80,7 +84,7 @@ seal_err_t seal_get_buf_size(seal_buf_t*, int* /*psize*/);
  * @param buf   the buffer to retrive the frequency of
  * @param pfreq the receiver of the frequency
  */
-seal_err_t seal_get_buf_freq(seal_buf_t*, int* /*pfreq*/);
+seal_err_t SEAL_API seal_get_buf_freq(seal_buf_t*, int* /*pfreq*/);
 
 /*
  * Gets the bit depth (bits per sample) of the audio contained in a buffer.
@@ -89,7 +93,7 @@ seal_err_t seal_get_buf_freq(seal_buf_t*, int* /*pfreq*/);
  * @param buf   the buffer to retrive the bit depth of
  * @param pbps  the receiver of the bit depth
  */
-seal_err_t seal_get_buf_bps(seal_buf_t*, int* /*pbps*/);
+seal_err_t SEAL_API seal_get_buf_bps(seal_buf_t*, int* /*pbps*/);
 
 /*
  * Gets the number of channels of the audio contained in a buffer. The default
@@ -98,7 +102,7 @@ seal_err_t seal_get_buf_bps(seal_buf_t*, int* /*pbps*/);
  * @param buf           the buffer to retrive the number of channels of
  * @param pnchannels    the receiver of the number of channels
  */
-seal_err_t seal_get_buf_nchannels(seal_buf_t*, int* /*pnchannels*/);
+seal_err_t SEAL_API seal_get_buf_nchannels(seal_buf_t*, int* /*pnchannels*/);
 
 /*
  * Loads an audio file and extracts the whole PCM data to memory. This is the
@@ -112,7 +116,11 @@ seal_err_t seal_get_buf_nchannels(seal_buf_t*, int* /*pnchannels*/);
  *                  audio format will be attempted if the passed-in `fmt' is
  *                  `SEAL_UNKNOWN_FMT'
  */
-seal_err_t seal_load(seal_raw_t*, const char* /*filename*/, seal_fmt_t);
+seal_err_t SEAL_API seal_load(
+    seal_raw_t*,
+    const char* /*filename*/,
+    seal_fmt_t
+);
 
 #ifdef __cplusplus
 }

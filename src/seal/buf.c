@@ -10,18 +10,21 @@
 #include "wav.h"
 
 seal_err_t
+SEAL_API
 seal_init_buf(seal_buf_t* buf)
 {
     return _seal_init_obj(buf, alGenBuffers);
 }
 
 seal_err_t
+SEAL_API
 seal_destroy_buf(seal_buf_t* buf)
 {
     return _seal_destroy_obj(buf, alDeleteBuffers, alIsBuffer);
 }
 
 seal_err_t
+SEAL_API
 seal_load2buf(seal_buf_t* buf, const char* filename, seal_fmt_t fmt)
 {
     seal_raw_t raw;
@@ -38,6 +41,7 @@ seal_load2buf(seal_buf_t* buf, const char* filename, seal_fmt_t fmt)
 }
 
 seal_err_t
+SEAL_API
 seal_raw2buf(seal_buf_t* buf, seal_raw_t* raw)
 {
     return _seal_raw2buf(buf->id, raw);
@@ -46,38 +50,47 @@ seal_raw2buf(seal_buf_t* buf, seal_raw_t* raw)
 seal_err_t
 _seal_raw2buf(unsigned int buf, seal_raw_t* raw)
 {
-    alBufferData(buf, _seal_get_buf_fmt(raw->attr.nchannels,
-                                        raw->attr.bit_depth),
-                 raw->data, raw->size, raw->attr.freq);
+    alBufferData(
+        buf,
+        _seal_get_buf_fmt(raw->attr.nchannels, raw->attr.bit_depth),
+        raw->data,
+        raw->size,
+        raw->attr.freq
+    );
 
     return _seal_get_openal_err();
 }
 
 seal_err_t
+SEAL_API
 seal_get_buf_size(seal_buf_t* buf, int* psize)
 {
     return _seal_geti(buf, AL_SIZE, psize, alGetBufferi);
 }
 
 seal_err_t
+SEAL_API
 seal_get_buf_freq(seal_buf_t* buf, int* pfreq)
 {
     return _seal_geti(buf, AL_FREQUENCY, pfreq, alGetBufferi);
 }
 
 seal_err_t
+SEAL_API
 seal_get_buf_bps(seal_buf_t* buf, int* pbps)
 {
     return _seal_geti(buf, AL_BITS, pbps, alGetBufferi);
 }
 
 seal_err_t
+SEAL_API
 seal_get_buf_nchannels(seal_buf_t* buf, int* pnchannels)
 {
     return _seal_geti(buf, AL_CHANNELS, pnchannels, alGetBufferi);
 }
 
 seal_err_t
+SEAL_API
 seal_load(seal_raw_t* raw, const char* filename, seal_fmt_t fmt)
 {
     seal_err_t err;

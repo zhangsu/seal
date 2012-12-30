@@ -41,8 +41,15 @@ read(seal_raw_t* raw, unsigned long* nbytes_loaded, OggVorbis_File* ovf)
     long nbytes_read;
     int bitstream;
 
-    nbytes_read = ov_read(ovf, (char*) raw->data + *nbytes_loaded,
-                          raw->size - *nbytes_loaded, 0, 2, 1, &bitstream);
+    nbytes_read = ov_read(
+        ovf,
+        (char*) raw->data + *nbytes_loaded,
+        raw->size - *nbytes_loaded,
+        0,
+        2,
+        1,
+        &bitstream
+    );
     *nbytes_loaded += nbytes_read;
 
     return nbytes_read;

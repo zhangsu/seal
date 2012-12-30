@@ -57,48 +57,56 @@ getfv(int key, float* vector)
 }
 
 seal_err_t
+SEAL_API
 seal_set_listener_gain(float gain)
 {
     return setf(AL_GAIN, gain);
 }
 
 seal_err_t
+SEAL_API
 seal_set_listener_pos(float x, float y, float z)
 {
     return set3f(AL_POSITION, x, y, z);
 }
 
 seal_err_t
+SEAL_API
 seal_set_listener_vel(float x, float y, float z)
 {
     return set3f(AL_VELOCITY, x, y, z);
 }
 
 seal_err_t
+SEAL_API
 seal_set_listener_orien(float* orien)
 {
     return setfv(AL_ORIENTATION, orien);
 }
 
 seal_err_t
+SEAL_API
 seal_get_listener_gain(float* pgain)
 {
     return getf(AL_GAIN, pgain);
 }
 
 seal_err_t
+SEAL_API
 seal_get_listener_pos(float* px, float* py, float* pz)
 {
     return get3f(AL_POSITION, px, py, pz);
 }
 
 seal_err_t
+SEAL_API
 seal_get_listener_vel(float* px, float* py, float* pz)
 {
     return get3f(AL_VELOCITY, px, py, pz);
 }
 
 seal_err_t
+SEAL_API
 seal_get_listener_orien(float* orien)
 {
     return getfv(AL_ORIENTATION, orien);

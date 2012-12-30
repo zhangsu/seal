@@ -2,6 +2,7 @@
 #include <seal/err.h>
 
 const char*
+SEAL_API
 seal_get_err_msg(seal_err_t err)
 {
     switch (err) {

@@ -38,8 +38,11 @@ extern "C" {
  *                  audio format will be attempted if the passed-in `fmt' is
  *                  `SEAL_UNKNOWN_FMT'
  */
-seal_err_t seal_open_stream(seal_stream_t*, const char* /*filename*/,
-                            seal_fmt_t);
+seal_err_t SEAL_API seal_open_stream(
+    seal_stream_t*,
+    const char* /*filename*/,
+    seal_fmt_t
+);
 
 /*
  * Streams from an opened stream.
@@ -56,14 +59,18 @@ seal_err_t seal_open_stream(seal_stream_t*, const char* /*filename*/,
  * @param psize     the receiver of the actual size, in bytes, of streamed
  *                  data if successful or otherwise a negative integer
  */
-seal_err_t seal_stream(seal_stream_t*, seal_raw_t*, size_t* /*psize*/);
+seal_err_t SEAL_API seal_stream(
+    seal_stream_t*,
+    seal_raw_t*,
+    size_t* /*psize*/
+);
 
 /*
  * Rewinds a stream to the beginning.
  *
  * @param stream    the stream to rewind
  */
-seal_err_t seal_rewind_stream(seal_stream_t*);
+seal_err_t SEAL_API seal_rewind_stream(seal_stream_t*);
 
 /*
  * Closes a stream opened by `seal_open_stream'.
@@ -71,7 +78,7 @@ seal_err_t seal_rewind_stream(seal_stream_t*);
  * @param stream    the stream to close;  will be left untouched if an error
  *                  occurs
  */
-seal_err_t seal_close_stream(seal_stream_t*);
+seal_err_t SEAL_API seal_close_stream(seal_stream_t*);
 
 #ifdef __cplusplus
 }
