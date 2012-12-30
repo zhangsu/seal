@@ -69,6 +69,7 @@ Apply a reverberation effect to the sound source:
 
 ```ruby
 # Allocate an effect slot and associate a specific reverb object.
+# Here we are using a predefined reverb effect. See doc for `Reverb::Preset`.
 slot = EffectSlot.new(Reverb.new(Reverb::Preset::FOREST))
 # Start feeding the slot.
 source.feed(slot, 0)
@@ -114,6 +115,10 @@ seal_destroy_efs(&efs);
 seal_destroy_rvb(&rvb);
 seal_cleanup();
 ```
+
+For detailed documentation, refer to:  
+[http://rubydoc.info/gems/seal](http://rubydoc.info/gems/seal)  
+[zhang.su/seal](http://zhang.su/seal)  
 
 ## Platforms
 
