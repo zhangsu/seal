@@ -31,7 +31,7 @@ const char*
 SEAL_API
 seal_get_version(void)
 {
-    return "0.1.0";
+    return "0.1.1";
 }
 
 static
