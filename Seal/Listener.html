@@ -185,6 +185,28 @@ to all the sources.</p>
         <li class="public ">
   <span class="summary_signature">
     
+      <a href="#move-instance_method" title="#move (instance method)">- (Object) <strong>move</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
       <a href="#orientation-instance_method" title="#listener.orientation (instance method)">- (Array) <strong>listener.orientation</strong> </a>
     
 
@@ -365,15 +387,15 @@ system.</p>
       <pre class="lines">
 
 
-1707
-1708
-1709
-1710
-1711
-1712</pre>
+1734
+1735
+1736
+1737
+1738
+1739</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1707</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1734</span>
 
 static
 VALUE
@@ -438,21 +460,61 @@ attenuation of 6 dB; 0.0 means silence. The valid range is [0.0, +inf.).</p>
       <pre class="lines">
 
 
-1694
-1695
-1696
-1697
-1698
-1699</pre>
+1721
+1722
+1723
+1724
+1725
+1726</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1694</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1721</span>
 
 static
 VALUE
 set_listener_gain(VALUE rlistener, VALUE value)
 {
     return set_listener_float(value, seal_set_listener_gain);
+}</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="move-instance_method">
+  
+    - (<tt>Object</tt>) <strong>move</strong> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+1704
+1705
+1706
+1707
+1708
+1709
+1710
+1711</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1704</span>
+
+static
+VALUE
+move_listener(VALUE rlistener)
+{
+    check_seal_err(seal_move_listener());
+
+    return rlistener;
 }</pre>
     </td>
   </tr>
@@ -520,24 +582,24 @@ set_listener_gain(VALUE rlistener, VALUE value)
       <pre class="lines">
 
 
-1812
-1813
-1814
-1815
-1816
-1817
-1818
-1819
-1820
-1821
-1822
-1823
-1824
-1825
-1826</pre>
+1839
+1840
+1841
+1842
+1843
+1844
+1845
+1846
+1847
+1848
+1849
+1850
+1851
+1852
+1853</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1812</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1839</span>
 
 static
 VALUE
@@ -594,22 +656,22 @@ Otherwise, the operation is undefined.</p>
       <pre class="lines">
 
 
-1782
-1783
-1784
-1785
-1786
-1787
-1788
-1789
-1790
-1791
-1792
-1793
-1794</pre>
+1809
+1810
+1811
+1812
+1813
+1814
+1815
+1816
+1817
+1818
+1819
+1820
+1821</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1782</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1809</span>
 
 static
 VALUE
@@ -679,15 +741,15 @@ set_listener_orien(VALUE rlistener, VALUE rarr)
       <pre class="lines">
 
 
-1734
-1735
-1736
-1737
-1738
-1739</pre>
+1761
+1762
+1763
+1764
+1765
+1766</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1734</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1761</span>
 
 static
 VALUE
@@ -751,15 +813,15 @@ system. Use of NaN and infinity is undefined.</p>
       <pre class="lines">
 
 
-1721
-1722
-1723
-1724
-1725
-1726</pre>
+1748
+1749
+1750
+1751
+1752
+1753</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1721</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1748</span>
 
 static
 VALUE
@@ -822,15 +884,15 @@ set_listener_pos(VALUE rlistener, VALUE value)
       <pre class="lines">
 
 
-1763
-1764
-1765
-1766
-1767
-1768</pre>
+1790
+1791
+1792
+1793
+1794
+1795</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1763</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1790</span>
 
 static
 VALUE
@@ -895,15 +957,15 @@ factor used during the Doppler effect emulation.</p>
       <pre class="lines">
 
 
-1749
-1750
-1751
-1752
-1753
-1754</pre>
+1776
+1777
+1778
+1779
+1780
+1781</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1749</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1776</span>
 
 static
 VALUE
@@ -921,7 +983,7 @@ set_listener_vel(VALUE rlistener, VALUE value)
 </div>
 
     <div id="footer">
-  Generated on Wed Dec 26 21:20:54 2012 by
+  Generated on Thu Jan 24 23:25:21 2013 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.3 (ruby-1.9.3).
 </div>

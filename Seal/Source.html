@@ -442,6 +442,30 @@ output is filtered based on the effect attached to <em>effect_slot</em>.</p>
         <li class="public ">
   <span class="summary_signature">
     
+      <a href="#move-instance_method" title="#move (instance method)">- (Object) <strong>move</strong> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Moves the source (changes the position) based on the source velocity.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
       <a href="#pause-instance_method" title="#pause (instance method)">- (Object) <strong>pause</strong> </a>
     
 
@@ -1026,15 +1050,15 @@ true.</p>
       <pre class="lines">
 
 
-902
-903
-904
-905
-906
-907</pre>
+920
+921
+922
+923
+924
+925</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 902</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 920</span>
 
 static
 VALUE
@@ -1100,15 +1124,15 @@ effect the next time the source gets played.</p>
       <pre class="lines">
 
 
-889
-890
-891
-892
-893
-894</pre>
+907
+908
+909
+910
+911
+912</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 889</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 907</span>
 
 static
 VALUE
@@ -1149,15 +1173,15 @@ set_src_auto(VALUE rsrc, VALUE value)
       <pre class="lines">
 
 
-673
-674
-675
-676
-677
-678</pre>
+692
+693
+694
+695
+696
+697</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 673</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 692</span>
 
 static
 VALUE
@@ -1241,25 +1265,25 @@ State::STOPPED. It will not free the buffer.</p>
       <pre class="lines">
 
 
-650
-651
-652
-653
-654
-655
-656
-657
-658
-659
-660
-661
-662
-663
-664
-665</pre>
+669
+670
+671
+672
+673
+674
+675
+676
+677
+678
+679
+680
+681
+682
+683
+684</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 650</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 669</span>
 
 static
 VALUE
@@ -1333,15 +1357,15 @@ is 36864.</p>
       <pre class="lines">
 
 
-1022
-1023
-1024
-1025
-1026
-1027</pre>
+1040
+1041
+1042
+1043
+1044
+1045</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1022</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1040</span>
 
 static
 VALUE
@@ -1409,15 +1433,15 @@ adjusted to the closest smaller multiple automatically.</p>
       <pre class="lines">
 
 
-1008
-1009
-1010
-1011
-1012
-1013</pre>
+1026
+1027
+1028
+1029
+1030
+1031</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1008</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1026</span>
 
 static
 VALUE
@@ -1464,20 +1488,20 @@ is <em>Seal.per_src_effect_limit - 1</em>.</p>
       <pre class="lines">
 
 
-741
-742
-743
-744
-745
-746
-747
-748
-749
-750
-751</pre>
+760
+761
+762
+763
+764
+765
+766
+767
+768
+769
+770</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 741</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 760</span>
 
 static
 VALUE
@@ -1523,15 +1547,15 @@ feed_efs(VALUE rsrc, VALUE rslot, VALUE rindex)
       <pre class="lines">
 
 
-873
-874
-875
-876
-877
-878</pre>
+891
+892
+893
+894
+895
+896</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 873</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 891</span>
 
 static
 VALUE
@@ -1596,15 +1620,15 @@ attenuation of 6 dB; 0.0 means silence.</p>
       <pre class="lines">
 
 
-860
-861
-862
-863
-864
-865</pre>
+878
+879
+880
+881
+882
+883</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 860</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 878</span>
 
 static
 VALUE
@@ -1671,15 +1695,15 @@ set_src_gain(VALUE rsrc, VALUE value)
       <pre class="lines">
 
 
-957
-958
-959
-960
-961
-962</pre>
+975
+976
+977
+978
+979
+980</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 957</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 975</span>
 
 static
 VALUE
@@ -1744,21 +1768,76 @@ then State::Playing after it reaches the end of the last buffer.</p>
       <pre class="lines">
 
 
-944
-945
-946
-947
-948
-949</pre>
+962
+963
+964
+965
+966
+967</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 944</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 962</span>
 
 static
 VALUE
 set_src_looping(VALUE rsrc, VALUE value)
 {
     return set_obj_char(rsrc, value, seal_set_src_looping);
+}</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="move-instance_method">
+  
+    - (<tt>Object</tt>) <strong>move</strong> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Moves the source (changes the position) based on the source velocity. This
+is a syntactic sugar for adding the velocity vector and position vector:</p>
+
+<pre class="code"><code><span class='comment'># Equivalent to `source.move`
+</span><span class='id identifier rubyid_source'>source</span><span class='period'>.</span><span class='id identifier rubyid_position'>position</span> <span class='op'>=</span> <span class='id identifier rubyid_source'>source</span><span class='period'>.</span><span class='id identifier rubyid_position'>position</span><span class='period'>.</span><span class='id identifier rubyid_zip'>zip</span><span class='lparen'>(</span><span class='id identifier rubyid_source'>source</span><span class='period'>.</span><span class='id identifier rubyid_velocity'>velocity</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_a'>a</span><span class='comma'>,</span> <span class='id identifier rubyid_b'>b</span><span class='op'>|</span>
+    <span class='id identifier rubyid_a'>a</span> <span class='op'>+</span> <span class='id identifier rubyid_b'>b</span>
+<span class='kw'>end</span></code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  
+
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+648
+649
+650
+651
+652
+653</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 648</span>
+
+static
+VALUE
+move_src(VALUE rsrc, VALUE value)
+{
+    return src_op(rsrc, seal_move_src);
 }</pre>
     </td>
   </tr>
@@ -1844,15 +1923,15 @@ pause_src(VALUE rsrc)
       <pre class="lines">
 
 
-845
-846
-847
-848
-849
-850</pre>
+863
+864
+865
+866
+867
+868</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 845</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 863</span>
 
 static
 VALUE
@@ -1918,15 +1997,15 @@ range is (0.0, +inf.).</p>
       <pre class="lines">
 
 
-832
-833
-834
-835
-836
-837</pre>
+850
+851
+852
+853
+854
+855</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 832</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 850</span>
 
 static
 VALUE
@@ -2044,15 +2123,15 @@ play_src(VALUE rsrc)
       <pre class="lines">
 
 
-787
-788
-789
-790
-791
-792</pre>
+806
+807
+808
+809
+810
+811</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 787</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 806</span>
 
 static
 VALUE
@@ -2092,15 +2171,15 @@ system. Use of NaN and infinity is undefined.</p>
       <pre class="lines">
 
 
-774
-775
-776
-777
-778
-779</pre>
+793
+794
+795
+796
+797
+798</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 774</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 793</span>
 
 static
 VALUE
@@ -2164,15 +2243,15 @@ is 3.</p>
       <pre class="lines">
 
 
-990
-991
-992
-993
-994
-995</pre>
+1008
+1009
+1010
+1011
+1012
+1013</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 990</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1008</span>
 
 static
 VALUE
@@ -2242,15 +2321,15 @@ the interval [2, 63].</p>
       <pre class="lines">
 
 
-977
-978
-979
-980
-981
-982</pre>
+995
+996
+997
+998
+999
+1000</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 977</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 995</span>
 
 static
 VALUE
@@ -2317,15 +2396,15 @@ set_src_queue_size(VALUE rsrc, VALUE value)
       <pre class="lines">
 
 
-929
-930
-931
-932
-933
-934</pre>
+947
+948
+949
+950
+951
+952</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 929</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 947</span>
 
 static
 VALUE
@@ -2389,15 +2468,15 @@ all relative to the listener position.</p>
       <pre class="lines">
 
 
-916
-917
-918
-919
-920
-921</pre>
+934
+935
+936
+937
+938
+939</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 916</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 934</span>
 
 static
 VALUE
@@ -2490,27 +2569,27 @@ rewind_src(VALUE rsrc)
       <pre class="lines">
 
 
-1057
-1058
-1059
-1060
-1061
-1062
-1063
-1064
-1065
-1066
-1067
-1068
-1069
-1070
-1071
-1072
-1073
-1074</pre>
+1075
+1076
+1077
+1078
+1079
+1080
+1081
+1082
+1083
+1084
+1085
+1086
+1087
+1088
+1089
+1090
+1091
+1092</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1057</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1075</span>
 
 static
 VALUE
@@ -2614,15 +2693,15 @@ stop_src(VALUE rsrc)
       <pre class="lines">
 
 
-723
-724
-725
-726
-727
-728</pre>
+742
+743
+744
+745
+746
+747</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 723</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 742</span>
 
 static
 VALUE
@@ -2678,25 +2757,25 @@ State::STOPPED. It will not free the stream.</p>
       <pre class="lines">
 
 
-700
-701
-702
-703
-704
-705
-706
-707
-708
-709
-710
-711
-712
-713
-714
-715</pre>
+719
+720
+721
+722
+723
+724
+725
+726
+727
+728
+729
+730
+731
+732
+733
+734</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 700</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 719</span>
 
 static
 VALUE
@@ -2747,25 +2826,25 @@ set_src_stream(VALUE rsrc, VALUE rstream)
       <pre class="lines">
 
 
-1034
-1035
-1036
-1037
-1038
-1039
-1040
-1041
-1042
-1043
-1044
-1045
-1046
-1047
-1048
-1049</pre>
+1052
+1053
+1054
+1055
+1056
+1057
+1058
+1059
+1060
+1061
+1062
+1063
+1064
+1065
+1066
+1067</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1034</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1052</span>
 
 static
 VALUE
@@ -2819,14 +2898,14 @@ is on.</p>
       <pre class="lines">
 
 
-761
-762
-763
-764
-765</pre>
+780
+781
+782
+783
+784</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 761</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 780</span>
 
 static
 VALUE update_src(VALUE rsrc)
@@ -2888,15 +2967,15 @@ VALUE update_src(VALUE rsrc)
       <pre class="lines">
 
 
-816
-817
-818
-819
-820
-821</pre>
+834
+835
+836
+837
+838
+839</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 816</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 834</span>
 
 static
 VALUE
@@ -2937,15 +3016,15 @@ factor used during the Doppler effect emulation. Use of NaN is undefined.</p>
       <pre class="lines">
 
 
-803
-804
-805
-806
-807
-808</pre>
+821
+822
+823
+824
+825
+826</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 803</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 821</span>
 
 static
 VALUE
@@ -2963,7 +3042,7 @@ set_src_vel(VALUE rsrc, VALUE value)
 </div>
 
     <div id="footer">
-  Generated on Wed Dec 26 21:20:54 2012 by
+  Generated on Thu Jan 24 23:25:21 2013 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.3 (ruby-1.9.3).
 </div>

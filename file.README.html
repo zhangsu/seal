@@ -88,9 +88,18 @@ audio streaming and audio formats like Ogg Vorbis, MPEG Audio and WAVE.</p>
 <pre class="code ruby"><code><span class='id identifier rubyid_source'>source</span><span class='period'>.</span><span class='id identifier rubyid_position'>position</span> <span class='op'>=</span> <span class='int'>3</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='op'>-</span><span class='int'>4</span>
 </code></pre>
 
+<p>Or change the position of the source based on velocity:</p>
+
+<pre class="code ruby"><code><span class='id identifier rubyid_source'>source</span><span class='period'>.</span><span class='id identifier rubyid_velocity'>velocity</span> <span class='op'>=</span> <span class='int'>1</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='op'>-</span><span class='int'>1</span>
+<span class='id identifier rubyid_source'>source</span><span class='period'>.</span><span class='id identifier rubyid_move'>move</span> <span class='comment'># automatically add the velocity vector to the position vector
+</span></code></pre>
+
 <p>Change the position of the listener (a singleton of Seal::Listener):</p>
 
 <pre class="code ruby"><code><span class='const'>Seal</span><span class='period'>.</span><span class='id identifier rubyid_listener'>listener</span><span class='period'>.</span><span class='id identifier rubyid_position'>position</span> <span class='op'>=</span> <span class='op'>-</span><span class='int'>1</span><span class='comma'>,</span> <span class='op'>-</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>0</span>
+<span class='comment'># ...
+</span><span class='const'>Seal</span><span class='period'>.</span><span class='id identifier rubyid_listener'>listener</span><span class='period'>.</span><span class='id identifier rubyid_velocity'>velocity</span> <span class='op'>=</span> <span class='int'>3</span><span class='comma'>,</span> <span class='int'>1</span><span class='comma'>,</span> <span class='op'>-</span><span class='int'>1</span>
+<span class='id identifier rubyid_seal'>seal</span><span class='period'>.</span><span class='id identifier rubyid_listener'>listener</span><span class='period'>.</span><span class='id identifier rubyid_move'>move</span>
 </code></pre>
 
 <p>Play the source:</p>
@@ -123,6 +132,7 @@ source.buffer = ...
 <p>Apply a reverberation effect to the sound source:</p>
 
 <pre class="code ruby"><code><span class='comment'># Allocate an effect slot and associate a specific reverb object.
+</span><span class='comment'># Here we are using a predefined reverb effect. See doc for `Reverb::Preset`.
 </span><span class='id identifier rubyid_slot'>slot</span> <span class='op'>=</span> <span class='const'>EffectSlot</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='const'>Reverb</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='const'>Reverb</span><span class='op'>::</span><span class='const'>Preset</span><span class='op'>::</span><span class='const'>FOREST</span><span class='rparen'>)</span><span class='rparen'>)</span>
 <span class='comment'># Start feeding the slot.
 </span><span class='id identifier rubyid_source'>source</span><span class='period'>.</span><span class='id identifier rubyid_feed'>feed</span><span class='lparen'>(</span><span class='id identifier rubyid_slot'>slot</span><span class='comma'>,</span> <span class='int'>0</span><span class='rparen'>)</span>
@@ -166,6 +176,10 @@ seal_destroy_efs(&amp;efs);
 seal_destroy_rvb(&amp;rvb);
 seal_cleanup();
 </code></pre>
+
+<p>For detailed documentation, refer to:<br>
+<a href="http://rubydoc.info/gems/seal">http://rubydoc.info/gems/seal</a><br>
+<a href="http://zhang.su/seal">zhang.su/seal</a>  </p>
 
 <h2>Platforms</h2>
 
@@ -251,6 +265,9 @@ that could be required by Ruby at runtime.</p>
 <li><p>walk</p>
 
 <p>3D audio positioning (attenuation).</p></li>
+<li><p>doppler</p>
+
+<p>Doppler Effect demonstration.</p></li>
 <li><p>reverb</p>
 
 <p>Audio reverberation. There are lots of built-in reverb presets, but this
@@ -308,7 +325,7 @@ and will be discovered by the right people who need the right tool.</p>
 </div></div>
 
     <div id="footer">
-  Generated on Wed Dec 26 21:20:53 2012 by
+  Generated on Thu Jan 24 23:25:20 2013 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.8.3 (ruby-1.9.3).
 </div>
