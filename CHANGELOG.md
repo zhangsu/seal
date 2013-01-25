@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.2 (January 24, 2013)
+
+- Added syntactic sugars `Source#move` and `Listener#move` for changing
+  position based on velocity
+
 ## 0.1.1 (December 26, 2012)
 
 - The original `EffectSlot#feed` method is now changed to `Source#feed` to be
