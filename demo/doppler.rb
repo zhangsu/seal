@@ -18,8 +18,8 @@ def move(source, steps = 100)
 end
 
 loop do
-  source.velocity = 1, 1, 0
+  source.velocity = 2, 2, 0
   move(source)
-  source.velocity = -1, -1, 0
+  source.velocity = -2, -2, 0
   move(source)
 end
