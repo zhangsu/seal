@@ -29,10 +29,20 @@ Change the position of the source:
 source.position = 3, 2, -4
 ```
 
+Or change the position of the source based on velocity:
+
+```ruby
+source.velocity = 1, 2, -1
+source.move # automatically add the velocity vector to the position vector
+```
+
 Change the position of the listener (a singleton of Seal::Listener):
 
 ```ruby
 Seal.listener.position = -1, -1, 0
+# ...
+Seal.listener.velocity = 3, 1, -1
+seal.listener.move
 ```
 
 Play the source:
