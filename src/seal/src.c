@@ -325,6 +325,29 @@ seal_detach_src_audio(seal_src_t* src)
 
 seal_err_t
 SEAL_API
+seal_move_src(seal_src_t* src)
+{
+    seal_err_t err;
+    float pos[3], vel[3];
+
+    if ((err = seal_get_src_pos(src, pos, pos + 1, pos + 2)) != SEAL_OK)
+        return err;
+    if ((err = seal_get_src_vel(src, vel, vel + 1, vel + 2)) != SEAL_OK)
+        return err;
+    err = seal_set_src_pos(
+        src,
+        pos[0] + vel[0],
+        pos[1] + vel[1],
+        pos[2] + vel[2]
+    );
+    if (err != SEAL_OK)
+        return err;
+
+    return SEAL_OK;
+}
+
+seal_err_t
+SEAL_API
 seal_set_src_buf(seal_src_t* src, seal_buf_t* buf)
 {
     seal_err_t err;

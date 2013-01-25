@@ -11,7 +11,7 @@ source.play
 
 def move(source, steps = 100)
   steps.times do
-    source.position = source.position.zip(source.velocity).map { |a, b| a + b }
+    source.move
     p source.position
     sleep(0.1)
   end

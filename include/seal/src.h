@@ -113,6 +113,14 @@ seal_err_t SEAL_API seal_stop_src(seal_src_t*);
 seal_err_t SEAL_API seal_rewind_src(seal_src_t*);
 
 /*
+ * Moves the source (changes the position) based on the source velocity. This
+ * is a syntactic sugar for adding the velocity vector and position vector.
+ *
+ * @param src   the source to move
+ */
+seal_err_t SEAL_API seal_move_src(seal_src_t*);
+
+/*
  * Associates a buffer with a source so that the source is ready to play the
  * audio contained in the buffer. Can be applied only to sources in the
  * `SEAL_INITIAL' or `SEAL_STOPPED' states and that are not of the

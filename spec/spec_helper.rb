@@ -20,6 +20,16 @@ class Symbol
   end
 end
 
+module Helpers
+  def with_motion(movable)
+    original_position = movable.position
+    original_velocity = movable.velocity
+    yield
+    movable.position = original_position
+    movable.velocity = original_velocity
+  end
+end
+
 Dir["./spec/support/**/*.rb"].each { |f| require f }
 require 'seal'
 include Seal
@@ -35,6 +45,8 @@ RSpec.configure do |config|
   config.alias_it_should_behave_like_to :it_defines, 'defines'
 
   config.instance_eval do
+    include Helpers, :include_helpers
+
     before :all do
       Seal.startup
     end

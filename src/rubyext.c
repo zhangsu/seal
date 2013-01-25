@@ -635,6 +635,25 @@ rewind_src(VALUE rsrc)
 
 /*
  *  call-seq:
+ *      source.move ->  source
+ *
+ * Moves the source (changes the position) based on the source velocity. This
+ * is a syntactic sugar for adding the velocity vector and position vector:
+ *
+ *      # Equivalent to `source.move`
+ *      source.position = source.position.zip(source.velocity).map do |a, b|
+ *          a + b
+ *      end
+ */
+static
+VALUE
+move_src(VALUE rsrc, VALUE value)
+{
+    return src_op(rsrc, seal_move_src);
+}
+
+/*
+ *  call-seq:
  *      source.buffer = buffer  -> buffer
  *      source.buffer = nil     -> nil
  *
@@ -798,7 +817,6 @@ get_src_pos(VALUE rsrc)
  * Sets the velocity of _source_ in a right-handed Cartesian coordinate
  * system. The velocity of the source does not affect its position but is a
  * factor used during the Doppler effect emulation. Use of NaN is undefined.
- *
  */
 static
 VALUE
@@ -1683,6 +1701,15 @@ get_listener()
     return rb_const_get(mSeal, rb_intern("LISTENER"));
 }
 
+static
+VALUE
+move_listener(VALUE rlistener)
+{
+    check_seal_err(seal_move_listener());
+
+    return rlistener;
+}
+
 /*
  *  call-seq:
  *      Seal.listener.gain = flt   -> [flt, flt, flt]
@@ -1975,6 +2002,7 @@ bind_src(void)
     rb_define_method(cSource, "pause", pause_src, 0);
     rb_define_method(cSource, "stop", stop_src, 0);
     rb_define_method(cSource, "rewind", rewind_src, 0);
+    rb_define_method(cSource, "move", move_src, 0);
     rb_define_method(cSource, "buffer=", set_src_buf, 1);
     rb_define_method(cSource, "buffer", get_src_buf, 0);
     rb_define_method(cSource, "stream=", set_src_stream, 1);
@@ -2348,6 +2376,7 @@ bind_listener(void)
     rb_define_const(mSeal, "LISTENER", listener);
     rb_define_singleton_method(mSeal, "listener", get_listener, 0);
     singletonify(cListener);
+    rb_define_method(cListener, "move", move_listener, 0);
     rb_define_method(cListener, "position=", set_listener_pos, 1);
     rb_define_method(cListener, "position", get_listener_pos, 0);
     rb_define_method(cListener, "velocity=", set_listener_vel, 1);

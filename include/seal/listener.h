@@ -18,6 +18,13 @@ extern "C" {
 #endif
 
 /*
+ * Moves the listener (changes the position) based on the listener velocity.
+ * This is a syntactic sugar for adding the velocity vector and position
+ * vector.
+ */
+seal_err_t SEAL_API seal_move_listener(void);
+
+/*
  * Sets the master scalar amplitude multiplier of the listener which applies
  * to all the sources. 1.0f means that the sound is unattenuated; 0.5f means
  * an attenuation of 6 dB; 0.0f means silence.

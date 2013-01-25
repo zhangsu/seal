@@ -58,6 +58,28 @@ getfv(int key, float* vector)
 
 seal_err_t
 SEAL_API
+seal_move_listener(void)
+{
+    seal_err_t err;
+    float pos[3], vel[3];
+
+    if ((err = seal_get_listener_pos(pos, pos + 1, pos + 2)) != SEAL_OK)
+        return err;
+    if ((err = seal_get_listener_vel(vel, vel + 1, vel + 2)) != SEAL_OK)
+        return err;
+    err = seal_set_listener_pos(
+        pos[0] + vel[0],
+        pos[1] + vel[1],
+        pos[2] + vel[2]
+    );
+    if (err != SEAL_OK)
+        return err;
+
+    return SEAL_OK;
+}
+
+seal_err_t
+SEAL_API
 seal_set_listener_gain(float gain)
 {
     return setf(AL_GAIN, gain);
