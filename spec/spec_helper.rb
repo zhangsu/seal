@@ -40,12 +40,13 @@ WAV_PATH = File.join FIXTURE_DIR, 'tone_up.wav'
 OV_PATH = File.join FIXTURE_DIR, 'heal.ogg'
 
 RSpec.configure do |config|
-  config.include CustomMatchers
-  config.alias_it_should_behave_like_to :it_validates, 'validates that'
-  config.alias_it_should_behave_like_to :it_defines, 'defines'
 
   config.instance_eval do
+    include CustomMatchers
     include Helpers, :include_helpers
+
+    alias_it_should_behave_like_to :it_validates, 'validates that'
+    alias_it_should_behave_like_to :it_defines, 'defines'
 
     before :all do
       Seal.startup
