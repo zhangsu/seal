@@ -30,7 +30,7 @@ describe Reverb do
   it_validates 'the float attribute', :reflections_delay, '[0, 0.3]'
   it_validates 'the float attribute', :reflections_gain, '[0, 3.16]'
   it_validates 'the float attribute', :room_rolloff_factor, '[0, 10]'
-  it_defines 'boolean reader aliases', [:hfdecay_limited]
+  it_defines 'boolean reader aliases', %i(hfdecay_limited)
 
   specify_preset_loading = -> mod do
     mod.constants.each do |const_sym|

@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.has_rdoc          = 'yard'
   s.extra_rdoc_files  = ['src/rubyext.c']
 
-  s.required_ruby_version = '~> 1.9'
+  s.required_ruby_version = '>= 1.9.2'
   s.requirements = ['libopenal', 'a sound card']
   s.add_development_dependency 'rake-compiler'
   s.add_development_dependency 'rspec', '~> 2'
