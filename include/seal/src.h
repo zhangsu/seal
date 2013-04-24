@@ -166,10 +166,10 @@ seal_err_t SEAL_API seal_set_src_stream(seal_src_t*, seal_stream_t*);
 seal_err_t SEAL_API seal_feed_efs(seal_src_t*, seal_efs_t*, int /*index*/);
 
 /*
- * Updates a streaming source. If the source is not up-to-date, the playback
- * will end before the end of the stream is reached. Does nothing if the
- * passed-in source is not a streaming source. Also does nothing if auto
- * update is on.
+ * Updates a streaming source by filling up the audio queue until it is full.
+ * If the source is not up-to-date, the playback will end before the end of
+ * the stream is reached. Does nothing if the passed-in source is not a
+ * streaming source. Also does nothing if auto update is on.
  *
  * @param src       the source to update
  */

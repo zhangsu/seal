@@ -27,6 +27,9 @@ static const size_t DEFAULT_CHUNK_SIZE = MIN_CHUNK_SIZE << 2;
 static const size_t MAX_CHUNK_SIZE     = CHUNK_STORAGE_CAP -
                                          CHUNK_STORAGE_CAP % MIN_CHUNK_SIZE;
 
+/*
+ * Checks if `val` is in the closed interval [`lower_bound`, `upper_bound`].
+ */
 static
 seal_err_t
 check_val_limit(int val, int lower_bound, int upper_bound)
@@ -76,6 +79,9 @@ wait4updater(seal_src_t* src)
     }
 }
 
+/*
+ * The main routine for updater threads.
+ */
 static
 void*
 update(void* args)
@@ -119,6 +125,10 @@ unqueue_bufs(seal_src_t* src, int nbufs, unsigned int* bufs)
     return queue_op(src, nbufs, bufs, alSourceUnqueueBuffers);
 }
 
+/*
+ * Cleans the queue and free any allocated buffers in the queue. This function
+ * assumes the source is stopped at the time of calling.
+ */
 static
 seal_err_t
 clean_queue(seal_src_t* src)
@@ -151,8 +161,9 @@ clean_queue(seal_src_t* src)
 }
 
 /*
- * Stopping a source will mark all the buffers in its queue processed so that
- * they can be unqueued.
+ * Cleans the queue after stopping the source. A stopped source will have all
+ * the buffers in its queue marked as processed so that they can be unqueued.
+ * This function assumes the source is playing at the time of calling.
  */
 static
 seal_err_t
@@ -178,6 +189,10 @@ restart_queuing(seal_src_t* src)
     return seal_rewind_stream(src->stream);
 }
 
+/*
+ * This does the same thing as `stop_then_clean_queue` except it works for
+ * sources in any state at the time of calling.
+ */
 static
 seal_err_t
 empty_queue(seal_src_t* src)
@@ -210,6 +225,7 @@ seal_init_src(seal_src_t* src)
     if (err == SEAL_OK) {
         src->buf = 0;
         src->stream = 0;
+        /* The id of the thread that is updating the source. */
         src->updater = 0;
         src->chunk_size = DEFAULT_CHUNK_SIZE;
         src->queue_size = DEFAULT_QUEUE_SIZE;
