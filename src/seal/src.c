@@ -42,13 +42,42 @@ check_val_limit(int val, int lower_bound, int upper_bound)
         return SEAL_OK;
 }
 
+/*
+ * Called when the state of a source is preemptively changed by a caller.
+ */
+static
+seal_err_t
+on_preemptive_state_change(seal_src_t* src)
+{
+    seal_err_t err;
+    seal_src_state_t state;
+
+    if ((err = seal_get_src_state(src, &state)) != SEAL_OK)
+        return err;
+
+    /* Set `early_stop` to true after playing so it will only be set to false
+     * when playback ended with the end of stream reached or the state is
+     * preemptively changed.
+     */
+    src->early_stop = state == SEAL_PLAYING ? 1 : 0;
+
+    return SEAL_OK;
+}
+
+/*
+ * Changes the source state by calling one of the four operations on a source.
+ */
 static
 seal_err_t
 change_state(seal_src_t* src, void (*op)(unsigned int))
 {
-    op(src->id);
+    seal_err_t err;
 
-    return _seal_get_openal_err();
+    op(src->id);
+    if ((err = _seal_get_openal_err()) != SEAL_OK)
+        return err;
+
+    return on_preemptive_state_change(src);
 }
 
 static
@@ -91,11 +120,22 @@ update(void* args)
 
     while (alIsSource(src->id)) {
         seal_src_state_t state;
-        err = seal_get_src_state(src, &state);
-        if (err != SEAL_OK || state != SEAL_PLAYING)
-            break;
+
+        /* Check source state before checking if interrupted by caller. */
+        if ((err = seal_get_src_state(src, &state)) != SEAL_OK)
+           break;
+        if (state != SEAL_PLAYING) {
+            /* Early stopping, most likely due to I/O load. Restart playing. */
+            if (src->early_stop) {
+                if ((err = change_state(src, alSourcePlay)) != SEAL_OK)
+                    break;
+            } else {
+                break;
+            }
+        }
         if ((err = seal_update_src(src)) != SEAL_OK)
             break;
+
         _seal_sleep(50);
     }
 
@@ -231,6 +271,7 @@ seal_init_src(seal_src_t* src)
         src->queue_size = DEFAULT_QUEUE_SIZE;
         src->looping = 0;
         src->automatic = 1;
+        src->early_stop = 0;
     }
 
     return err;
@@ -273,11 +314,16 @@ seal_play_src(seal_src_t* src)
         /* Stream some data so plackback can start immediately. */
         if ((err = seal_update_src(src)) != SEAL_OK)
             return err;
+        /* Actually start playing. */
+        if ((err = change_state(src, alSourcePlay)) != SEAL_OK)
+            return err;
+        /* Create background updater for automatic sources. */
         if (src->automatic)
             src->updater = _seal_create_thread(update, src);
+        return SEAL_OK;
+    } else {
+        return change_state(src, alSourcePlay);
     }
-
-    return change_state(src, alSourcePlay);
 }
 
 seal_err_t
@@ -334,10 +380,14 @@ seal_detach_src_audio(seal_src_t* src)
     if ((err = change_state(src, alSourceRewind)) != SEAL_OK)
         return err;
 
-    if ((err = _seal_seti(src, AL_BUFFER, AL_NONE, alSourcei)) == SEAL_OK) {
-        src->buf = 0;
-        src->stream = 0;
-    }
+    if ((err = _seal_seti(src, AL_BUFFER, AL_NONE, alSourcei)) != SEAL_OK)
+        return err;
+
+    if ((err = on_preemptive_state_change(src)) != SEAL_OK)
+        return err;
+
+    src->buf = 0;
+    src->stream = 0;
 
     return err;
 }
@@ -505,6 +555,7 @@ start_streaming:
             goto start_streaming;
         /* End of stream reached. */
         } else {
+            src->early_stop = 0;
             break;
         }
     } /* for (;;) */

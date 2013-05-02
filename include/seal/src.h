@@ -457,6 +457,7 @@ struct seal_src_t
     size_t         queue_size   : 6;
     unsigned int   looping      : 1;
     unsigned int   automatic    : 1;
+    unsigned int   early_stop   : 1;
 };
 
 #endif /* _SEAL_SRC_H_ */
