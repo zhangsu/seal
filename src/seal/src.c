@@ -44,7 +44,7 @@ check_val_limit(int val, int lower_bound, int upper_bound)
 
 static
 seal_err_t
-operate(seal_src_t* src, void (*op)(unsigned int))
+change_state(seal_src_t* src, void (*op)(unsigned int))
 {
     op(src->id);
 
@@ -171,7 +171,7 @@ stop_then_clean_queue(seal_src_t* src)
 {
     seal_err_t err;
 
-    if ((err = operate(src, alSourceStop)) != SEAL_OK)
+    if ((err = change_state(src, alSourceStop)) != SEAL_OK)
         return err;
 
     return clean_queue(src);
@@ -200,7 +200,7 @@ empty_queue(seal_src_t* src)
     seal_err_t err;
 
     /* Need to be playing first in order to become stopped. */
-    if ((err = operate(src, alSourcePlay)) != SEAL_OK)
+    if ((err = change_state(src, alSourcePlay)) != SEAL_OK)
         return err;
 
     return stop_then_clean_queue(src);
@@ -277,14 +277,14 @@ seal_play_src(seal_src_t* src)
             src->updater = _seal_create_thread(update, src);
     }
 
-    return operate(src, alSourcePlay);
+    return change_state(src, alSourcePlay);
 }
 
 seal_err_t
 SEAL_API
 seal_pause_src(seal_src_t* src)
 {
-    return operate(src, alSourcePause);
+    return change_state(src, alSourcePause);
 }
 
 seal_err_t
@@ -293,7 +293,10 @@ seal_stop_src(seal_src_t* src)
 {
     seal_err_t err;
 
-    if ((err = operate(src, alSourceStop)) == SEAL_OK && src->stream != 0)
+    if ((err = change_state(src, alSourceStop)) != SEAL_OK)
+       return err;
+
+    if (src->stream != 0)
         /* Already stopped so all buffers are proccessed. */
         if ((err = clean_queue(src)) == SEAL_OK)
             err = seal_rewind_stream(src->stream);
@@ -315,7 +318,7 @@ seal_rewind_src(seal_src_t* src)
                 return err;
     }
 
-    return operate(src, alSourceRewind);
+    return change_state(src, alSourceRewind);
 }
 
 seal_err_t
@@ -328,7 +331,7 @@ seal_detach_src_audio(seal_src_t* src)
         return err;
 
     /* Sets the state to `SEAL_INITIAL' for consistency. */
-    if ((err = operate(src, alSourceRewind)) != SEAL_OK)
+    if ((err = change_state(src, alSourceRewind)) != SEAL_OK)
         return err;
 
     if ((err = _seal_seti(src, AL_BUFFER, AL_NONE, alSourcei)) == SEAL_OK) {
