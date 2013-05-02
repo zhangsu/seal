@@ -773,9 +773,13 @@ feed_efs(VALUE rsrc, VALUE rslot, VALUE rindex)
  *  call-seq:
  *      source.update   -> source
  *
- * Updates _source_. If _source_ is not up-to-date, the playback will end
- * before the end of the stream is reached. Does nothing if _source_ is not a
- * streaming source. Also does nothing if auto update is on.
+ * Updates a streaming _source_ by filling up the audio queue until it is full.
+ * If _source_ is not up-to-date, the playback will end before the end of the
+ * stream is reached. Does nothing if _source_ is not a streaming source. Also
+ * does nothing if auto update is on. When auto update is off, it is the
+ * caller's responsibility to handle cases where the consumer (OpenAL) consumes
+ * faster than the producer (the caller) produces and causes the playback to
+ * stop. Automatic sources automatically resume playing in such cases.
  */
 static
 VALUE update_src(VALUE rsrc)

@@ -169,7 +169,11 @@ seal_err_t SEAL_API seal_feed_efs(seal_src_t*, seal_efs_t*, int /*index*/);
  * Updates a streaming source by filling up the audio queue until it is full.
  * If the source is not up-to-date, the playback will end before the end of
  * the stream is reached. Does nothing if the passed-in source is not a
- * streaming source. Also does nothing if auto update is on.
+ * streaming source. Also does nothing if auto update is on. When auto update
+ * is off, it is the caller's responsibility to handle cases where the consumer
+ * (OpenAL) consumes faster than the producer (the caller) produces and causes
+ * the playback to stop. Automatic sources automatically resume playing in such
+ * cases.
  *
  * @param src       the source to update
  */
