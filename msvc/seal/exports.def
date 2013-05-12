@@ -13,6 +13,7 @@ seal_set_src_buf
 seal_set_src_stream
 seal_update_src
 seal_detach_src_audio
+seal_move_src
 seal_set_src_queue_size
 seal_set_src_chunk_size
 seal_set_src_pos
