@@ -4,6 +4,7 @@ module Seal
   class Listener
     include Helper
 
+    MOVE = SealAPI.new('move_listener', 'v')
     SET_GAIN = SealAPI.new('set_listener_gain', 'i')
     GET_GAIN = SealAPI.new('get_listener_gain', 'p')
     SET_POS = SealAPI.new('set_listener_pos', 'iii')
@@ -12,6 +13,11 @@ module Seal
     GET_VEL = SealAPI.new('get_listener_vel', 'ppp')
     SET_ORIEN = SealAPI.new('set_listener_orien', 'p')
     GET_ORIEN = SealAPI.new('get_listener_orien', 'p')
+
+    def move
+      check_error(MOVE.call)
+      self
+    end
 
     def gain=(gain)
       check_error(SET_GAIN[[gain].pack('f').unpack('i')[0]])

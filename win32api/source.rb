@@ -9,6 +9,7 @@ module Seal
     PLAY = SealAPI.new('play_src', 'p')
     STOP = SealAPI.new('stop_src', 'p')
     REWIND = SealAPI.new('rewind_src', 'p')
+    MOVE = SealAPI.new('move_src', 'p')
     PAUSE = SealAPI.new('pause_src', 'p')
     DETACH = SealAPI.new('detach_src_audio', 'p')
     SET_BUF = SealAPI.new('set_src_buf', 'pp')
@@ -57,6 +58,10 @@ module Seal
 
     def pause
       operate(PAUSE)
+    end
+
+    def move
+      operate(MOVE)
     end
 
     def buffer=(buffer)

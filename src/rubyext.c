@@ -1705,6 +1705,14 @@ get_listener()
     return rb_const_get(mSeal, rb_intern("LISTENER"));
 }
 
+/*
+ *  call-seq:
+ *      listener.move ->  listener
+ *
+ * Moves the listener (changes the position) based on the source velocity. This
+ * is a syntactic sugar for adding the velocity vector and position vector. See
+ * Source#move.
+ */
 static
 VALUE
 move_listener(VALUE rlistener)

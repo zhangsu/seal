@@ -36,6 +36,7 @@ seal_is_src_relative
 seal_is_src_looping
 seal_get_src_type
 seal_get_src_state
+seal_move_listener
 seal_set_listener_pos
 seal_set_listener_gain
 seal_set_listener_vel
