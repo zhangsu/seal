@@ -12,7 +12,7 @@ mpg123_dir = File.join root_dir, 'mpg123'
 mpg123_src_dir = File.join mpg123_dir, 'src'
 mpg123_lib_dir = File.join mpg123_src_dir, 'libmpg123', '.libs'
 
-$defs << '-DNDEBUG'
+$defs << '-DNDEBUG' << '-DMPG123_NO_LARGENAME'
 $LDFLAGS << ' -s'
 
 unless File.exists?(File.join(mpg123_src_dir, 'config.h'))
