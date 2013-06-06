@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name      = 'seal'
-  s.version   = '0.1.2'
+  s.version   = '0.1.3'
   s.summary   = 'An OpenAL-based 3D audio library'
   s.authors   = ['Su Zhang']
   s.email     = 'me@zhang.su'
