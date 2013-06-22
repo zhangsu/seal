@@ -174,6 +174,11 @@ CC=/usr/bin/gcc-4.2 cmake -DCMAKE_BUILD_TYPE=Release ..
 After OpenAL is installed, you can start building Seal. Seal will dynamically
 link OpenAL.
 
+Note that depending on where OpenAL's `make install` installs the actual
+shared library, you may need to add the lib path to `LD_LIBRARY_PATH` in
+order for Seal to find the shared `libopenal.so` file.
+
+
 ### Install as a Gem (in a sane environment)
 
 ```Bash
