@@ -6,13 +6,13 @@
 <title>
   File: README
   
-    &mdash; Documentation by YARD 0.8.3
+    &mdash; Documentation by YARD 0.8.6.1
   
 </title>
 
-  <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8" />
+  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
 
-  <link rel="stylesheet" href="css/common.css" type="text/css" media="screen" charset="utf-8" />
+  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
 
 <script type="text/javascript" charset="utf-8">
   hasFrames = window.top.frames.main ? true : false;
@@ -61,42 +61,56 @@
 
     <iframe id="search_frame"></iframe>
 
-    <div id="content"><div id='filecontents'><h1>Scorched End Audio Library</h1>
+    <div id="content"><div id='filecontents'>
+<h1 id="label-Scorched+End+Audio+Library">Scorched End Audio Library</h1>
 
 <p>Seal is a C library with Ruby binding for audio rendering and manipulation,
 such as direction and distance attenuation, the simulation of the Doppler
-effect and reverberation, in a 3D space. It is built on top of <a href="http://connect.creativelabs.com/openal/default.aspx">OpenAL</a>, adding support for
-audio streaming and audio formats like Ogg Vorbis, MPEG Audio and WAVE.</p>
+effect and reverberation, in a 3D space. It is built on top of <a
+href="http://connect.creativelabs.com/openal/default.aspx">OpenAL</a>.</p>
 
-<h2>Basic Use</h2>
+<h2 id="label-Why+Seal%3F+Why+not+Simply+Use+OpenAL%3F">Why Seal? Why not Simply Use OpenAL?</h2>
+<ol><li>
+<p>Seal has a Ruby binding and many syntactic sugars.</p>
+</li><li>
+<p>Seal supports audio formats like Ogg Vorbis, MPEG Audio and WAVE.</p>
+</li><li>
+<p>Seal abstracts automatic audio streaming (also preventing problems like
+discontinued stream due to I/O stress).</p>
+</li><li>
+<p>More stuff in the future…</p>
+</li></ol>
+
+<h2 id="label-Basic+Usage">Basic Usage</h2>
 
 <p>Initialize Seal:</p>
 
-<pre class="code ruby"><code><span class='const'>Seal</span><span class='period'>.</span><span class='id identifier rubyid_startup'>startup</span>
+<pre class="code ruby"><code class="ruby"><span class='const'>Seal</span><span class='period'>.</span><span class='id identifier rubyid_startup'>startup</span>
 
 <span class='id identifier rubyid_include'>include</span> <span class='const'>Seal</span>
 </code></pre>
 
-<p>Use a source object to represent a sound source, and attach an audio buffer:</p>
+<p>Use a source object to represent a sound source, and attach an audio
+buffer:</p>
 
-<pre class="code ruby"><code><span class='id identifier rubyid_source'>source</span> <span class='op'>=</span> <span class='const'>Source</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_source'>source</span> <span class='op'>=</span> <span class='const'>Source</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
 <span class='id identifier rubyid_source'>source</span><span class='period'>.</span><span class='id identifier rubyid_buffer'>buffer</span> <span class='op'>=</span> <span class='const'>Buffer</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>audio.ogg</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
 </code></pre>
 
 <p>Change the position of the source:</p>
 
-<pre class="code ruby"><code><span class='id identifier rubyid_source'>source</span><span class='period'>.</span><span class='id identifier rubyid_position'>position</span> <span class='op'>=</span> <span class='int'>3</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='op'>-</span><span class='int'>4</span>
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_source'>source</span><span class='period'>.</span><span class='id identifier rubyid_position'>position</span> <span class='op'>=</span> <span class='int'>3</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='op'>-</span><span class='int'>4</span>
 </code></pre>
 
 <p>Or change the position of the source based on velocity:</p>
 
-<pre class="code ruby"><code><span class='id identifier rubyid_source'>source</span><span class='period'>.</span><span class='id identifier rubyid_velocity'>velocity</span> <span class='op'>=</span> <span class='int'>1</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='op'>-</span><span class='int'>1</span>
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_source'>source</span><span class='period'>.</span><span class='id identifier rubyid_velocity'>velocity</span> <span class='op'>=</span> <span class='int'>1</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='op'>-</span><span class='int'>1</span>
 <span class='id identifier rubyid_source'>source</span><span class='period'>.</span><span class='id identifier rubyid_move'>move</span> <span class='comment'># automatically add the velocity vector to the position vector
 </span></code></pre>
 
 <p>Change the position of the listener (a singleton of Seal::Listener):</p>
 
-<pre class="code ruby"><code><span class='const'>Seal</span><span class='period'>.</span><span class='id identifier rubyid_listener'>listener</span><span class='period'>.</span><span class='id identifier rubyid_position'>position</span> <span class='op'>=</span> <span class='op'>-</span><span class='int'>1</span><span class='comma'>,</span> <span class='op'>-</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>0</span>
+<pre class="code ruby"><code class="ruby"><span class='const'>Seal</span><span class='period'>.</span><span class='id identifier rubyid_listener'>listener</span><span class='period'>.</span><span class='id identifier rubyid_position'>position</span> <span class='op'>=</span> <span class='op'>-</span><span class='int'>1</span><span class='comma'>,</span> <span class='op'>-</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>0</span>
 <span class='comment'># ...
 </span><span class='const'>Seal</span><span class='period'>.</span><span class='id identifier rubyid_listener'>listener</span><span class='period'>.</span><span class='id identifier rubyid_velocity'>velocity</span> <span class='op'>=</span> <span class='int'>3</span><span class='comma'>,</span> <span class='int'>1</span><span class='comma'>,</span> <span class='op'>-</span><span class='int'>1</span>
 <span class='id identifier rubyid_seal'>seal</span><span class='period'>.</span><span class='id identifier rubyid_listener'>listener</span><span class='period'>.</span><span class='id identifier rubyid_move'>move</span>
@@ -104,19 +118,19 @@ audio streaming and audio formats like Ogg Vorbis, MPEG Audio and WAVE.</p>
 
 <p>Play the source:</p>
 
-<pre class="code ruby"><code><span class='id identifier rubyid_source'>source</span><span class='period'>.</span><span class='id identifier rubyid_play'>play</span>
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_source'>source</span><span class='period'>.</span><span class='id identifier rubyid_play'>play</span>
 </code></pre>
 
-<p>In case of massive audio resource, use of buffer will eat all the memory, so
-we can use streams:</p>
+<p>In case of massive audio resource, use of buffer will eat all the memory,
+so we can use streams:</p>
 
-<pre class="code ruby"><code><span class='id identifier rubyid_source'>source</span><span class='period'>.</span><span class='id identifier rubyid_stream'>stream</span> <span class='op'>=</span> <span class='const'>Stream</span><span class='period'>.</span><span class='id identifier rubyid_open'>open</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>background_music.ogg</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_source'>source</span><span class='period'>.</span><span class='id identifier rubyid_stream'>stream</span> <span class='op'>=</span> <span class='const'>Stream</span><span class='period'>.</span><span class='id identifier rubyid_open'>open</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>background_music.ogg</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
 </code></pre>
 
-<p>Make sure to detach the audio from the source before switching from a buffer
-to a stream or vice-versa:</p>
+<p>Make sure to detach the audio from the source before switching from a
+buffer to a stream or vice-versa:</p>
 
-<pre class="code ruby"><code>source.buffer = ...
+<pre class="code ruby"><code class="ruby">source.buffer = ...
 
 # ...
 
@@ -131,7 +145,7 @@ source.buffer = ...
 
 <p>Apply a reverberation effect to the sound source:</p>
 
-<pre class="code ruby"><code><span class='comment'># Allocate an effect slot and associate a specific reverb object.
+<pre class="code ruby"><code class="ruby"><span class='comment'># Allocate an effect slot and associate a specific reverb object.
 </span><span class='comment'># Here we are using a predefined reverb effect. See doc for `Reverb::Preset`.
 </span><span class='id identifier rubyid_slot'>slot</span> <span class='op'>=</span> <span class='const'>EffectSlot</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='const'>Reverb</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='const'>Reverb</span><span class='op'>::</span><span class='const'>Preset</span><span class='op'>::</span><span class='const'>FOREST</span><span class='rparen'>)</span><span class='rparen'>)</span>
 <span class='comment'># Start feeding the slot.
@@ -140,23 +154,22 @@ source.buffer = ...
 
 <p>Uninitialize Seal:</p>
 
-<pre class="code ruby"><code><span class='id identifier rubyid_seal'>seal</span><span class='period'>.</span><span class='id identifier rubyid_cleanup'>cleanup</span>
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_seal'>seal</span><span class='period'>.</span><span class='id identifier rubyid_cleanup'>cleanup</span>
 </code></pre>
 
-<p>You can find detailed documentations in the header files under <code>include/seal</code>
-for each of the modules.</p>
+<p>You can find detailed documentations in the header files under
+<code>include/seal</code> for each of the modules.</p>
 
-<p>The C interface is very similar to the Ruby binding, except that some of the
-Seal objects are abbreviated (but still more verbose than Ruby in general):</p>
+<p>The C interface is very similar to the Ruby binding, except that some of
+the Seal objects are abbreviated (but still more verbose than Ruby in
+general):</p>
 
-<p>src -&gt; Source<br>
-buf -&gt; Buffer<br>
-rvb -&gt; Reverb<br>
-efs -&gt; EffectSlot</p>
+<p>src -&gt; Source<br> buf -&gt; Buffer<br> rvb -&gt; Reverb<br> efs -&gt;
+EffectSlot</p>
 
 <p>For example:</p>
 
-<pre class="code c"><code>seal_src_t src;
+<pre class="code ruby"><code class="ruby">seal_src_t src;
 seal_buf_t buf;
 
 seal_startup(0);
@@ -174,160 +187,172 @@ seal_destroy_src(&amp;src);
 seal_destroy_buf(&amp;buf);
 seal_destroy_efs(&amp;efs);
 seal_destroy_rvb(&amp;rvb);
-seal_cleanup();
-</code></pre>
+seal_cleanup();</code></pre>
 
-<p>For detailed documentation, refer to:<br>
-<a href="http://rubydoc.info/gems/seal">http://rubydoc.info/gems/seal</a><br>
-<a href="http://zhang.su/seal">zhang.su/seal</a>  </p>
+<p>For detailed documentation, refer to:<br> <a
+href="http://rubydoc.info/gems/seal">rubydoc.info/gems/seal</a> <a
+href="http://zhang.su/seal">zhang.su/seal</a></p>
 
-<h2>Platforms</h2>
+<h2 id="label-Platforms">Platforms</h2>
 
-<p>Linux, Windows and Mac OS X are officially tested and supported. Seal should
-run on all Unix-like operating systems where OpenAL, libogg, libvorbis and
-libmpg123 can run, but those platforms are never tested. The Makefiles are
-generated specifically for MSVC and GCC (MinGW or native Unix-like systems).</p>
+<p>Linux, Windows and Mac OS X are officially tested and supported. Seal
+should run on all Unix-like operating systems where OpenAL, libogg,
+libvorbis and libmpg123 can run, but those platforms are never tested. The
+Makefiles are generated specifically for MSVC and GCC (MinGW or native
+Unix-like systems).</p>
 
-<h2>Installation</h2>
+<h2 id="label-Installation">Installation</h2>
 
-<h3>Prerequisite</h3>
+<h3 id="label-Prerequisite">Prerequisite</h3>
 
-<p>Seal has native dependencies; you need to have OpenAL installed on your system.</p>
+<p>Seal has native dependencies; you need to have OpenAL installed on your
+system.</p>
 
 <p>You need <a href="http://www.cmake.org/">CMake</a> 2.4 or later to install
 <a href="http://kcat.strangesoft.net/openal.html">libopenal</a> as follows:</p>
 
-<pre class="code bash"><code>git clone git://repo.or.cz/openal-soft.git openal-soft
+<pre class="code ruby"><code class="ruby">git clone git://repo.or.cz/openal-soft.git openal-soft
 cd openal-soft/build
 cmake -DCMAKE_BUILD_TYPE=Release ..
 make
-make install
-</code></pre>
+make install</code></pre>
 
 <p>Note: There has been issues compiling OpenAL on some versions of OS X
 because LLVM is the default compiler. I haven&#39;t had luck compiling
 OpenAL with LLVM, so I explicitly specified GCC instead:</p>
 
-<pre class="code bash"><code>...
+<pre class="code ruby"><code class="ruby">...
 CC=/usr/bin/gcc-4.2 cmake -DCMAKE_BUILD_TYPE=Release ..
-...
-</code></pre>
+...</code></pre>
 
-<p>After OpenAL is installed, you can start building Seal. Seal will dynamically
-link OpenAL.</p>
+<p>After OpenAL is installed, you can start building Seal. Seal will
+dynamically link OpenAL.</p>
 
-<h3>Install as a Gem (in a sane environment)</h3>
+<p>Note that depending on where OpenAL&#39;s <code>make install</code>
+installs the actual shared library, you may need to add the lib path to
+<code>LD_LIBRARY_PATH</code> in order for Seal to find the shared
+<code>libopenal.so</code> file.</p>
 
-<pre class="code Bash"><code>gem install seal
-</code></pre>
+<h3 id="label-Install+as+a+Gem+%28in+a+sane+environment%29">Install as a Gem (in a sane environment)</h3>
 
-<h3>GCC + GNU Make + Unix-like operating systems + UN*X shell</h3>
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_gem'>gem</span> <span class='id identifier rubyid_install'>install</span> <span class='id identifier rubyid_seal'>seal</span></code></pre>
+
+<h3 id="label-GCC+%2B+GNU+Make+%2B+Unix-like+operating+systems+%2B+UN%2AX+shell">GCC + GNU Make + Unix-like operating systems + UN*X shell</h3>
 
 <p>From Seal directory:</p>
 
-<pre class="code bash"><code>cd make/unix-like
-make
-</code></pre>
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_cd'>cd</span> <span class='id identifier rubyid_make'>make</span><span class='op'>/</span><span class='id identifier rubyid_unix'>unix</span><span class='op'>-</span><span class='id identifier rubyid_like'>like</span>
+<span class='id identifier rubyid_make'>make</span></code></pre>
 
-<h3>GCC + GNU Make + MinGW + UN*X shell</h3>
+<h3 id="label-GCC+%2B+GNU+Make+%2B+MinGW+%2B+UN%2AX+shell">GCC + GNU Make + MinGW + UN*X shell</h3>
 
-<pre class="code bash"><code>cd make/win32
-make
-</code></pre>
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_cd'>cd</span> <span class='id identifier rubyid_make'>make</span><span class='op'>/</span><span class='id identifier rubyid_win32'>win32</span>
+<span class='id identifier rubyid_make'>make</span></code></pre>
 
-<h3>MSVC + Microsoft Visual Studio 2010</h3>
+<h3 id="label-MSVC+%2B+Microsoft+Visual+Studio+2010">MSVC + Microsoft Visual Studio 2010</h3>
 
 <p>use the solution and project files under /msvc.</p>
 
-<h3>Ruby extension</h3>
+<h3 id="label-Ruby+extension">Ruby extension</h3>
 
-<pre class="code bash"><code>bundle install
-rake compile
-</code></pre>
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_bundle'>bundle</span> <span class='id identifier rubyid_install'>install</span>
+<span class='id identifier rubyid_rake'>rake</span> <span class='id identifier rubyid_compile'>compile</span></code></pre>
 
-<p>The default output is <code>lib/seal.{so,dll,bundle}</code>, which is a dynamic library
-that could be required by Ruby at runtime.</p>
+<p>The default output is <code>lib/seal.{so,dll,bundle}</code>, which is a
+dynamic library that could be required by Ruby at runtime.</p>
 
-<h2>Demos</h2>
+<h2 id="label-Demos">Demos</h2>
 
-<p>Use <code>rake demo:&lt;demo_name&gt;</code> to run the demos under the <code>demo/</code> directory.</p>
+<p>Use <code>rake demo:&lt;demo_name&gt;</code> to run the demos under the
+<code>demo/</code> directory.</p>
+<ul><li>
+<p>playback</p>
 
-<ul>
-<li><p>playback</p>
+<p>Basic playback of audio.</p>
+</li><li>
+<p>control</p>
 
-<p>Basic playback of audio.</p></li>
-<li><p>control</p>
+<p>Various controls of audio like play, pause, stop.</p>
+</li><li>
+<p>pitch</p>
 
-<p>Various controls of audio like play, pause, stop.</p></li>
-<li><p>pitch</p>
+<p>Audio pitch shifting.</p>
+</li><li>
+<p>walk</p>
 
-<p>Audio pitch shifting.</p></li>
-<li><p>walk</p>
+<p>3D audio positioning (attenuation).</p>
+</li><li>
+<p>doppler</p>
 
-<p>3D audio positioning (attenuation).</p></li>
-<li><p>doppler</p>
-
-<p>Doppler Effect demonstration.</p></li>
-<li><p>reverb</p>
+<p>Doppler Effect demonstration.</p>
+</li><li>
+<p>reverb</p>
 
 <p>Audio reverberation. There are lots of built-in reverb presets, but this
-demo only simulates a large room in ice palace.</p></li>
-</ul>
+demo only simulates a large room in ice palace.</p>
+</li></ul>
 
-<h2>Running Tests</h2>
+<h2 id="label-Running+Tests">Running Tests</h2>
 
-<p>Tests are written on top of the Ruby binding, using <a href="https://github.com/rspec/rspec">RSpec</a>. You need to build Seal as a Ruby extension
-to run the tests:</p>
+<p>Tests are written on top of the Ruby binding, using <a
+href="https://github.com/rspec/rspec">RSpec</a>. You need to build Seal as
+a Ruby extension to run the tests:</p>
 
-<pre class="code Bash"><code>bundle install
-rake compile
-rspec
-</code></pre>
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_bundle'>bundle</span> <span class='id identifier rubyid_install'>install</span>
+<span class='id identifier rubyid_rake'>rake</span> <span class='id identifier rubyid_compile'>compile</span>
+<span class='id identifier rubyid_rspec'>rspec</span></code></pre>
 
-<h2>Thread Safety</h2>
+<h2 id="label-Thread+Safety">Thread Safety</h2>
 
 <p>Seal can be safely used in a multi-threaded environment so long as no Seal
 source, buffer or stream instance is accessed by different threads at the
-<em>same time</em> , which is similar to libvorbis&#39; thread-safety conditions
-described <a href="http://xiph.org/vorbis/doc/vorbisfile/threads.html">here</a>.</p>
+<em>same time</em> , which is similar to libvorbis&#39; thread-safety
+conditions described <a
+href="http://xiph.org/vorbis/doc/vorbisfile/threads.html">here</a>.</p>
 
-<p>Exceptions are the two functions <code>seal_startup</code> and <code>seal_cleanup</code>, which are
-<em>NOT</em> thread-safe. Refer to the documentation for these two functions for
-details.</p>
+<p>Exceptions are the two functions <code>seal_startup</code> and
+<code>seal_cleanup</code>, which are <em>NOT</em> thread-safe. Refer to the
+documentation for these two functions for details.</p>
 
-<h2>Character Encoding</h2>
+<h2 id="label-Character+Encoding">Character Encoding</h2>
 
-<p>UTF-8 should be used to encode the source code or at least the path strings so
-that Seal can properly input audio files using paths that contain multi-byte
-(Chinese, Japanese, etc.) characters.</p>
+<p>UTF-8 should be used to encode the source code or at least the path strings
+so that Seal can properly input audio files using paths that contain
+multi-byte (Chinese, Japanese, etc.) characters.</p>
 
-<h2>Etymology</h2>
+<h2 id="label-Etymology">Etymology</h2>
 
-<p>The phrase &quot;Scorched end&quot; (Chinese: 焦尾; Pinyin: Jiao Wei) is a direct
-translation of the name of a Guqin[1] existed in China in the second
-century CE. The name literally means that one end of the Qin is scorched.</p>
+<p>The phrase “Scorched end” (Chinese: 焦尾; Pinyin: Jiao Wei) is a direct
+translation of the name of a <a href="http://1">Guqin</a> existed in China
+in the second century CE. The name literally means that one end of the Qin
+is scorched.</p>
 
-<p>This Qin was found by Cai Yong.[2] According to the &quot;History of the Later
-Han&quot;,[3] Cai Yong once heard very loud sound of someone burning Firmiana
-simplex[4] wood for cooking and realized that it is a good material for
-making Qin soundboards. He then asked for the wood and cut it into a Qin,
-and the sound it produced was pleasant to hear as expected. However, one
-end of the wood had already been scorched by the time Cai Yong got it,
-hence the name &quot;Scorched end&quot;.</p>
+<p>This Qin was found by Cai <a href="http://2">Yong.</a> According to the
+“History of the Later <a href="http://3">Han”,</a> Cai Yong once heard very
+loud sound of someone burning Firmiana <a href="http://4">simplex</a> wood
+for cooking and realized that it is a good material for making Qin
+soundboards. He then asked for the wood and cut it into a Qin, and the
+sound it produced was pleasant to hear as expected. However, one end of the
+wood had already been scorched by the time Cai Yong got it, hence the name
+“Scorched end”.</p>
 
 <p>Seal was named so with the hope that it will be more useful than it seems
 and will be discovered by the right people who need the right tool.</p>
 
-<p>[1] <a href="http://en.wikipedia.org/wiki/Guqin">http://en.wikipedia.org/wiki/Guqin</a><br>
-[2] <a href="http://en.wikipedia.org/wiki/Cai_Yong">http://en.wikipedia.org/wiki/Cai_Yong</a><br>
-[3] <a href="http://en.wikipedia.org/wiki/History_of_the_Later_Han">http://en.wikipedia.org/wiki/History_of_the_Later_Han</a><br>
-[4] <a href="http://en.wikipedia.org/wiki/Firmiana_simplex">http://en.wikipedia.org/wiki/Firmiana_simplex</a>  </p>
+<p>[1] <a
+href="http://en.wikipedia.org/wiki/Guqin<br>“>en.wikipedia.org/wiki/Guqin<br></a>
+[2] <a
+href="http://en.wikipedia.org/wiki/Cai_Yong<br>”>en.wikipedia.org/wiki/Cai_Yong<br></a>
+[3] <a
+href="http://en.wikipedia.org/wiki/History_of_the_Later_Han<br>“>en.wikipedia.org/wiki/History_of_the_Later_Han<br></a>
+[4] <a
+href="http://en.wikipedia.org/wiki/Firmiana_simplex">en.wikipedia.org/wiki/Firmiana_simplex</a></p>
 </div></div>
 
     <div id="footer">
-  Generated on Thu Jan 24 23:25:20 2013 by
+  Generated on Fri Jun 21 23:24:08 2013 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.3 (ruby-1.9.3).
+  0.8.6.1 (ruby-2.0.0).
 </div>
 
   </body>

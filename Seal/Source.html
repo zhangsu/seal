@@ -6,13 +6,13 @@
 <title>
   Class: Seal::Source
   
-    &mdash; Documentation by YARD 0.8.3
+    &mdash; Documentation by YARD 0.8.6.1
   
 </title>
 
-  <link rel="stylesheet" href="../css/style.css" type="text/css" media="screen" charset="utf-8" />
+  <link rel="stylesheet" href="../css/style.css" type="text/css" charset="utf-8" />
 
-  <link rel="stylesheet" href="../css/common.css" type="text/css" media="screen" charset="utf-8" />
+  <link rel="stylesheet" href="../css/common.css" type="text/css" charset="utf-8" />
 
 <script type="text/javascript" charset="utf-8">
   hasFrames = window.top.frames.main ? true : false;
@@ -258,7 +258,7 @@ to play the audio contained in <em>buffer</em>.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Gets the size, in byte, of <em>source</em>'s streaming chunk.</p>
+<p>Gets the size, in byte, of <em>source</em>&#39;s streaming chunk.</p>
 </div></span>
   
 </li>
@@ -626,7 +626,7 @@ system.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Gets the size, in byte, of <em>source</em>'s streaming queue.</p>
+<p>Gets the size, in byte, of <em>source</em>&#39;s streaming queue.</p>
 </div></span>
   
 </li>
@@ -700,8 +700,8 @@ system.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Sets whether <em>source</em>'s position, velocity, cone and direction are
-all relative to the listener position.</p>
+<p>Sets whether <em>source</em>&#39;s position, velocity, cone and direction
+are all relative to the listener position.</p>
 </div></span>
   
 </li>
@@ -871,7 +871,8 @@ memory at once.</p>
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Updates <em>source</em>.</p>
+<p>Updates a streaming <em>source</em> by filling up the audio queue until it
+is full.</p>
 </div></span>
   
 </li>
@@ -1050,15 +1051,15 @@ true.</p>
       <pre class="lines">
 
 
-920
-921
-922
-923
 924
-925</pre>
+925
+926
+927
+928
+929</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 920</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 924</span>
 
 static
 VALUE
@@ -1124,15 +1125,15 @@ effect the next time the source gets played.</p>
       <pre class="lines">
 
 
-907
-908
-909
-910
 911
-912</pre>
+912
+913
+914
+915
+916</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 907</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 911</span>
 
 static
 VALUE
@@ -1318,8 +1319,8 @@ set_src_buf(VALUE rsrc, VALUE rbuf)
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Gets the size, in byte, of <em>source</em>'s streaming chunk. The default
-is 36864.</p>
+<p>Gets the size, in byte, of <em>source</em>&#39;s streaming chunk. The
+default is 36864.</p>
 
 
   </div>
@@ -1357,15 +1358,15 @@ is 36864.</p>
       <pre class="lines">
 
 
-1040
-1041
-1042
-1043
 1044
-1045</pre>
+1045
+1046
+1047
+1048
+1049</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1040</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1044</span>
 
 static
 VALUE
@@ -1433,15 +1434,15 @@ adjusted to the closest smaller multiple automatically.</p>
       <pre class="lines">
 
 
-1026
-1027
-1028
-1029
 1030
-1031</pre>
+1031
+1032
+1033
+1034
+1035</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1026</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1030</span>
 
 static
 VALUE
@@ -1547,15 +1548,15 @@ feed_efs(VALUE rsrc, VALUE rslot, VALUE rindex)
       <pre class="lines">
 
 
-891
-892
-893
-894
 895
-896</pre>
+896
+897
+898
+899
+900</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 891</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 895</span>
 
 static
 VALUE
@@ -1620,15 +1621,15 @@ attenuation of 6 dB; 0.0 means silence.</p>
       <pre class="lines">
 
 
-878
-879
-880
-881
 882
-883</pre>
+883
+884
+885
+886
+887</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 878</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 882</span>
 
 static
 VALUE
@@ -1695,15 +1696,15 @@ set_src_gain(VALUE rsrc, VALUE value)
       <pre class="lines">
 
 
-975
-976
-977
-978
 979
-980</pre>
+980
+981
+982
+983
+984</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 975</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 979</span>
 
 static
 VALUE
@@ -1768,15 +1769,15 @@ then State::Playing after it reaches the end of the last buffer.</p>
       <pre class="lines">
 
 
-962
-963
-964
-965
 966
-967</pre>
+967
+968
+969
+970
+971</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 962</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 966</span>
 
 static
 VALUE
@@ -1804,10 +1805,11 @@ set_src_looping(VALUE rsrc, VALUE value)
 <p>Moves the source (changes the position) based on the source velocity. This
 is a syntactic sugar for adding the velocity vector and position vector:</p>
 
-<pre class="code"><code><span class='comment'># Equivalent to `source.move`
+<pre class="code"><code class=""><span class='comment'># Equivalent to `source.move`
 </span><span class='id identifier rubyid_source'>source</span><span class='period'>.</span><span class='id identifier rubyid_position'>position</span> <span class='op'>=</span> <span class='id identifier rubyid_source'>source</span><span class='period'>.</span><span class='id identifier rubyid_position'>position</span><span class='period'>.</span><span class='id identifier rubyid_zip'>zip</span><span class='lparen'>(</span><span class='id identifier rubyid_source'>source</span><span class='period'>.</span><span class='id identifier rubyid_velocity'>velocity</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_a'>a</span><span class='comma'>,</span> <span class='id identifier rubyid_b'>b</span><span class='op'>|</span>
     <span class='id identifier rubyid_a'>a</span> <span class='op'>+</span> <span class='id identifier rubyid_b'>b</span>
-<span class='kw'>end</span></code></pre>
+<span class='kw'>end</span>
+</code></pre>
 
 
   </div>
@@ -1923,15 +1925,15 @@ pause_src(VALUE rsrc)
       <pre class="lines">
 
 
-863
-864
-865
-866
 867
-868</pre>
+868
+869
+870
+871
+872</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 863</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 867</span>
 
 static
 VALUE
@@ -1997,15 +1999,15 @@ range is (0.0, +inf.).</p>
       <pre class="lines">
 
 
-850
-851
-852
-853
 854
-855</pre>
+855
+856
+857
+858
+859</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 850</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 854</span>
 
 static
 VALUE
@@ -2123,15 +2125,15 @@ play_src(VALUE rsrc)
       <pre class="lines">
 
 
-806
-807
-808
-809
 810
-811</pre>
+811
+812
+813
+814
+815</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 806</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 810</span>
 
 static
 VALUE
@@ -2171,15 +2173,15 @@ system. Use of NaN and infinity is undefined.</p>
       <pre class="lines">
 
 
-793
-794
-795
-796
 797
-798</pre>
+798
+799
+800
+801
+802</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 793</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 797</span>
 
 static
 VALUE
@@ -2204,8 +2206,8 @@ set_src_pos(VALUE rsrc, VALUE value)
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Gets the size, in byte, of <em>source</em>'s streaming queue. The default
-is 3.</p>
+<p>Gets the size, in byte, of <em>source</em>&#39;s streaming queue. The
+default is 3.</p>
 
 
   </div>
@@ -2243,15 +2245,15 @@ is 3.</p>
       <pre class="lines">
 
 
-1008
-1009
-1010
-1011
 1012
-1013</pre>
+1013
+1014
+1015
+1016
+1017</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1008</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1012</span>
 
 static
 VALUE
@@ -2321,15 +2323,15 @@ the interval [2, 63].</p>
       <pre class="lines">
 
 
-995
-996
-997
-998
 999
-1000</pre>
+1000
+1001
+1002
+1003
+1004</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 995</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 999</span>
 
 static
 VALUE
@@ -2396,15 +2398,15 @@ set_src_queue_size(VALUE rsrc, VALUE value)
       <pre class="lines">
 
 
-947
-948
-949
-950
 951
-952</pre>
+952
+953
+954
+955
+956</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 947</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 951</span>
 
 static
 VALUE
@@ -2429,8 +2431,8 @@ is_src_relative(VALUE rsrc)
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Sets whether <em>source</em>'s position, velocity, cone and direction are
-all relative to the listener position.</p>
+<p>Sets whether <em>source</em>&#39;s position, velocity, cone and direction
+are all relative to the listener position.</p>
 
 
   </div>
@@ -2468,15 +2470,15 @@ all relative to the listener position.</p>
       <pre class="lines">
 
 
-934
-935
-936
-937
 938
-939</pre>
+939
+940
+941
+942
+943</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 934</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 938</span>
 
 static
 VALUE
@@ -2569,10 +2571,6 @@ rewind_src(VALUE rsrc)
       <pre class="lines">
 
 
-1075
-1076
-1077
-1078
 1079
 1080
 1081
@@ -2586,10 +2584,14 @@ rewind_src(VALUE rsrc)
 1089
 1090
 1091
-1092</pre>
+1092
+1093
+1094
+1095
+1096</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1075</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1079</span>
 
 static
 VALUE
@@ -2826,10 +2828,6 @@ set_src_stream(VALUE rsrc, VALUE rstream)
       <pre class="lines">
 
 
-1052
-1053
-1054
-1055
 1056
 1057
 1058
@@ -2841,10 +2839,14 @@ set_src_stream(VALUE rsrc, VALUE rstream)
 1064
 1065
 1066
-1067</pre>
+1067
+1068
+1069
+1070
+1071</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1052</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1056</span>
 
 static
 VALUE
@@ -2879,10 +2881,14 @@ get_src_type(VALUE rsrc)
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Updates <em>source</em>. If <em>source</em> is not up-to-date, the playback
-will end before the end of the stream is reached. Does nothing if
-<em>source</em> is not a streaming source. Also does nothing if auto update
-is on.</p>
+<p>Updates a streaming <em>source</em> by filling up the audio queue until it
+is full. If <em>source</em> is not up-to-date, the playback will end before
+the end of the stream is reached. Does nothing if <em>source</em> is not a
+streaming source. Also does nothing if auto update is on. When auto update
+is off, it is the caller&#39;s responsibility to handle cases where the
+consumer (OpenAL) consumes faster than the producer (the caller) produces
+and causes the playback to stop. Automatic sources automatically resume
+playing in such cases.</p>
 
 
   </div>
@@ -2898,14 +2904,14 @@ is on.</p>
       <pre class="lines">
 
 
-780
-781
-782
-783
-784</pre>
+784
+785
+786
+787
+788</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 780</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 784</span>
 
 static
 VALUE update_src(VALUE rsrc)
@@ -2967,15 +2973,15 @@ VALUE update_src(VALUE rsrc)
       <pre class="lines">
 
 
-834
-835
-836
-837
 838
-839</pre>
+839
+840
+841
+842
+843</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 834</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 838</span>
 
 static
 VALUE
@@ -3016,15 +3022,15 @@ factor used during the Doppler effect emulation. Use of NaN is undefined.</p>
       <pre class="lines">
 
 
-821
-822
-823
-824
 825
-826</pre>
+826
+827
+828
+829
+830</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 821</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 825</span>
 
 static
 VALUE
@@ -3042,9 +3048,9 @@ set_src_vel(VALUE rsrc, VALUE value)
 </div>
 
     <div id="footer">
-  Generated on Thu Jan 24 23:25:21 2013 by
+  Generated on Fri Jun 21 23:24:09 2013 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.3 (ruby-1.9.3).
+  0.8.6.1 (ruby-2.0.0).
 </div>
 
   </body>

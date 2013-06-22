@@ -6,13 +6,13 @@
 <title>
   Class: Seal::Reverb
   
-    &mdash; Documentation by YARD 0.8.3
+    &mdash; Documentation by YARD 0.8.6.1
   
 </title>
 
-  <link rel="stylesheet" href="../css/style.css" type="text/css" media="screen" charset="utf-8" />
+  <link rel="stylesheet" href="../css/style.css" type="text/css" charset="utf-8" />
 
-  <link rel="stylesheet" href="../css/common.css" type="text/css" media="screen" charset="utf-8" />
+  <link rel="stylesheet" href="../css/common.css" type="text/css" charset="utf-8" />
 
 <script type="text/javascript" charset="utf-8">
   hasFrames = window.top.frames.main ? true : false;
@@ -435,7 +435,7 @@ dB (no reflected sound at all) to 0 dB (the maximum amount).</p>
   
     <span class="summary_desc"><div class='inline'>
 <p>Sets whether the high-frequency decay time automatically stays below a
-limit value that's derived from the setting of the air absorption high-
+limit value that&#39;s derived from the setting of the air absorption high-
 frequency gain.</p>
 </div></span>
   
@@ -878,10 +878,6 @@ error if it is exceeding the limit.</p>
       <pre class="lines">
 
 
-1123
-1124
-1125
-1126
 1127
 1128
 1129
@@ -893,10 +889,14 @@ error if it is exceeding the limit.</p>
 1135
 1136
 1137
-1138</pre>
+1138
+1139
+1140
+1141
+1142</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1123</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1127</span>
 
 static
 VALUE
@@ -955,15 +955,15 @@ is 0.994.</p>
       <pre class="lines">
 
 
-1480
-1481
-1482
-1483
 1484
-1485</pre>
+1485
+1486
+1487
+1488
+1489</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1480</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1484</span>
 
 static
 VALUE
@@ -1012,15 +1012,15 @@ the value simulates a less absorbent medium (dry desert air, for example).</p>
       <pre class="lines">
 
 
-1466
-1467
-1468
-1469
 1470
-1471</pre>
+1471
+1472
+1473
+1474
+1475</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1466</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1470</span>
 
 static
 VALUE
@@ -1061,15 +1061,15 @@ set_rvb_air_absorbtion_hfgain(VALUE rrvb, VALUE value)
       <pre class="lines">
 
 
-1281
-1282
-1283
-1284
 1285
-1286</pre>
+1286
+1287
+1288
+1289
+1290</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1281</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1285</span>
 
 static
 VALUE
@@ -1112,15 +1112,15 @@ very live surfaces.</p>
       <pre class="lines">
 
 
-1268
-1269
-1270
-1271
 1272
-1273</pre>
+1273
+1274
+1275
+1276
+1277</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1268</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1272</span>
 
 static
 VALUE
@@ -1161,15 +1161,15 @@ set_rvb_decay_time(VALUE rrvb, VALUE value)
       <pre class="lines">
 
 
-1161
-1162
-1163
-1164
 1165
-1166</pre>
+1166
+1167
+1168
+1169
+1170</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1161</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1165</span>
 
 static
 VALUE
@@ -1212,15 +1212,15 @@ the more coloration.</p>
       <pre class="lines">
 
 
-1148
-1149
-1150
-1151
 1152
-1153</pre>
+1153
+1154
+1155
+1156
+1157</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1148</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1152</span>
 
 static
 VALUE
@@ -1261,15 +1261,15 @@ set_rvb_density(VALUE rrvb, VALUE value)
       <pre class="lines">
 
 
-1191
-1192
-1193
-1194
 1195
-1196</pre>
+1196
+1197
+1198
+1199
+1200</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1191</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1195</span>
 
 static
 VALUE
@@ -1296,7 +1296,7 @@ get_rvb_diffusion(VALUE rrvb)
     
 <p>Sets the diffusion of <em>reverb</em> in the interval [0.0, 1.0]. The
 diffusion controls the echo density in the reverberation decay. Reducing
-diffusion gives the reverberation a more "grainy" character that is
+diffusion gives the reverberation a more “grainy” character that is
 especially noticeable with percussive sound sources. If you set a diffusion
 value of 0.0, the later reverberation sounds like a succession of distinct
 echoes.</p>
@@ -1315,15 +1315,15 @@ echoes.</p>
       <pre class="lines">
 
 
-1178
-1179
-1180
-1181
 1182
-1183</pre>
+1183
+1184
+1185
+1186
+1187</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1178</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1182</span>
 
 static
 VALUE
@@ -1364,15 +1364,15 @@ set_rvb_diffusion(VALUE rrvb, VALUE value)
       <pre class="lines">
 
 
-1222
-1223
-1224
-1225
 1226
-1227</pre>
+1227
+1228
+1229
+1230
+1231</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1222</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1226</span>
 
 static
 VALUE
@@ -1418,15 +1418,15 @@ mix.</p>
       <pre class="lines">
 
 
-1209
-1210
-1211
-1212
 1213
-1214</pre>
+1214
+1215
+1216
+1217
+1218</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1209</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1213</span>
 
 static
 VALUE
@@ -1494,15 +1494,15 @@ default is true.</p>
       <pre class="lines">
 
 
-1561
-1562
-1563
-1564
 1565
-1566</pre>
+1566
+1567
+1568
+1569
+1570</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1561</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1565</span>
 
 static
 VALUE
@@ -1528,14 +1528,14 @@ is_rvb_hfdecay_limited(VALUE rrvb)
   <div class="discussion">
     
 <p>Sets whether the high-frequency decay time automatically stays below a
-limit value that's derived from the setting of the air absorption high-
+limit value that&#39;s derived from the setting of the air absorption high-
 frequency gain. This limit applies regardless of the setting of the decay
-high-frequency ratio, and the limit doesn't affect the value of decay
+high-frequency ratio, and the limit doesn&#39;t affect the value of decay
 high-frequency ratio. This limit, when on, maintains a natural sounding
 reverberation decay by allowing you to increase the value of decay time
 without the risk of getting an unnaturally long decay time at high
-frequencies. If this flag is set to false, high-frequency decay time isn't
-automatically limited.</p>
+frequencies. If this flag is set to false, high-frequency decay time
+isn&#39;t automatically limited.</p>
 
 
   </div>
@@ -1573,15 +1573,15 @@ automatically limited.</p>
       <pre class="lines">
 
 
-1547
-1548
-1549
-1550
 1551
-1552</pre>
+1552
+1553
+1554
+1555
+1556</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1547</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1551</span>
 
 static
 VALUE
@@ -1623,15 +1623,15 @@ set_rvb_hfdecay_limited(VALUE rrvb, VALUE value)
       <pre class="lines">
 
 
-1316
-1317
-1318
-1319
 1320
-1321</pre>
+1321
+1322
+1323
+1324
+1325</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1316</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1320</span>
 
 static
 VALUE
@@ -1660,10 +1660,10 @@ get_rvb_hfdecay_ratio(VALUE rrvb)
 time of <em>reverb</em> in the interval [0.1, 2.0]. It is the ratio of
 high-frequency decay time relative to the time set by decay Time. 1.0 means
 neutral: the decay time is equal for all frequencies. As this value
-increases above 1.0, the high-frequency decay time increases so it's longer
-than the decay time at low frequencies. You hear a more brilliant
+increases above 1.0, the high-frequency decay time increases so it&#39;s
+longer than the decay time at low frequencies. You hear a more brilliant
 reverberation with a longer decay at high frequencies. As this value
-decreases below 1.0, the high-frequency decay time decreases so it's
+decreases below 1.0, the high-frequency decay time decreases so it&#39;s
 shorter than the decay time of the low frequencies. You hear a more natural
 reverberation.</p>
 
@@ -1681,15 +1681,15 @@ reverberation.</p>
       <pre class="lines">
 
 
-1303
-1304
-1305
-1306
 1307
-1308</pre>
+1308
+1309
+1310
+1311
+1312</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1303</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1307</span>
 
 static
 VALUE
@@ -1730,15 +1730,15 @@ set_rvb_hfdecay_ratio(VALUE rrvb, VALUE value)
       <pre class="lines">
 
 
-1253
-1254
-1255
-1256
 1257
-1258</pre>
+1258
+1259
+1260
+1261
+1262</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1253</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1257</span>
 
 static
 VALUE
@@ -1784,15 +1784,15 @@ the reverb effect.</p>
       <pre class="lines">
 
 
-1240
-1241
-1242
-1243
 1244
-1245</pre>
+1245
+1246
+1247
+1248
+1249</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1240</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1244</span>
 
 static
 VALUE
@@ -1833,15 +1833,15 @@ set_rvb_hfgain(VALUE rrvb, VALUE value)
       <pre class="lines">
 
 
-1446
-1447
-1448
-1449
 1450
-1451</pre>
+1451
+1452
+1453
+1454
+1455</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1446</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1450</span>
 
 static
 VALUE
@@ -1886,15 +1886,15 @@ larger room.</p>
       <pre class="lines">
 
 
-1433
-1434
-1435
-1436
 1437
-1438</pre>
+1438
+1439
+1440
+1441
+1442</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1433</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1437</span>
 
 static
 VALUE
@@ -1935,15 +1935,15 @@ set_rvb_late_delay(VALUE rrvb, VALUE value)
       <pre class="lines">
 
 
-1417
-1418
-1419
-1420
 1421
-1422</pre>
+1422
+1423
+1424
+1425
+1426</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1417</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1421</span>
 
 static
 VALUE
@@ -1991,15 +1991,15 @@ constant.</p>
       <pre class="lines">
 
 
-1404
-1405
-1406
-1407
 1408
-1409</pre>
+1409
+1410
+1411
+1412
+1413</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1404</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1408</span>
 
 static
 VALUE
@@ -2040,20 +2040,20 @@ set_rvb_late_gain(VALUE rrvb, VALUE value)
       <pre class="lines">
 
 
-1100
-1101
-1102
-1103
 1104
 1105
 1106
 1107
 1108
 1109
-1110</pre>
+1110
+1111
+1112
+1113
+1114</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1100</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1104</span>
 
 static
 VALUE
@@ -2099,15 +2099,15 @@ load_rvb(VALUE rrvb, VALUE rpreset)
       <pre class="lines">
 
 
-1384
-1385
-1386
-1387
 1388
-1389</pre>
+1389
+1390
+1391
+1392
+1393</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1384</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1388</span>
 
 static
 VALUE
@@ -2152,15 +2152,15 @@ reflective surfaces and therefore control the perceived size of the room.</p>
       <pre class="lines">
 
 
-1371
-1372
-1373
-1374
 1375
-1376</pre>
+1376
+1377
+1378
+1379
+1380</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1371</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1375</span>
 
 static
 VALUE
@@ -2201,15 +2201,15 @@ set_rvb_reflections_delay(VALUE rrvb, VALUE value)
       <pre class="lines">
 
 
-1354
-1355
-1356
-1357
 1358
-1359</pre>
+1359
+1360
+1361
+1362
+1363</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1354</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1358</span>
 
 static
 VALUE
@@ -2262,15 +2262,15 @@ reflections.</p>
       <pre class="lines">
 
 
-1341
-1342
-1343
-1344
 1345
-1346</pre>
+1346
+1347
+1348
+1349
+1350</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1341</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1345</span>
 
 static
 VALUE
@@ -2311,15 +2311,15 @@ set_rvb_reflections_gain(VALUE rrvb, VALUE value)
       <pre class="lines">
 
 
-1526
-1527
-1528
-1529
 1530
-1531</pre>
+1531
+1532
+1533
+1534
+1535</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1526</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1530</span>
 
 static
 VALUE
@@ -2355,13 +2355,13 @@ equivalent to a scaling factor applied to the quantity specified by
 ((source listener distance) - (Reference Distance)). Reference Distance is
 an OpenAL source parameter that specifies the inner border for distance
 rolloff effects: if the source comes closer to the listener than the
-reference distance, the direct-path sound isn't increased as the source
+reference distance, the direct-path sound isn&#39;t increased as the source
 comes closer to the listener, and neither is the reflected sound.</p>
 
 <p>The default value of Room Rolloff Factor is 0.0 because, by default, the
 reverb effect naturally manages the reflected sound level automatically for
 each sound source to simulate the natural rolloff of reflected sound vs.
-distance in typical rooms. (Note that this isn't the case if the source
+distance in typical rooms. (Note that this isn&#39;t the case if the source
 property @TODO is set to false.) You can use this value as an option to
 automatic control so you can exaggerate or replace the default
 automatically-controlled rolloff.</p>
@@ -2380,15 +2380,15 @@ automatically-controlled rolloff.</p>
       <pre class="lines">
 
 
-1513
-1514
-1515
-1516
 1517
-1518</pre>
+1518
+1519
+1520
+1521
+1522</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1513</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1517</span>
 
 static
 VALUE
@@ -2406,9 +2406,9 @@ set_rvb_room_rolloff_factor(VALUE rrvb, VALUE value)
 </div>
 
     <div id="footer">
-  Generated on Thu Jan 24 23:25:21 2013 by
+  Generated on Fri Jun 21 23:24:09 2013 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.3 (ruby-1.9.3).
+  0.8.6.1 (ruby-2.0.0).
 </div>
 
   </body>

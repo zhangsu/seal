@@ -6,13 +6,13 @@
 <title>
   Module: Seal
   
-    &mdash; Documentation by YARD 0.8.3
+    &mdash; Documentation by YARD 0.8.6.1
   
 </title>
 
-  <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8" />
+  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
 
-  <link rel="stylesheet" href="css/common.css" type="text/css" media="screen" charset="utf-8" />
+  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
 
 <script type="text/javascript" charset="utf-8">
   hasFrames = window.top.frames.main ? true : false;
@@ -372,15 +372,15 @@ cleanup()
       <pre class="lines">
 
 
-1697
-1698
-1699
-1700
 1701
-1702</pre>
+1702
+1703
+1704
+1705
+1706</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1697</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1701</span>
 
 static
 VALUE
@@ -482,8 +482,9 @@ per_source_effect_limit()
     
 <p>Initializes Seal by specifying the device name <em>str</em>. This function
 is not re-entrant nor thread-safe and should be called only once per Seal
-session. Match a call to <tt>seal_startup</tt> with a call to
-<tt>seal_cleanup</tt> and never call <tt>seal_starup</tt> twice in a row.</p>
+session. Match a call to <code>seal_startup</code> with a call to
+<code>seal_cleanup</code> and never call <code>seal_starup</code> twice in
+a row.</p>
 
 
   </div>
@@ -596,9 +597,9 @@ startup(int argc, VALUE* argv)
 </div>
 
     <div id="footer">
-  Generated on Thu Jan 24 23:25:20 2013 by
+  Generated on Fri Jun 21 23:24:08 2013 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.3 (ruby-1.9.3).
+  0.8.6.1 (ruby-2.0.0).
 </div>
 
   </body>

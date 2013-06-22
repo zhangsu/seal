@@ -6,13 +6,13 @@
 <title>
   Class: Seal::Listener
   
-    &mdash; Documentation by YARD 0.8.3
+    &mdash; Documentation by YARD 0.8.6.1
   
 </title>
 
-  <link rel="stylesheet" href="../css/style.css" type="text/css" media="screen" charset="utf-8" />
+  <link rel="stylesheet" href="../css/style.css" type="text/css" charset="utf-8" />
 
-  <link rel="stylesheet" href="../css/common.css" type="text/css" media="screen" charset="utf-8" />
+  <link rel="stylesheet" href="../css/common.css" type="text/css" charset="utf-8" />
 
 <script type="text/javascript" charset="utf-8">
   hasFrames = window.top.frames.main ? true : false;
@@ -106,7 +106,7 @@
     
 <p>Interfaces for manipulating the listener singleton object. The listener
 object abstractly represents the main object in a sound application which
-"hears" all the sound. For example, the listener object can be used to
+“hears” all the sound. For example, the listener object can be used to
 represent the main character moving around on the map in a role-playing
 game. The properties of the listener (position, velocity, etc.) combined
 with those of the existing sources determine how the sound should be
@@ -199,7 +199,9 @@ to all the sources.</p>
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Moves the listener (changes the position) based on the source velocity.</p>
+</div></span>
   
 </li>
 
@@ -387,15 +389,15 @@ system.</p>
       <pre class="lines">
 
 
-1734
-1735
-1736
-1737
-1738
-1739</pre>
+1746
+1747
+1748
+1749
+1750
+1751</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1734</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1746</span>
 
 static
 VALUE
@@ -460,15 +462,15 @@ attenuation of 6 dB; 0.0 means silence. The valid range is [0.0, +inf.).</p>
       <pre class="lines">
 
 
-1721
-1722
-1723
-1724
-1725
-1726</pre>
+1733
+1734
+1735
+1736
+1737
+1738</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1721</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1733</span>
 
 static
 VALUE
@@ -490,23 +492,38 @@ set_listener_gain(VALUE rlistener, VALUE value)
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Moves the listener (changes the position) based on the source velocity.
+This is a syntactic sugar for adding the velocity vector and position
+vector. See Source#move.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  
+
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-1704
-1705
-1706
-1707
-1708
-1709
-1710
-1711</pre>
+1716
+1717
+1718
+1719
+1720
+1721
+1722
+1723</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1704</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1716</span>
 
 static
 VALUE
@@ -538,12 +555,12 @@ move_listener(VALUE rlistener)
 
 <p>Examples:</p>
 
-<pre class="code"><code><span class='comment'># at references the `at' vector [flt, flt, flt]
-</span><span class='comment'># up references the `up' vector [flt, flt, flt]
+<pre class="code"><code class=""><span class='comment'># at references the `at&#39; vector [flt, flt, flt]
+</span><span class='comment'># up references the `up&#39; vector [flt, flt, flt]
 </span><span class='id identifier rubyid_at'>at</span><span class='comma'>,</span> <span class='id identifier rubyid_up'>up</span> <span class='op'>=</span> <span class='const'>Seal</span><span class='period'>.</span><span class='id identifier rubyid_listener'>listener</span><span class='period'>.</span><span class='id identifier rubyid_orientation'>orientation</span>
-<span class='comment'># at_x references the x component of the `at' vector
+<span class='comment'># at_x references the x component of the `at&#39; vector
 </span><span class='comment'># ...
-</span><span class='comment'># up_z references the z component of the `up' vector
+</span><span class='comment'># up_z references the z component of the `up&#39; vector
 </span><span class='lparen'>(</span><span class='id identifier rubyid_at_x'>at_x</span><span class='comma'>,</span> <span class='id identifier rubyid_at_y'>at_y</span><span class='comma'>,</span> <span class='id identifier rubyid_ay_z'>ay_z</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='lparen'>(</span><span class='id identifier rubyid_up_x'>up_x</span><span class='comma'>,</span> <span class='id identifier rubyid_up_y'>up_y</span><span class='comma'>,</span> <span class='id identifier rubyid_up_z'>up_z</span><span class='rparen'>)</span> <span class='op'>=</span> <span class='const'>Seal</span><span class='period'>.</span><span class='id identifier rubyid_listener'>listener</span><span class='period'>.</span><span class='id identifier rubyid_orientation'>orientation</span></code></pre>
 
 
@@ -582,24 +599,24 @@ move_listener(VALUE rlistener)
       <pre class="lines">
 
 
-1839
-1840
-1841
-1842
-1843
-1844
-1845
-1846
-1847
-1848
-1849
-1850
 1851
 1852
-1853</pre>
+1853
+1854
+1855
+1856
+1857
+1858
+1859
+1860
+1861
+1862
+1863
+1864
+1865</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1839</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1851</span>
 
 static
 VALUE
@@ -638,11 +655,12 @@ get_listener_orien(VALUE rlistener)
   <div class="discussion">
     
 <p>Sets the orientation of the listener. The argument must be a pair of
-3-tuple consisting of an 'at' vector and an 'up' vector, where the 'at'
-vector represents the 'forward' direction of the listener and the 'up'
-vector represents the 'up' direction for the listener. These two vectors
-must be linearly independent, must not be NaN and must not be normalized.
-Otherwise, the operation is undefined.</p>
+3-tuple consisting of an &#39;at&#39; vector and an &#39;up&#39; vector,
+where the &#39;at&#39; vector represents the &#39;forward&#39; direction of
+the listener and the &#39;up&#39; vector represents the &#39;up&#39;
+direction for the listener. These two vectors must be linearly independent,
+must not be NaN and must not be normalized. Otherwise, the operation is
+undefined.</p>
 
 
   </div>
@@ -656,22 +674,22 @@ Otherwise, the operation is undefined.</p>
       <pre class="lines">
 
 
-1809
-1810
-1811
-1812
-1813
-1814
-1815
-1816
-1817
-1818
-1819
-1820
-1821</pre>
+1821
+1822
+1823
+1824
+1825
+1826
+1827
+1828
+1829
+1830
+1831
+1832
+1833</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1809</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1821</span>
 
 static
 VALUE
@@ -741,15 +759,15 @@ set_listener_orien(VALUE rlistener, VALUE rarr)
       <pre class="lines">
 
 
-1761
-1762
-1763
-1764
-1765
-1766</pre>
+1773
+1774
+1775
+1776
+1777
+1778</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1761</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1773</span>
 
 static
 VALUE
@@ -813,15 +831,15 @@ system. Use of NaN and infinity is undefined.</p>
       <pre class="lines">
 
 
-1748
-1749
-1750
-1751
-1752
-1753</pre>
+1760
+1761
+1762
+1763
+1764
+1765</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1748</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1760</span>
 
 static
 VALUE
@@ -884,15 +902,15 @@ set_listener_pos(VALUE rlistener, VALUE value)
       <pre class="lines">
 
 
-1790
-1791
-1792
-1793
-1794
-1795</pre>
+1802
+1803
+1804
+1805
+1806
+1807</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1790</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1802</span>
 
 static
 VALUE
@@ -957,15 +975,15 @@ factor used during the Doppler effect emulation.</p>
       <pre class="lines">
 
 
-1776
-1777
-1778
-1779
-1780
-1781</pre>
+1788
+1789
+1790
+1791
+1792
+1793</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1776</span>
+      <pre class="code"><span class="info file"># File 'src/rubyext.c', line 1788</span>
 
 static
 VALUE
@@ -983,9 +1001,9 @@ set_listener_vel(VALUE rlistener, VALUE value)
 </div>
 
     <div id="footer">
-  Generated on Thu Jan 24 23:25:21 2013 by
+  Generated on Fri Jun 21 23:24:09 2013 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.8.3 (ruby-1.9.3).
+  0.8.6.1 (ruby-2.0.0).
 </div>
 
   </body>
