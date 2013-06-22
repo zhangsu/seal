@@ -3,10 +3,17 @@
 Seal is a C library with Ruby binding for audio rendering and manipulation,
 such as direction and distance attenuation, the simulation of the Doppler
 effect and reverberation, in a 3D space. It is built on top of [OpenAL]
-(http://connect.creativelabs.com/openal/default.aspx), adding support for
-audio streaming and audio formats like Ogg Vorbis, MPEG Audio and WAVE.
+(http://connect.creativelabs.com/openal/default.aspx).
 
-## Basic Use
+## Why Seal? Why not Simply Use OpenAL?
+
+0. Seal has a Ruby binding and many syntactic sugars.
+1. Seal supports audio formats like Ogg Vorbis, MPEG Audio and WAVE.
+2. Seal abstracts automatic audio streaming (also preventing problems like
+discontinued stream due to I/O stress).
+3. More stuff in the future...
+
+## Basic Usage
 
 Initialize Seal:
 
