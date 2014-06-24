@@ -7,7 +7,7 @@ describe Reverb do
     its(:diffusion) { should be_within(TOLERANCE).of 1.0 }
     its(:density) { should be_within(TOLERANCE).of 1.0 }
     its(:gain) { should be_within(TOLERANCE).of 0.32 }
-    its(:hfdecay_limited?) { should be_true }
+    its(:hfdecay_limited?) { should be_truthy }
     its(:hfdecay_ratio) { should be_within(TOLERANCE).of 0.83 }
     its(:hfgain) { should be_within(TOLERANCE).of 0.89 }
     its(:late_delay) { should be_within(TOLERANCE).of 0.011 }

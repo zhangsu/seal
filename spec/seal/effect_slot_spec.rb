@@ -4,7 +4,7 @@ describe EffectSlot do
   before(:each) { GC.start }
 
   describe 'by default' do
-    its(:auto?) { should be_true }
+    its(:auto?) { should be_truthy }
     its(:effect) { should be_nil }
     its(:gain) { should eq 1.0 }
   end

@@ -5,13 +5,13 @@ shared_examples 'the boolean attribute' do |reader_sym|
 
   it "'#{reader_sym}' can be a truthy or falsy" do
     subject.send writer_sym, true
-    subject.send(reader_sym).should be_true
+    subject.send(reader_sym).should be_truthy
     subject.send writer_sym, false
-    subject.send(reader_sym).should be_false
+    subject.send(reader_sym).should be_falsey
     subject.send writer_sym, Object.new
-    subject.send(reader_sym).should be_true
+    subject.send(reader_sym).should be_truthy
     subject.send writer_sym, nil
-    subject.send(reader_sym).should be_false
+    subject.send(reader_sym).should be_falsey
   end
 end
 

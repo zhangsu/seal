@@ -11,14 +11,14 @@ describe Source do
   it_behaves_like 'a movable object'
 
   describe 'by default' do
-    its(:auto) { should be_true }
+    its(:auto) { should be_truthy }
     its(:buffer) { should be_nil }
     its(:chunk_size) { should eq 36864 }
     its(:gain) { should be_within(TOLERANCE).of(1.0) }
-    its(:looping) { should be_false }
+    its(:looping) { should be_falsey }
     its(:pitch) { should be_within(TOLERANCE).of(1.0) }
     its(:queue_size) { should eq 3 }
-    its(:relative) { should be_false }
+    its(:relative) { should be_falsey }
     its(:state) { should be INITIAL }
     its(:stream) { should be_nil }
     its(:type) { should be UNDETERMINED }
@@ -222,31 +222,31 @@ describe Source do
 
   describe 'looping' do
     example 'as undetermined type' do
-      source.looping.should be_false
+      source.looping.should be_falsey
       source.looping = true
-      source.looping.should be_true
+      source.looping.should be_truthy
       source.looping = false
-      source.looping.should be_false
+      source.looping.should be_falsey
     end
 
     example 'as streaming type' do
       source.looping = true
       source.stream = stream
-      source.looping.should be_true
+      source.looping.should be_truthy
       source.looping = false
-      source.looping.should be_false
+      source.looping.should be_falsey
       source.looping = true
-      source.looping.should be_true
+      source.looping.should be_truthy
     end
 
     example 'as static type' do
       source.looping = true
       source.buffer = buffer
-      source.looping.should be_true
+      source.looping.should be_truthy
       source.looping = false
-      source.looping.should be_false
+      source.looping.should be_falsey
       source.looping = true
-      source.looping.should be_true
+      source.looping.should be_truthy
     end
 
     # This example depends on the length of the test audio file.
