@@ -1,3 +1,5 @@
+require 'rspec/its'
+
 module CustomMatchers
   class BeEachWithin < RSpec::Matchers::BuiltIn::BeWithin
     def matches?(target)

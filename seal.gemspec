@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
   s.requirements = ['libopenal', 'a sound card']
   s.add_development_dependency 'rake-compiler'
   s.add_development_dependency 'rspec', '~> 2'
+  s.add_development_dependency 'rspec-its'
   s.add_development_dependency 'guard-rspec'
   s.add_development_dependency 'yard'
   s.add_development_dependency 'rb-inotify'
