@@ -43,15 +43,15 @@ shared_examples 'the float attribute' do |reader_sym, interval|
 
     # Validates values within the bounds.
     l, u =
-    if lower == -Float::INFINITY and upper == Float::INFINITY
-      [-4096, 4096]
-    elsif lower == -Float::INFINITY
-      [upper - 4096, upper]
-    elsif upper == Float::INFINITY
-      [lower, lower + 4096]
-    else
-      [lower, upper]
-    end
+      if lower == -Float::INFINITY and upper == Float::INFINITY
+        [-4096, 4096]
+      elsif lower == -Float::INFINITY
+        [upper - 4096, upper]
+      elsif upper == Float::INFINITY
+        [lower, lower + 4096]
+      else
+        [lower, upper]
+      end
     [l + 0.01, (l + u) / 2.0, u - 0.01].each do |value|
       subject.send writer_sym, value
       subject.send(reader_sym).should be_within(TOLERANCE).of(value)
