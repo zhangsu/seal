@@ -5,13 +5,13 @@ shared_examples 'the boolean attribute' do |reader_sym|
 
   it "'#{reader_sym}' can be a truthy or falsy" do
     subject.send writer_sym, true
-    subject.send(reader_sym).should be_truthy
+    expect(subject.send(reader_sym)).to be_truthy
     subject.send writer_sym, false
-    subject.send(reader_sym).should be_falsey
+    expect(subject.send(reader_sym)).to be_falsey
     subject.send writer_sym, Object.new
-    subject.send(reader_sym).should be_truthy
+    expect(subject.send(reader_sym)).to be_truthy
     subject.send writer_sym, nil
-    subject.send(reader_sym).should be_falsey
+    expect(subject.send(reader_sym)).to be_falsey
   end
 end
 
@@ -37,7 +37,7 @@ shared_examples 'the float attribute' do |reader_sym, interval|
         expect { subject.send writer_sym, lower }.to raise_error error_pattern
       else
         subject.send writer_sym, lower
-        subject.send(reader_sym).should be_within(TOLERANCE).of lower
+        expect(subject.send(reader_sym)).to be_within(TOLERANCE).of lower
       end
     end
 
@@ -54,7 +54,7 @@ shared_examples 'the float attribute' do |reader_sym, interval|
       end
     [l + 0.01, (l + u) / 2.0, u - 0.01].each do |value|
       subject.send writer_sym, value
-      subject.send(reader_sym).should be_within(TOLERANCE).of(value)
+      expect(subject.send(reader_sym)).to be_within(TOLERANCE).of(value)
     end
 
     if upper != Float::INFINITY
@@ -63,7 +63,7 @@ shared_examples 'the float attribute' do |reader_sym, interval|
         expect { subject.send writer_sym, upper }.to raise_error error_pattern
       else
         subject.send writer_sym, upper
-        subject.send(reader_sym).should be_within(TOLERANCE).of upper
+        expect(subject.send(reader_sym)).to be_within(TOLERANCE).of upper
       end
 
       # Validates values greater than the upper bound.
