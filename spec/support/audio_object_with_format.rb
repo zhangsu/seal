@@ -4,16 +4,16 @@ shared_examples 'an audio object with format' do
 
   context 'read from the WAVE file' do
     subject { described_class.new(WAV_PATH) }
-    its(:bit_depth) { should eq 8 }
-    its(:channel_count) { should eq 1 }
-    its(:frequency) { should eq 11025 }
+    its(:bit_depth) { is_expected.to eq 8 }
+    its(:channel_count) { is_expected.to eq 1 }
+    its(:frequency) { is_expected.to eq 11025 }
   end
 
   context 'read from the Ogg Vorbis file' do
     subject { described_class.new(OV_PATH) }
-    its(:bit_depth) { should eq 16 }
-    its(:channel_count) { should eq 1 }
-    its(:frequency) { should eq 44100 }
+    its(:bit_depth) { is_expected.to eq 16 }
+    its(:channel_count) { is_expected.to eq 1 }
+    its(:frequency) { is_expected.to eq 44100 }
   end
 
   it 'fails reading audio if a wrong format is specified' do
