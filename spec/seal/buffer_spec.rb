@@ -6,12 +6,12 @@ describe Buffer do
   describe 'size after reading' do
     context 'from the WAVE file' do
       subject { Buffer.new(WAV_PATH) }
-      its(:size) { should eq 2250 }
+      its(:size) { is_expected.to eq 2250 }
     end
 
     context 'from the Ogg Vorbise file' do
       subject { Buffer.new(OV_PATH) }
-      its(:size) { should eq 85342 }
+      its(:size) { is_expected.to eq 85342 }
     end
   end
 
