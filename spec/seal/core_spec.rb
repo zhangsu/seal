@@ -25,17 +25,17 @@ describe Seal do
   end
 
   it 'has only one instance of Listener' do
-    Seal.listener.should be Seal.listener
-    Seal.listener.should be_a Listener
+    expect(Seal.listener).to be Seal.listener
+    expect(Seal.listener).to be_a Listener
     expect { Seal::Listener.new }.to raise_error NoMethodError
     expect { Seal::Listener.allocate }.to raise_error
   end
 
   it 'defines a limit on the number of effect slots per source' do
-    Seal.per_source_effect_limit.should be_an Integer
+    expect(Seal.per_source_effect_limit).to be_an Integer
   end
 
   it 'defines a version string' do
-    Seal::VERSION.should match /\d\.\d\.\d/
+    expect(Seal::VERSION).to match /\d\.\d\.\d/
   end
 end
