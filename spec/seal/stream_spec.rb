@@ -12,7 +12,7 @@ describe Stream do
   specify 'open is equivalent to new' do
     klass = described_class
     class << klass; alias unit_test_open new; end
-    klass.method(:open).should eq klass.method(:unit_test_open)
+    expect(klass.method(:open)).to eq klass.method(:unit_test_open)
     class << klass; remove_method :unit_test_open; end
   end
 
@@ -21,9 +21,9 @@ describe Stream do
       Stream.new(WAV_PATH).tap { |stream| stream.close }
     end
 
-    its(:bit_depth) { should eq 16 }
-    its(:channel_count) { should eq 1 }
-    its(:frequency) { should eq 0 }
+    its(:bit_depth) { is_expected.to eq 16 }
+    its(:channel_count) { is_expected.to eq 1 }
+    its(:frequency) { is_expected.to eq 0 }
   end
 
   example 'rewinding prevents source from stopping' do
@@ -32,7 +32,7 @@ describe Stream do
       sleep(0.1)
       source.stream.rewind
     end
-    source.state.should be PLAYING
+    expect(source.state).to be PLAYING
   end
 
   it 'can be closed even when used by sources' do
