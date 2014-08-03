@@ -2,19 +2,19 @@ require 'spec_helper'
 
 describe Reverb do
   describe 'by default' do
-    its(:air_absorbtion_hfgain) { should be_within(TOLERANCE).of 0.994 }
-    its(:decay_time) { should be_within(TOLERANCE).of 1.49 }
-    its(:diffusion) { should be_within(TOLERANCE).of 1.0 }
-    its(:density) { should be_within(TOLERANCE).of 1.0 }
-    its(:gain) { should be_within(TOLERANCE).of 0.32 }
-    its(:hfdecay_limited?) { should be_truthy }
-    its(:hfdecay_ratio) { should be_within(TOLERANCE).of 0.83 }
-    its(:hfgain) { should be_within(TOLERANCE).of 0.89 }
-    its(:late_delay) { should be_within(TOLERANCE).of 0.011 }
-    its(:late_gain) { should be_within(TOLERANCE).of 1.26 }
-    its(:reflections_delay) { should be_within(TOLERANCE).of 0.007 }
-    its(:reflections_gain) { should be_within(TOLERANCE).of 0.05 }
-    its(:room_rolloff_factor) { should be_within(TOLERANCE).of 0 }
+    its(:air_absorbtion_hfgain) { is_expected.to be_within(TOLERANCE).of 0.994 }
+    its(:decay_time) { is_expected.to be_within(TOLERANCE).of 1.49 }
+    its(:diffusion) { is_expected.to be_within(TOLERANCE).of 1.0 }
+    its(:density) { is_expected.to be_within(TOLERANCE).of 1.0 }
+    its(:gain) { is_expected.to be_within(TOLERANCE).of 0.32 }
+    its(:hfdecay_limited?) { is_expected.to be_truthy }
+    its(:hfdecay_ratio) { is_expected.to be_within(TOLERANCE).of 0.83 }
+    its(:hfgain) { is_expected.to be_within(TOLERANCE).of 0.89 }
+    its(:late_delay) { is_expected.to be_within(TOLERANCE).of 0.011 }
+    its(:late_gain) { is_expected.to be_within(TOLERANCE).of 1.26 }
+    its(:reflections_delay) { is_expected.to be_within(TOLERANCE).of 0.007 }
+    its(:reflections_gain) { is_expected.to be_within(TOLERANCE).of 0.05 }
+    its(:room_rolloff_factor) { is_expected.to be_within(TOLERANCE).of 0 }
   end
 
   it_validates 'the boolean attribute', :hfdecay_limited
