@@ -11,17 +11,17 @@ describe Source do
   it_behaves_like 'a movable object'
 
   describe 'by default' do
-    its(:auto) { should be_truthy }
-    its(:buffer) { should be_nil }
-    its(:chunk_size) { should eq 36864 }
-    its(:gain) { should be_within(TOLERANCE).of(1.0) }
-    its(:looping) { should be_falsey }
-    its(:pitch) { should be_within(TOLERANCE).of(1.0) }
-    its(:queue_size) { should eq 3 }
-    its(:relative) { should be_falsey }
-    its(:state) { should be INITIAL }
-    its(:stream) { should be_nil }
-    its(:type) { should be UNDETERMINED }
+    its(:auto) { is_expected.to be_truthy }
+    its(:buffer) { is_expected.to be_nil }
+    its(:chunk_size) { is_expected.to eq 36864 }
+    its(:gain) { is_expected.to be_within(TOLERANCE).of(1.0) }
+    its(:looping) { is_expected.to be_falsey }
+    its(:pitch) { is_expected.to be_within(TOLERANCE).of(1.0) }
+    its(:queue_size) { is_expected.to eq 3 }
+    its(:relative) { is_expected.to be_falsey }
+    its(:state) { is_expected.to be INITIAL }
+    its(:stream) { is_expected.to be_nil }
+    its(:type) { is_expected.to be UNDETERMINED }
   end
 
   it_validates 'the boolean attribute', :relative
@@ -36,14 +36,14 @@ describe Source do
     expect { source.queue_size = 0 }.to raise_error error_pattern
     expect { source.queue_size = 1 }.to raise_error error_pattern
     source.queue_size = 2
-    source.queue_size.should eq 2
+    expect(source.queue_size).to eq 2
     source.queue_size = 32
-    source.queue_size.should eq 32
+    expect(source.queue_size).to eq 32
     source.queue_size = 63
-    source.queue_size.should eq 63
+    expect(source.queue_size).to eq 63
     expect { source.queue_size = 64 }.to raise_error error_pattern
     expect { source.queue_size = 1203 }.to raise_error error_pattern
-    source.queue_size.should eq 63
+    expect(source.queue_size).to eq 63
   end
 
   it 'validates it has an auto-adjusting chunk size in [9216, 16773120]' do
@@ -52,18 +52,18 @@ describe Source do
     expect { source.chunk_size = 432 }.to raise_error error_pattern
     expect { source.chunk_size = 9215 }.to raise_error error_pattern
     source.chunk_size = 9216
-    source.chunk_size.should eq 9216
+    expect(source.chunk_size).to eq 9216
     # It should be automatically adjusted to a smaller multiple of 9216.
     source.chunk_size = 9217
-    source.chunk_size.should eq 9216
+    expect(source.chunk_size).to eq 9216
     source.chunk_size = 32768
-    source.chunk_size.should eq 27648
+    expect(source.chunk_size).to eq 27648
     source.chunk_size = 294912
-    source.chunk_size.should eq 294912
+    expect(source.chunk_size).to eq 294912
     source.chunk_size = 16773119
-    source.chunk_size.should eq 16763904
+    expect(source.chunk_size).to eq 16763904
     source.chunk_size = 16773120
-    source.chunk_size.should eq 16773120
+    expect(source.chunk_size).to eq 16773120
     expect { source.chunk_size = 16773121 }.to raise_error error_pattern
     expect { source.chunk_size = 234923428 }.to raise_error error_pattern
   end
@@ -205,7 +205,7 @@ describe Source do
     it 'continues in the background' do
       source.play
       sleep(0.5)
-      source.state.should be PLAYING
+      expect(source.state).to be PLAYING
     end
 
     it 'can be disabled (taking effect upon the next play call)' do
@@ -213,40 +213,40 @@ describe Source do
       source.auto = false
       sleep(0.5)
       # Not stopping streaming until the next play call.
-      source.state.should be PLAYING
+      expect(source.state).to be PLAYING
       source.play
       sleep(0.5)
-      source.state.should be STOPPED
+      expect(source.state).to be STOPPED
     end
   end
 
   describe 'looping' do
     example 'as undetermined type' do
-      source.looping.should be_falsey
+      expect(source.looping).to be_falsey
       source.looping = true
-      source.looping.should be_truthy
+      expect(source.looping).to be_truthy
       source.looping = false
-      source.looping.should be_falsey
+      expect(source.looping).to be_falsey
     end
 
     example 'as streaming type' do
       source.looping = true
       source.stream = stream
-      source.looping.should be_truthy
+      expect(source.looping).to be_truthy
       source.looping = false
-      source.looping.should be_falsey
+      expect(source.looping).to be_falsey
       source.looping = true
-      source.looping.should be_truthy
+      expect(source.looping).to be_truthy
     end
 
     example 'as static type' do
       source.looping = true
       source.buffer = buffer
-      source.looping.should be_truthy
+      expect(source.looping).to be_truthy
       source.looping = false
-      source.looping.should be_falsey
+      expect(source.looping).to be_falsey
       source.looping = true
-      source.looping.should be_truthy
+      expect(source.looping).to be_truthy
     end
 
     # This example depends on the length of the test audio file.
@@ -255,36 +255,36 @@ describe Source do
       source.pitch = 2
       source.play
       sleep(0.3)
-      source.state.should be STOPPED
+      expect(source.state).to be STOPPED
       source.looping = true
       source.play
       sleep(0.3)
-      source.state.should be PLAYING
+      expect(source.state).to be PLAYING
     end
   end
 
   describe 'type' do
     it 'should initially be undetermined' do
-      source.type.should be UNDETERMINED
+      expect(source.type).to be UNDETERMINED
     end
 
     it 'should be streaming if it has a stream' do
       source.stream = stream
-      source.type.should be STREAMING
+      expect(source.type).to be STREAMING
     end
 
     it 'should be static if it has a buffer' do
       source.buffer = buffer
-      source.type.should be STATIC
+      expect(source.type).to be STATIC
     end
 
     it 'should be undetermined after detaching' do
       source.stream = stream
       source.stream = nil
-      source.type.should be UNDETERMINED
+      expect(source.type).to be UNDETERMINED
       source.buffer = buffer
       source.buffer = nil
-      source.type.should be UNDETERMINED
+      expect(source.type).to be UNDETERMINED
     end
   end
 
@@ -294,89 +294,89 @@ describe Source do
     end
 
     example 'from initial state' do
-      source.state.should be INITIAL
+      expect(source.state).to be INITIAL
       source.stop
-      source.state.should be INITIAL
+      expect(source.state).to be INITIAL
       source.pause
-      source.state.should be INITIAL
+      expect(source.state).to be INITIAL
       source.rewind
-      source.state.should be INITIAL
+      expect(source.state).to be INITIAL
       source.play
-      source.state.should be PLAYING
+      expect(source.state).to be PLAYING
     end
 
     example 'from playing state' do
       source.play
-      source.state.should be PLAYING
+      expect(source.state).to be PLAYING
       source.rewind
-      source.state.should be INITIAL
+      expect(source.state).to be INITIAL
       source.play
       source.stop
-      source.state.should be STOPPED
+      expect(source.state).to be STOPPED
       source.play
       source.pause
-      source.state.should be PAUSED
+      expect(source.state).to be PAUSED
       source.play
       source.play
-      source.state.should be PLAYING
+      expect(source.state).to be PLAYING
     end
 
     example 'from paused state' do
       source.play
       source.pause
-      source.state.should be PAUSED
+      expect(source.state).to be PAUSED
       source.play
-      source.state.should be PLAYING
+      expect(source.state).to be PLAYING
       source.pause
       source.rewind
-      source.state.should be INITIAL
+      expect(source.state).to be INITIAL
       source.play
       source.pause
       source.stop
-      source.state.should be STOPPED
+      expect(source.state).to be STOPPED
     end
 
     example 'from stopped state' do
       source.play
       source.stop
-      source.state.should be STOPPED
+      expect(source.state).to be STOPPED
       source.pause
-      source.state.should be STOPPED
+      expect(source.state).to be STOPPED
       source.play
-      source.state.should be PLAYING
+      expect(source.state).to be PLAYING
       source.stop
       source.rewind
-      source.state.should be INITIAL
+      expect(source.state).to be INITIAL
     end
 
     context 'when detaching' do
       example 'from initial state' do
-        source.state.should be INITIAL
+        expect(source.state).to be INITIAL
         source.stream = nil
-        source.state.should be INITIAL
+        expect(source.state).to be INITIAL
       end
 
       example 'from playing state' do
         source.play
-        source.state.should be PLAYING
+        expect(source.state).to be PLAYING
         source.stream = nil
-        source.state.should be INITIAL
+        expect(source.state).to be INITIAL
       end
 
       example 'from paused state' do
         source.play
         source.pause
-        source.state.should be PAUSED
+        expect(source.state).to be PAUSED
         source.stream = nil
-        source.state.should be INITIAL
+        expect(source.state).to be INITIAL
       end
 
       example 'from stopped state' do
         source.play
         source.stop
-        source.state.should be STOPPED
+        expect(source.state).to be STOPPED
         source.stream = nil
-        source.state.should be INITIAL
+        expect(source.state).to be INITIAL
       end
     end
   end
