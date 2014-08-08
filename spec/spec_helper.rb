@@ -1,15 +1,5 @@
 require 'rspec/its'
 
-module Helpers
-  def with_motion(movable)
-    original_position = movable.position
-    original_velocity = movable.velocity
-    yield
-    movable.position = original_position
-    movable.velocity = original_velocity
-  end
-end
-
 Dir["./spec/support/**/*.rb"].each { |f| require f }
 require 'seal'
 include Seal
