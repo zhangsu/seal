@@ -15,9 +15,6 @@ RSpec.configure do |config|
     include CustomMatchers
     include Helpers, :include_helpers
 
-    alias_it_should_behave_like_to :it_validates, 'validates that'
-    alias_it_should_behave_like_to :it_defines, 'defines'
-
     before :all do
       Seal.startup
     end
