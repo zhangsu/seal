@@ -22,5 +22,7 @@ RSpec.configure do |config|
     after :all do
       Seal.cleanup
     end
+
+    expect_with(:rspec) { |c| c.syntax = :expect }
   end
 end
