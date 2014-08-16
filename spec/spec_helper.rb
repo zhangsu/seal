@@ -10,7 +10,6 @@ WAV_PATH = File.join FIXTURE_DIR, 'tone_up.wav'
 OV_PATH = File.join FIXTURE_DIR, 'heal.ogg'
 
 RSpec.configure do |config|
-
   config.instance_eval do
     include CustomMatchers
     include Helpers, :include_helpers
