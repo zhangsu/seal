@@ -3,13 +3,22 @@ require 'spec_helper'
 shared_examples 'the boolean attribute' do |reader_sym|
   writer_sym = reader_sym.to_writer
 
-  it "'#{reader_sym}' can be a truthy or falsy" do
+  it "'#{reader_sym}' can be true" do
     subject.send writer_sym, true
     expect(subject.send(reader_sym)).to be_truthy
+  end
+
+  it "'#{reader_sym}' can be false" do
     subject.send writer_sym, false
     expect(subject.send(reader_sym)).to be_falsey
+  end
+
+  it "'#{reader_sym}' can be truthy" do
     subject.send writer_sym, Object.new
     expect(subject.send(reader_sym)).to be_truthy
+  end
+
+  it "'#{reader_sym}' can be falsey" do
     subject.send writer_sym, nil
     expect(subject.send(reader_sym)).to be_falsey
   end
