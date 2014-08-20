@@ -33,8 +33,8 @@ shared_examples 'the float attribute' do |reader_sym, interval|
   lopen = $1 == '('
   uopen = $4 == ')'
   error_pattern = /Invalid parameter value/
-  specify "'#{reader_sym}' is in #$1#$2,#$3#$4" do
 
+  specify "'#{reader_sym}' is in #$1#$2,#$3#$4" do
     if lower != -Float::INFINITY
       # Validates values smaller than the lower bound.
       [lower - 4096, lower - 0.01].each do |value|
