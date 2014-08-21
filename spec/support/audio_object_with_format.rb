@@ -16,10 +16,13 @@ shared_examples 'an audio object with format' do
     its(:frequency) { is_expected.to eq 44100 }
   end
 
-  it 'fails reading audio if a wrong format is specified' do
+  it 'fails when reading WAVE with OV format specified' do
     expect do
       described_class.new(WAV_PATH, Format::OV)
     end.to raise_error /Ogg Vorbis/
+  end
+
+  it 'fails when reading OV with MPG format specified' do
     expect do
       described_class.new(OV_PATH, Format::MPG)
     end.to raise_error /MPEG/
