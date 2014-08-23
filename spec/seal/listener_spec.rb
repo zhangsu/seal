@@ -18,7 +18,7 @@ describe Listener do
     LISTENER.orientation = old_orientation
   end
 
-  it "validates the float attribute 'gain' is in [0, +inf.)" do
+  it "validates the bounded float attribute 'gain' is in [0, +inf.)" do
     old_gain = LISTENER.gain
     LISTENER.gain = 0.34767
     expect(LISTENER.gain).to be_within(TOLERANCE).of 0.34767

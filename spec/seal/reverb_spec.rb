@@ -18,18 +18,19 @@ describe Reverb do
   end
 
   it_validates 'the boolean attribute', :hfdecay_limited
-  it_validates 'the float attribute', :air_absorbtion_hfgain, '[0.892, 1]'
-  it_validates 'the float attribute', :decay_time, '[0.1, 20]'
-  it_validates 'the float attribute', :density, '[0, 1]'
-  it_validates 'the float attribute', :diffusion, '[0, 1]'
-  it_validates 'the float attribute', :gain, '[0, 1]'
-  it_validates 'the float attribute', :hfdecay_ratio, '[0.1, 2]'
-  it_validates 'the float attribute', :hfgain, '[0, 1]'
-  it_validates 'the float attribute', :late_delay, '[0, 0.1]'
-  it_validates 'the float attribute', :late_gain, '[0, 10]'
-  it_validates 'the float attribute', :reflections_delay, '[0, 0.3]'
-  it_validates 'the float attribute', :reflections_gain, '[0, 3.16]'
-  it_validates 'the float attribute', :room_rolloff_factor, '[0, 10]'
+  it_validates 'the bounded float attribute',
+               :air_absorbtion_hfgain, '[0.892, 1]'
+  it_validates 'the bounded float attribute', :decay_time, '[0.1, 20]'
+  it_validates 'the bounded float attribute', :density, '[0, 1]'
+  it_validates 'the bounded float attribute', :diffusion, '[0, 1]'
+  it_validates 'the bounded float attribute', :gain, '[0, 1]'
+  it_validates 'the bounded float attribute', :hfdecay_ratio, '[0.1, 2]'
+  it_validates 'the bounded float attribute', :hfgain, '[0, 1]'
+  it_validates 'the bounded float attribute', :late_delay, '[0, 0.1]'
+  it_validates 'the bounded float attribute', :late_gain, '[0, 10]'
+  it_validates 'the bounded float attribute', :reflections_delay, '[0, 0.3]'
+  it_validates 'the bounded float attribute', :reflections_gain, '[0, 3.16]'
+  it_validates 'the bounded float attribute', :room_rolloff_factor, '[0, 10]'
   it_defines 'boolean reader aliases', %i(hfdecay_limited)
 
   specify_preset_loading = -> mod do

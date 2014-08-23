@@ -24,7 +24,7 @@ shared_examples 'the boolean attribute' do |reader_sym|
   end
 end
 
-shared_examples 'the float attribute' do |reader_sym, interval|
+shared_examples 'the bounded float attribute' do |reader_sym, interval|
   writer_sym = reader_sym.to_writer
   interval =~ /(\[|\()\s*(.+?)\s*,\s*(.+?)\s*(\]|\))/
   lower = $2 == '-inf.' ? -Float::INFINITY : $2.to_f
