@@ -24,9 +24,11 @@ describe Seal do
     end
   end
 
-  it 'has only one instance of Listener' do
-    expect(Seal.listener).to be Seal.listener
+  it 'has a pre-allocated Listener instance' do
     expect(Seal.listener).to be_a Listener
+  end
+
+  it 'can only have one instance of Listener' do
     expect { Seal::Listener.new }.to raise_error NoMethodError
     expect { Seal::Listener.allocate }.to raise_error
   end
