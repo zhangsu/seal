@@ -33,7 +33,7 @@ describe Reverb do
   it_validates 'the bounded float attribute', :room_rolloff_factor, '[0, 10]'
   it_defines 'boolean reader aliases', %i(hfdecay_limited)
 
-  specify_preset_loading = -> mod do
+  specify_preset_loading = lambda do |mod|
     mod.constants.each do |const_sym|
       constant = mod.const_get(const_sym)
       case constant
