@@ -6,14 +6,14 @@ shared_examples 'an audio object with format' do
     subject { described_class.new(WAV_PATH) }
     its(:bit_depth) { is_expected.to eq 8 }
     its(:channel_count) { is_expected.to eq 1 }
-    its(:frequency) { is_expected.to eq 11025 }
+    its(:frequency) { is_expected.to eq 11_025 }
   end
 
   context 'read from the Ogg Vorbis file' do
     subject { described_class.new(OV_PATH) }
     its(:bit_depth) { is_expected.to eq 16 }
     its(:channel_count) { is_expected.to eq 1 }
-    its(:frequency) { is_expected.to eq 44100 }
+    its(:frequency) { is_expected.to eq 44_100 }
   end
 
   it 'fails when reading WAVE with OV format specified' do

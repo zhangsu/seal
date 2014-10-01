@@ -13,7 +13,7 @@ describe Source do
   describe 'by default' do
     its(:auto) { is_expected.to be_truthy }
     its(:buffer) { is_expected.to be_nil }
-    its(:chunk_size) { is_expected.to eq 36864 }
+    its(:chunk_size) { is_expected.to eq 36_864 }
     its(:gain) { is_expected.to be_within(TOLERANCE).of(1.0) }
     its(:looping) { is_expected.to be_falsey }
     its(:pitch) { is_expected.to be_within(TOLERANCE).of(1.0) }
@@ -56,16 +56,16 @@ describe Source do
     # It should be automatically adjusted to a smaller multiple of 9216.
     source.chunk_size = 9217
     expect(source.chunk_size).to eq 9216
-    source.chunk_size = 32768
-    expect(source.chunk_size).to eq 27648
-    source.chunk_size = 294912
-    expect(source.chunk_size).to eq 294912
-    source.chunk_size = 16773119
-    expect(source.chunk_size).to eq 16763904
-    source.chunk_size = 16773120
-    expect(source.chunk_size).to eq 16773120
-    expect { source.chunk_size = 16773121 }.to raise_error error_pattern
-    expect { source.chunk_size = 234923428 }.to raise_error error_pattern
+    source.chunk_size = 32_768
+    expect(source.chunk_size).to eq 27_648
+    source.chunk_size = 294_912
+    expect(source.chunk_size).to eq 294_912
+    source.chunk_size = 16_773_119
+    expect(source.chunk_size).to eq 16_763_904
+    source.chunk_size = 16_773_120
+    expect(source.chunk_size).to eq 16_773_120
+    expect { source.chunk_size = 16_773_121 }.to raise_error error_pattern
+    expect { source.chunk_size = 234_923_428 }.to raise_error error_pattern
   end
 
   context 'with a buffer' do

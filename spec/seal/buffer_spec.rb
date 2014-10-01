@@ -11,7 +11,7 @@ describe Buffer do
 
     context 'from the Ogg Vorbise file' do
       subject { Buffer.new(OV_PATH) }
-      its(:size) { is_expected.to eq 85342 }
+      its(:size) { is_expected.to eq 85_342 }
     end
   end
 
