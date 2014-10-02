@@ -26,8 +26,8 @@ describe Source do
 
   it_validates 'the boolean attribute', :relative
   it_validates 'the boolean attribute', :auto
-  it_validates 'the bounded float attribute', :pitch, "[0, +inf.)"
-  it_validates 'the bounded float attribute', :gain, "[0, +inf.)"
+  it_validates 'the bounded float attribute', :pitch, '[0, +inf.)'
+  it_validates 'the bounded float attribute', :gain, '[0, +inf.)'
   it_defines 'boolean reader aliases', %i(auto relative looping)
 
   it 'validates its queue size is in [2, 63]' do

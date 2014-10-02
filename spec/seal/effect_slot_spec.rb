@@ -10,7 +10,7 @@ describe EffectSlot do
   end
 
   it_validates 'the boolean attribute', :auto
-  it_validates 'the bounded float attribute', :gain, "[0, 1]"
+  it_validates 'the bounded float attribute', :gain, '[0, 1]'
   it_defines 'boolean reader aliases', %i(auto)
 
   it 'can initialize with an effect' do
