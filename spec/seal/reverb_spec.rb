@@ -38,7 +38,7 @@ describe Reverb do
       constant = mod.const_get(const_sym)
       case constant
       when Module
-        specify_preset_loading.(constant)
+        specify_preset_loading.call(constant)
       else
         it "can load preset #{mod}::#{const_sym}" do
           expect do
@@ -49,5 +49,5 @@ describe Reverb do
       end
     end
   end
-  specify_preset_loading.(Reverb::Preset)
+  specify_preset_loading.call(Reverb::Preset)
 end
