@@ -52,7 +52,7 @@ shared_examples 'the bounded float attribute' do |reader_sym, interval|
 
     # Validates values within the bounds.
     l, u =
-      if lower == -Float::INFINITY and upper == Float::INFINITY
+      if lower == -Float::INFINITY && upper == Float::INFINITY
         [-4096, 4096]
       elsif lower == -Float::INFINITY
         [upper - 4096, upper]
