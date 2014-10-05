@@ -1,3 +1,4 @@
+# Helpers shared by all specs.
 module Helpers
   def with_motion(movable)
     original_position = movable.position
